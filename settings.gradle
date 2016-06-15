@@ -1,0 +1,4 @@
+include ':app', ':nanowidget'
+
+include ':NanoAndroidSDK'
+project(':NanoAndroidSDK').projectDir=new File('../NanoAndroidSDK')
