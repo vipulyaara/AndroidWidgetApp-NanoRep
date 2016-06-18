@@ -1,5 +1,6 @@
 package nanorep.nanowidget.DataClasse;
 
+import android.content.Context;
 import android.util.Log;
 
 import com.nanorep.nanorepsdk.Connection.NRError;
@@ -18,6 +19,7 @@ import NanoRep.ResponseParams.NRFAQCnf;
 import NanoRep.ResponseParams.NRFAQData;
 import NanoRep.ResponseParams.NRSearchResponse;
 import NanoRep.ResponseParams.NRSuggestions;
+import nanorep.nanowidget.Utilities.Calculate;
 import nanorep.nanowidget.interfaces.NRFetcherListener;
 import nanorep.nanowidget.interfaces.OnFAQAnswerFetched;
 
@@ -28,11 +30,13 @@ public class NRFetchedDataManager {
     private NanoRep mNanoRep;
     private NRFAQData mFaqData;
     private NRFetcherListener mFetcherListener;
+    Context mContext;
 
     private int mRows;
 
 
-    public NRFetchedDataManager(NanoRep nanoRep) {
+    public NRFetchedDataManager(NanoRep nanoRep, Context context) {
+        mContext = context;
         mNanoRep = nanoRep;
         mNanoRep.fetchDefaultFAQWithCompletion(new NRDefaultFAQCompletion() {
             @Override
@@ -66,7 +70,7 @@ public class NRFetchedDataManager {
         ArrayList<NRResult> results = new ArrayList<>();
         for (NRQueryResult result: queryResults) {
             NRResult currentResult = new NRResult(result);
-            currentResult.setHeight(62);
+            currentResult.setHeight((int) Calculate.pxFromDp(mContext, 62));
             results.add(currentResult);
         }
         mRows = queryResults.size();

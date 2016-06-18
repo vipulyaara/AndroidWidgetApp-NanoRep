@@ -8,4 +8,5 @@ import nanorep.nanowidget.Components.NRResultItem;
 public interface NRResultItemListener {
     void shouldFetchFAQAnswerBody(NRResultItem item, String answerId);
     void unfoldItem(NRResultItem item);
+    void onShareClicked(NRResultItem item, String linkToShare);
 }

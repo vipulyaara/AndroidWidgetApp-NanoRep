@@ -1,6 +1,7 @@
 package nanorep.nanowidget;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -23,6 +24,7 @@ import nanorep.nanowidget.Components.NRSearchBar;
 import nanorep.nanowidget.Components.NRSuggestionsView;
 import nanorep.nanowidget.DataClasse.NRFetchedDataManager;
 import nanorep.nanowidget.DataClasse.NRResult;
+import nanorep.nanowidget.Utilities.Calculate;
 import nanorep.nanowidget.interfaces.NRFetcherListener;
 import nanorep.nanowidget.interfaces.NRResultItemListener;
 import nanorep.nanowidget.interfaces.NRSearchBarListener;
@@ -101,7 +103,7 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
         ((AppCompatActivity)getActivity()).getSupportActionBar().hide();
         mResutlsAdapter = new NRResutlsAdapter();
         NanoRep nanoRep = new NanoRep("Main", null);
-        mFetchedDataManager = new NRFetchedDataManager(nanoRep);
+        mFetchedDataManager = new NRFetchedDataManager(nanoRep, getContext());
         mFetchedDataManager.setFetcherListener(new NRFetcherListener() {
             @Override
             public void updateTitle(String title) {
@@ -221,20 +223,29 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
         if (item.getResult().isUnfolded()) {
             item.getResult().setUnfolded(false);
             for (NRResult result: mQueryResults) {
-                result.setHeight(62);
+                result.setHeight((int) Calculate.pxFromDp(getContext(), 62));
             }
         } else {
             for (int i = 0; i < mQueryResults.size(); i++) {
                 if (i == item.getAdapterPosition()) {
-                    mQueryResults.get(i).setHeight(500);
+                    mQueryResults.get(i).setHeight((int) Calculate.pxFromDp(getContext(), 500));
                     mQueryResults.get(i).setUnfolded(true);
                 } else {
-                    mQueryResults.get(i).setHeight(10);
+                    mQueryResults.get(i).setHeight((int) Calculate.pxFromDp(getContext(), 10));
                     mQueryResults.get(i).setUnfolded(false);
                 }
             }
         }
         mResutlsAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onShareClicked(NRResultItem item, String linkToShare) {
+        Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+        sharingIntent.setType("text/plain");
+        sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "nanorep Result");
+        sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, linkToShare);
+        startActivity(Intent.createChooser(sharingIntent, "Share via"));
     }
 
     /**
