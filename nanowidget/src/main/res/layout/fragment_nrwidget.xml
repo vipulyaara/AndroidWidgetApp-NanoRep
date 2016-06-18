@@ -25,7 +25,7 @@
             android:layout_alignParentTop="true"
             android:layout_alignParentBottom="true"
             android:layout_alignParentStart="false"
-            />
+            android:src="@drawable/searchbar_mic_icon"/>
 
         <android.support.v7.widget.SearchView
             android:layout_width="wrap_content"
@@ -54,7 +54,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/resultsView"
-        android:layout_weight="13">
+        android:layout_weight="13"
+        android:background="@color/white">
 
     </android.support.v7.widget.RecyclerView>
 </LinearLayout>
