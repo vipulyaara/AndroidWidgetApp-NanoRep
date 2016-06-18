@@ -7,6 +7,41 @@ import NanoRep.Interfaces.NRQueryResult;
  */
 public class NRResult {
     private NRQueryResult mFetchedResult;
+
+    public boolean isUnfolded() {
+        return mIsUnfolded;
+    }
+
+    public void setUnfolded(boolean unfolded) {
+        mIsUnfolded = unfolded;
+    }
+
+    private boolean mIsUnfolded;
+
+    public int getHeight() {
+        return mHeight;
+    }
+
+    public void setHeight(int height) {
+        mHeight = height;
+    }
+
+    public boolean isSingle() {
+        return mIsSingle;
+    }
+
+    public void setSingle(boolean single) {
+        mIsSingle = single;
+    }
+
+    public NRResultType getType() {
+        return mType;
+    }
+
+    public void setType(NRResultType type) {
+        mType = type;
+    }
+
     private int mHeight;
     private boolean mIsSingle;
     private NRResultType mType;

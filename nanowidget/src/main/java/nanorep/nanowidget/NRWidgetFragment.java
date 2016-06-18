@@ -12,7 +12,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,9 +22,12 @@ import nanorep.nanowidget.Components.NRResultItem;
 import nanorep.nanowidget.Components.NRSearchBar;
 import nanorep.nanowidget.Components.NRSuggestionsView;
 import nanorep.nanowidget.DataClasse.NRFetchedDataManager;
+import nanorep.nanowidget.DataClasse.NRResult;
 import nanorep.nanowidget.interfaces.NRFetcherListener;
+import nanorep.nanowidget.interfaces.NRResultItemListener;
 import nanorep.nanowidget.interfaces.NRSearchBarListener;
 import nanorep.nanowidget.interfaces.NRSuggestionsListener;
+import nanorep.nanowidget.interfaces.OnFAQAnswerFetched;
 
 
 /**
@@ -36,7 +38,7 @@ import nanorep.nanowidget.interfaces.NRSuggestionsListener;
  * Use the {@link NRWidgetFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class NRWidgetFragment extends Fragment implements NRSearchBarListener, NRSuggestionsListener {
+public class NRWidgetFragment extends Fragment implements NRSearchBarListener, NRSuggestionsListener, NRResultItemListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -53,7 +55,7 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
     private NRSearchBar mSearchBar;
     private NRSuggestionsView mSuggestionsView;
 
-    private ArrayList<NRQueryResult> mQueryResults;
+    private ArrayList<NRResult> mQueryResults;
     private NRResutlsAdapter mResutlsAdapter;
     private RecyclerView mResultsRecyclerView;
 
@@ -117,7 +119,7 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
             }
 
             @Override
-            public void insertRows(ArrayList<NRQueryResult> rows) {
+            public void insertRows(ArrayList<NRResult> rows) {
                 mQueryResults = rows;
                 mResutlsAdapter.notifyDataSetChanged();
             }
@@ -204,6 +206,37 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
         mFetchedDataManager.searchText(suggestion);
     }
 
+    @Override
+    public void shouldFetchFAQAnswerBody(final NRResultItem item, String answerId) {
+        mFetchedDataManager.faqAnswer(answerId, new OnFAQAnswerFetched() {
+            @Override
+            public void onAnsweFetced(String answerBody) {
+                item.setBody(answerBody);
+            }
+        });
+    }
+
+    @Override
+    public void unfoldItem(NRResultItem item) {
+        if (item.getResult().isUnfolded()) {
+            item.getResult().setUnfolded(false);
+            for (NRResult result: mQueryResults) {
+                result.setHeight(62);
+            }
+        } else {
+            for (int i = 0; i < mQueryResults.size(); i++) {
+                if (i == item.getAdapterPosition()) {
+                    mQueryResults.get(i).setHeight(500);
+                    mQueryResults.get(i).setUnfolded(true);
+                } else {
+                    mQueryResults.get(i).setHeight(10);
+                    mQueryResults.get(i).setUnfolded(false);
+                }
+            }
+        }
+        mResutlsAdapter.notifyDataSetChanged();
+    }
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -224,9 +257,10 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
 
         @Override
         public NRResultItem onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.result_item, null);
-            NRResultItem item = new NRResultItem(view);
-//            item.setListener(this);
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.result_item, parent, false);
+            NRResultItem item = new NRResultItem(view, mResultsRecyclerView.getHeight());
+
+            item.setListener(NRWidgetFragment.this);
             return item;
         }
 

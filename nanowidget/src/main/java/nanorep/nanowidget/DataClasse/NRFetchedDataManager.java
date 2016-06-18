@@ -7,16 +7,19 @@ import com.nanorep.nanorepsdk.Connection.NRError;
 import java.util.ArrayList;
 
 import NanoRep.Interfaces.NRDefaultFAQCompletion;
+import NanoRep.Interfaces.NRFAQAnswerCompletion;
 import NanoRep.Interfaces.NRLikeCompletion;
 import NanoRep.Interfaces.NRQueryResult;
 import NanoRep.Interfaces.NRSpeechRecognizerCompletion;
 import NanoRep.NanoRep;
+import NanoRep.ResponseParams.NRFAQAnswer;
 import NanoRep.ResponseParams.NRFAQAnswerItem;
 import NanoRep.ResponseParams.NRFAQCnf;
 import NanoRep.ResponseParams.NRFAQData;
 import NanoRep.ResponseParams.NRSearchResponse;
 import NanoRep.ResponseParams.NRSuggestions;
 import nanorep.nanowidget.interfaces.NRFetcherListener;
+import nanorep.nanowidget.interfaces.OnFAQAnswerFetched;
 
 /**
  * Created by nissimpardo on 04/06/16.
@@ -55,9 +58,19 @@ public class NRFetchedDataManager {
     private void prepareDatasource() {
         if (mFaqData != null && mFaqData.getGroups() != null && mFaqData.getGroups().size() > 0) {
             ArrayList<NRQueryResult> answers = mFaqData.getGroups().get(0).getAnswers();
-            mRows = answers.size();
-            mFetcherListener.insertRows(answers);
+            updateResults(answers);
         }
+    }
+
+    private void updateResults(ArrayList<NRQueryResult> queryResults) {
+        ArrayList<NRResult> results = new ArrayList<>();
+        for (NRQueryResult result: queryResults) {
+            NRResult currentResult = new NRResult(result);
+            currentResult.setHeight(62);
+            results.add(currentResult);
+        }
+        mRows = queryResults.size();
+        mFetcherListener.insertRows(results);
     }
 
     public int getRows() {
@@ -83,7 +96,7 @@ public class NRFetchedDataManager {
                 if (error != null) {
 
                 } else {
-                    mFetcherListener.insertRows(response.getAnswerList());
+                    updateResults(response.getAnswerList());
                 }
             }
         });
@@ -108,6 +121,19 @@ public class NRFetchedDataManager {
 
     public void sendLike(boolean like, NRResult result, NRLikeCompletion completion) {
 
+    }
+
+    public void faqAnswer(String answerId, final OnFAQAnswerFetched answerFetcher) {
+        mNanoRep.answerWithId(answerId, new NRFAQAnswerCompletion() {
+            @Override
+            public void fetchAnswer(NRFAQAnswer answer, NRError error) {
+                if (error == null) {
+                    answerFetcher.onAnsweFetced(answer.getBody());
+                } else {
+                    answerFetcher.onAnsweFetced(null);
+                }
+            }
+        });
     }
 
     private void onRequestError(NRError error) {

@@ -57,8 +57,6 @@ public class NRSuggestionsView extends LinearLayout{
 
     public void setHeight(int height) {
         LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) getLayoutParams();
-
-
         params.height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, height, getResources().getDisplayMetrics());
         setLayoutParams(params);
     }
