@@ -107,6 +107,10 @@ public class NRResultItem extends RecyclerView.ViewHolder implements View.OnClic
         animator.start();
     }
 
+    public String getText() {
+        return mTitleButton.getText().toString();
+    }
+
 
     @Override
     public void onClick(View v) {
