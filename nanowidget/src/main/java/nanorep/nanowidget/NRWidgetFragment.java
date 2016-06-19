@@ -130,6 +130,7 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
 
             @Override
             public void insertRows(ArrayList<NRResult> rows) {
+                mResutlsAdapter.setShouldResetLikeView(true);
                 mQueryResults = rows;
                 mResutlsAdapter.notifyDataSetChanged();
             }
@@ -248,6 +249,7 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
                 }
             }
         }
+        mResutlsAdapter.setShouldResetLikeView(false);
         mResutlsAdapter.notifyDataSetChanged();
     }
 
@@ -286,6 +288,8 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
                                 item.getLikeView().updateLikeButton(false);
                             }
                         });
+                    } else {
+                        item.getLikeView().cancelLike();
                     }
                 }
             };
@@ -314,6 +318,11 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
 
 
     private class NRResutlsAdapter extends RecyclerView.Adapter<NRResultItem> {
+        private boolean mShouldResetLikeView = false;
+
+        public void setShouldResetLikeView(boolean shouldResetLikeView) {
+            mShouldResetLikeView = shouldResetLikeView;
+        }
 
         @Override
         public NRResultItem onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -326,6 +335,9 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
 
         @Override
         public void onBindViewHolder(NRResultItem holder, int position) {
+            if (mShouldResetLikeView) {
+                holder.getLikeView().resetLikeView();
+            }
             holder.setResult(mQueryResults.get(position));
         }
 

@@ -44,8 +44,8 @@ public class NRLikeView extends LinearLayout implements View.OnClickListener {
         mDislikeButton.setEnabled(true);
         mLikeButton.setImageResource(resId("grey_like_icon"));
         mDislikeButton.setImageResource(resId("grey_dislike_icon"));
-        mLikeButton.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.MULTIPLY);
-        mDislikeButton.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.MULTIPLY);
+        mLikeButton.getBackground().setColorFilter(Color.LTGRAY, PorterDuff.Mode.MULTIPLY);
+        mDislikeButton.getBackground().setColorFilter(Color.LTGRAY, PorterDuff.Mode.MULTIPLY);
     }
 
     private int resId(String resName) {
@@ -65,6 +65,11 @@ public class NRLikeView extends LinearLayout implements View.OnClickListener {
 
     public boolean getLikeSelection() {
         return mLikeSelection;
+    }
+
+    public void cancelLike() {
+        mLikeButton.setEnabled(true);
+        mDislikeButton.setEnabled(true);
     }
 
 
