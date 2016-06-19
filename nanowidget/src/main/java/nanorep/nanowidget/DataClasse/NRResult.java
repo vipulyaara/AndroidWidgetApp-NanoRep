@@ -1,22 +1,15 @@
 package nanorep.nanowidget.DataClasse;
 
 import NanoRep.Interfaces.NRQueryResult;
+import nanorep.nanowidget.Components.NRResultItem;
 
 /**
  * Created by nissimpardo on 04/06/16.
  */
 public class NRResult {
     private NRQueryResult mFetchedResult;
-
-    public boolean isUnfolded() {
-        return mIsUnfolded;
-    }
-
-    public void setUnfolded(boolean unfolded) {
-        mIsUnfolded = unfolded;
-    }
-
-    private boolean mIsUnfolded;
+    private boolean mIsUnfolded = true;
+    private NRResultItem.RowType mRowType = NRResultItem.RowType.standard;
 
     public int getHeight() {
         return mHeight;
@@ -51,5 +44,21 @@ public class NRResult {
 
     public NRQueryResult getFetchedResult() {
         return mFetchedResult;
+    }
+
+    public boolean isUnfolded() {
+        return mIsUnfolded;
+    }
+
+    public void setUnfolded(boolean unfolded) {
+        mIsUnfolded = unfolded;
+    }
+
+    public NRResultItem.RowType getRowType() {
+        return mRowType;
+    }
+
+    public void setRowType(NRResultItem.RowType rowType) {
+        mRowType = rowType;
     }
 }

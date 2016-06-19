@@ -1,6 +1,7 @@
 package nanorep.nanowidget.Components;
 
 import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.TypedValue;
@@ -39,6 +40,10 @@ public class NRResultItem extends RecyclerView.ViewHolder implements View.OnClic
     private NRLikeView mLikeView;
     private NRResult mResult;
 
+    public enum RowType {
+        standard, shrinked, unfolded
+    }
+
     public NRResultItem(View view, int maxHeight) {
         super(view);
         mItemView = view;
@@ -68,6 +73,10 @@ public class NRResultItem extends RecyclerView.ViewHolder implements View.OnClic
             RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) mActionView.getLayoutParams();
             params.height = (int) Calculate.pxFromDp(mItemView.getContext(), 50);
         }
+        int visibility = result.getRowType() == RowType.shrinked ? View.INVISIBLE : View.VISIBLE;
+        mTitleButton.setVisibility(visibility);
+        mUnFoldButton.setVisibility(visibility);
+        mShareButton.setVisibility(visibility);
     }
 
     public NRResult getResult() {
@@ -86,9 +95,16 @@ public class NRResultItem extends RecyclerView.ViewHolder implements View.OnClic
     }
 
     private void setHeight(int height) {
-        GridLayoutManager.LayoutParams params = (GridLayoutManager.LayoutParams) mItemView.getLayoutParams();
-        params.height = height;
-        mItemView.setLayoutParams(params);
+        ValueAnimator animator = ValueAnimator.ofInt(mItemView.getHeight(), height);
+        animator.setDuration(200);
+        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                mItemView.getLayoutParams().height = (Integer) animation.getAnimatedValue();
+                mItemView.requestLayout();
+            }
+        });
+        animator.start();
     }
 
 

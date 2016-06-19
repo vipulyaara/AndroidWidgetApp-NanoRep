@@ -231,16 +231,20 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
         if (item.getResult().isUnfolded()) {
             item.getResult().setUnfolded(false);
             for (NRResult result: mQueryResults) {
+                result.setRowType(NRResultItem.RowType.standard);
                 result.setHeight((int) Calculate.pxFromDp(getContext(), 62));
             }
         } else {
             for (int i = 0; i < mQueryResults.size(); i++) {
                 if (i == item.getAdapterPosition()) {
-                    mQueryResults.get(i).setHeight((int) Calculate.pxFromDp(getContext(), 500));
+                    int shrinkedHeight = (int) Calculate.pxFromDp(getContext(), (mQueryResults.size() - 1) * 10);
+                    mQueryResults.get(i).setHeight(mResultsRecyclerView.getHeight() - shrinkedHeight);
                     mQueryResults.get(i).setUnfolded(true);
+                    mQueryResults.get(i).setRowType(NRResultItem.RowType.unfolded);
                 } else {
                     mQueryResults.get(i).setHeight((int) Calculate.pxFromDp(getContext(), 10));
                     mQueryResults.get(i).setUnfolded(false);
+                    mQueryResults.get(i).setRowType(NRResultItem.RowType.shrinked);
                 }
             }
         }
