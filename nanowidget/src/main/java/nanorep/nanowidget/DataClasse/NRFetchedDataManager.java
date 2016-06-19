@@ -13,6 +13,9 @@ import NanoRep.Interfaces.NRLikeCompletion;
 import NanoRep.Interfaces.NRQueryResult;
 import NanoRep.Interfaces.NRSpeechRecognizerCompletion;
 import NanoRep.NanoRep;
+import NanoRep.RequestParams.NRFAQLikeParams;
+import NanoRep.RequestParams.NRLikeType;
+import NanoRep.RequestParams.NRSearchLikeParams;
 import NanoRep.ResponseParams.NRFAQAnswer;
 import NanoRep.ResponseParams.NRFAQAnswerItem;
 import NanoRep.ResponseParams.NRFAQCnf;
@@ -123,8 +126,16 @@ public class NRFetchedDataManager {
 
     }
 
-    public void sendLike(boolean like, NRResult result, NRLikeCompletion completion) {
-
+    public void sendLike(NRLikeType likeType, NRResult result, NRLikeCompletion completion) {
+        if (result.getFetchedResult().isCNF()) {
+            NRFAQLikeParams likeParams = new NRFAQLikeParams(result.getFetchedResult());
+            likeParams.setLikeType(likeType);
+            mNanoRep.faqLike(likeParams, completion);
+        } else {
+            NRSearchLikeParams likeParams = new NRSearchLikeParams(result.getFetchedResult());
+            likeParams.setFeedbackType(likeType);
+            mNanoRep.sendLike(likeParams, completion);
+        }
     }
 
     public void faqAnswer(String answerId, final OnFAQAnswerFetched answerFetcher) {

@@ -34,14 +34,6 @@ public class NRResult {
         mIsSingle = single;
     }
 
-    public NRResultType getType() {
-        return mType;
-    }
-
-    public void setType(NRResultType type) {
-        mType = type;
-    }
-
     private int mHeight;
     private boolean mIsSingle;
     private NRResultType mType;

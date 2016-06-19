@@ -22,11 +22,12 @@ import nanorep.nanowidget.DataClasse.NRResult;
 import nanorep.nanowidget.R;
 import nanorep.nanowidget.Utilities.Calculate;
 import nanorep.nanowidget.interfaces.NRResultItemListener;
+import nanorep.nanowidget.interfaces.OnLikeListener;
 
 /**
  * Created by nissimpardo on 15/06/16.
  */
-public class NRResultItem extends RecyclerView.ViewHolder implements View.OnClickListener {
+public class NRResultItem extends RecyclerView.ViewHolder implements View.OnClickListener, OnLikeListener {
     private NRResultItemListener mListener;
     private View mItemView;
     private Button mTitleButton;
@@ -35,6 +36,7 @@ public class NRResultItem extends RecyclerView.ViewHolder implements View.OnClic
     private RelativeLayout mFooterView;
     private RelativeLayout mActionView;
     private ImageButton mShareButton;
+    private NRLikeView mLikeView;
     private NRResult mResult;
 
     public NRResultItem(View view, int maxHeight) {
@@ -50,6 +52,8 @@ public class NRResultItem extends RecyclerView.ViewHolder implements View.OnClic
         mTitleButton.setOnClickListener(this);
         mShareButton = (ImageButton) view.findViewById(R.id.shareButton);
         mShareButton.setOnClickListener(this);
+        mLikeView = (NRLikeView) view.findViewById(R.id.likeView);
+        mLikeView.setListener(this);
     }
 
     public void setListener(NRResultItemListener listener) {
@@ -68,6 +72,10 @@ public class NRResultItem extends RecyclerView.ViewHolder implements View.OnClic
 
     public NRResult getResult() {
         return mResult;
+    }
+
+    public NRLikeView getLikeView() {
+        return mLikeView;
     }
 
     public void setBody(String htmlString) {
@@ -97,5 +105,10 @@ public class NRResultItem extends RecyclerView.ViewHolder implements View.OnClic
         } else if (v.getId() == R.id.shareButton) {
             mListener.onShareClicked(this, mResult.getFetchedResult().getTitle());
         }
+    }
+
+    @Override
+    public void onLikeClicked() {
+        mListener.onLikeClicked(this);
     }
 }

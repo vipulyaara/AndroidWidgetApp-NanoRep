@@ -1,10 +1,12 @@
 package nanorep.nanowidget;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,12 +15,18 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import NanoRep.Interfaces.NRLikeCompletion;
 import NanoRep.Interfaces.NRQueryResult;
 import NanoRep.NanoRep;
+import NanoRep.RequestParams.NRLikeType;
+import nanorep.nanowidget.Components.NRLikeView;
 import nanorep.nanowidget.Components.NRResultItem;
 import nanorep.nanowidget.Components.NRSearchBar;
 import nanorep.nanowidget.Components.NRSuggestionsView;
@@ -248,6 +256,43 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
         startActivity(Intent.createChooser(sharingIntent, "Share via"));
     }
 
+    @Override
+    public void onLikeClicked(final NRResultItem item) {
+        if (item.getLikeView().getLikeSelection()) {
+            mFetchedDataManager.sendLike(NRLikeType.POSITIVE, item.getResult(), new NRLikeCompletion() {
+                @Override
+                public void likeResult(int type, boolean success) {
+                    if (success) {
+                        item.getLikeView().updateLikeButton(true);
+                    }
+                }
+            });
+        } else {
+            String reasons[] = new String[] {"Incorrect answer", "Missing or incorrect information", "Didn't find what I was looking for"};
+            AlertDialog.Builder dislikeAlert = new  AlertDialog.Builder(getContext());
+            dislikeAlert.setTitle("What's wrong with this answer");
+            final NRLikeAdapter adapter = new NRLikeAdapter(getContext(), R.layout.dislike_row, reasons);
+            DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    if (which == DialogInterface.BUTTON_POSITIVE && adapter.getSelection() != NRLikeType.POSITIVE) {
+                        mFetchedDataManager.sendLike(adapter.getSelection(), item.getResult(), new NRLikeCompletion() {
+                            @Override
+                            public void likeResult(int type, boolean success) {
+                                item.getLikeView().updateLikeButton(false);
+                            }
+                        });
+                    }
+                }
+            };
+            dislikeAlert.setAdapter(adapter, null);
+            dislikeAlert.setPositiveButton("OK", dialogClickListener);
+            dislikeAlert.setNegativeButton("Cancel", dialogClickListener);
+            AlertDialog alert = dislikeAlert.create();
+            alert.show();
+        }
+    }
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -286,6 +331,70 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
                 return 0;
             }
             return mQueryResults.size();
+        }
+    }
+
+    private class NRLikeAdapter extends ArrayAdapter<String> implements View.OnClickListener {
+        private String[] mObjects;
+        private ArrayList<ImageView> bullets;
+        private NRLikeType mSelection = NRLikeType.POSITIVE;
+
+        public NRLikeAdapter(Context context, int resource, String[] objects) {
+            super(context, resource, objects);
+            mObjects = objects;
+        }
+
+        public NRLikeType getSelection() {
+            return mSelection;
+        }
+
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            final LayoutInflater inflater = (LayoutInflater) getContext()
+                    .getSystemService(
+                            Context.LAYOUT_INFLATER_SERVICE);
+            if (convertView == null) {
+                convertView = inflater.inflate(R.layout.dislike_row, null);
+                convertView.setTag(position);
+                convertView.setOnClickListener(this);
+                TextView titleView = (TextView) convertView.findViewById(R.id.dislike);
+                titleView.setText(mObjects[position]);
+                if (bullets == null) {
+                    bullets = new ArrayList<>();
+                }
+                bullets.add((ImageView) convertView.findViewById(R.id.imageView));
+            }
+            return convertView;
+        }
+
+        private int resId(String resName) {
+            return getResources().getIdentifier(resName, "drawable", getContext().getPackageName());
+        }
+
+
+        @Override
+        public void onClick(View v) {
+            switch ((int)v.getTag()) {
+                case 0:
+                    mSelection = NRLikeType.INCORRECT_ANSWER;
+                    break;
+                case 1:
+                    mSelection = NRLikeType.MISSING_INFORMATION;
+                    break;
+                case 2:
+                    mSelection = NRLikeType.IRRELEVANT;
+                    break;
+            }
+            for (int i = 0; i < bullets.size(); i++) {
+                int id;
+                if ((int) v.getTag() == i) {
+                    id = resId("bullet_on");
+                } else {
+                    id = resId("bullet_off");
+                }
+                bullets.get(i).setImageResource(id);
+            }
         }
     }
 
