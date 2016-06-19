@@ -8,7 +8,7 @@ import nanorep.nanowidget.Components.NRResultItem;
  */
 public class NRResult {
     private NRQueryResult mFetchedResult;
-    private boolean mIsUnfolded = true;
+    private boolean mIsUnfolded = false;
     private NRResultItem.RowType mRowType = NRResultItem.RowType.standard;
 
     public int getHeight() {
