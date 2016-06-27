@@ -22,7 +22,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:id="@+id/titleButton"
-                android:layout_toLeftOf="@+id/shareButton"
+                android:layout_toStartOf="@+id/shareButton"
                 android:background="#00ffffff"
                 android:textColor="#189ac6"
                 android:textAlignment="viewStart"
@@ -41,35 +41,29 @@
                 android:layout_width="40dp"
                 android:layout_height="match_parent"
                 android:id="@+id/unFoldButton"
-                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 android:src="@drawable/answer_arrowdown_icon"
                 android:background="#00ffffff"/>
         </RelativeLayout>
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:id="@+id/footerView"
             android:layout_alignParentBottom="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentRight="true"
-            android:layout_below="@+id/topView"
-            android:visibility="visible">
+            android:layout_below="@+id/topView">
             <WebView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:id="@+id/webView"
                 android:layout_alignParentTop="true"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentRight="true"
                 android:layout_above="@+id/actionView"/>
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
                 android:id="@+id/actionView"
                 android:layout_alignParentBottom="true"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentRight="true">
+                >
                 <nanorep.nanowidget.Components.NRLikeView
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
@@ -77,8 +71,8 @@
                     android:orientation="horizontal"
                     android:weightSum="2"
                     android:layout_alignParentTop="true"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentRight="true">
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentStart="true">
 
                     <ImageButton
                         android:layout_width="0dp"
@@ -103,9 +97,18 @@
                     android:layout_height="50dp"
                     android:id="@+id/channelingView"
                     android:layout_alignParentBottom="true"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_below="@+id/likeView">
+                    android:layout_below="@+id/likeView"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentStart="true">
+                    <android.support.v7.widget.RecyclerView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:id="@+id/channelingTabs"
+                        android:minHeight="50dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentStart="true">
+
+                    </android.support.v7.widget.RecyclerView>
 
                 </nanorep.nanowidget.Components.NRChannelingView>
 

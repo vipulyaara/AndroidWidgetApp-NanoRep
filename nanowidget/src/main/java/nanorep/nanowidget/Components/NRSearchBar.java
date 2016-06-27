@@ -1,11 +1,13 @@
 package nanorep.nanowidget.Components;
 
 import android.content.Context;
+import android.support.v7.widget.AppCompatImageButton;
 import android.support.v7.widget.SearchView;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 
 import nanorep.nanowidget.R;
@@ -15,9 +17,10 @@ import nanorep.nanowidget.interfaces.NRSearchBarListener;
 /**
  * Created by nissimpardo on 07/06/16.
  */
-public class NRSearchBar extends RelativeLayout implements SearchView.OnQueryTextListener {
+public class NRSearchBar extends RelativeLayout implements SearchView.OnQueryTextListener, View.OnClickListener {
     private NRSearchBarListener mListener;
     private SearchView mSearchView;
+    private ImageButton mSpeechButton;
 
     public NRSearchBar(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -31,6 +34,9 @@ public class NRSearchBar extends RelativeLayout implements SearchView.OnQueryTex
         if (child.getId() == R.id.searchView) {
             mSearchView = (SearchView) child;
             mSearchView.setOnQueryTextListener(this);
+        } else if (child instanceof AppCompatImageButton) {
+            mSpeechButton = (ImageButton) child;
+            mSpeechButton.setOnClickListener(this);
         }
     }
 
@@ -66,5 +72,11 @@ public class NRSearchBar extends RelativeLayout implements SearchView.OnQueryTex
             dismissKeyboard();
         }
         return false;
+    }
+
+    @Override
+    public void onClick(View v) {
+        mSpeechButton.setEnabled(false);
+        mListener.onStartRecording(mSpeechButton);
     }
 }

@@ -16,6 +16,7 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -24,8 +25,11 @@ import java.util.HashMap;
 
 import NanoRep.Interfaces.NRLikeCompletion;
 import NanoRep.Interfaces.NRQueryResult;
+import NanoRep.Interfaces.NRSpeechRecognizerCompletion;
 import NanoRep.NanoRep;
 import NanoRep.RequestParams.NRLikeType;
+import nanorep.nanowidget.Components.ChannelPresenters.NRChannelStrategy;
+import nanorep.nanowidget.Components.NRChannelItem;
 import nanorep.nanowidget.Components.NRLikeView;
 import nanorep.nanowidget.Components.NRResultItem;
 import nanorep.nanowidget.Components.NRSearchBar;
@@ -189,8 +193,14 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
     }
 
     @Override
-    public void onStartRecording() {
-
+    public void onStartRecording(final ImageButton button) {
+        mFetchedDataManager.startSpeech(new NRSpeechRecognizerCompletion() {
+            @Override
+            public void speechReconitionResults(String speechToText) {
+                button.setEnabled(true);
+                onSelectSuggestion(speechToText);
+            }
+        });
     }
 
     @Override
@@ -299,6 +309,11 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
             AlertDialog alert = dislikeAlert.create();
             alert.show();
         }
+    }
+
+    @Override
+    public void onChannelSelected(NRChannelItem channelItem) {
+        NRChannelStrategy.presentor(channelItem.getChanneling(), getContext()).present();
     }
 
     /**

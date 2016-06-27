@@ -123,7 +123,7 @@ public class NRFetchedDataManager {
     }
 
     public void startSpeech(NRSpeechRecognizerCompletion completion) {
-
+        mNanoRep.startVoiceRecognition(completion);
     }
 
     public void sendLike(NRLikeType likeType, NRResult result, NRLikeCompletion completion) {
