@@ -1,6 +1,7 @@
 package nanorep.nanowidget.Components;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v7.widget.AppCompatImageButton;
 import android.support.v7.widget.SearchView;
 import android.util.AttributeSet;
@@ -8,7 +9,10 @@ import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import nanorep.nanowidget.R;
 import nanorep.nanowidget.interfaces.NRSearchBarListener;
@@ -34,6 +38,11 @@ public class NRSearchBar extends RelativeLayout implements SearchView.OnQueryTex
         if (child.getId() == R.id.searchView) {
             mSearchView = (SearchView) child;
             mSearchView.setOnQueryTextListener(this);
+            LinearLayout icon = (LinearLayout) mSearchView.findViewById(android.support.v7.appcompat.R.id.search_mag_icon);
+            TextView searchTextView = (TextView) icon.getChildAt(0);
+            searchTextView.setTextColor(Color.WHITE);
+            ImageView iconImg = (ImageView) icon.getChildAt(1);
+            iconImg.setImageResource(R.drawable.searchbar_search_icon);
         } else if (child instanceof AppCompatImageButton) {
             mSpeechButton = (ImageButton) child;
             mSpeechButton.setOnClickListener(this);

@@ -1,12 +1,20 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              tools:context="nanorep.nanowidget.NRWidgetFragment"
-              android:orientation="vertical"
-              android:weightSum="14">
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             xmlns:app="http://schemas.android.com/apk/res-auto"
+             tools:context="nanorep.nanowidget.NRWidgetFragment"
+
+
+    >
 
     <!-- TODO: Update blank fragment layout -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:id="@+id/contentId"
+        android:weightSum="14">
 
     <nanorep.nanowidget.Components.NRSearchBar
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -14,6 +22,7 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:id="@+id/searchBar"
+        android:background="#3F51B5"
         android:layout_weight="1">
 
         <ImageButton
@@ -25,7 +34,8 @@
             android:layout_alignParentTop="true"
             android:layout_alignParentBottom="true"
             android:layout_alignParentStart="false"
-            android:src="@drawable/searchbar_mic_icon"/>
+            android:src="@drawable/searchbar_mic_icon"
+            android:background="#00ffffff"/>
 
         <android.support.v7.widget.SearchView
             android:layout_width="wrap_content"
@@ -58,4 +68,27 @@
         android:background="@color/white">
 
     </android.support.v7.widget.RecyclerView>
-</LinearLayout>
+    </LinearLayout>
+    <nanorep.nanowidget.Components.NRWebContentView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/webContentView"
+        android:orientation="vertical"
+        android:visibility="invisible">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="#e3dcdc">
+            <Button
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:id="@+id/closeWebviewButton"
+                android:background="#3a3737"/>
+        </RelativeLayout>
+        <WebView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/channelingWebview"/>
+
+    </nanorep.nanowidget.Components.NRWebContentView>
+</FrameLayout>

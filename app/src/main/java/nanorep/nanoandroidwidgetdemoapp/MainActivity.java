@@ -18,7 +18,9 @@ public class MainActivity extends AppCompatActivity implements NRWidgetFragment.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        getSupportActionBar().setElevation(0);
         nanoFragment = NRWidgetFragment.newInstance(null, null);
+        nanoFragment.setNanoRep(new NanoRep("us", null));
         Button loadButton = (Button)findViewById(R.id.button);
         if (loadButton != null) {
             loadButton.setOnClickListener(new View.OnClickListener() {

@@ -6,6 +6,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import NanoRep.Chnneling.NRChanneling;
+import NanoRep.Interfaces.NRQueryResult;
 import nanorep.nanowidget.R;
 
 /**
@@ -47,11 +48,15 @@ public class NRChannelItem extends RecyclerView.ViewHolder implements View.OnCli
             case ChatForm:
                 resName = "channel_chat_icon";
                 break;
+            case OpenCustomURL:
             case ContactForm:
                 resName = "channel_form_icon";
                 break;
+
         }
-        mIcon.setImageResource(itemView.getResources().getIdentifier(resName, "drawable", itemView.getContext().getPackageName()));
+        if (resName != null) {
+            mIcon.setImageResource(itemView.getResources().getIdentifier(resName, "drawable", itemView.getContext().getPackageName()));
+        }
     }
 
 

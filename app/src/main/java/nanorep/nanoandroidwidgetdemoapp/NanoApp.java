@@ -11,6 +11,6 @@ public class NanoApp extends Application{
     @Override
     public void onCreate() {
         super.onCreate();
-        NanoRep.initializeNanorep(getApplicationContext(), "chegg" ,"my.nanorep.com");
+        NanoRep.initializeNanorep(getApplicationContext(), "fxcm-asia" ,"my.nanorep.com");
     }
 }

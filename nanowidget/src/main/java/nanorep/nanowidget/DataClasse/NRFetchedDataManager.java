@@ -80,6 +80,10 @@ public class NRFetchedDataManager {
         mFetcherListener.insertRows(results);
     }
 
+    public NanoRep getNanoRep() {
+        return mNanoRep;
+    }
+
     public int getRows() {
         return 0;
     }

@@ -18,10 +18,14 @@ import com.nanorep.nanorepsdk.Connection.NRConnection;
 
 import org.w3c.dom.Text;
 
+import java.util.ArrayList;
+
+import NanoRep.Chnneling.NRChanneling;
 import NanoRep.Interfaces.NRQueryResult;
 import nanorep.nanowidget.DataClasse.NRResult;
 import nanorep.nanowidget.R;
 import nanorep.nanowidget.Utilities.Calculate;
+import nanorep.nanowidget.Utilities.NRWebClient;
 import nanorep.nanowidget.interfaces.NRResultItemListener;
 import nanorep.nanowidget.interfaces.OnLikeListener;
 
@@ -51,6 +55,10 @@ public class NRResultItem extends RecyclerView.ViewHolder implements View.OnClic
         setHeight(maxHeight);
         mTitleButton = (Button) view.findViewById(R.id.titleButton);
         mWebView = (WebView) view.findViewById(R.id.webView);
+        if (mWebView != null) {
+            mWebView.getSettings().setJavaScriptEnabled(true);
+            mWebView.setWebViewClient(new NRWebClient());
+        }
         mFooterView = (RelativeLayout) view.findViewById(R.id.footerView);
         mUnFoldButton = (ImageButton) view.findViewById(R.id.unFoldButton);
         mUnFoldButton.setOnClickListener(this);
@@ -114,10 +122,12 @@ public class NRResultItem extends RecyclerView.ViewHolder implements View.OnClic
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.titleButton || v.getId() == R.id.unFoldButton) {
-            if (mResult.getFetchedResult().getBody() == null) {
-                mListener.shouldFetchFAQAnswerBody(this, mResult.getFetchedResult().getId());
-            } else {
-                setBody(mResult.getFetchedResult().getBody());
+            if (!mResult.isUnfolded()) {
+                if (mResult.getFetchedResult().getBody() == null) {
+                    mListener.shouldFetchFAQAnswerBody(this, mResult.getFetchedResult().getId());
+                } else {
+                    setBody(mResult.getFetchedResult().getBody());
+                }
             }
             ObjectAnimator.ofFloat(mUnFoldButton, "rotation", 0, mResult.isUnfolded() ? 0 : -180).start();
             mListener.unfoldItem(this);
@@ -125,7 +135,11 @@ public class NRResultItem extends RecyclerView.ViewHolder implements View.OnClic
                 RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) mActionView.getLayoutParams();
                 params.height = (int) Calculate.pxFromDp(mItemView.getContext(), 50);
             } else {
-                mNRChannelingView.setChannelings(mResult.getFetchedResult().getChanneling());
+                ArrayList<NRChanneling> channelings = mResult.getFetchedResult().getChanneling();
+                for (NRChanneling channeling: channelings) {
+                    channeling.setQueryResult(mResult.getFetchedResult());
+                }
+                mNRChannelingView.setChannelings(channelings);
                 RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) mActionView.getLayoutParams();
                 params.height = (int) Calculate.pxFromDp(mItemView.getContext(), 100);
             }

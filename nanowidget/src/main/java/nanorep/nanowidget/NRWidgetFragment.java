@@ -15,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -34,6 +35,7 @@ import nanorep.nanowidget.Components.NRLikeView;
 import nanorep.nanowidget.Components.NRResultItem;
 import nanorep.nanowidget.Components.NRSearchBar;
 import nanorep.nanowidget.Components.NRSuggestionsView;
+import nanorep.nanowidget.Components.NRWebContentView;
 import nanorep.nanowidget.DataClasse.NRFetchedDataManager;
 import nanorep.nanowidget.DataClasse.NRResult;
 import nanorep.nanowidget.Utilities.Calculate;
@@ -57,6 +59,9 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private NRWebContentView mChannelingWebView;
+
+    private NanoRep mNanoRep;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -95,13 +100,16 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
         return fragment;
     }
 
+    public void setNanoRep(NanoRep nanoRep) {
+        mNanoRep = nanoRep;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
-
         }
 
     }
@@ -111,11 +119,11 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 //        setHasOptionsMenu(true);
-        assert ((AppCompatActivity)getActivity()).getSupportActionBar() != null;
-        ((AppCompatActivity)getActivity()).getSupportActionBar().hide();
+//        assert ((AppCompatActivity)getActivity()).getSupportActionBar() != null;
+//        ((AppCompatActivity)getActivity()).getSupportActionBar().hide();
         mResutlsAdapter = new NRResutlsAdapter();
-        NanoRep nanoRep = new NanoRep("Main", null);
-        mFetchedDataManager = new NRFetchedDataManager(nanoRep, getContext());
+
+        mFetchedDataManager = new NRFetchedDataManager(mNanoRep, getContext());
         mFetchedDataManager.setFetcherListener(new NRFetcherListener() {
             @Override
             public void updateTitle(String title) {
@@ -157,6 +165,7 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
         mResultsRecyclerView = (RecyclerView) nanoView.findViewById(R.id.resultsView);
         mResultsRecyclerView.setLayoutManager(new GridLayoutManager(this.getContext(), 1));
         mResultsRecyclerView.setAdapter(mResutlsAdapter);
+        mChannelingWebView = (NRWebContentView) nanoView.findViewById(R.id.webContentView);
         return nanoView;
     }
 
@@ -167,8 +176,13 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
         }
     }
 
+    public NRFetchedDataManager getFetchedDataManager() {
+        return mFetchedDataManager;
+    }
 
-
+    public NRWebContentView getChannelingWebView() {
+        return mChannelingWebView;
+    }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -313,7 +327,7 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
 
     @Override
     public void onChannelSelected(NRChannelItem channelItem) {
-        NRChannelStrategy.presentor(channelItem.getChanneling(), getContext()).present();
+        NRChannelStrategy.presentor(channelItem.getChanneling(), this).present();
     }
 
     /**
