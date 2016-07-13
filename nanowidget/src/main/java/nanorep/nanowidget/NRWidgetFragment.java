@@ -12,7 +12,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.ImageButton;
 
 import java.util.ArrayList;
@@ -172,7 +171,11 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
                 if (mListener != null) {
                     if (event.getAction() == KeyEvent.ACTION_DOWN) {
                         if (keyCode == KeyEvent.KEYCODE_BACK) {
-                            mListener.onCancelWidget(NRWidgetFragment.this);
+                            if (getChildFragmentManager().getBackStackEntryCount() > 0) {
+                                getChildFragmentManager().popBackStack();
+                            } else {
+                                mListener.onCancelWidget(NRWidgetFragment.this);
+                            }
                             return true;
                         }
                     }
@@ -211,6 +214,7 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
 
     @Override
     public void searchForText(String text) {
+        mSuggestionsView.setSuggestions(null);
         mFetchedDataManager.searchText(text);
     }
 
@@ -239,8 +243,7 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
 
             @Override
             public void resultFragmentWillDismiss(NRResultFragment resultFragment) {
-//                getView().animate().translationXBy((float) (getView().getMeasuredWidth() * 0.25)).setDuration(200).setInterpolator(new AccelerateDecelerateInterpolator()).start();
-                getChildFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_left).remove(resultFragment).commit();
+//                getChildFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_left).remove(resultFragment).commit();
             }
 
             @Override
@@ -270,8 +273,7 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
         });
         resultFragment.setResult(item.getResult());
         getView().findViewById(R.id.fragment_place_holder).setVisibility(View.VISIBLE);
-//        getView().animate().translationXBy((float) (- getView().getMeasuredWidth() * 0.25)).setDuration(200).setInterpolator(new AccelerateDecelerateInterpolator()).start();
-        getChildFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_left).add(R.id.fragment_place_holder, resultFragment).commit();
+        getChildFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_left).add(R.id.fragment_place_holder, resultFragment).addToBackStack("test").commit();
     }
 
     @Override

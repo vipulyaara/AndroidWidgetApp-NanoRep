@@ -47,6 +47,11 @@ public class NRResultFragment extends Fragment implements View.OnClickListener, 
     private NRResultFragmentListener mListener;
     private View mView;
 
+    @Override
+    public void onClick(View v) {
+
+    }
+
 
     public interface NRResultFragmentListener {
         void onResultFragmentDismissed(NRResultFragment resultFragment);
@@ -142,58 +147,55 @@ public class NRResultFragment extends Fragment implements View.OnClickListener, 
                     mFeedbackView.setLayoutParams(params);
                 }
                 mView = view;
+
 //                view.setX(view.getMeasuredWidth());
 //                view.animate().translationXBy(-view.getMeasuredWidth()).setDuration(500).setInterpolator(new AccelerateDecelerateInterpolator()).start();
             }
         });
     }
 
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        getView().setFocusableInTouchMode(true);
-        getView().requestFocus();
-
-        getView().setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-
-                if (event.getAction() == KeyEvent.ACTION_DOWN)
-                    if (keyCode == KeyEvent.KEYCODE_BACK) {
-//                        mView.animate().translationXBy(getView().getMeasuredWidth()).setDuration(500).setInterpolator(new AccelerateDecelerateInterpolator()).setListener(new Animator.AnimatorListener() {
-//                            @Override
-//                            public void onAnimationStart(Animator animation) {
-//                                mListener.resultFragmentWillDismiss(NRResultFragment.this);
-//                            }
+//    @Override
+//    public void onActivityCreated(Bundle savedInstanceState) {
+//        super.onActivityCreated(savedInstanceState);
+//        getView().setFocusableInTouchMode(true);
+//        getView().requestFocus();
 //
-//                            @Override
-//                            public void onAnimationEnd(Animator animation) {
-//                                mListener.onResultFragmentDismissed(NRResultFragment.this);
-//                            }
+//        getView().setOnKeyListener(new View.OnKeyListener() {
+//            @Override
+//            public boolean onKey(View v, int keyCode, KeyEvent event) {
 //
-//                            @Override
-//                            public void onAnimationCancel(Animator animation) {
+//                if (event.getAction() == KeyEvent.ACTION_DOWN)
+//                    if (keyCode == KeyEvent.KEYCODE_BACK) {
+////                        mView.animate().translationXBy(getView().getMeasuredWidth()).setDuration(500).setInterpolator(new AccelerateDecelerateInterpolator()).setListener(new Animator.AnimatorListener() {
+////                            @Override
+////                            public void onAnimationStart(Animator animation) {
+////                                mListener.resultFragmentWillDismiss(NRResultFragment.this);
+////                            }
+////
+////                            @Override
+////                            public void onAnimationEnd(Animator animation) {
+////                                mListener.onResultFragmentDismissed(NRResultFragment.this);
+////                            }
+////
+////                            @Override
+////                            public void onAnimationCancel(Animator animation) {
+////
+////                            }
+////
+////                            @Override
+////                            public void onAnimationRepeat(Animator animation) {
+////
+////                            }
+////                        }).start();
+//                        mListener.resultFragmentWillDismiss(NRResultFragment.this);
+//                        return true;
+//                    }
 //
-//                            }
-//
-//                            @Override
-//                            public void onAnimationRepeat(Animator animation) {
-//
-//                            }
-//                        }).start();
-                        mListener.resultFragmentWillDismiss(NRResultFragment.this);
-                        return true;
-                    }
+//                return false;
+//            }
+//        });
+//    }
 
-                return false;
-            }
-        });
-    }
-
-    @Override
-    public void onClick(View v) {
-
-    }
 
     @Override
     public void onLikeClicked() {

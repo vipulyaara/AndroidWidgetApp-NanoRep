@@ -29,8 +29,6 @@ public class MainActivity extends AppCompatActivity implements NRWidgetFragment.
                 public void onClick(View v) {
                     v.setVisibility(View.INVISIBLE);
                     getSupportFragmentManager().beginTransaction().add(R.id.root_layout, nanoFragment, "test").commit();
-//                    NanoRep nanoRep = new NanoRep("Main", null);
-//                    NRFetchedDataManager mFetchedDataManager = new NRFetchedDataManager(nanoRep);
                 }
             });
         }

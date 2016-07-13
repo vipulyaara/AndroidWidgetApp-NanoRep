@@ -70,14 +70,16 @@ public class NRFetchedDataManager {
     }
 
     private void updateResults(ArrayList<NRQueryResult> queryResults) {
-        ArrayList<NRResult> results = new ArrayList<>();
-        for (NRQueryResult result: queryResults) {
-            NRResult currentResult = new NRResult(result);
-            currentResult.setHeight((int) Calculate.pxFromDp(mContext, 62));
-            results.add(currentResult);
+        if (queryResults != null) {
+            ArrayList<NRResult> results = new ArrayList<>();
+            for (NRQueryResult result : queryResults) {
+                NRResult currentResult = new NRResult(result);
+                currentResult.setHeight((int) Calculate.pxFromDp(mContext, 62));
+                results.add(currentResult);
+            }
+            mRows = queryResults.size();
+            mFetcherListener.insertRows(results);
         }
-        mRows = queryResults.size();
-        mFetcherListener.insertRows(results);
     }
 
     public NanoRep getNanoRep() {

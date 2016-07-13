@@ -55,9 +55,8 @@ public class NRWebContentChannelPresentor implements NRChannelPresentor{
                 url = ((NRChannelingOpenCustomURL)mChanneling).getLinkUrl();
                 break;
         }
-//        mNanoWidget.getChannelingWebView().loadUrl(url == null ? channelUri.toString() : url);
         String passUrl = url == null ? channelUri.toString() : url;
-        mResultFragment.getChildFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_left).add(R.id.content_id, NRWebContentFragment.newInstance(passUrl, null)).commit();
+        mResultFragment.getParentFragment().getChildFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_left).add(R.id.content_id, NRWebContentFragment.newInstance(passUrl, null)).addToBackStack("test2").commit();
     }
 
     @Override

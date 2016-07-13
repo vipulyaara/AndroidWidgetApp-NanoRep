@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.RelativeLayout;
 
 import nanorep.nanowidget.R;
@@ -49,30 +50,13 @@ public class NRWebContentFragment extends Fragment {
         mWebView = (WebView) view.findViewById(R.id.webContentView);
         mWebView.loadUrl(getArguments().getString(ARG_PARAM1));
         mWebView.getSettings().setJavaScriptEnabled(true);
+        mWebView.setWebViewClient(new WebViewClient());
         return view;
     }
 
-
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        getView().setFocusableInTouchMode(true);
-        getView().requestFocus();
-
-        getView().setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-
-                if (event.getAction() == KeyEvent.ACTION_DOWN) {
-                    if (keyCode == KeyEvent.KEYCODE_BACK) {
-                        mWebView.stopLoading();
-                        getParentFragment().getChildFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_left).remove(NRWebContentFragment.this).commit();
-                        return true;
-                    }
-                }
-
-                return false;
-            }
-        });
+    public void onDetach() {
+        super.onDetach();
+        mWebView.stopLoading();
     }
 }
