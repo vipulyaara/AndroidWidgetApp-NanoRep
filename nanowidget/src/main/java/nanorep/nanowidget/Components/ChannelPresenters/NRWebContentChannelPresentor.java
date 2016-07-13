@@ -9,6 +9,8 @@ import NanoRep.Chnneling.NRChanneling;
 import NanoRep.Chnneling.NRChannelingChatForm;
 import NanoRep.Chnneling.NRChannelingContactForm;
 import NanoRep.Chnneling.NRChannelingOpenCustomURL;
+import NanoRep.NanoRep;
+import nanorep.nanowidget.Components.NRResultFragment;
 import nanorep.nanowidget.DataClasse.NRResult;
 import nanorep.nanowidget.NRWidgetFragment;
 import nanorep.nanowidget.R;
@@ -17,27 +19,28 @@ import nanorep.nanowidget.R;
  * Created by nissimpardo on 28/06/16.
  */
 public class NRWebContentChannelPresentor implements NRChannelPresentor{
-    private NRWidgetFragment mNanoWidget;
+    private NRResultFragment mResultFragment;
+    private NanoRep mNanoRep;
     private NRChanneling mChanneling;
 
-    public NRWebContentChannelPresentor(NRWidgetFragment nanoWidget) {
-        mNanoWidget = nanoWidget;
+    public NRWebContentChannelPresentor(NRResultFragment resultFragment, NanoRep nanoRep) {
+        mResultFragment = resultFragment;
+        mNanoRep = nanoRep;
     }
 
     @Override
     public void present() {
-//        mNanoWidget.getChildFragmentManager().beginTransaction().add(R.id.contentId, NRWebFragment.newInstance(null, null)).commit();
-        mNanoWidget.getChannelingWebView().setVisibility(View.VISIBLE);
+//        mNanoWidget.getChannelingWebView().setVisibility(View.VISIBLE);
         Uri.Builder channelUri = new Uri.Builder();
         channelUri.scheme("http").authority("dev4.nanorep.com");
         String url = null;
         switch (mChanneling.getType()) {
             case ContactForm:
                 channelUri.appendPath("sdk/mobile/contactform.html");
-                channelUri.appendQueryParameter("account", mNanoWidget.getFetchedDataManager().getNanoRep().getAccountName());
+                channelUri.appendQueryParameter("account", mNanoRep.getAccountName());
                 channelUri.appendQueryParameter("articleId", mChanneling.getQueryResult().getId());
                 channelUri.appendQueryParameter("context", "null").appendQueryParameter("host", "my.nanorep.com");
-                channelUri.appendQueryParameter("kb", mNanoWidget.getFetchedDataManager().getNanoRep().getKnowledgeBase());
+                channelUri.appendQueryParameter("kb", mNanoRep.getKnowledgeBase());
                 channelUri.appendQueryParameter("text", mChanneling.getQueryResult().getTitle());
                 channelUri.appendQueryParameter("contactFormId", ((NRChannelingContactForm)mChanneling).getContactForms());
                 break;
@@ -52,7 +55,9 @@ public class NRWebContentChannelPresentor implements NRChannelPresentor{
                 url = ((NRChannelingOpenCustomURL)mChanneling).getLinkUrl();
                 break;
         }
-        mNanoWidget.getChannelingWebView().loadUrl(url == null ? channelUri.toString() : url);
+//        mNanoWidget.getChannelingWebView().loadUrl(url == null ? channelUri.toString() : url);
+        String passUrl = url == null ? channelUri.toString() : url;
+        mResultFragment.getChildFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_left).add(R.id.content_id, NRWebContentFragment.newInstance(passUrl, null)).commit();
     }
 
     @Override

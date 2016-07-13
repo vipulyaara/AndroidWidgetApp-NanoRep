@@ -4,19 +4,21 @@ package nanorep.nanowidget.Components.ChannelPresenters;
 import android.content.Context;
 
 import NanoRep.Chnneling.NRChanneling;
+import NanoRep.NanoRep;
+import nanorep.nanowidget.Components.NRResultFragment;
 import nanorep.nanowidget.NRWidgetFragment;
 
 /**
  * Created by nissimpardo on 26/06/16.
  */
 public class NRChannelStrategy {
-    public static NRChannelPresentor presentor(NRChanneling channeling, NRWidgetFragment fragment) {
+    public static NRChannelPresentor presentor(NRChanneling channeling, NRResultFragment fragment, NanoRep nanoRep) {
         NRChannelPresentor presentor = null;
         switch (channeling.getType()) {
             case OpenCustomURL:
             case ChatForm:
             case ContactForm:
-                presentor = new NRWebContentChannelPresentor(fragment);
+                presentor = new NRWebContentChannelPresentor(fragment, nanoRep);
                 break;
             case PhoneNumber:
                 presentor = new NRPhoneChannelPresentor(fragment.getContext());

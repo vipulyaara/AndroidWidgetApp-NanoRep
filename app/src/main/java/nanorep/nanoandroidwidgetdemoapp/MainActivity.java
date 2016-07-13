@@ -10,7 +10,7 @@ import NanoRep.NanoRep;
 import nanorep.nanowidget.DataClasse.NRFetchedDataManager;
 import nanorep.nanowidget.NRWidgetFragment;
 
-public class MainActivity extends AppCompatActivity implements NRWidgetFragment.OnFragmentInteractionListener {
+public class MainActivity extends AppCompatActivity implements NRWidgetFragment.NRWidgetFragmentListener {
 
     private NRWidgetFragment nanoFragment;
 
@@ -20,6 +20,7 @@ public class MainActivity extends AppCompatActivity implements NRWidgetFragment.
         setContentView(R.layout.activity_main);
         getSupportActionBar().setElevation(0);
         nanoFragment = NRWidgetFragment.newInstance(null, null);
+        nanoFragment.setListener(this);
         nanoFragment.setNanoRep(new NanoRep("us", null));
         Button loadButton = (Button)findViewById(R.id.button);
         if (loadButton != null) {
@@ -36,7 +37,7 @@ public class MainActivity extends AppCompatActivity implements NRWidgetFragment.
     }
 
     @Override
-    public void onFragmentInteraction(Uri uri) {
-
+    public void onCancelWidget(NRWidgetFragment widgetFragment) {
+        getSupportFragmentManager().beginTransaction().remove(nanoFragment).commit();
     }
 }

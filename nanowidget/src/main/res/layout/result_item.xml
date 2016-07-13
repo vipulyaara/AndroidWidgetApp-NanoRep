@@ -2,22 +2,16 @@
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
+                                    android:layout_marginTop="5dp"
+                                    android:layout_marginRight="5dp"
+                                    android:layout_marginLeft="5dp"
                                     android:id="@+id/cardView">
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="62dp"
             android:id="@+id/topView">
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="4dp"
-                android:src="@drawable/card_shadow"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentRight="true"
-                android:scaleType="fitXY"/>
+
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -46,77 +40,7 @@
                 android:src="@drawable/answer_arrowdown_icon"
                 android:background="#00ffffff"/>
         </RelativeLayout>
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/footerView"
-            android:layout_alignParentBottom="true"
-            android:layout_below="@+id/topView">
-            <WebView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/webView"
-                android:layout_alignParentTop="true"
-                android:layout_above="@+id/actionView"/>
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:id="@+id/actionView"
-                android:layout_alignParentBottom="true"
-                >
-                <nanorep.nanowidget.Components.NRLikeView
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:id="@+id/likeView"
-                    android:orientation="horizontal"
-                    android:weightSum="2"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentStart="true">
 
-                    <ImageButton
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:id="@+id/likeButton"
-                        android:layout_alignParentBottom="true"
-                        android:layout_alignParentStart="true"
-                        android:src="@drawable/grey_like_icon"/>
-
-                    <ImageButton
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:id="@+id/dislikeButton"
-                        android:layout_alignParentTop="true"
-                        android:layout_centerHorizontal="true"
-                        android:src="@drawable/grey_dislike_icon"/>
-                </nanorep.nanowidget.Components.NRLikeView>
-                <nanorep.nanowidget.Components.NRChannelingView
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:id="@+id/channelingView"
-                    android:layout_alignParentBottom="true"
-                    android:layout_below="@+id/likeView"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentStart="true">
-                    <android.support.v7.widget.RecyclerView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:id="@+id/channelingTabs"
-                        android:minHeight="50dp"
-                        android:layout_alignParentEnd="true"
-                        android:layout_alignParentStart="true">
-
-                    </android.support.v7.widget.RecyclerView>
-
-                </nanorep.nanowidget.Components.NRChannelingView>
-
-            </RelativeLayout>
-
-
-        </RelativeLayout>
-    </RelativeLayout>
 
 
 </android.support.v7.widget.CardView>

@@ -54,26 +54,20 @@ public class NRResultItem extends RecyclerView.ViewHolder implements View.OnClic
         mItemView = view;
         setHeight(maxHeight);
         mTitleButton = (Button) view.findViewById(R.id.titleButton);
-        mWebView = (WebView) view.findViewById(R.id.webView);
-        if (mWebView != null) {
-            mWebView.getSettings().setJavaScriptEnabled(true);
-            mWebView.setWebViewClient(new NRWebClient());
-        }
-        mFooterView = (RelativeLayout) view.findViewById(R.id.footerView);
+
+
         mUnFoldButton = (ImageButton) view.findViewById(R.id.unFoldButton);
         mUnFoldButton.setOnClickListener(this);
-        mActionView = (RelativeLayout) view.findViewById(R.id.actionView);
+
         mTitleButton.setOnClickListener(this);
         mShareButton = (ImageButton) view.findViewById(R.id.shareButton);
         mShareButton.setOnClickListener(this);
-        mLikeView = (NRLikeView) view.findViewById(R.id.likeView);
-        mLikeView.setListener(this);
-        mNRChannelingView = (NRChannelingView) view.findViewById(R.id.channelingView);
+
+
     }
 
     public void setListener(NRResultItemListener listener) {
         mListener = listener;
-        mNRChannelingView.setListener(mListener);
     }
 
     public void setResult(NRResult result) {
@@ -122,27 +116,28 @@ public class NRResultItem extends RecyclerView.ViewHolder implements View.OnClic
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.titleButton || v.getId() == R.id.unFoldButton) {
-            if (!mResult.isUnfolded()) {
-                if (mResult.getFetchedResult().getBody() == null) {
-                    mListener.shouldFetchFAQAnswerBody(this, mResult.getFetchedResult().getId());
-                } else {
-                    setBody(mResult.getFetchedResult().getBody());
-                }
-            }
-            ObjectAnimator.ofFloat(mUnFoldButton, "rotation", 0, mResult.isUnfolded() ? 0 : -180).start();
+//            if (!mResult.isUnfolded()) {
+//                if (mResult.getFetchedResult().getBody() == null) {
+//                    mListener.shouldFetchFAQAnswerBody(this, mResult.getFetchedResult().getId());
+//                } else {
+//                    setBody(mResult.getFetchedResult().getBody());
+//                }
+//            }
+//            ObjectAnimator.ofFloat(mUnFoldButton, "rotation", 0, mResult.isUnfolded() ? 0 : -180).start();
+//            mListener.unfoldItem(this);
+//            if (mResult.getFetchedResult().getChanneling() == null) {
+//                RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) mActionView.getLayoutParams();
+//                params.height = (int) Calculate.pxFromDp(mItemView.getContext(), 50);
+//            } else {
+//                ArrayList<NRChanneling> channelings = mResult.getFetchedResult().getChanneling();
+//                for (NRChanneling channeling: channelings) {
+//                    channeling.setQueryResult(mResult.getFetchedResult());
+//                }
+//                mNRChannelingView.setChannelings(channelings);
+//                RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) mActionView.getLayoutParams();
+//                params.height = (int) Calculate.pxFromDp(mItemView.getContext(), 100);
+//            }
             mListener.unfoldItem(this);
-            if (mResult.getFetchedResult().getChanneling() == null) {
-                RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) mActionView.getLayoutParams();
-                params.height = (int) Calculate.pxFromDp(mItemView.getContext(), 50);
-            } else {
-                ArrayList<NRChanneling> channelings = mResult.getFetchedResult().getChanneling();
-                for (NRChanneling channeling: channelings) {
-                    channeling.setQueryResult(mResult.getFetchedResult());
-                }
-                mNRChannelingView.setChannelings(channelings);
-                RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) mActionView.getLayoutParams();
-                params.height = (int) Calculate.pxFromDp(mItemView.getContext(), 100);
-            }
         } else if (v.getId() == R.id.shareButton) {
             mListener.onShareClicked(this, mResult.getFetchedResult().getTitle());
         }

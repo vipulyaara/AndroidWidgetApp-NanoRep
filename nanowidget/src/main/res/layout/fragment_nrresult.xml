@@ -1,0 +1,99 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+                android:id="@+id/content_id"
+             tools:context="nanorep.nanowidget.Components.NRResultFragment"
+    >
+
+    <!-- TODO: Update blank fragment layout -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="62dp"
+        android:id="@+id/topView"
+        android:background="@color/white"
+        android:layout_alignParentTop="true">
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/resultTitle"
+            android:layout_toStartOf="@+id/shareButton"
+            android:background="#00ffffff"
+            android:textColor="#189ac6"
+            android:textAlignment="viewStart"
+            android:text="title"
+            android:textStyle="bold"
+            android:paddingLeft="10dp"/>
+        <ImageButton
+            android:layout_width="40dp"
+            android:layout_height="match_parent"
+            android:id="@+id/shareButton"
+            android:layout_centerVertical="true"
+            android:src="@drawable/share_icon"
+            android:background="#00ffffff"
+            android:layout_alignParentEnd="true"/>
+    </RelativeLayout>
+    <WebView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/resultWebView"
+        android:layout_below="@+id/topView"
+        android:layout_above="@+id/feedbackView"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_marginBottom="5dp"
+        android:id="@+id/feedbackView"
+        android:background="@color/white"
+        android:layout_alignParentBottom="true"
+        >
+        <nanorep.nanowidget.Components.NRLikeView
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:id="@+id/likeView"
+            android:orientation="horizontal"
+            android:weightSum="2"
+            android:layout_alignParentTop="true">
+
+            <ImageButton
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:id="@+id/likeButton"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentStart="true"
+                android:src="@drawable/grey_like_icon"/>
+
+            <ImageButton
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:id="@+id/dislikeButton"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:src="@drawable/grey_dislike_icon"/>
+        </nanorep.nanowidget.Components.NRLikeView>
+        <nanorep.nanowidget.Components.NRChannelingView
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:id="@+id/channelingView"
+
+
+            android:layout_alignParentBottom="true"
+            android:layout_below="@+id/likeView">
+            <android.support.v7.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/channelingTabs"
+                android:minHeight="50dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentStart="true">
+
+            </android.support.v7.widget.RecyclerView>
+
+        </nanorep.nanowidget.Components.NRChannelingView>
+
+    </RelativeLayout>
+
+</RelativeLayout>
