@@ -1,32 +1,26 @@
 package nanorep.nanowidget.Components;
 
 
-import android.animation.Animator;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AccelerateDecelerateInterpolator;
 import android.webkit.WebView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import NanoRep.Chnneling.NRChanneling;
-import NanoRep.Interfaces.NRLikeCompletion;
-import NanoRep.RequestParams.NRLikeType;
+import nanorep.Chnneling.NRChanneling;
+import nanorep.RequestParams.NRLikeType;
 import nanorep.nanowidget.DataClasse.NRResult;
-import nanorep.nanowidget.NRWidgetFragment;
 import nanorep.nanowidget.R;
 import nanorep.nanowidget.Utilities.Calculate;
 import nanorep.nanowidget.Utilities.NRWebClient;
@@ -200,7 +194,7 @@ public class NRResultFragment extends Fragment implements View.OnClickListener, 
     @Override
     public void onLikeClicked() {
         if (mLikeView.getLikeSelection()) {
-//            mFetchedDataManager.sendLike(NRLikeType.POSITIVE, item.getResult(), new NRLikeCompletion() {
+//            mFetchedDataManager.sendLike(NRLikeType.POSITIVE, item.getResult(), new OnLikeSent() {
 //                @Override
 //                public void likeResult(int type, boolean success) {
 //                    if (success) {
@@ -218,7 +212,7 @@ public class NRResultFragment extends Fragment implements View.OnClickListener, 
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     if (which == DialogInterface.BUTTON_POSITIVE && adapter.getSelection() != NRLikeType.POSITIVE) {
-//                        mFetchedDataManager.sendLike(adapter.getSelection(), item.getResult(), new NRLikeCompletion() {
+//                        mFetchedDataManager.sendLike(adapter.getSelection(), item.getResult(), new OnLikeSent() {
 //                            @Override
 //                            public void likeResult(int type, boolean success) {
 //                                item.getLikeView().updateLikeButton(false);

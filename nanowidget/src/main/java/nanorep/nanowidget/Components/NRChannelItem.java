@@ -5,8 +5,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import NanoRep.Chnneling.NRChanneling;
-import NanoRep.Interfaces.NRQueryResult;
+import nanorep.Chnneling.NRChanneling;
 import nanorep.nanowidget.R;
 
 /**

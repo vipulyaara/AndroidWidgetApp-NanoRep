@@ -1,31 +1,15 @@
 package nanorep.nanowidget.Components;
 
-import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.TypedValue;
 import android.view.View;
-import android.view.animation.AccelerateDecelerateInterpolator;
 import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
-import com.nanorep.nanorepsdk.Connection.NRConnection;
-
-import org.w3c.dom.Text;
-
-import java.util.ArrayList;
-
-import NanoRep.Chnneling.NRChanneling;
-import NanoRep.Interfaces.NRQueryResult;
 import nanorep.nanowidget.DataClasse.NRResult;
 import nanorep.nanowidget.R;
-import nanorep.nanowidget.Utilities.Calculate;
-import nanorep.nanowidget.Utilities.NRWebClient;
 import nanorep.nanowidget.interfaces.NRResultItemListener;
 import nanorep.nanowidget.interfaces.OnLikeListener;
 

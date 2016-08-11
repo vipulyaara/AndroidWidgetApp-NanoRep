@@ -38,11 +38,11 @@ public class NRSearchBar extends RelativeLayout implements SearchView.OnQueryTex
         if (child.getId() == R.id.searchView) {
             mSearchView = (SearchView) child;
             mSearchView.setOnQueryTextListener(this);
-            LinearLayout icon = (LinearLayout) mSearchView.findViewById(android.support.v7.appcompat.R.id.search_mag_icon);
-            TextView searchTextView = (TextView) icon.getChildAt(0);
-            searchTextView.setTextColor(Color.WHITE);
-            ImageView iconImg = (ImageView) icon.getChildAt(1);
-            iconImg.setImageResource(R.drawable.searchbar_search_icon);
+//            LinearLayout icon = (LinearLayout) mSearchView.findViewById(android.support.v7.appcompat.R.id.search_mag_icon);
+//            TextView searchTextView = (TextView) icon.getChildAt(0);
+//            searchTextView.setTextColor(Color.WHITE);
+//            ImageView iconImg = (ImageView) icon.getChildAt(1);
+//            iconImg.setImageResource(R.drawable.searchbar_search_icon);
         } else if (child instanceof AppCompatImageButton) {
             mSpeechButton = (ImageButton) child;
             mSpeechButton.setOnClickListener(this);

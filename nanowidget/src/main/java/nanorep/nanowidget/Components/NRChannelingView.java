@@ -2,7 +2,6 @@ package nanorep.nanowidget.Components;
 
 import android.content.Context;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -12,7 +11,7 @@ import android.widget.RelativeLayout;
 
 import java.util.ArrayList;
 
-import NanoRep.Chnneling.NRChanneling;
+import nanorep.Chnneling.NRChanneling;
 import nanorep.nanowidget.R;
 
 /**

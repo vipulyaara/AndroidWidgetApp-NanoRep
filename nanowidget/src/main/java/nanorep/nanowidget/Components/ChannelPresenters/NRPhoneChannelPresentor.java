@@ -8,8 +8,8 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.support.v4.app.ActivityCompat;
 
-import NanoRep.Chnneling.NRChanneling;
-import NanoRep.Chnneling.NRChannelingPhoneNumber;
+import nanorep.Chnneling.NRChanneling;
+import nanorep.Chnneling.NRChannelingPhoneNumber;
 import nanorep.nanowidget.DataClasse.NRResult;
 
 /**

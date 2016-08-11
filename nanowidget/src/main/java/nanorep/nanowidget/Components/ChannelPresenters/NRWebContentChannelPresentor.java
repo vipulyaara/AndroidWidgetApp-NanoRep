@@ -1,18 +1,14 @@
 package nanorep.nanowidget.Components.ChannelPresenters;
 
-import android.content.Context;
-import android.content.Intent;
 import android.net.Uri;
-import android.view.View;
 
-import NanoRep.Chnneling.NRChanneling;
-import NanoRep.Chnneling.NRChannelingChatForm;
-import NanoRep.Chnneling.NRChannelingContactForm;
-import NanoRep.Chnneling.NRChannelingOpenCustomURL;
-import NanoRep.NanoRep;
+import nanorep.Chnneling.NRChanneling;
+import nanorep.Chnneling.NRChannelingChatForm;
+import nanorep.Chnneling.NRChannelingContactForm;
+import nanorep.Chnneling.NRChannelingOpenCustomURL;
+import nanorep.Nanorep;
 import nanorep.nanowidget.Components.NRResultFragment;
 import nanorep.nanowidget.DataClasse.NRResult;
-import nanorep.nanowidget.NRWidgetFragment;
 import nanorep.nanowidget.R;
 
 /**
@@ -20,10 +16,10 @@ import nanorep.nanowidget.R;
  */
 public class NRWebContentChannelPresentor implements NRChannelPresentor{
     private NRResultFragment mResultFragment;
-    private NanoRep mNanoRep;
+    private Nanorep mNanoRep;
     private NRChanneling mChanneling;
 
-    public NRWebContentChannelPresentor(NRResultFragment resultFragment, NanoRep nanoRep) {
+    public NRWebContentChannelPresentor(NRResultFragment resultFragment, Nanorep nanoRep) {
         mResultFragment = resultFragment;
         mNanoRep = nanoRep;
     }
@@ -37,10 +33,10 @@ public class NRWebContentChannelPresentor implements NRChannelPresentor{
         switch (mChanneling.getType()) {
             case ContactForm:
                 channelUri.appendPath("sdk/mobile/contactform.html");
-                channelUri.appendQueryParameter("account", mNanoRep.getAccountName());
+                channelUri.appendQueryParameter("account", mNanoRep.getAccountParams().getAccount());
                 channelUri.appendQueryParameter("articleId", mChanneling.getQueryResult().getId());
                 channelUri.appendQueryParameter("context", "null").appendQueryParameter("host", "my.nanorep.com");
-                channelUri.appendQueryParameter("kb", mNanoRep.getKnowledgeBase());
+                channelUri.appendQueryParameter("kb", mNanoRep.getAccountParams().getKnowledgeBase());
                 channelUri.appendQueryParameter("text", mChanneling.getQueryResult().getTitle());
                 channelUri.appendQueryParameter("contactFormId", ((NRChannelingContactForm)mChanneling).getContactForms());
                 break;

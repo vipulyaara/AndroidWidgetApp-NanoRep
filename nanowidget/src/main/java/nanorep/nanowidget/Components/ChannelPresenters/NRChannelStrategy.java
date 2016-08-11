@@ -1,18 +1,17 @@
 package nanorep.nanowidget.Components.ChannelPresenters;
 
 
-import android.content.Context;
-
-import NanoRep.Chnneling.NRChanneling;
-import NanoRep.NanoRep;
+import nanorep.Chnneling.NRChanneling;
+import nanorep.Nanorep;
 import nanorep.nanowidget.Components.NRResultFragment;
-import nanorep.nanowidget.NRWidgetFragment;
+
+import static nanorep.Chnneling.NRChanneling.NRChannelingType.OpenCustomURL;
 
 /**
  * Created by nissimpardo on 26/06/16.
  */
 public class NRChannelStrategy {
-    public static NRChannelPresentor presentor(NRChanneling channeling, NRResultFragment fragment, NanoRep nanoRep) {
+    public static NRChannelPresentor presentor(NRChanneling channeling, NRResultFragment fragment, Nanorep nanoRep) {
         NRChannelPresentor presentor = null;
         switch (channeling.getType()) {
             case OpenCustomURL:

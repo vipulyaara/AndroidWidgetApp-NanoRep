@@ -2,9 +2,7 @@ package nanorep.nanowidget.interfaces;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Objects;
 
-import NanoRep.Interfaces.NRQueryResult;
 import nanorep.nanowidget.DataClasse.NRResult;
 
 /**

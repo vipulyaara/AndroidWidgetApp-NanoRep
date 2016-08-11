@@ -1,6 +1,6 @@
 package nanorep.nanowidget.Components.ChannelPresenters;
 
-import NanoRep.Chnneling.NRChanneling;
+import nanorep.Chnneling.NRChanneling;
 import nanorep.nanowidget.DataClasse.NRResult;
 
 /**

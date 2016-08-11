@@ -1,7 +1,7 @@
 package nanorep.nanowidget;
 
-import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
@@ -17,10 +17,8 @@ import android.widget.ImageButton;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import NanoRep.Interfaces.NRLikeCompletion;
-import NanoRep.Interfaces.NRSpeechRecognizerCompletion;
-import NanoRep.NanoRep;
-import NanoRep.RequestParams.NRLikeType;
+import nanorep.Nanorep;
+import nanorep.RequestParams.NRLikeType;
 import nanorep.nanowidget.Components.ChannelPresenters.NRChannelStrategy;
 import nanorep.nanowidget.Components.NRChannelItem;
 import nanorep.nanowidget.Components.NRResultFragment;
@@ -43,7 +41,7 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    private NanoRep mNanoRep;
+    private Nanorep mNanoRep;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -86,7 +84,7 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
         return fragment;
     }
 
-    public void setNanoRep(NanoRep nanoRep) {
+    public void setNanoRep(Nanorep nanoRep) {
         mNanoRep = nanoRep;
     }
 
@@ -150,12 +148,14 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
         mResultsRecyclerView = (RecyclerView) nanoView.findViewById(R.id.resultsView);
         mResultsRecyclerView.setLayoutManager(new GridLayoutManager(this.getContext(), 1));
         mResultsRecyclerView.setAdapter(mResutlsAdapter);
-        mResultsRecyclerView.setOnScrollChangeListener(new View.OnScrollChangeListener() {
-            @Override
-            public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            mResultsRecyclerView.setOnScrollChangeListener(new View.OnScrollChangeListener() {
+                @Override
+                public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
 
-            }
-        });
+                }
+            });
+        }
         return nanoView;
     }
 
@@ -198,13 +198,13 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
 
     @Override
     public void onStartRecording(final ImageButton button) {
-        mFetchedDataManager.startSpeech(new NRSpeechRecognizerCompletion() {
-            @Override
-            public void speechReconitionResults(String speechToText) {
-                button.setEnabled(true);
-                onSelectSuggestion(speechToText);
-            }
-        });
+//        mFetchedDataManager.startSpeech(new NRSpeechRecognizerCompletion() {
+//            @Override
+//            public void speechReconitionResults(String speechToText) {
+//                button.setEnabled(true);
+//                onSelectSuggestion(speechToText);
+//            }
+//        });
     }
 
     @Override
@@ -247,11 +247,11 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
             }
 
             @Override
-            public void onLikeSelected(final NRResultFragment resultFragment1, final NRLikeType likeType, NRResult currentResult) {
-                mFetchedDataManager.sendLike(likeType, currentResult, new NRLikeCompletion() {
+            public void onLikeSelected(final NRResultFragment resultFragment, final NRLikeType likeType, NRResult currentResult) {
+                mFetchedDataManager.sendLike(likeType, currentResult, new Nanorep.OnLikeSentListener() {
                     @Override
-                    public void likeResult(int type, boolean success) {
-                        resultFragment1.setLikeState(likeType == NRLikeType.POSITIVE);
+                    public void onLikeSent(int type, boolean success) {
+                        resultFragment.setLikeState(likeType == NRLikeType.POSITIVE);
                     }
                 });
             }
