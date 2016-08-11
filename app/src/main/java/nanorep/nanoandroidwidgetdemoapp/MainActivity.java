@@ -8,6 +8,7 @@ import android.widget.Button;
 import com.crittercism.app.Crittercism;
 import com.nanorep.nanorepsdk.Connection.NRError;
 
+
 import nanorep.Nanorep;
 import nanorep.NanorepBuilder;
 import nanorep.ResponseParams.NRConfiguration;
@@ -30,15 +31,15 @@ public class MainActivity extends AppCompatActivity implements NRWidgetFragment.
             loadButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(final View v) {
+                    v.setVisibility(View.INVISIBLE);
                     Nanorep.AccountParams accountParams = new Nanorep.AccountParams();
-                    accountParams.setAccount("voonik");
+                    accountParams.setAccount("yatra");
                     accountParams.setKnowledgeBase("English");
                     Nanorep test = NanorepBuilder.createNanorep(getApplicationContext(), accountParams);
                     nanoFragment.setNanoRep(test);
                     test.fetchConfiguration(new Nanorep.OnConfigurationFetchedListener() {
                         @Override
                         public void onConfigurationFetched(NRConfiguration configuration, NRError error) {
-                            v.setVisibility(View.INVISIBLE);
                             getSupportFragmentManager().beginTransaction().add(R.id.root_layout, nanoFragment, "test").commit();
                         }
                     });

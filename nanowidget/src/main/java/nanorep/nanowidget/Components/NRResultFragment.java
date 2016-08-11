@@ -107,6 +107,8 @@ public class NRResultFragment extends Fragment implements View.OnClickListener, 
                 mWebView = (WebView) view.findViewById(R.id.resultWebView);
                 if (mWebView != null) {
                     mWebView.getSettings().setJavaScriptEnabled(true);
+//                    mWebView.getSettings().setLoadWithOverviewMode(true);
+//                    mWebView.getSettings().setUseWideViewPort(true);
                     mWebView.setWebViewClient(new NRWebClient());
                     if (mResult.getFetchedResult().getBody() != null) {
                         setBody(mResult.getFetchedResult().getBody());

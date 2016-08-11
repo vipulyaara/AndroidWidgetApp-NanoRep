@@ -3,19 +3,22 @@ package nanorep.nanowidget.Components;
 import android.content.Context;
 import android.graphics.Color;
 import android.support.v7.widget.AppCompatImageButton;
+import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.SearchView;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import java.lang.reflect.Field;
+
 import nanorep.nanowidget.R;
 import nanorep.nanowidget.interfaces.NRSearchBarListener;
+
+import static nanorep.nanowidget.R.id.searchView;
 
 
 /**
@@ -35,14 +38,34 @@ public class NRSearchBar extends RelativeLayout implements SearchView.OnQueryTex
     @Override
     public void onViewAdded(View child) {
         super.onViewAdded(child);
-        if (child.getId() == R.id.searchView) {
+        if (child.getId() == searchView) {
             mSearchView = (SearchView) child;
             mSearchView.setOnQueryTextListener(this);
-//            LinearLayout icon = (LinearLayout) mSearchView.findViewById(android.support.v7.appcompat.R.id.search_mag_icon);
-//            TextView searchTextView = (TextView) icon.getChildAt(0);
-//            searchTextView.setTextColor(Color.WHITE);
-//            ImageView iconImg = (ImageView) icon.getChildAt(1);
-//            iconImg.setImageResource(R.drawable.searchbar_search_icon);
+
+
+//            if (mSearchView instanceof ViewGroup) {
+//                ViewGroup viewGroup = (ViewGroup) mSearchView;
+//                for (int i = 0; i < viewGroup.getChildCount(); i++) {
+//                    changeSearchViewTextColor(viewGroup.getChildAt(i));
+//                }
+//            }
+            View icon = mSearchView.findViewById(android.support.v7.appcompat.R.id.search_button);
+            ((AppCompatImageView)icon).setImageResource(R.drawable.searchbar_search_icon);
+            SearchView.SearchAutoComplete textArea = (SearchView.SearchAutoComplete) mSearchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
+            textArea.setTextColor(Color.WHITE);
+            try {
+                Field searchField = SearchView.class.getDeclaredField("mCloseButton");
+                searchField.setAccessible(true);
+                ImageView closeBtn = (ImageView) searchField.get(mSearchView);
+                closeBtn.setImageResource(R.drawable.searchbar_x_icon);
+
+            } catch (NoSuchFieldException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+
+
         } else if (child instanceof AppCompatImageButton) {
             mSpeechButton = (ImageButton) child;
             mSpeechButton.setOnClickListener(this);
