@@ -1,4 +1,3 @@
-include ':app', ':nanowidget'
+include ':app', ':nanowidget', ':nanoclient'
 
-include ':NanoAndroidSDK'
-project(':NanoAndroidSDK').projectDir=new File('../NanoAndroidSDK')
+

@@ -3,21 +3,22 @@ package nanorep.nanowidget.DataClasse;
 import android.content.Context;
 import android.util.Log;
 
-import com.nanorep.nanorepsdk.Connection.NRError;
+
+import com.nanorep.nanoclient.Connection.NRError;
+import com.nanorep.nanoclient.Interfaces.NRQueryResult;
+import com.nanorep.nanoclient.Interfaces.NRSpeechRecognizerCompletion;
+import com.nanorep.nanoclient.Nanorep;
+import com.nanorep.nanoclient.RequestParams.NRFAQLikeParams;
+import com.nanorep.nanoclient.RequestParams.NRLikeType;
+import com.nanorep.nanoclient.RequestParams.NRSearchLikeParams;
+import com.nanorep.nanoclient.Response.NRConfiguration;
+import com.nanorep.nanoclient.Response.NRFAQAnswer;
+import com.nanorep.nanoclient.Response.NRFAQData;
+import com.nanorep.nanoclient.Response.NRSearchResponse;
+import com.nanorep.nanoclient.Response.NRSuggestions;
 
 import java.util.ArrayList;
 
-import nanorep.Interfaces.NRQueryResult;
-import nanorep.Interfaces.NRSpeechRecognizerCompletion;
-import nanorep.Nanorep;
-import nanorep.RequestParams.NRFAQLikeParams;
-import nanorep.RequestParams.NRLikeType;
-import nanorep.RequestParams.NRSearchLikeParams;
-import nanorep.ResponseParams.NRConfiguration;
-import nanorep.ResponseParams.NRFAQAnswer;
-import nanorep.ResponseParams.NRFAQData;
-import nanorep.ResponseParams.NRSearchResponse;
-import nanorep.ResponseParams.NRSuggestions;
 import nanorep.nanowidget.Utilities.Calculate;
 import nanorep.nanowidget.interfaces.NRFetcherListener;
 

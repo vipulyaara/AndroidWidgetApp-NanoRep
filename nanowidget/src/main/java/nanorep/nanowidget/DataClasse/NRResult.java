@@ -1,7 +1,8 @@
 package nanorep.nanowidget.DataClasse;
 
 
-import nanorep.Interfaces.NRQueryResult;
+import com.nanorep.nanoclient.Interfaces.NRQueryResult;
+
 import nanorep.nanowidget.Components.NRResultItem;
 
 /**

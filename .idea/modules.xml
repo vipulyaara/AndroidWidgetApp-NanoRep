@@ -3,8 +3,8 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/AndroidWidgetApp.iml" filepath="$PROJECT_DIR$/AndroidWidgetApp.iml" />
-      <module fileurl="file://$PROJECT_DIR$/../NanoAndroidSDK/NanoAndroidSDK.iml" filepath="$PROJECT_DIR$/../NanoAndroidSDK/NanoAndroidSDK.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/nanoclient/nanoclient.iml" filepath="$PROJECT_DIR$/nanoclient/nanoclient.iml" />
       <module fileurl="file://$PROJECT_DIR$/nanowidget/nanowidget.iml" filepath="$PROJECT_DIR$/nanowidget/nanowidget.iml" />
     </modules>
   </component>

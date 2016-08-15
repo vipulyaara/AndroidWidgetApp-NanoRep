@@ -14,11 +14,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 
+import com.nanorep.nanoclient.Nanorep;
+import com.nanorep.nanoclient.RequestParams.NRLikeType;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import nanorep.Nanorep;
-import nanorep.RequestParams.NRLikeType;
 import nanorep.nanowidget.Components.ChannelPresenters.NRChannelStrategy;
 import nanorep.nanowidget.Components.NRChannelItem;
 import nanorep.nanowidget.Components.NRResultFragment;

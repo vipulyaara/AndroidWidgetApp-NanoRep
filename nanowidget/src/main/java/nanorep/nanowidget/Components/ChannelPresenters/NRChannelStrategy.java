@@ -1,11 +1,11 @@
 package nanorep.nanowidget.Components.ChannelPresenters;
 
 
-import nanorep.Chnneling.NRChanneling;
-import nanorep.Nanorep;
+import com.nanorep.nanoclient.Channeling.NRChanneling;
+import com.nanorep.nanoclient.Nanorep;
+
 import nanorep.nanowidget.Components.NRResultFragment;
 
-import static nanorep.Chnneling.NRChanneling.NRChannelingType.OpenCustomURL;
 
 /**
  * Created by nissimpardo on 26/06/16.

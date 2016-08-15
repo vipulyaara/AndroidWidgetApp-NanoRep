@@ -9,9 +9,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
+import com.nanorep.nanoclient.Channeling.NRChanneling;
+
 import java.util.ArrayList;
 
-import nanorep.Chnneling.NRChanneling;
 import nanorep.nanowidget.R;
 
 /**

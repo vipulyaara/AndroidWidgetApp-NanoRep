@@ -2,11 +2,12 @@ package nanorep.nanowidget.Components.ChannelPresenters;
 
 import android.net.Uri;
 
-import nanorep.Chnneling.NRChanneling;
-import nanorep.Chnneling.NRChannelingChatForm;
-import nanorep.Chnneling.NRChannelingContactForm;
-import nanorep.Chnneling.NRChannelingOpenCustomURL;
-import nanorep.Nanorep;
+import com.nanorep.nanoclient.Channeling.NRChanneling;
+import com.nanorep.nanoclient.Channeling.NRChannelingChatForm;
+import com.nanorep.nanoclient.Channeling.NRChannelingContactForm;
+import com.nanorep.nanoclient.Channeling.NRChannelingOpenCustomURL;
+import com.nanorep.nanoclient.Nanorep;
+
 import nanorep.nanowidget.Components.NRResultFragment;
 import nanorep.nanowidget.DataClasse.NRResult;
 import nanorep.nanowidget.R;

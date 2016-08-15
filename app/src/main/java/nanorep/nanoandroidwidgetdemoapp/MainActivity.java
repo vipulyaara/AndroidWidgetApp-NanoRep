@@ -6,12 +6,12 @@ import android.view.View;
 import android.widget.Button;
 
 import com.crittercism.app.Crittercism;
-import com.nanorep.nanorepsdk.Connection.NRError;
+import com.nanorep.nanoclient.Connection.NRError;
+import com.nanorep.nanoclient.Nanorep;
+import com.nanorep.nanoclient.NanorepBuilder;
+import com.nanorep.nanoclient.Response.NRConfiguration;
 
 
-import nanorep.Nanorep;
-import nanorep.NanorepBuilder;
-import nanorep.ResponseParams.NRConfiguration;
 import nanorep.nanowidget.NRWidgetFragment;
 
 public class MainActivity extends AppCompatActivity implements NRWidgetFragment.NRWidgetFragmentListener {
