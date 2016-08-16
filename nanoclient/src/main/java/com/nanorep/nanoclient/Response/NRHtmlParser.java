@@ -44,7 +44,7 @@ public class NRHtmlParser {
                     case XmlPullParser.START_TAG:
                         if (parser.getName().equals("a") && getValue("nanoreplinkid", parser) != null) {
                             String idStr = "nanorep://id/" + getValue("nanoreplinkid", parser);
-                            mHtmlString.replace("javascript:void(0", idStr);
+                            mHtmlString = mHtmlString.replace("javascript:void(0)", idStr);
                             Log.d("test", getValue("nanoreplinkid", parser));
                             return mHtmlString;
                         }
