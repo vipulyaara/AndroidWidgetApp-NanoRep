@@ -12,6 +12,8 @@ import com.nanorep.nanoclient.NanorepBuilder;
 import com.nanorep.nanoclient.Response.NRConfiguration;
 
 
+import java.util.HashMap;
+
 import nanorep.nanowidget.NRWidgetFragment;
 
 public class MainActivity extends AppCompatActivity implements NRWidgetFragment.NRWidgetFragmentListener {
@@ -33,8 +35,11 @@ public class MainActivity extends AppCompatActivity implements NRWidgetFragment.
                 public void onClick(final View v) {
                     v.setVisibility(View.INVISIBLE);
                     Nanorep.AccountParams accountParams = new Nanorep.AccountParams();
-                    accountParams.setAccount("yatra");
-                    accountParams.setKnowledgeBase("English");
+                    accountParams.setAccount("nanorep");
+                    accountParams.setKnowledgeBase("english");
+                    HashMap<String, String> channel = new HashMap();
+                    channel.put("channel", "mobile");
+                    accountParams.setContext(channel);
                     Nanorep test = NanorepBuilder.createNanorep(getApplicationContext(), accountParams);
                     nanoFragment.setNanoRep(test);
                     test.fetchConfiguration(new Nanorep.OnConfigurationFetchedListener() {

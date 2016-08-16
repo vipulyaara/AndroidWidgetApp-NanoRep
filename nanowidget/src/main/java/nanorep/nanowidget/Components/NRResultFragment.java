@@ -6,10 +6,13 @@ import android.support.v4.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -18,13 +21,13 @@ import android.widget.TextView;
 
 import com.nanorep.nanoclient.Channeling.NRChanneling;
 import com.nanorep.nanoclient.RequestParams.NRLikeType;
+import com.nanorep.nanoclient.Response.NRHtmlParser;
 
 import java.util.ArrayList;
 
 import nanorep.nanowidget.DataClasse.NRResult;
 import nanorep.nanowidget.R;
 import nanorep.nanowidget.Utilities.Calculate;
-import nanorep.nanowidget.Utilities.NRWebClient;
 import nanorep.nanowidget.interfaces.OnLikeListener;
 
 
@@ -73,8 +76,10 @@ public class NRResultFragment extends Fragment implements View.OnClickListener, 
     }
 
     public void setBody(String htmlString) {
+        NRHtmlParser parser = new NRHtmlParser(htmlString);
+        String parsed = parser.getParsedHtml();
         mResult.getFetchedResult().setBody(htmlString);
-        mWebView.loadData(htmlString, "text/html", "UTF-8");
+        mWebView.loadData(parsed, "text/html", "UTF-8");
     }
 
     @Override
@@ -110,7 +115,13 @@ public class NRResultFragment extends Fragment implements View.OnClickListener, 
                     mWebView.getSettings().setJavaScriptEnabled(true);
 //                    mWebView.getSettings().setLoadWithOverviewMode(true);
 //                    mWebView.getSettings().setUseWideViewPort(true);
-                    mWebView.setWebViewClient(new NRWebClient());
+                    mWebView.setWebViewClient(new WebViewClient() {
+                        @Override
+                        public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+                            Log.d("NRResultFragment", request.getUrl().toString());
+                            return false;
+                        }
+                    });
                     if (mResult.getFetchedResult().getBody() != null) {
                         setBody(mResult.getFetchedResult().getBody());
                     } else {

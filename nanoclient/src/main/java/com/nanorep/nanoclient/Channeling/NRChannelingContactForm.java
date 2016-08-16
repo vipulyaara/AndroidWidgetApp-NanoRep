@@ -9,14 +9,14 @@ public class NRChannelingContactForm extends NRChanneling {
 
     private String contactForms;
     private String ticketingInterface;
-    private String showInArticle;
+    private Boolean showInArticle;
     private String thankYouMessage;
 
     public NRChannelingContactForm(HashMap<String, Object> params) {
         super(params);
         contactForms = (String)params.get("contactForms");
         ticketingInterface = (String)params.get("ticketingInterface");
-        showInArticle = (String)params.get("showInArticle");
+        showInArticle = (Boolean) params.get("showInArticle");
         thankYouMessage = (String)params.get("thankYouMessage");
         this.type = NRChannelingType.ContactForm;
     }
@@ -29,7 +29,7 @@ public class NRChannelingContactForm extends NRChanneling {
         return ticketingInterface;
     }
 
-    public String getShowInArticle() {
+    public Boolean getShowInArticle() {
         return showInArticle;
     }
 
