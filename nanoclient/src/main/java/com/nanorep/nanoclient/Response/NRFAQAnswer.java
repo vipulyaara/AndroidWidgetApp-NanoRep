@@ -1,11 +1,15 @@
 package com.nanorep.nanoclient.Response;
 
+import com.nanorep.nanoclient.Channeling.NRChanneling;
+import com.nanorep.nanoclient.Interfaces.NRQueryResult;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
  * Created by nissopa on 9/14/15.
  */
-public class NRFAQAnswer {
+public class NRFAQAnswer implements NRQueryResult {
     HashMap<String, Object> mParams;
 
     /**
@@ -17,6 +21,11 @@ public class NRFAQAnswer {
         mParams = params;
     }
 
+    @Override
+    public String getId() {
+        return null;
+    }
+
     /**
      * Fetches Title of answer
      *
@@ -26,6 +35,11 @@ public class NRFAQAnswer {
         return (String)mParams.get("title");
     }
 
+    @Override
+    public void setBody(String body) {
+
+    }
+
     /**
      * Fetches short description of the answer in html string
      *
@@ -33,6 +47,16 @@ public class NRFAQAnswer {
      */
     public String getBody() {
         return (String)mParams.get("body");
+    }
+
+    @Override
+    public boolean isCNF() {
+        return false;
+    }
+
+    @Override
+    public ArrayList<NRChanneling> getChanneling() {
+        return null;
     }
 
     /**

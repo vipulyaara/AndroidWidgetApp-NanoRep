@@ -274,7 +274,12 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
 
             @Override
             public void onLinkedArticleClicked(String articleId) {
-                
+                mFetchedDataManager.faqAnswer(articleId, new OnFAQAnswerFetched() {
+                    @Override
+                    public void onAnsweFetced(String answerBody) {
+
+                    }
+                });
             }
         });
         resultFragment.setResult(item.getResult());
