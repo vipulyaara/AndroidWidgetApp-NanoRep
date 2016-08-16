@@ -236,7 +236,7 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
     @Override
     public void unfoldItem(NRResultItem item) {
         NRResultFragment resultFragment = new NRResultFragment();
-        resultFragment.setListener(new NRResultFragment.NRResultFragmentListener() {
+        resultFragment.setListener(new NRResultFragment.Listener() {
             @Override
             public void onResultFragmentDismissed(NRResultFragment resultFragment) {
 
@@ -270,6 +270,11 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
             @Override
             public void onChannelSelected(NRResultFragment resultFragment, NRChannelItem channelItem) {
                 NRChannelStrategy.presentor(channelItem.getChanneling(), resultFragment, mFetchedDataManager.getNanoRep()).present();
+            }
+
+            @Override
+            public void onLinkedArticleClicked(String articleId) {
+                
             }
         });
         resultFragment.setResult(item.getResult());
