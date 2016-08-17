@@ -25,5 +25,5 @@ dependencies {
     compile 'com.android.support:support-v4:24.1.1'
     compile 'com.android.support:recyclerview-v7:24.1.1'
     compile 'com.android.support:cardview-v7:24.1.1'
-    compile project(path: ':nanoclient')
+    compile project(':nanoclient')
 }

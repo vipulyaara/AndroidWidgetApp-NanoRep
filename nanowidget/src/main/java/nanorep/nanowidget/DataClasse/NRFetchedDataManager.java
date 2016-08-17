@@ -147,9 +147,9 @@ public class NRFetchedDataManager {
             @Override
             public void onFAQAnswerFetched(NRFAQAnswer faqAnswer, NRError error) {
                 if (error == null) {
-                    answerFetcher.onAnsweFetced(faqAnswer.getBody());
+                    answerFetcher.onAnswerFetched(faqAnswer);
                 } else {
-                    answerFetcher.onAnsweFetced(null);
+                    answerFetcher.onAnswerFetched(null);
                 }
             }
         });

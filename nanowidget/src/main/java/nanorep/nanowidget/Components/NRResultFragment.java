@@ -1,12 +1,13 @@
 package nanorep.nanowidget.Components;
 
 
+import android.annotation.TargetApi;
 import android.app.AlertDialog;
+import android.os.Build;
 import android.support.v4.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,7 +43,7 @@ public class NRResultFragment extends Fragment implements View.OnClickListener, 
     private ImageButton mShareButton;
     private NRLikeView mLikeView;
     private NRChannelingView mChannelingView;
-    private NRResultFragmentListener mListener;
+    private Listener mListener;
     private View mView;
 
     @Override
@@ -51,12 +52,13 @@ public class NRResultFragment extends Fragment implements View.OnClickListener, 
     }
 
 
-    public interface NRResultFragmentListener {
+    public interface Listener {
         void onResultFragmentDismissed(NRResultFragment resultFragment);
         void resultFragmentWillDismiss(NRResultFragment resultFragment);
         void onLikeSelected(NRResultFragment resultFragment, NRLikeType likeType, NRResult currentResult);
         void fetchBodyForResult(NRResultFragment resultFragment, String resultID);
         void onChannelSelected(NRResultFragment resultFragment, NRChannelItem channelItem);
+        void onLinkedArticleClicked(String articleId);
     }
 
     public NRResultFragment() {
@@ -67,7 +69,7 @@ public class NRResultFragment extends Fragment implements View.OnClickListener, 
         mResult = result;
     }
 
-    public void setListener(NRResultFragmentListener listener) {
+    public void setListener(Listener listener) {
         mListener = listener;
     }
 
@@ -115,13 +117,7 @@ public class NRResultFragment extends Fragment implements View.OnClickListener, 
                     mWebView.getSettings().setJavaScriptEnabled(true);
 //                    mWebView.getSettings().setLoadWithOverviewMode(true);
 //                    mWebView.getSettings().setUseWideViewPort(true);
-                    mWebView.setWebViewClient(new WebViewClient() {
-                        @Override
-                        public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
-                            Log.d("NRResultFragment", request.getUrl().toString());
-                            return false;
-                        }
-                    });
+                    mWebView.setWebViewClient(new NRWebClient());
                     if (mResult.getFetchedResult().getBody() != null) {
                         setBody(mResult.getFetchedResult().getBody());
                     } else {
@@ -162,60 +158,12 @@ public class NRResultFragment extends Fragment implements View.OnClickListener, 
         });
     }
 
-//    @Override
-//    public void onActivityCreated(Bundle savedInstanceState) {
-//        super.onActivityCreated(savedInstanceState);
-//        getView().setFocusableInTouchMode(true);
-//        getView().requestFocus();
-//
-//        getView().setOnKeyListener(new View.OnKeyListener() {
-//            @Override
-//            public boolean onKey(View v, int keyCode, KeyEvent event) {
-//
-//                if (event.getAction() == KeyEvent.ACTION_DOWN)
-//                    if (keyCode == KeyEvent.KEYCODE_BACK) {
-////                        mView.animate().translationXBy(getView().getMeasuredWidth()).setDuration(500).setInterpolator(new AccelerateDecelerateInterpolator()).setListener(new Animator.AnimatorListener() {
-////                            @Override
-////                            public void onAnimationStart(Animator animation) {
-////                                mListener.resultFragmentWillDismiss(NRResultFragment.this);
-////                            }
-////
-////                            @Override
-////                            public void onAnimationEnd(Animator animation) {
-////                                mListener.onResultFragmentDismissed(NRResultFragment.this);
-////                            }
-////
-////                            @Override
-////                            public void onAnimationCancel(Animator animation) {
-////
-////                            }
-////
-////                            @Override
-////                            public void onAnimationRepeat(Animator animation) {
-////
-////                            }
-////                        }).start();
-//                        mListener.resultFragmentWillDismiss(NRResultFragment.this);
-//                        return true;
-//                    }
-//
-//                return false;
-//            }
-//        });
-//    }
+
 
 
     @Override
     public void onLikeClicked() {
         if (mLikeView.getLikeSelection()) {
-//            mFetchedDataManager.sendLike(NRLikeType.POSITIVE, item.getResult(), new OnLikeSent() {
-//                @Override
-//                public void likeResult(int type, boolean success) {
-//                    if (success) {
-//                        item.getLikeView().updateLikeButton(true);
-//                    }
-//                }
-//            });
             mListener.onLikeSelected(this, NRLikeType.POSITIVE, mResult);
         } else {
             String reasons[] = new String[] {"Incorrect answer", "Missing or incorrect information", "Didn't find what I was looking for"};
@@ -226,12 +174,6 @@ public class NRResultFragment extends Fragment implements View.OnClickListener, 
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     if (which == DialogInterface.BUTTON_POSITIVE && adapter.getSelection() != NRLikeType.POSITIVE) {
-//                        mFetchedDataManager.sendLike(adapter.getSelection(), item.getResult(), new OnLikeSent() {
-//                            @Override
-//                            public void likeResult(int type, boolean success) {
-//                                item.getLikeView().updateLikeButton(false);
-//                            }
-//                        });
                         mListener.onLikeSelected(NRResultFragment.this, adapter.getSelection(), mResult);
                     } else {
                         mLikeView.cancelLike();
@@ -312,6 +254,30 @@ public class NRResultFragment extends Fragment implements View.OnClickListener, 
                 }
                 bullets.get(i).setImageResource(id);
             }
+        }
+    }
+
+    private class NRWebClient extends WebViewClient {
+        @Override
+        public boolean shouldOverrideUrlLoading(WebView view, String url) {
+            return linkedArticle(url);
+        }
+
+        @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+        @Override
+        public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+            return linkedArticle(request.getUrl().toString());
+        }
+
+        private boolean linkedArticle(String link) {
+            if (link.startsWith("nanorep")) {
+                String comps[] = link.split("/");
+                if (comps != null && comps.length > 0) {
+                    mListener.onLinkedArticleClicked(comps[comps.length - 1]);
+                }
+                return true;
+            }
+            return false;
         }
     }
 }
