@@ -72,8 +72,9 @@ public class NRFAQAnswer implements NRQueryResult {
      *
      * @return Value of like param
      */
-    public int getLikes() {
-        return Integer.parseInt((String)mParams.get("likesCount"));
+    @Override
+    public String getLikes() {
+        return (String)mParams.get("likesCount");
     }
 
 }

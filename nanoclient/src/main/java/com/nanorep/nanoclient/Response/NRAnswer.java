@@ -17,7 +17,6 @@ public class NRAnswer implements NRQueryResult {
     private int mLikes;
     private String mTitle;
     private String mSummary;
-    private ArrayList<String> mAttachments;
     private ArrayList<NRChanneling> mChanneling;
 
     /**
@@ -32,7 +31,6 @@ public class NRAnswer implements NRQueryResult {
         mLikes = (int)params.get("likes");
         mTitle = (String)params.get("title");
         mSummary = (String)params.get("summary");
-        mAttachments = (ArrayList)params.get("attachments");
     }
 
     /**
@@ -100,13 +98,6 @@ public class NRAnswer implements NRQueryResult {
         return mSummary;
     }
 
-    /**
-     *
-     * @return Value of attachments
-     */
-    public ArrayList<String> getAttachments() {
-        return mAttachments;
-    }
 
     public ArrayList<NRChanneling> getChanneling() {
         if (mChanneling == null) {

@@ -6,5 +6,5 @@ import com.nanorep.nanoclient.Interfaces.NRQueryResult;
  * Created by nissimpardo on 18/06/16.
  */
 public interface OnFAQAnswerFetched {
-    void onAnsweFetced(NRQueryResult result);
+    void onAnswerFetched(NRQueryResult result);
 }

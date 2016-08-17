@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 
+import com.nanorep.nanoclient.Interfaces.NRQueryResult;
 import com.nanorep.nanoclient.Nanorep;
 import com.nanorep.nanoclient.RequestParams.NRLikeType;
 
@@ -258,11 +259,11 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
             }
 
             @Override
-            public void fetchBodyForResult(final NRResultFragment resultFragment, String resultID) {
+            public void fetchBodyForResult(final NRResultFragment resultFragment, final String resultID) {
                 mFetchedDataManager.faqAnswer(resultID, new OnFAQAnswerFetched() {
                     @Override
-                    public void onAnsweFetced(String answerBody) {
-                        resultFragment.setBody(answerBody);
+                    public void onAnswerFetched(NRQueryResult result) {
+                        resultFragment.setBody(result.getBody());
                     }
                 });
             }
@@ -275,8 +276,9 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
             @Override
             public void onLinkedArticleClicked(String articleId) {
                 mFetchedDataManager.faqAnswer(articleId, new OnFAQAnswerFetched() {
+
                     @Override
-                    public void onAnsweFetced(String answerBody) {
+                    public void onAnswerFetched(NRQueryResult result) {
 
                     }
                 });
