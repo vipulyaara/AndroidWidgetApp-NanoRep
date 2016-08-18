@@ -49,21 +49,21 @@ public class NRSearchBar extends RelativeLayout implements SearchView.OnQueryTex
 //                    changeSearchViewTextColor(viewGroup.getChildAt(i));
 //                }
 //            }
-            View icon = mSearchView.findViewById(android.support.v7.appcompat.R.id.search_button);
-            ((AppCompatImageView)icon).setImageResource(R.drawable.searchbar_search_icon);
-            SearchView.SearchAutoComplete textArea = (SearchView.SearchAutoComplete) mSearchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
-            textArea.setTextColor(Color.WHITE);
-            try {
-                Field searchField = SearchView.class.getDeclaredField("mCloseButton");
-                searchField.setAccessible(true);
-                ImageView closeBtn = (ImageView) searchField.get(mSearchView);
-                closeBtn.setImageResource(R.drawable.searchbar_x_icon);
-
-            } catch (NoSuchFieldException e) {
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            }
+//            View icon = mSearchView.findViewById(android.support.v7.appcompat.R.id.search_button);
+//            ((AppCompatImageView)icon).setImageResource(R.drawable.searchbar_search_icon);
+//            SearchView.SearchAutoComplete textArea = (SearchView.SearchAutoComplete) mSearchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
+//            textArea.setTextColor(Color.WHITE);
+//            try {
+//                Field searchField = SearchView.class.getDeclaredField("mCloseButton");
+//                searchField.setAccessible(true);
+//                ImageView closeBtn = (ImageView) searchField.get(mSearchView);
+//                closeBtn.setImageResource(R.drawable.searchbar_x_icon);
+//
+//            } catch (NoSuchFieldException e) {
+//                e.printStackTrace();
+//            } catch (IllegalAccessException e) {
+//                e.printStackTrace();
+//            }
 
 
         } else if (child instanceof AppCompatImageButton) {

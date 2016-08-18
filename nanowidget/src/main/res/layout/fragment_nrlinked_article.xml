@@ -1,0 +1,41 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             tools:context="nanorep.nanowidget.Components.NRLinkedArticleFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <nanorep.nanowidget.Components.NRResultTitleView
+        android:layout_width="match_parent"
+        android:layout_height="62dp"
+        android:id="@+id/linkedArtTitle"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true">
+
+    </nanorep.nanowidget.Components.NRResultTitleView>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_below="@+id/linkedArtTitle"
+        android:id="@+id/backView"
+        android:layout_alignParentStart="true">
+
+    </RelativeLayout>
+
+    <WebView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/linkedArtWebView"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/backView"
+        />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_below="@+id/linkedArtWebView">
+
+    </RelativeLayout>
+</RelativeLayout>
