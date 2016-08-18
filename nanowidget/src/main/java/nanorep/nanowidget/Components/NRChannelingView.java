@@ -27,6 +27,7 @@ public class NRChannelingView extends RelativeLayout implements NRChannelItem.On
     public NRChannelingView(Context context, AttributeSet attrs) {
         super(context, attrs);
         mAdapter = new ChannelingAdapter();
+        LayoutInflater.from(context).inflate(R.layout.channeling_view, this);
     }
 
     public void setChannelings(ArrayList<NRChanneling> channelings) {
@@ -42,10 +43,8 @@ public class NRChannelingView extends RelativeLayout implements NRChannelItem.On
     @Override
     public void onViewAdded(View child) {
         super.onViewAdded(child);
-        if (child.getId() == R.id.channelingTabs) {
-            mChannelingsRecycleView = (RecyclerView) child;
-            mChannelingsRecycleView.setAdapter(mAdapter);
-        }
+        mChannelingsRecycleView = (RecyclerView) child.findViewById(R.id.channelingTabs);
+        mChannelingsRecycleView.setAdapter(mAdapter);
     }
 
     @Override

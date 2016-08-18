@@ -2,7 +2,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:id="@+id/topView"
                 android:background="@color/white"
                 android:layout_alignParentTop="true">
 
@@ -14,7 +13,6 @@
         android:background="#00ffffff"
         android:textColor="#189ac6"
         android:textAlignment="viewStart"
-        android:text="title"
         android:textStyle="bold"
         android:paddingLeft="10dp"/>
     <ImageButton

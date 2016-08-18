@@ -39,7 +39,7 @@ public class NRResultFragment extends Fragment implements View.OnClickListener, 
 
     private WebView mWebView;
     private RelativeLayout mFeedbackView;
-    private TextView mTitle;
+    private NRResultTitleView mTitle;
     private ImageButton mShareButton;
     private NRLikeView mLikeView;
     private NRChannelingView mChannelingView;
@@ -102,9 +102,15 @@ public class NRResultFragment extends Fragment implements View.OnClickListener, 
         view.post(new Runnable() {
             @Override
             public void run() {
-                mTitle = (TextView) view.findViewById(R.id.resultTitle);
+                mTitle = (NRResultTitleView) view.findViewById(R.id.titleView);
                 if (mTitle != null) {
-                    mTitle.setText(mResult.getFetchedResult().getTitle());
+                    mTitle.setTitle(mResult.getFetchedResult().getTitle());
+                    mTitle.setListener(new NRResultTitleView.Listener() {
+                        @Override
+                        public void onSharePressed() {
+
+                        }
+                    });
                 }
 
                 mShareButton = (ImageButton) view.findViewById(R.id.shareButton);

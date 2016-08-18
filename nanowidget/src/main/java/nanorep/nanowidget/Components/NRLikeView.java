@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.util.AttributeSet;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -23,6 +24,7 @@ public class NRLikeView extends LinearLayout implements View.OnClickListener {
 
     public NRLikeView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        LayoutInflater.from(context).inflate(R.layout.like_view, this);
     }
 
     public void setListener(OnLikeListener listener) {
@@ -55,12 +57,10 @@ public class NRLikeView extends LinearLayout implements View.OnClickListener {
     @Override
     public void onViewAdded(View child) {
         super.onViewAdded(child);
-        if (child.getId() == R.id.likeButton) {
-            mLikeButton = (ImageButton) child;
-        } else if (child.getId() == R.id.dislikeButton) {
-            mDislikeButton = (ImageButton) child;
-        }
-        child.setOnClickListener(this);
+        mLikeButton = (ImageButton) child.findViewById(R.id.likeButton);
+        mDislikeButton = (ImageButton) child.findViewById(R.id.dislikeButton);
+        mLikeButton.setOnClickListener(this);
+        mDislikeButton.setOnClickListener(this);
     }
 
     public boolean getLikeSelection() {
