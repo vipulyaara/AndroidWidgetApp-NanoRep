@@ -30,12 +30,35 @@
         android:id="@+id/linkedArtWebView"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/backView"
+        android:layout_above="@+id/linkedArtBrowser"
         />
 
-    <RelativeLayout
+    <nanorep.nanowidget.Components.NRLinkedArticlesBrowserView
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:layout_below="@+id/linkedArtWebView">
+        android:id="@+id/linkedArtBrowser"
+        android:layout_above="@+id/linkedArtFeedback">
 
-    </RelativeLayout>
+    </nanorep.nanowidget.Components.NRLinkedArticlesBrowserView>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:id="@+id/linkedArtFeedback"
+        android:orientation="vertical"
+        android:layout_alignParentBottom="true">
+        <nanorep.nanowidget.Components.NRLikeView
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:id="@+id/linkedArtLikeView">
+
+        </nanorep.nanowidget.Components.NRLikeView>
+        <nanorep.nanowidget.Components.NRChannelingView
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:id="@+id/linkedArtChanneling">
+
+        </nanorep.nanowidget.Components.NRChannelingView>
+
+    </LinearLayout>
+
 </RelativeLayout>
