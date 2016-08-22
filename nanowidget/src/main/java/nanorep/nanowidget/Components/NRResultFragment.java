@@ -21,6 +21,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.nanorep.nanoclient.Channeling.NRChanneling;
+import com.nanorep.nanoclient.Interfaces.NRQueryResult;
 import com.nanorep.nanoclient.RequestParams.NRLikeType;
 import com.nanorep.nanoclient.Response.NRHtmlParser;
 
@@ -29,15 +30,16 @@ import java.util.ArrayList;
 import nanorep.nanowidget.DataClasse.NRResult;
 import nanorep.nanowidget.R;
 import nanorep.nanowidget.Utilities.Calculate;
+import nanorep.nanowidget.interfaces.OnFAQAnswerFetched;
 import nanorep.nanowidget.interfaces.OnLikeListener;
+import nanorep.nanowidget.interfaces.OnLinkedArticle;
 
 
-
-public class NRResultFragment extends Fragment implements View.OnClickListener, OnLikeListener, NRChannelItem.OnChannelSelectedListener {
+public class NRResultFragment extends Fragment implements View.OnClickListener, OnLikeListener, NRChannelItem.OnChannelSelectedListener, NRWebView.Listener, OnFAQAnswerFetched {
 
     private NRResult mResult;
 
-    private WebView mWebView;
+    private NRWebView mWebView;
     private RelativeLayout mFeedbackView;
     private NRResultTitleView mTitle;
     private ImageButton mShareButton;
@@ -51,14 +53,27 @@ public class NRResultFragment extends Fragment implements View.OnClickListener, 
 
     }
 
+    @Override
+    public void onLinkedArticleClicked(String articleId) {
+        mListener.onLinkedArticleClicked(this, articleId);
+    }
 
-    public interface Listener {
+    @Override
+    public void onAnswerFetched(NRQueryResult result) {
+        getView().findViewById(R.id.linkedArtHolder).setVisibility(View.VISIBLE);
+        NRLinkedArticleFragment linkedArticleFragment = new NRLinkedArticleFragment();
+        linkedArticleFragment.setListener(mListener);
+        linkedArticleFragment.setQueryResult(result);
+        getChildFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_left).add(R.id.linkedArtHolder, linkedArticleFragment).addToBackStack("test").commit();
+    }
+
+
+    public interface Listener extends OnLinkedArticle {
         void onResultFragmentDismissed(NRResultFragment resultFragment);
         void resultFragmentWillDismiss(NRResultFragment resultFragment);
         void onLikeSelected(NRResultFragment resultFragment, NRLikeType likeType, NRResult currentResult);
         void fetchBodyForResult(NRResultFragment resultFragment, String resultID);
         void onChannelSelected(NRResultFragment resultFragment, NRChannelItem channelItem);
-        void onLinkedArticleClicked(String articleId);
     }
 
     public NRResultFragment() {
@@ -78,10 +93,8 @@ public class NRResultFragment extends Fragment implements View.OnClickListener, 
     }
 
     public void setBody(String htmlString) {
-        NRHtmlParser parser = new NRHtmlParser(htmlString);
-        String parsed = parser.getParsedHtml();
         mResult.getFetchedResult().setBody(htmlString);
-        mWebView.loadData(parsed, "text/html", "UTF-8");
+        mWebView.loadData(htmlString, "text/html", "UTF-8");
     }
 
     @Override
@@ -118,12 +131,9 @@ public class NRResultFragment extends Fragment implements View.OnClickListener, 
                     mShareButton.setOnClickListener(NRResultFragment.this);
                 }
 
-                mWebView = (WebView) view.findViewById(R.id.resultWebView);
+                mWebView = (NRWebView) view.findViewById(R.id.resultWebView);
                 if (mWebView != null) {
-                    mWebView.getSettings().setJavaScriptEnabled(true);
-//                    mWebView.getSettings().setLoadWithOverviewMode(true);
-//                    mWebView.getSettings().setUseWideViewPort(true);
-                    mWebView.setWebViewClient(new NRWebClient());
+                    mWebView.setListener(NRResultFragment.this);
                     if (mResult.getFetchedResult().getBody() != null) {
                         setBody(mResult.getFetchedResult().getBody());
                     } else {
@@ -260,30 +270,6 @@ public class NRResultFragment extends Fragment implements View.OnClickListener, 
                 }
                 bullets.get(i).setImageResource(id);
             }
-        }
-    }
-
-    private class NRWebClient extends WebViewClient {
-        @Override
-        public boolean shouldOverrideUrlLoading(WebView view, String url) {
-            return linkedArticle(url);
-        }
-
-        @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-        @Override
-        public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
-            return linkedArticle(request.getUrl().toString());
-        }
-
-        private boolean linkedArticle(String link) {
-            if (link.startsWith("nanorep")) {
-                String comps[] = link.split("/");
-                if (comps != null && comps.length > 0) {
-                    mListener.onLinkedArticleClicked(comps[comps.length - 1]);
-                }
-                return true;
-            }
-            return false;
         }
     }
 }

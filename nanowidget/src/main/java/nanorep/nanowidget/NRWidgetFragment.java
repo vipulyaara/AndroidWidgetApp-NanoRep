@@ -23,10 +23,12 @@ import java.util.HashMap;
 
 import nanorep.nanowidget.Components.ChannelPresenters.NRChannelStrategy;
 import nanorep.nanowidget.Components.NRChannelItem;
+import nanorep.nanowidget.Components.NRLinkedArticleFragment;
 import nanorep.nanowidget.Components.NRResultFragment;
 import nanorep.nanowidget.Components.NRResultItem;
 import nanorep.nanowidget.Components.NRSearchBar;
 import nanorep.nanowidget.Components.NRSuggestionsView;
+import nanorep.nanowidget.Components.NRWebView;
 import nanorep.nanowidget.DataClasse.NRFetchedDataManager;
 import nanorep.nanowidget.DataClasse.NRResult;
 import nanorep.nanowidget.interfaces.NRFetcherListener;
@@ -37,7 +39,7 @@ import nanorep.nanowidget.interfaces.OnFAQAnswerFetched;
 
 
 
-public class NRWidgetFragment extends Fragment implements NRSearchBarListener, NRSuggestionsListener, NRResultItemListener {
+public class NRWidgetFragment extends Fragment implements NRSearchBarListener, NRSuggestionsListener, NRResultItemListener, NRResultFragment.Listener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -59,6 +61,7 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
     private NRResutlsAdapter mResutlsAdapter;
     private RecyclerView mResultsRecyclerView;
     private NRWidgetFragmentListener mListener;
+    private NRResultFragment mResultFragment;
 
     public NRWidgetFragment() {
         // Required empty public constructor
@@ -88,6 +91,13 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
 
     public void setNanoRep(Nanorep nanoRep) {
         mNanoRep = nanoRep;
+    }
+
+    private NRResultFragment getResultFragment() {
+        if (mResultFragment == null) {
+            mResultFragment = new NRResultFragment();
+        }
+        return mResultFragment;
     }
 
     @Override
@@ -236,57 +246,10 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
 
     @Override
     public void unfoldItem(NRResultItem item) {
-        NRResultFragment resultFragment = new NRResultFragment();
-        resultFragment.setListener(new NRResultFragment.Listener() {
-            @Override
-            public void onResultFragmentDismissed(NRResultFragment resultFragment) {
-
-            }
-
-            @Override
-            public void resultFragmentWillDismiss(NRResultFragment resultFragment) {
-//                getChildFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_left).remove(resultFragment).commit();
-            }
-
-            @Override
-            public void onLikeSelected(final NRResultFragment resultFragment, final NRLikeType likeType, NRResult currentResult) {
-                mFetchedDataManager.sendLike(likeType, currentResult, new Nanorep.OnLikeSentListener() {
-                    @Override
-                    public void onLikeSent(int type, boolean success) {
-                        resultFragment.setLikeState(likeType == NRLikeType.POSITIVE);
-                    }
-                });
-            }
-
-            @Override
-            public void fetchBodyForResult(final NRResultFragment resultFragment, final String resultID) {
-                mFetchedDataManager.faqAnswer(resultID, new OnFAQAnswerFetched() {
-                    @Override
-                    public void onAnswerFetched(NRQueryResult result) {
-                        resultFragment.setBody(result.getBody());
-                    }
-                });
-            }
-
-            @Override
-            public void onChannelSelected(NRResultFragment resultFragment, NRChannelItem channelItem) {
-                NRChannelStrategy.presentor(channelItem.getChanneling(), resultFragment, mFetchedDataManager.getNanoRep()).present();
-            }
-
-            @Override
-            public void onLinkedArticleClicked(String articleId) {
-                mFetchedDataManager.faqAnswer(articleId, new OnFAQAnswerFetched() {
-
-                    @Override
-                    public void onAnswerFetched(NRQueryResult result) {
-
-                    }
-                });
-            }
-        });
-        resultFragment.setResult(item.getResult());
+        getResultFragment().setListener(this);
+        getResultFragment().setResult(item.getResult());
         getView().findViewById(R.id.fragment_place_holder).setVisibility(View.VISIBLE);
-        getChildFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_left).add(R.id.fragment_place_holder, resultFragment).addToBackStack("test").commit();
+        getChildFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_left).add(R.id.fragment_place_holder, getResultFragment()).addToBackStack("test").commit();
     }
 
     @Override
@@ -301,6 +264,46 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
     @Override
     public void onLikeClicked(final NRResultItem item) {
 
+    }
+
+    @Override
+    public void onResultFragmentDismissed(NRResultFragment resultFragment) {
+
+    }
+
+    @Override
+    public void resultFragmentWillDismiss(NRResultFragment resultFragment) {
+//                getChildFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_left).remove(resultFragment).commit();
+    }
+
+    @Override
+    public void onLikeSelected(final NRResultFragment resultFragment, final NRLikeType likeType, NRResult currentResult) {
+        mFetchedDataManager.sendLike(likeType, currentResult, new Nanorep.OnLikeSentListener() {
+            @Override
+            public void onLikeSent(int type, boolean success) {
+                resultFragment.setLikeState(likeType == NRLikeType.POSITIVE);
+            }
+        });
+    }
+
+    @Override
+    public void fetchBodyForResult(final NRResultFragment resultFragment, final String resultID) {
+        mFetchedDataManager.faqAnswer(resultID, new OnFAQAnswerFetched() {
+            @Override
+            public void onAnswerFetched(NRQueryResult result) {
+                resultFragment.setBody(result.getBody());
+            }
+        });
+    }
+
+    @Override
+    public void onChannelSelected(NRResultFragment resultFragment, NRChannelItem channelItem) {
+        NRChannelStrategy.presentor(channelItem.getChanneling(), resultFragment, mFetchedDataManager.getNanoRep()).present();
+    }
+
+    @Override
+    public void onLinkedArticleClicked(OnFAQAnswerFetched listener, String articleId) {
+        mFetchedDataManager.faqAnswer(articleId, listener);
     }
 
     private class NRResutlsAdapter extends RecyclerView.Adapter<NRResultItem> {

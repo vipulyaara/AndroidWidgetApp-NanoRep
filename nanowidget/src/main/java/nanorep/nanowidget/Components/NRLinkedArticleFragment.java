@@ -4,21 +4,29 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
+import android.widget.ImageButton;
+
+import com.nanorep.nanoclient.Interfaces.NRQueryResult;
+
+import java.util.ArrayList;
 
 import nanorep.nanowidget.R;
+import nanorep.nanowidget.interfaces.OnFAQAnswerFetched;
+import nanorep.nanowidget.interfaces.OnLinkedArticle;
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link NRLinkedArticleFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
  * Use the {@link NRLinkedArticleFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class NRLinkedArticleFragment extends Fragment {
+public class NRLinkedArticleFragment extends Fragment implements NRWebView.Listener, OnFAQAnswerFetched {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -27,8 +35,12 @@ public class NRLinkedArticleFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-
-    private OnFragmentInteractionListener mListener;
+    private OnLinkedArticle mListener;
+    private NRResultTitleView mTitleView;
+    private NRWebView mWebView;
+    private NRLinkedArticlesBrowserView mBrowserView;
+    private ArrayList<NRQueryResult> mLinkedArticles = new ArrayList<>();
+    private int mIndex;
 
     public NRLinkedArticleFragment() {
         // Required empty public constructor
@@ -52,6 +64,15 @@ public class NRLinkedArticleFragment extends Fragment {
         return fragment;
     }
 
+    public void setQueryResult(NRQueryResult queryResult) {
+        mIndex = 0;
+        mLinkedArticles.add(queryResult);
+    }
+
+    public void setListener(OnLinkedArticle listener) {
+        mListener = listener;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,45 +86,68 @@ public class NRLinkedArticleFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_nrlinked_article, container, false);
+        View view = inflater.inflate(R.layout.fragment_nrlinked_article, container, false);
+        mTitleView = (NRResultTitleView) view.findViewById(R.id.linkedArtTitle);
+        mTitleView.setTitle(mLinkedArticles.get(0).getTitle());
+        mWebView = (NRWebView) view.findViewById(R.id.linkedArtWebView);
+        mWebView.setListener(this);
+        mWebView.loadData(mLinkedArticles.get(0).getBody(), "text/html", "UTF-8");
+        mBrowserView = (NRLinkedArticlesBrowserView) view.findViewById(R.id.linkedArtBrowser);
+        mBrowserView.setListener(new NRLinkedArticlesBrowserView.Listener() {
+            @Override
+            public void onNextClicked() {
+                mIndex++;
+                updateArticle(mLinkedArticles.get(mIndex));
+            }
+
+            @Override
+            public void onPrevClicked() {
+                mIndex--;
+                updateArticle(mLinkedArticles.get(mIndex));
+            }
+        });
+        return view;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
+
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
+
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+    private void updateArticle(NRQueryResult result) {
+        mTitleView.setTitle(result.getTitle());
+        mWebView.loadData(result.getBody(), "html/text", "UTF-8");
+        if (mLinkedArticles.size() > 1) {
+            if (mIndex < mLinkedArticles.size() - 1 && mIndex > 0) {
+                mBrowserView.setState(NRLinkedArticlesBrowserView.State.hasNextAndPrev);
+            } else if (mIndex == 0) {
+                mBrowserView.setState(NRLinkedArticlesBrowserView.State.hasNext);
+            } else if (mIndex == mLinkedArticles.size() - 1) {
+                mBrowserView.setState(NRLinkedArticlesBrowserView.State.hasPrev);
+            }
+        }
+    }
+
+    @Override
+    public void onAnswerFetched(NRQueryResult result) {
+        Log.d("Test", result.getTitle());
+        if (result != null) {
+            mIndex++;
+            mLinkedArticles.add(mIndex, result);
+            updateArticle(result);
+        }
+    }
+
+    @Override
+    public void onLinkedArticleClicked(String articleId) {
+        mListener.onLinkedArticleClicked(this, articleId);
     }
 }

@@ -13,7 +13,7 @@
         android:id="@+id/titleView">
 
     </nanorep.nanowidget.Components.NRResultTitleView>
-    <WebView
+    <nanorep.nanowidget.Components.NRWebView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/resultWebView"
@@ -43,5 +43,13 @@
         </nanorep.nanowidget.Components.NRChannelingView>
 
     </RelativeLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/linkedArtHolder"
+        android:orientation="vertical"
+        android:visibility="invisible"
+        android:background="#00ffffff">
+    </LinearLayout>
 
 </RelativeLayout>
