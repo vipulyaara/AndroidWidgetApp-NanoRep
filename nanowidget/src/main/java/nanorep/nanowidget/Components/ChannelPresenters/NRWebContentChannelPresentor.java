@@ -53,7 +53,7 @@ public class NRWebContentChannelPresentor implements NRChannelPresentor{
                 break;
         }
         String passUrl = url == null ? channelUri.toString() : url;
-        mResultFragment.getParentFragment().getChildFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_left).add(R.id.content_id, NRWebContentFragment.newInstance(passUrl, null)).addToBackStack("test2").commit();
+        mResultFragment.getParentFragment().getChildFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_left).add(R.id.content_id, NRWebContentFragment.newInstance(passUrl, null)).addToBackStack("nanowidget").commit();
     }
 
     @Override

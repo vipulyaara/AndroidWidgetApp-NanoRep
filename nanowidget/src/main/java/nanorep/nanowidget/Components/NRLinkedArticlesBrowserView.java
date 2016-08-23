@@ -43,17 +43,23 @@ public class NRLinkedArticlesBrowserView extends RelativeLayout {
 
     public void setState(State state) {
         if (mState != state) {
+            mPrevButton.setEnabled(false);
+            mNextButton.setEnabled(false);
             String nextImageName = "disabled_right_arrow";
             String prevImageName = "disabled_left_arrow";
             mState = state;
             switch (state) {
                 case hasNext:
                     nextImageName = "right_arrow";
+                    mNextButton.setEnabled(true);
                     break;
                 case hasPrev:
                     prevImageName = "left_arrow";
+                    mPrevButton.setEnabled(true);
                     break;
                 case hasNextAndPrev:
+                    mPrevButton.setEnabled(true);
+                    mNextButton.setEnabled(true);
                     nextImageName = "right_arrow";
                     prevImageName = "left_arrow";
                     break;

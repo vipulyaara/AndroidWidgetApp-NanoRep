@@ -1,22 +1,27 @@
 package nanorep.nanowidget.Components;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebView;
-import android.widget.ImageButton;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
+import com.nanorep.nanoclient.Channeling.NRChanneling;
 import com.nanorep.nanoclient.Interfaces.NRQueryResult;
+import com.nanorep.nanoclient.RequestParams.NRLikeType;
 
 import java.util.ArrayList;
 
 import nanorep.nanowidget.R;
+import nanorep.nanowidget.Utilities.Calculate;
+import nanorep.nanowidget.interfaces.NRResultView;
 import nanorep.nanowidget.interfaces.OnFAQAnswerFetched;
+import nanorep.nanowidget.interfaces.OnLikeListener;
 import nanorep.nanowidget.interfaces.OnLinkedArticle;
 
 /**
@@ -26,7 +31,7 @@ import nanorep.nanowidget.interfaces.OnLinkedArticle;
  * Use the {@link NRLinkedArticleFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class NRLinkedArticleFragment extends Fragment implements NRWebView.Listener, OnFAQAnswerFetched {
+public class NRLinkedArticleFragment extends Fragment implements NRWebView.Listener, OnFAQAnswerFetched, NRChannelItem.OnChannelSelectedListener, OnLikeListener, NRResultView {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -41,6 +46,15 @@ public class NRLinkedArticleFragment extends Fragment implements NRWebView.Liste
     private NRLinkedArticlesBrowserView mBrowserView;
     private ArrayList<NRQueryResult> mLinkedArticles = new ArrayList<>();
     private int mIndex;
+    private LinearLayout mFeedbackView;
+    private NRChannelingView mChannelingView;
+    private NRLikeView mLikeView;
+    private Button mBackButton;
+    private OnDismissListener mDismissListener;
+
+    public interface OnDismissListener {
+        void onBackClicked();
+    }
 
     public NRLinkedArticleFragment() {
         // Required empty public constructor
@@ -69,6 +83,10 @@ public class NRLinkedArticleFragment extends Fragment implements NRWebView.Liste
         mLinkedArticles.add(queryResult);
     }
 
+    public void setDismissListener(OnDismissListener listener) {
+        mDismissListener = listener;
+    }
+
     public void setListener(OnLinkedArticle listener) {
         mListener = listener;
     }
@@ -88,24 +106,37 @@ public class NRLinkedArticleFragment extends Fragment implements NRWebView.Liste
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_nrlinked_article, container, false);
         mTitleView = (NRResultTitleView) view.findViewById(R.id.linkedArtTitle);
-        mTitleView.setTitle(mLinkedArticles.get(0).getTitle());
+        mBackButton = (Button) view.findViewById(R.id.backButton);
+        mBackButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mDismissListener.onBackClicked();
+            }
+        });
         mWebView = (NRWebView) view.findViewById(R.id.linkedArtWebView);
         mWebView.setListener(this);
-        mWebView.loadData(mLinkedArticles.get(0).getBody(), "text/html", "UTF-8");
+        mFeedbackView = (LinearLayout) view.findViewById(R.id.linkedArtFeedback);
+        mLikeView = (NRLikeView) view.findViewById(R.id.linkedArtLikeView);
+        mLikeView.setListener(this);
         mBrowserView = (NRLinkedArticlesBrowserView) view.findViewById(R.id.linkedArtBrowser);
         mBrowserView.setListener(new NRLinkedArticlesBrowserView.Listener() {
             @Override
             public void onNextClicked() {
-                mIndex++;
-                updateArticle(mLinkedArticles.get(mIndex));
+                if (mLinkedArticles.size() > 1) {
+                    mIndex++;
+                    updateArticle(mLinkedArticles.get(mIndex));
+                }
             }
 
             @Override
             public void onPrevClicked() {
-                mIndex--;
-                updateArticle(mLinkedArticles.get(mIndex));
+                if (mLinkedArticles.size() > 1) {
+                    mIndex--;
+                    updateArticle(mLinkedArticles.get(mIndex));
+                }
             }
         });
+        updateArticle(mLinkedArticles.get(0));
         return view;
     }
 
@@ -134,11 +165,36 @@ public class NRLinkedArticleFragment extends Fragment implements NRWebView.Liste
                 mBrowserView.setState(NRLinkedArticlesBrowserView.State.hasPrev);
             }
         }
+        if (result.getLikeState() == NRQueryResult.LikeState.notSelected) {
+            mLikeView.resetLikeView();
+        } else {
+            mLikeView.updateLikeButton(result.getLikeState() == NRQueryResult.LikeState.positive);
+        }
+
+        if (mFeedbackView != null) {
+            RelativeLayout.LayoutParams params = null;
+            if (result.getChanneling() == null) {
+                params = (RelativeLayout.LayoutParams) mFeedbackView.getLayoutParams();
+                params.height = (int) Calculate.pxFromDp(getContext(), 50);
+            }else {
+                mChannelingView = (NRChannelingView) getView().findViewById(R.id.linkedArtChanneling);
+                if (mChannelingView != null) {
+                    mChannelingView.setListener(this);
+                    ArrayList<NRChanneling> channelings = result.getChanneling();
+                    for (NRChanneling channeling: channelings) {
+                        channeling.setQueryResult(result);
+                    }
+                    mChannelingView.setChannelings(channelings);
+                    params = (RelativeLayout.LayoutParams) mFeedbackView.getLayoutParams();
+                    params.height = (int) Calculate.pxFromDp(getContext(), 100);
+                }
+            }
+            mFeedbackView.setLayoutParams(params);
+        }
     }
 
     @Override
     public void onAnswerFetched(NRQueryResult result) {
-        Log.d("Test", result.getTitle());
         if (result != null) {
             mIndex++;
             mLinkedArticles.add(mIndex, result);
@@ -149,5 +205,39 @@ public class NRLinkedArticleFragment extends Fragment implements NRWebView.Liste
     @Override
     public void onLinkedArticleClicked(String articleId) {
         mListener.onLinkedArticleClicked(this, articleId);
+    }
+
+    @Override
+    public void onChannelSelected(NRChannelItem channelItem) {
+
+    }
+
+    @Override
+    public void onLikeClicked() {
+        if (mLikeView.getLikeSelection()) {
+            mListener.onLikeSelected(this, NRLikeType.POSITIVE, mLinkedArticles.get(mIndex));
+        } else {
+            String reasons[] = new String[] {"Incorrect answer", "Missing or incorrect information", "Didn't find what I was looking for"};
+            DislikeDialog dislikeAlert = new DislikeDialog(getContext());
+            dislikeAlert.setTitle("What's wrong with this answer");
+            dislikeAlert.setListener(new DislikeDialog.Listener() {
+                @Override
+                public void onCancel() {
+                    mLikeView.cancelLike();
+                }
+
+                @Override
+                public void onDislike(NRLikeType type) {
+                    mListener.onLikeSelected(NRLinkedArticleFragment.this, type, mLinkedArticles.get(mIndex));
+                }
+            });
+            dislikeAlert.setDislikeOptions(reasons);
+        }
+    }
+
+    @Override
+    public void setLikeState(boolean isPositive) {
+        mLikeView.updateLikeButton(isPositive);
+        mLinkedArticles.get(mIndex).setLikeState(isPositive ? NRQueryResult.LikeState.positive : NRQueryResult.LikeState.negative);
     }
 }

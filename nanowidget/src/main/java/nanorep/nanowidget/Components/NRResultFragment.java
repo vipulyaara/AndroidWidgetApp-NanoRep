@@ -1,41 +1,30 @@
 package nanorep.nanowidget.Components;
 
 
-import android.annotation.TargetApi;
-import android.app.AlertDialog;
-import android.os.Build;
 import android.support.v4.app.Fragment;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebResourceRequest;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
-import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.nanorep.nanoclient.Channeling.NRChanneling;
 import com.nanorep.nanoclient.Interfaces.NRQueryResult;
 import com.nanorep.nanoclient.RequestParams.NRLikeType;
-import com.nanorep.nanoclient.Response.NRHtmlParser;
 
 import java.util.ArrayList;
 
 import nanorep.nanowidget.DataClasse.NRResult;
 import nanorep.nanowidget.R;
 import nanorep.nanowidget.Utilities.Calculate;
+import nanorep.nanowidget.interfaces.NRResultView;
 import nanorep.nanowidget.interfaces.OnFAQAnswerFetched;
 import nanorep.nanowidget.interfaces.OnLikeListener;
 import nanorep.nanowidget.interfaces.OnLinkedArticle;
 
 
-public class NRResultFragment extends Fragment implements View.OnClickListener, OnLikeListener, NRChannelItem.OnChannelSelectedListener, NRWebView.Listener, OnFAQAnswerFetched {
+public class NRResultFragment extends Fragment implements View.OnClickListener, OnLikeListener, NRChannelItem.OnChannelSelectedListener, NRWebView.Listener, OnFAQAnswerFetched, NRResultView {
 
     private NRResult mResult;
 
@@ -63,15 +52,20 @@ public class NRResultFragment extends Fragment implements View.OnClickListener, 
         getView().findViewById(R.id.linkedArtHolder).setVisibility(View.VISIBLE);
         NRLinkedArticleFragment linkedArticleFragment = new NRLinkedArticleFragment();
         linkedArticleFragment.setListener(mListener);
+        linkedArticleFragment.setDismissListener(new NRLinkedArticleFragment.OnDismissListener() {
+            @Override
+            public void onBackClicked() {
+                getChildFragmentManager().popBackStack();
+            }
+        });
         linkedArticleFragment.setQueryResult(result);
-        getChildFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_left).add(R.id.linkedArtHolder, linkedArticleFragment).addToBackStack("test").commit();
+        getChildFragmentManager().beginTransaction().setCustomAnimations(R.anim.fade_in, R.anim.fade_out, R.anim.fade_in, R.anim.fade_out).add(R.id.linkedArtHolder, linkedArticleFragment).addToBackStack("linked").commit();
     }
 
 
     public interface Listener extends OnLinkedArticle {
         void onResultFragmentDismissed(NRResultFragment resultFragment);
         void resultFragmentWillDismiss(NRResultFragment resultFragment);
-        void onLikeSelected(NRResultFragment resultFragment, NRLikeType likeType, NRResult currentResult);
         void fetchBodyForResult(NRResultFragment resultFragment, String resultID);
         void onChannelSelected(NRResultFragment resultFragment, NRChannelItem channelItem);
     }
@@ -88,7 +82,9 @@ public class NRResultFragment extends Fragment implements View.OnClickListener, 
         mListener = listener;
     }
 
+    @Override
     public void setLikeState(boolean isPositive) {
+        mResult.getFetchedResult().setLikeState(isPositive ? NRQueryResult.LikeState.positive : NRQueryResult.LikeState.negative);
         mLikeView.updateLikeButton(isPositive);
     }
 
@@ -143,6 +139,9 @@ public class NRResultFragment extends Fragment implements View.OnClickListener, 
 
                 mLikeView = (NRLikeView) view.findViewById(R.id.likeView);
                 if (mLikeView != null) {
+                    if (mResult.getFetchedResult().getLikeState() != NRQueryResult.LikeState.notSelected) {
+                        mLikeView.updateLikeButton(mResult.getFetchedResult().getLikeState() == NRQueryResult.LikeState.positive);
+                    }
                     mLikeView.setListener(NRResultFragment.this);
                 }
                 mFeedbackView = (RelativeLayout) view.findViewById(R.id.feedbackView);
@@ -167,9 +166,6 @@ public class NRResultFragment extends Fragment implements View.OnClickListener, 
                     mFeedbackView.setLayoutParams(params);
                 }
                 mView = view;
-
-//                view.setX(view.getMeasuredWidth());
-//                view.animate().translationXBy(-view.getMeasuredWidth()).setDuration(500).setInterpolator(new AccelerateDecelerateInterpolator()).start();
             }
         });
     }
@@ -180,96 +176,28 @@ public class NRResultFragment extends Fragment implements View.OnClickListener, 
     @Override
     public void onLikeClicked() {
         if (mLikeView.getLikeSelection()) {
-            mListener.onLikeSelected(this, NRLikeType.POSITIVE, mResult);
+            mListener.onLikeSelected(this, NRLikeType.POSITIVE, mResult.getFetchedResult());
         } else {
             String reasons[] = new String[] {"Incorrect answer", "Missing or incorrect information", "Didn't find what I was looking for"};
-            AlertDialog.Builder dislikeAlert = new  AlertDialog.Builder(getContext());
+            DislikeDialog dislikeAlert = new DislikeDialog(getContext());
             dislikeAlert.setTitle("What's wrong with this answer");
-            final NRLikeAdapter adapter = new NRLikeAdapter(getContext(), R.layout.dislike_row, reasons);
-            DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+            dislikeAlert.setListener(new DislikeDialog.Listener() {
                 @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    if (which == DialogInterface.BUTTON_POSITIVE && adapter.getSelection() != NRLikeType.POSITIVE) {
-                        mListener.onLikeSelected(NRResultFragment.this, adapter.getSelection(), mResult);
-                    } else {
-                        mLikeView.cancelLike();
-                    }
+                public void onCancel() {
+                    mLikeView.cancelLike();
                 }
-            };
-            dislikeAlert.setAdapter(adapter, null);
-            dislikeAlert.setPositiveButton("OK", dialogClickListener);
-            dislikeAlert.setNegativeButton("Cancel", dialogClickListener);
-            AlertDialog alert = dislikeAlert.create();
-            alert.show();
+
+                @Override
+                public void onDislike(NRLikeType type) {
+                    mListener.onLikeSelected(NRResultFragment.this, type, mResult.getFetchedResult());
+                }
+            });
+            dislikeAlert.setDislikeOptions(reasons);
         }
     }
 
     @Override
     public void onChannelSelected(NRChannelItem channelItem) {
         mListener.onChannelSelected(this, channelItem);
-    }
-
-    private class NRLikeAdapter extends ArrayAdapter<String> implements View.OnClickListener {
-        private String[] mObjects;
-        private ArrayList<ImageView> bullets;
-        private NRLikeType mSelection = NRLikeType.POSITIVE;
-
-        public NRLikeAdapter(Context context, int resource, String[] objects) {
-            super(context, resource, objects);
-            mObjects = objects;
-        }
-
-        public NRLikeType getSelection() {
-            return mSelection;
-        }
-
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            final LayoutInflater inflater = (LayoutInflater) getContext()
-                    .getSystemService(
-                            Context.LAYOUT_INFLATER_SERVICE);
-            if (convertView == null) {
-                convertView = inflater.inflate(R.layout.dislike_row, null);
-                convertView.setTag(position);
-                convertView.setOnClickListener(this);
-                TextView titleView = (TextView) convertView.findViewById(R.id.dislike);
-                titleView.setText(mObjects[position]);
-                if (bullets == null) {
-                    bullets = new ArrayList<>();
-                }
-                bullets.add((ImageView) convertView.findViewById(R.id.imageView));
-            }
-            return convertView;
-        }
-
-        private int resId(String resName) {
-            return getResources().getIdentifier(resName, "drawable", getContext().getPackageName());
-        }
-
-
-        @Override
-        public void onClick(View v) {
-            switch ((int)v.getTag()) {
-                case 0:
-                    mSelection = NRLikeType.INCORRECT_ANSWER;
-                    break;
-                case 1:
-                    mSelection = NRLikeType.MISSING_INFORMATION;
-                    break;
-                case 2:
-                    mSelection = NRLikeType.IRRELEVANT;
-                    break;
-            }
-            for (int i = 0; i < bullets.size(); i++) {
-                int id;
-                if ((int) v.getTag() == i) {
-                    id = resId("bullet_on");
-                } else {
-                    id = resId("bullet_off");
-                }
-                bullets.get(i).setImageResource(id);
-            }
-        }
     }
 }

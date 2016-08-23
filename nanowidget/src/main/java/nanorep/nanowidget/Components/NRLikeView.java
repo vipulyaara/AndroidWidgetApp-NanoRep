@@ -32,6 +32,7 @@ public class NRLikeView extends LinearLayout implements View.OnClickListener {
     }
 
     public void updateLikeButton(boolean isLike) {
+        resetLikeView();
         if (isLike) {
             mLikeButton.getBackground().setColorFilter(0xff35d691, PorterDuff.Mode.MULTIPLY);
             mLikeButton.setImageResource(resId("white_like_icon"));
@@ -39,6 +40,8 @@ public class NRLikeView extends LinearLayout implements View.OnClickListener {
             mDislikeButton.getBackground().setColorFilter(0xfff46f64, PorterDuff.Mode.MULTIPLY);
             mDislikeButton.setImageResource(resId("white_dislike_icon"));
         }
+        mLikeButton.setEnabled(false);
+        mDislikeButton.setEnabled(false);
     }
 
     public void resetLikeView() {

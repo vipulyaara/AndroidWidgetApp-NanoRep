@@ -20,7 +20,7 @@ public class NRSearchLikeParams extends NRRequestParams {
     public NRSearchLikeParams(NRQueryResult result) {
         super(result);
         setArticleId(result.getId());
-        setKeywordSetId(((NRAnswer)result).getKeywordsetId());
+//        setKeywordSetId(result.getKeywordsetId());
         setSearchQuery(result.getTitle());
     }
 

@@ -33,6 +33,7 @@ import nanorep.nanowidget.DataClasse.NRFetchedDataManager;
 import nanorep.nanowidget.DataClasse.NRResult;
 import nanorep.nanowidget.interfaces.NRFetcherListener;
 import nanorep.nanowidget.interfaces.NRResultItemListener;
+import nanorep.nanowidget.interfaces.NRResultView;
 import nanorep.nanowidget.interfaces.NRSearchBarListener;
 import nanorep.nanowidget.interfaces.NRSuggestionsListener;
 import nanorep.nanowidget.interfaces.OnFAQAnswerFetched;
@@ -249,7 +250,7 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
         getResultFragment().setListener(this);
         getResultFragment().setResult(item.getResult());
         getView().findViewById(R.id.fragment_place_holder).setVisibility(View.VISIBLE);
-        getChildFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_left).add(R.id.fragment_place_holder, getResultFragment()).addToBackStack("test").commit();
+        getChildFragmentManager().beginTransaction().setCustomAnimations(R.anim.fade_in, R.anim.fade_out, R.anim.fade_in, R.anim.fade_out).add(R.id.fragment_place_holder, getResultFragment()).addToBackStack("nanowidget").commit();
     }
 
     @Override
@@ -277,11 +278,11 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
     }
 
     @Override
-    public void onLikeSelected(final NRResultFragment resultFragment, final NRLikeType likeType, NRResult currentResult) {
+    public void onLikeSelected(final NRResultView resultView, final NRLikeType likeType, NRQueryResult currentResult) {
         mFetchedDataManager.sendLike(likeType, currentResult, new Nanorep.OnLikeSentListener() {
             @Override
             public void onLikeSent(int type, boolean success) {
-                resultFragment.setLikeState(likeType == NRLikeType.POSITIVE);
+                resultView.setLikeState(likeType == NRLikeType.POSITIVE);
             }
         });
     }

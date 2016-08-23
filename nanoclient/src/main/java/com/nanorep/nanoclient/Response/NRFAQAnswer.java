@@ -2,6 +2,7 @@ package com.nanorep.nanoclient.Response;
 
 import com.nanorep.nanoclient.Channeling.NRChanneling;
 import com.nanorep.nanoclient.Interfaces.NRQueryResult;
+import com.nanorep.nanoclient.RequestParams.NRLikeType;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,6 +12,7 @@ import java.util.HashMap;
  */
 public class NRFAQAnswer implements NRQueryResult {
     HashMap<String, Object> mParams;
+    private LikeState mLikeState = LikeState.notSelected;
 
     /**
      * Converts JSON string to NRFAQAnswer object
@@ -38,6 +40,17 @@ public class NRFAQAnswer implements NRQueryResult {
     @Override
     public void setBody(String body) {
 
+    }
+
+
+    @Override
+    public void setLikeState(LikeState likeState) {
+        mLikeState = likeState;
+    }
+
+    @Override
+    public LikeState getLikeState() {
+        return mLikeState;
     }
 
     /**

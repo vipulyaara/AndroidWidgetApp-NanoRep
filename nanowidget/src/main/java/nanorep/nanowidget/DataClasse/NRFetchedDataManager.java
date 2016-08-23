@@ -130,13 +130,13 @@ public class NRFetchedDataManager {
 //        mNanoRep.startVoiceRecognition(completion);
     }
 
-    public void sendLike(NRLikeType likeType, NRResult result, Nanorep.OnLikeSentListener completion) {
-        if (result.getFetchedResult().isCNF()) {
-            NRFAQLikeParams likeParams = new NRFAQLikeParams(result.getFetchedResult());
+    public void sendLike(NRLikeType likeType, NRQueryResult result, Nanorep.OnLikeSentListener completion) {
+        if (true){//result.isCNF()) {
+            NRFAQLikeParams likeParams = new NRFAQLikeParams(result);
             likeParams.setLikeType(likeType);
             mNanoRep.likeForFAQResult(likeParams, completion);
         } else {
-            NRSearchLikeParams likeParams = new NRSearchLikeParams(result.getFetchedResult());
+            NRSearchLikeParams likeParams = new NRSearchLikeParams(result);
             likeParams.setFeedbackType(likeType);
             mNanoRep.likeForSearchResult(likeParams, completion);
         }
