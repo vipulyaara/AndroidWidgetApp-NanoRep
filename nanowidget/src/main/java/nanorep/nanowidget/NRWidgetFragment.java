@@ -13,6 +13,7 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 
 import com.nanorep.nanoclient.Interfaces.NRQueryResult;
 import com.nanorep.nanoclient.Nanorep;
@@ -63,6 +64,7 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
     private RecyclerView mResultsRecyclerView;
     private NRWidgetFragmentListener mListener;
     private NRResultFragment mResultFragment;
+    private RelativeLayout mLoadingView;
 
     public NRWidgetFragment() {
         // Required empty public constructor
@@ -117,6 +119,8 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
 //        setHasOptionsMenu(true);
 //        assert ((AppCompatActivity)getActivity()).getSupportActionBar() != null;
 //        ((AppCompatActivity)getActivity()).getSupportActionBar().hide();
+        View nanoView = inflater.inflate(R.layout.fragment_nrwidget, container, false);
+        mLoadingView = (RelativeLayout) nanoView.findViewById(R.id.fragment_place_holder);
         mResutlsAdapter = new NRResutlsAdapter();
 
         mFetchedDataManager = new NRFetchedDataManager(mNanoRep, getContext());
@@ -138,6 +142,7 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
 
             @Override
             public void insertRows(ArrayList<NRResult> rows) {
+                mLoadingView.setVisibility(View.INVISIBLE);
                 mResutlsAdapter.setShouldResetLikeView(true);
                 mQueryResults = rows;
                 mResutlsAdapter.notifyDataSetChanged();
@@ -153,7 +158,7 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
 
             }
         });
-        View nanoView = inflater.inflate(R.layout.fragment_nrwidget, container, false);
+
         mSearchBar = (NRSearchBar) nanoView.findViewById(R.id.searchBar);
         mSearchBar.setListener(this);
         mSuggestionsView = (NRSuggestionsView)nanoView.findViewById(R.id.suggestions);
@@ -185,6 +190,7 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
                     if (event.getAction() == KeyEvent.ACTION_DOWN) {
                         if (keyCode == KeyEvent.KEYCODE_BACK) {
                             if (getChildFragmentManager().getBackStackEntryCount() > 0) {
+                                mLoadingView.setVisibility(View.INVISIBLE);
                                 getChildFragmentManager().popBackStack();
                             } else {
                                 mListener.onCancelWidget(NRWidgetFragment.this);
@@ -249,7 +255,7 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
     public void unfoldItem(NRResultItem item) {
         getResultFragment().setListener(this);
         getResultFragment().setResult(item.getResult());
-        getView().findViewById(R.id.fragment_place_holder).setVisibility(View.VISIBLE);
+        mLoadingView.setVisibility(View.VISIBLE);
         getChildFragmentManager().beginTransaction().setCustomAnimations(R.anim.fade_in, R.anim.fade_out, R.anim.fade_in, R.anim.fade_out).add(R.id.fragment_place_holder, getResultFragment()).addToBackStack("nanowidget").commit();
     }
 

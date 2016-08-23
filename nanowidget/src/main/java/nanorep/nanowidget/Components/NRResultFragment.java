@@ -15,6 +15,7 @@ import com.nanorep.nanoclient.RequestParams.NRLikeType;
 
 import java.util.ArrayList;
 
+import nanorep.nanowidget.Components.ChannelPresenters.NRWebContentFragment;
 import nanorep.nanowidget.DataClasse.NRResult;
 import nanorep.nanowidget.R;
 import nanorep.nanowidget.Utilities.Calculate;
@@ -35,7 +36,6 @@ public class NRResultFragment extends Fragment implements View.OnClickListener, 
     private NRLikeView mLikeView;
     private NRChannelingView mChannelingView;
     private Listener mListener;
-    private View mView;
 
     @Override
     public void onClick(View v) {
@@ -45,6 +45,19 @@ public class NRResultFragment extends Fragment implements View.OnClickListener, 
     @Override
     public void onLinkedArticleClicked(String articleId) {
         mListener.onLinkedArticleClicked(this, articleId);
+    }
+
+    @Override
+    public void onLinkClicked(String url) {
+        NRWebContentFragment webContentFragment = NRWebContentFragment.newInstance(url, null);
+        webContentFragment.setListener(new NRWebContentFragment.Listener() {
+            @Override
+            public void onDismiss() {
+                getChildFragmentManager().popBackStack();
+            }
+        });
+        getView().findViewById(R.id.linkedArtHolder).setVisibility(View.VISIBLE);
+        getChildFragmentManager().beginTransaction().setCustomAnimations(R.anim.fade_in, R.anim.fade_out, R.anim.fade_in, R.anim.fade_out).add(R.id.linkedArtHolder, webContentFragment).addToBackStack("linked").commit();
     }
 
     @Override
@@ -111,61 +124,60 @@ public class NRResultFragment extends Fragment implements View.OnClickListener, 
         view.post(new Runnable() {
             @Override
             public void run() {
-                mTitle = (NRResultTitleView) view.findViewById(R.id.titleView);
-                if (mTitle != null) {
-                    mTitle.setTitle(mResult.getFetchedResult().getTitle());
-                    mTitle.setListener(new NRResultTitleView.Listener() {
-                        @Override
-                        public void onSharePressed() {
+            mTitle = (NRResultTitleView) view.findViewById(R.id.titleView);
+            if (mTitle != null) {
+                mTitle.setTitle(mResult.getFetchedResult().getTitle());
+                mTitle.setListener(new NRResultTitleView.Listener() {
+                    @Override
+                    public void onSharePressed() {
 
+                    }
+                });
+            }
+
+            mShareButton = (ImageButton) view.findViewById(R.id.shareButton);
+            if (mShareButton != null) {
+                mShareButton.setOnClickListener(NRResultFragment.this);
+            }
+
+            mWebView = (NRWebView) view.findViewById(R.id.resultWebView);
+            if (mWebView != null) {
+                mWebView.setListener(NRResultFragment.this);
+                if (mResult.getFetchedResult().getBody() != null) {
+                    setBody(mResult.getFetchedResult().getBody());
+                } else {
+                    mListener.fetchBodyForResult(NRResultFragment.this, mResult.getFetchedResult().getId());
+                }
+            }
+
+            mLikeView = (NRLikeView) view.findViewById(R.id.likeView);
+            if (mLikeView != null) {
+                if (mResult.getFetchedResult().getLikeState() != NRQueryResult.LikeState.notSelected) {
+                    mLikeView.updateLikeButton(mResult.getFetchedResult().getLikeState() == NRQueryResult.LikeState.positive);
+                }
+                mLikeView.setListener(NRResultFragment.this);
+            }
+            mFeedbackView = (RelativeLayout) view.findViewById(R.id.feedbackView);
+            if (mFeedbackView != null) {
+                RelativeLayout.LayoutParams params = null;
+                if (mResult.getFetchedResult().getChanneling() == null) {
+                    params = (RelativeLayout.LayoutParams) mFeedbackView.getLayoutParams();
+                    params.height = (int) Calculate.pxFromDp(getContext(), 50);
+                }else {
+                    mChannelingView = (NRChannelingView) view.findViewById(R.id.channelingView);
+                    if (mChannelingView != null) {
+                        mChannelingView.setListener(NRResultFragment.this);
+                        ArrayList<NRChanneling> channelings = mResult.getFetchedResult().getChanneling();
+                        for (NRChanneling channeling: channelings) {
+                            channeling.setQueryResult(mResult.getFetchedResult());
                         }
-                    });
-                }
-
-                mShareButton = (ImageButton) view.findViewById(R.id.shareButton);
-                if (mShareButton != null) {
-                    mShareButton.setOnClickListener(NRResultFragment.this);
-                }
-
-                mWebView = (NRWebView) view.findViewById(R.id.resultWebView);
-                if (mWebView != null) {
-                    mWebView.setListener(NRResultFragment.this);
-                    if (mResult.getFetchedResult().getBody() != null) {
-                        setBody(mResult.getFetchedResult().getBody());
-                    } else {
-                        mListener.fetchBodyForResult(NRResultFragment.this, mResult.getFetchedResult().getId());
-                    }
-                }
-
-                mLikeView = (NRLikeView) view.findViewById(R.id.likeView);
-                if (mLikeView != null) {
-                    if (mResult.getFetchedResult().getLikeState() != NRQueryResult.LikeState.notSelected) {
-                        mLikeView.updateLikeButton(mResult.getFetchedResult().getLikeState() == NRQueryResult.LikeState.positive);
-                    }
-                    mLikeView.setListener(NRResultFragment.this);
-                }
-                mFeedbackView = (RelativeLayout) view.findViewById(R.id.feedbackView);
-                if (mFeedbackView != null) {
-                    RelativeLayout.LayoutParams params = null;
-                    if (mResult.getFetchedResult().getChanneling() == null) {
+                        mChannelingView.setChannelings(channelings);
                         params = (RelativeLayout.LayoutParams) mFeedbackView.getLayoutParams();
-                        params.height = (int) Calculate.pxFromDp(getContext(), 50);
-                    }else {
-                        mChannelingView = (NRChannelingView) view.findViewById(R.id.channelingView);
-                        if (mChannelingView != null) {
-                            mChannelingView.setListener(NRResultFragment.this);
-                            ArrayList<NRChanneling> channelings = mResult.getFetchedResult().getChanneling();
-                            for (NRChanneling channeling: channelings) {
-                                channeling.setQueryResult(mResult.getFetchedResult());
-                            }
-                            mChannelingView.setChannelings(channelings);
-                            params = (RelativeLayout.LayoutParams) mFeedbackView.getLayoutParams();
-                            params.height = (int) Calculate.pxFromDp(getContext(), 100);
-                        }
+                        params.height = (int) Calculate.pxFromDp(getContext(), 100);
                     }
-                    mFeedbackView.setLayoutParams(params);
                 }
-                mView = view;
+                mFeedbackView.setLayoutParams(params);
+            }
             }
         });
     }

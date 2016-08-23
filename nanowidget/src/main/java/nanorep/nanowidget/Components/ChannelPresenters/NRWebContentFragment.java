@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Button;
 import android.widget.RelativeLayout;
 
 import nanorep.nanowidget.R;
@@ -23,7 +24,12 @@ public class NRWebContentFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private WebView mWebView;
+    private Button mCloseButton;
+    private Listener mListener;
 
+    public interface Listener {
+        void onDismiss();
+    }
 
     // TODO: Rename and change types and number of parameters
     public static NRWebContentFragment newInstance(String param1, String param2) {
@@ -40,6 +46,10 @@ public class NRWebContentFragment extends Fragment {
         // Required empty public constructor
     }
 
+    public void setListener(Listener listener) {
+        mListener = listener;
+    }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -51,6 +61,13 @@ public class NRWebContentFragment extends Fragment {
         mWebView.loadUrl(getArguments().getString(ARG_PARAM1));
         mWebView.getSettings().setJavaScriptEnabled(true);
         mWebView.setWebViewClient(new WebViewClient());
+        mCloseButton = (Button) view.findViewById(R.id.closeChannelButton);
+        mCloseButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mListener.onDismiss();
+            }
+        });
         return view;
     }
 

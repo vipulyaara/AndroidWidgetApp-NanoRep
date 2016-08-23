@@ -17,6 +17,7 @@ import com.nanorep.nanoclient.RequestParams.NRLikeType;
 
 import java.util.ArrayList;
 
+import nanorep.nanowidget.Components.ChannelPresenters.NRWebContentFragment;
 import nanorep.nanowidget.R;
 import nanorep.nanowidget.Utilities.Calculate;
 import nanorep.nanowidget.interfaces.NRResultView;
@@ -205,6 +206,18 @@ public class NRLinkedArticleFragment extends Fragment implements NRWebView.Liste
     @Override
     public void onLinkedArticleClicked(String articleId) {
         mListener.onLinkedArticleClicked(this, articleId);
+    }
+
+    @Override
+    public void onLinkClicked(String url) {
+        NRWebContentFragment webContentFragment = NRWebContentFragment.newInstance(url, null);
+        webContentFragment.setListener(new NRWebContentFragment.Listener() {
+            @Override
+            public void onDismiss() {
+                getChildFragmentManager().popBackStack();
+            }
+        });
+        getChildFragmentManager().beginTransaction().setCustomAnimations(R.anim.fade_in, R.anim.fade_out, R.anim.fade_in, R.anim.fade_out).add(R.id.webContentHolder, webContentFragment).addToBackStack("linked").commit();
     }
 
     @Override

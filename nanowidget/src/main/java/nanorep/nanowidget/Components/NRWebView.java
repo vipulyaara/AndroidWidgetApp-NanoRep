@@ -22,6 +22,7 @@ public class NRWebView extends WebView {
 
     public interface Listener {
         void onLinkedArticleClicked(String articleId);
+        void onLinkClicked(String url);
     }
 
     @SuppressLint("SetJavaScriptEnabled")
@@ -60,6 +61,9 @@ public class NRWebView extends WebView {
                 if (comps != null && comps.length > 0) {
                     mListener.onLinkedArticleClicked(comps[comps.length - 1]);
                 }
+                return true;
+            } else if (link.startsWith("http")) {
+                mListener.onLinkClicked(link);
                 return true;
             }
             return false;
