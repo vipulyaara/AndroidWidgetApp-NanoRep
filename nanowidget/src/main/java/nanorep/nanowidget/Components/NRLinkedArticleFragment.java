@@ -250,7 +250,11 @@ public class NRLinkedArticleFragment extends Fragment implements NRWebView.Liste
 
     @Override
     public void setLikeState(boolean isPositive) {
-        mLikeView.updateLikeButton(isPositive);
-        mLinkedArticles.get(mIndex).setLikeState(isPositive ? NRQueryResult.LikeState.positive : NRQueryResult.LikeState.negative);
+        if (isPositive) {
+            mLinkedArticles.get(mIndex).setLikeState(mLikeView.getLikeSelection() ? NRQueryResult.LikeState.positive : NRQueryResult.LikeState.negative);
+        } else {
+            mLinkedArticles.get(mIndex).setLikeState(NRQueryResult.LikeState.notSelected);
+            mLikeView.resetLikeView();
+        }
     }
 }

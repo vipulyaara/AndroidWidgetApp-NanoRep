@@ -97,8 +97,12 @@ public class NRResultFragment extends Fragment implements View.OnClickListener, 
 
     @Override
     public void setLikeState(boolean isPositive) {
-        mResult.getFetchedResult().setLikeState(isPositive ? NRQueryResult.LikeState.positive : NRQueryResult.LikeState.negative);
-        mLikeView.updateLikeButton(isPositive);
+//        if (!isPositive) {
+//
+//        } else {
+//            mResult.getFetchedResult().setLikeState(NRQueryResult.LikeState.notSelected);
+//            mLikeView.resetLikeView();
+//        }
     }
 
     public void setBody(String htmlString) {
@@ -188,6 +192,7 @@ public class NRResultFragment extends Fragment implements View.OnClickListener, 
     @Override
     public void onLikeClicked() {
         if (mLikeView.getLikeSelection()) {
+            mResult.getFetchedResult().setLikeState(NRQueryResult.LikeState.positive);
             mListener.onLikeSelected(this, NRLikeType.POSITIVE, mResult.getFetchedResult());
         } else {
             String reasons[] = new String[] {"Incorrect answer", "Missing or incorrect information", "Didn't find what I was looking for"};
@@ -196,11 +201,12 @@ public class NRResultFragment extends Fragment implements View.OnClickListener, 
             dislikeAlert.setListener(new DislikeDialog.Listener() {
                 @Override
                 public void onCancel() {
-                    mLikeView.cancelLike();
+                    mLikeView.resetLikeView();
                 }
 
                 @Override
                 public void onDislike(NRLikeType type) {
+                    mResult.getFetchedResult().setLikeState(NRQueryResult.LikeState.negative);
                     mListener.onLikeSelected(NRResultFragment.this, type, mResult.getFetchedResult());
                 }
             });

@@ -288,7 +288,7 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
         mFetchedDataManager.sendLike(likeType, currentResult, new Nanorep.OnLikeSentListener() {
             @Override
             public void onLikeSent(int type, boolean success) {
-                resultView.setLikeState(likeType == NRLikeType.POSITIVE);
+                resultView.setLikeState(success);
             }
         });
     }

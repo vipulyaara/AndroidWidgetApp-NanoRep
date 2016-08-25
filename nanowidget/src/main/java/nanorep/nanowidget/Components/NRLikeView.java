@@ -42,6 +42,7 @@ public class NRLikeView extends LinearLayout implements View.OnClickListener {
         }
         mLikeButton.setEnabled(false);
         mDislikeButton.setEnabled(false);
+        mLikeSelection = isLike;
     }
 
     public void resetLikeView() {
@@ -79,8 +80,7 @@ public class NRLikeView extends LinearLayout implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         mLikeSelection = v.getId() == R.id.likeButton;
-        mLikeButton.setEnabled(false);
-        mDislikeButton.setEnabled(false);
+        updateLikeButton(mLikeSelection);
         mListener.onLikeClicked();
     }
 }
