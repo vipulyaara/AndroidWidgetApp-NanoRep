@@ -81,6 +81,7 @@ public class NRResultFragment extends Fragment implements View.OnClickListener, 
         void resultFragmentWillDismiss(NRResultFragment resultFragment);
         void fetchBodyForResult(NRResultFragment resultFragment, String resultID);
         void onChannelSelected(NRResultFragment resultFragment, NRChannelItem channelItem);
+        void onLikeFailed(String resultId);
     }
 
     public NRResultFragment() {
@@ -96,13 +97,15 @@ public class NRResultFragment extends Fragment implements View.OnClickListener, 
     }
 
     @Override
-    public void setLikeState(boolean isPositive) {
-//        if (!isPositive) {
-//
-//        } else {
-//            mResult.getFetchedResult().setLikeState(NRQueryResult.LikeState.notSelected);
-//            mLikeView.resetLikeView();
-//        }
+    public void setLikeState(String resultId, boolean isPositive) {
+        if (!isPositive) {
+            if (mResult.getFetchedResult().getId().equals(resultId)) {
+                mLikeView.resetLikeView();
+                mResult.getFetchedResult().setLikeState(NRQueryResult.LikeState.notSelected);
+            } else {
+                mListener.onLikeFailed(resultId);
+            }
+        }
     }
 
     public void setBody(String htmlString) {

@@ -228,6 +228,7 @@ public class NRLinkedArticleFragment extends Fragment implements NRWebView.Liste
     @Override
     public void onLikeClicked() {
         if (mLikeView.getLikeSelection()) {
+            mLinkedArticles.get(mIndex).setLikeState(NRQueryResult.LikeState.positive);
             mListener.onLikeSelected(this, NRLikeType.POSITIVE, mLinkedArticles.get(mIndex));
         } else {
             String reasons[] = new String[] {"Incorrect answer", "Missing or incorrect information", "Didn't find what I was looking for"};
@@ -236,11 +237,12 @@ public class NRLinkedArticleFragment extends Fragment implements NRWebView.Liste
             dislikeAlert.setListener(new DislikeDialog.Listener() {
                 @Override
                 public void onCancel() {
-                    mLikeView.cancelLike();
+                    mLikeView.resetLikeView();
                 }
 
                 @Override
                 public void onDislike(NRLikeType type) {
+                    mLinkedArticles.get(mIndex).setLikeState(NRQueryResult.LikeState.negative);
                     mListener.onLikeSelected(NRLinkedArticleFragment.this, type, mLinkedArticles.get(mIndex));
                 }
             });
@@ -249,7 +251,7 @@ public class NRLinkedArticleFragment extends Fragment implements NRWebView.Liste
     }
 
     @Override
-    public void setLikeState(boolean isPositive) {
+    public void setLikeState(String resultId, boolean isPositive) {
         if (isPositive) {
             mLinkedArticles.get(mIndex).setLikeState(mLikeView.getLikeSelection() ? NRQueryResult.LikeState.positive : NRQueryResult.LikeState.negative);
         } else {

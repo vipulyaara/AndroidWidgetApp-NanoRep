@@ -142,6 +142,14 @@ public class NRFetchedDataManager {
         }
     }
 
+    public void resetLike(String resultId) {
+        for (NRQueryResult result: mFaqData.getGroups().get(0).getAnswers()) {
+            if (result.getId().equals(resultId)) {
+                result.setLikeState(NRQueryResult.LikeState.notSelected);
+            }
+        }
+    }
+
     public void faqAnswer(String answerId, final nanorep.nanowidget.interfaces.OnFAQAnswerFetched answerFetcher) {
         mNanoRep.fetchFAQAnswer(answerId, new Nanorep.OnFAQAnswerFetchedListener() {
             @Override

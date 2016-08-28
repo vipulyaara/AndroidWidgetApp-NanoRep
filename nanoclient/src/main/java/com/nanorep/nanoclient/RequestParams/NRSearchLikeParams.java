@@ -78,4 +78,8 @@ public class NRSearchLikeParams extends NRRequestParams {
         mArticleId = articleId;
         setValue(articleId, "articleId");
     }
+
+    public String getArticleId() {
+        return mArticleId;
+    }
 }

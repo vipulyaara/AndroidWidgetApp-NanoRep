@@ -212,7 +212,7 @@ public class NRImpl implements Nanorep {
     }
 
     @Override
-    public void likeForSearchResult(NRSearchLikeParams likeParams, final OnLikeSentListener onLikeSentListener) {
+    public void likeForSearchResult(final NRSearchLikeParams likeParams, final OnLikeSentListener onLikeSentListener) {
         Uri.Builder uriBuilder = mAccountParams.getUri();
         uriBuilder.appendPath("api/widget/v1/thumb.js");
         for (String key: likeParams.getParams().keySet()) {
@@ -222,9 +222,9 @@ public class NRImpl implements Nanorep {
             @Override
             public void response(Object responseParam, int status, NRError error) {
                 if (error != null) {
-                    onLikeSentListener.onLikeSent(0, false);
+                    onLikeSentListener.onLikeSent(likeParams.getArticleId(), 0, false);
                 } else if (responseParam != null) {
-                    onLikeSentListener.onLikeSent((Integer) ((HashMap) responseParam).get("type"), ((HashMap) responseParam).get("result").equals("True"));
+                    onLikeSentListener.onLikeSent(likeParams.getArticleId(), (Integer) ((HashMap) responseParam).get("type"), ((HashMap) responseParam).get("result").equals("True"));
                 }
             }
         });
@@ -259,9 +259,9 @@ public class NRImpl implements Nanorep {
             @Override
             public void response(Object responseParam, int status, NRError error) {
                 if (error != null) {
-                    onLikeSentListener.onLikeSent(0, false);
+                    onLikeSentListener.onLikeSent(likeParams.getAnswerId(), 0, false);
                 } else {
-                    onLikeSentListener.onLikeSent(Integer.parseInt(likeParams.getParams().get("type")), responseParam == null);
+                    onLikeSentListener.onLikeSent(likeParams.getAnswerId(), Integer.parseInt(likeParams.getParams().get("type")), responseParam == null);
                 }
             }
         });

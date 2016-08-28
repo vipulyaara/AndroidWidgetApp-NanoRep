@@ -46,4 +46,8 @@ public class NRFAQLikeParams extends NRRequestParams {
         mAnswerId = answerId;
         setValue(answerId, "id");
     }
+
+    public String getAnswerId() {
+        return mAnswerId;
+    }
 }

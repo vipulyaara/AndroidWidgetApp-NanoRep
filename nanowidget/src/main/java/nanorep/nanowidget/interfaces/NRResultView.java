@@ -5,5 +5,5 @@ package nanorep.nanowidget.interfaces;
  */
 
 public interface NRResultView {
-    void setLikeState(boolean isPositive);
+    void setLikeState(String resultId, boolean isPositive);
 }

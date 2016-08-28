@@ -287,8 +287,8 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
     public void onLikeSelected(final NRResultView resultView, final NRLikeType likeType, NRQueryResult currentResult) {
         mFetchedDataManager.sendLike(likeType, currentResult, new Nanorep.OnLikeSentListener() {
             @Override
-            public void onLikeSent(int type, boolean success) {
-                resultView.setLikeState(success);
+            public void onLikeSent(String resultId, int type, boolean success) {
+                resultView.setLikeState(resultId, success);
             }
         });
     }
@@ -306,6 +306,11 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
     @Override
     public void onChannelSelected(NRResultFragment resultFragment, NRChannelItem channelItem) {
         NRChannelStrategy.presentor(channelItem.getChanneling(), resultFragment, mFetchedDataManager.getNanoRep()).present();
+    }
+
+    @Override
+    public void onLikeFailed(String resultId) {
+        mFetchedDataManager.resetLike(resultId);
     }
 
     @Override

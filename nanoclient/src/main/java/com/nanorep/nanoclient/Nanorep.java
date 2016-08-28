@@ -29,7 +29,7 @@ public interface Nanorep {
     }
 
     interface OnLikeSentListener {
-        void onLikeSent(int type, boolean success);
+        void onLikeSent(String resultId, int type, boolean success);
     }
 
     interface OnFAQAnswerFetchedListener {
