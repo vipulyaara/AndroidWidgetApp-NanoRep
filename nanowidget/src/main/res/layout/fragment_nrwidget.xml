@@ -6,12 +6,10 @@
              tools:context="nanorep.nanowidget.NRWidgetFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:id="@+id/contentId"
-        android:weightSum="14">
+        android:id="@+id/contentId">
 
     <nanorep.nanowidget.Components.NRSearchBar
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -19,32 +17,40 @@
         android:layout_height="50dp"
         android:id="@+id/searchBar"
         android:background="#3F51B5"
-        android:layout_weight="1">
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true"
+        >
     </nanorep.nanowidget.Components.NRSearchBar>
 
 
     <nanorep.nanowidget.Components.NRSuggestionsView
         android:layout_width="match_parent"
-        android:layout_height="0dp"
         android:id="@+id/suggestions"
-        android:layout_weight="0">
+        android:layout_below="@id/searchBar"
+        android:layout_height="0dp">
         <android.support.v7.widget.RecyclerView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="#ffffffff"
             android:id="@+id/recyclerSuggestions"
-            android:background="#ffffff">
+            >
 
         </android.support.v7.widget.RecyclerView>
     </nanorep.nanowidget.Components.NRSuggestionsView>
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/suggestions"
+        android:layout_alignParentBottom="true"
         android:id="@+id/resultsView"
-        android:layout_weight="13"
-        android:background="@color/white">
+        android:background="@color/white"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@id/suggestions">
 
     </android.support.v7.widget.RecyclerView>
-    </LinearLayout>
+    </RelativeLayout>
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"

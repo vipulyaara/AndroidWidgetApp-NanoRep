@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import java.util.ArrayList;
 
@@ -56,7 +57,7 @@ public class NRSuggestionsView extends LinearLayout{
     }
 
     public void setHeight(int height) {
-        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) getLayoutParams();
+        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) getLayoutParams();
         params.height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, height, getResources().getDisplayMetrics());
         setLayoutParams(params);
     }
