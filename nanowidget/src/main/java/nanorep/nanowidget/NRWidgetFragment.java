@@ -66,6 +66,8 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
     private NRResultFragment mResultFragment;
     private RelativeLayout mLoadingView;
 
+    private boolean resetSuggestions = false;
+
     public NRWidgetFragment() {
         // Required empty public constructor
     }
@@ -150,7 +152,9 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
 
             @Override
             public void presentSuggestion(ArrayList<String> suggestions) {
-                mSuggestionsView.setSuggestions(suggestions);
+                if (!resetSuggestions) {
+                    mSuggestionsView.setSuggestions(suggestions);
+                }
             }
 
             @Override
@@ -228,23 +232,34 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
 
     @Override
     public void fetchSuggestionsForText(String text) {
+        resetSuggestions = false;
         mFetchedDataManager.searchSuggestion(text);
+        if (mQueryResults != null) {
+            mQueryResults = null;
+            mResutlsAdapter.notifyDataSetChanged();
+        }
     }
 
     @Override
     public void searchForText(String text) {
+        resetSuggestions = true;
         mSuggestionsView.setSuggestions(null);
         mFetchedDataManager.searchText(text);
     }
 
     @Override
     public void onClear() {
+        resetSuggestions = true;
         mSuggestionsView.setSuggestions(null);
+        mQueryResults = null;
+        mResutlsAdapter.notifyDataSetChanged();
     }
 
     @Override
     public void onSelectSuggestion(String suggestion) {
         mSearchBar.dismissKeyboard();
+        mSearchBar.updateText(suggestion);
+        resetSuggestions = true;
         mSuggestionsView.setSuggestions(null);
         mQueryResults = null;
         mResutlsAdapter.notifyDataSetChanged();
