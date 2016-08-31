@@ -20,6 +20,7 @@ public class NRLikeView extends LinearLayout implements View.OnClickListener {
     private ImageButton mLikeButton;
     private ImageButton mDislikeButton;
     private boolean mLikeSelection;
+    private String mResultId;
 
 
     public NRLikeView(Context context, AttributeSet attrs) {
@@ -29,6 +30,10 @@ public class NRLikeView extends LinearLayout implements View.OnClickListener {
 
     public void setListener(OnLikeListener listener) {
         mListener = listener;
+    }
+
+    public void setResultId(String resultId) {
+        mResultId = resultId;
     }
 
     public void updateLikeButton(boolean isLike) {
@@ -81,6 +86,6 @@ public class NRLikeView extends LinearLayout implements View.OnClickListener {
     public void onClick(View v) {
         mLikeSelection = v.getId() == R.id.likeButton;
         updateLikeButton(mLikeSelection);
-        mListener.onLikeClicked();
+        mListener.onLikeClicked(this, mResultId, mLikeSelection);
     }
 }

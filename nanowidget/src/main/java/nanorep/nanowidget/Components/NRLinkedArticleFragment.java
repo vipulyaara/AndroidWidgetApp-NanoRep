@@ -226,7 +226,7 @@ public class NRLinkedArticleFragment extends Fragment implements NRWebView.Liste
     }
 
     @Override
-    public void onLikeClicked() {
+    public void onLikeClicked(NRLikeView likeView, String resultId, boolean isLike) {
         if (mLikeView.getLikeSelection()) {
             mLinkedArticles.get(mIndex).setLikeState(NRQueryResult.LikeState.positive);
             mListener.onLikeSelected(this, NRLikeType.POSITIVE, mLinkedArticles.get(mIndex));

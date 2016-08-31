@@ -30,8 +30,7 @@
         <nanorep.nanowidget.Components.NRLikeView
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:id="@+id/likeView"
-            />
+            android:id="@+id/likeView"/>
 
 
         <nanorep.nanowidget.Components.NRChannelingView

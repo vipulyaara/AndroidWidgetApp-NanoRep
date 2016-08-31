@@ -5,6 +5,8 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.Build;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
+import android.view.View;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -34,6 +36,12 @@ public class NRWebView extends WebView {
 
     public void setListener(NRWebView.Listener listener) {
         mListener = listener;
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event){
+        requestDisallowInterceptTouchEvent(true);
+        return super.onTouchEvent(event);
     }
 
     @Override

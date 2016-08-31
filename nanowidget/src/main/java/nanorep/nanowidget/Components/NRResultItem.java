@@ -1,5 +1,6 @@
 package nanorep.nanowidget.Components;
 
+import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -11,12 +12,13 @@ import android.widget.RelativeLayout;
 import nanorep.nanowidget.DataClasse.NRResult;
 import nanorep.nanowidget.R;
 import nanorep.nanowidget.interfaces.NRResultItemListener;
+import nanorep.nanowidget.interfaces.NRViewHolder;
 import nanorep.nanowidget.interfaces.OnLikeListener;
 
 /**
  * Created by nissimpardo on 15/06/16.
  */
-public class NRResultItem extends RecyclerView.ViewHolder implements View.OnClickListener, OnLikeListener {
+public class NRResultItem extends RecyclerView.ViewHolder implements View.OnClickListener {
     private NRResultItemListener mListener;
     private View mItemView;
     private Button mTitleButton;
@@ -29,9 +31,12 @@ public class NRResultItem extends RecyclerView.ViewHolder implements View.OnClic
     private NRResult mResult;
     private NRChannelingView mNRChannelingView;
 
-    public enum RowType {
-        standard, shrinked, unfolded
+
+
+    public NRResultItem(View view) {
+        super(view);
     }
+
 
     public NRResultItem(View view, int maxHeight) {
         super(view);
@@ -58,10 +63,10 @@ public class NRResultItem extends RecyclerView.ViewHolder implements View.OnClic
         mResult = result;
         mTitleButton.setText(result.getFetchedResult().getTitle());
         setHeight(result.getHeight());
-        int visibility = result.getRowType() == RowType.shrinked ? View.INVISIBLE : View.VISIBLE;
-        mTitleButton.setVisibility(visibility);
-        mUnFoldButton.setVisibility(visibility);
-        mShareButton.setVisibility(visibility);
+//        int visibility = result.getRowType() == NRViewHolder.RowType.shrinked ? View.INVISIBLE : View.VISIBLE;
+//        mTitleButton.setVisibility(visibility);
+        mUnFoldButton.setVisibility(result.isSingle() ? View.INVISIBLE : View.VISIBLE);
+//        mShareButton.setVisibility(visibility);
     }
 
     public NRResult getResult() {
@@ -70,6 +75,10 @@ public class NRResultItem extends RecyclerView.ViewHolder implements View.OnClic
 
     public NRLikeView getLikeView() {
         return mLikeView;
+    }
+
+    public NRViewHolder.RowType getRowType() {
+        return NRViewHolder.RowType.standard;
     }
 
     public void setBody(String htmlString) {
@@ -99,36 +108,16 @@ public class NRResultItem extends RecyclerView.ViewHolder implements View.OnClic
 
     @Override
     public void onClick(View v) {
+        if (v.getId() == R.id.titleButton && mResult.isSingle()) {
+            return;
+        }
         if (v.getId() == R.id.titleButton || v.getId() == R.id.unFoldButton) {
-//            if (!mResult.isUnfolded()) {
-//                if (mResult.getFetchedResult().getBody() == null) {
-//                    mListener.shouldFetchFAQAnswerBody(this, mResult.getFetchedResult().getId());
-//                } else {
-//                    setBody(mResult.getFetchedResult().getBody());
-//                }
-//            }
-//            ObjectAnimator.ofFloat(mUnFoldButton, "rotation", 0, mResult.isUnfolded() ? 0 : -180).start();
-//            mListener.unfoldItem(this);
-//            if (mResult.getFetchedResult().getChanneling() == null) {
-//                RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) mActionView.getLayoutParams();
-//                params.height = (int) Calculate.pxFromDp(mItemView.getContext(), 50);
-//            } else {
-//                ArrayList<NRChanneling> channelings = mResult.getFetchedResult().getChanneling();
-//                for (NRChanneling channeling: channelings) {
-//                    channeling.setQueryResult(mResult.getFetchedResult());
-//                }
-//                mNRChannelingView.setChannelings(channelings);
-//                RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) mActionView.getLayoutParams();
-//                params.height = (int) Calculate.pxFromDp(mItemView.getContext(), 100);
-//            }
-            mListener.unfoldItem(this);
+            ObjectAnimator.ofFloat(mUnFoldButton, "rotation", 0, mResult.isUnfolded() ? 0 : -180).start();
+            mListener.unfoldItem(mResult);
+            mResult.setUnfolded(!mResult.isUnfolded());
         } else if (v.getId() == R.id.shareButton) {
             mListener.onShareClicked(this, mResult.getFetchedResult().getTitle());
         }
     }
 
-    @Override
-    public void onLikeClicked() {
-        mListener.onLikeClicked(this);
-    }
 }

@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -22,26 +21,27 @@ import com.nanorep.nanoclient.RequestParams.NRLikeType;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import nanorep.nanowidget.Components.ChannelPresenters.NRChannelStrategy;
+import nanorep.nanowidget.Components.DislikeDialog;
 import nanorep.nanowidget.Components.NRChannelItem;
-import nanorep.nanowidget.Components.NRLinkedArticleFragment;
+import nanorep.nanowidget.Components.NRContentItem;
+import nanorep.nanowidget.Components.NRLikeView;
 import nanorep.nanowidget.Components.NRResultFragment;
 import nanorep.nanowidget.Components.NRResultItem;
 import nanorep.nanowidget.Components.NRSearchBar;
 import nanorep.nanowidget.Components.NRSuggestionsView;
-import nanorep.nanowidget.Components.NRWebView;
 import nanorep.nanowidget.DataClasse.NRFetchedDataManager;
 import nanorep.nanowidget.DataClasse.NRResult;
+import nanorep.nanowidget.Utilities.NRLinearLayoutManager;
 import nanorep.nanowidget.interfaces.NRFetcherListener;
 import nanorep.nanowidget.interfaces.NRResultItemListener;
-import nanorep.nanowidget.interfaces.NRResultView;
 import nanorep.nanowidget.interfaces.NRSearchBarListener;
 import nanorep.nanowidget.interfaces.NRSuggestionsListener;
+import nanorep.nanowidget.interfaces.NRViewHolder;
 import nanorep.nanowidget.interfaces.OnFAQAnswerFetched;
 
 
 
-public class NRWidgetFragment extends Fragment implements NRSearchBarListener, NRSuggestionsListener, NRResultItemListener, NRResultFragment.Listener {
+public class NRWidgetFragment extends Fragment implements NRSearchBarListener, NRSuggestionsListener, NRResultItemListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -60,16 +60,84 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
     private NRSuggestionsView mSuggestionsView;
 
     private ArrayList<NRResult> mQueryResults;
+    private ArrayList<NRResult> mQueryCopyResults;
     private NRResutlsAdapter mResutlsAdapter;
     private RecyclerView mResultsRecyclerView;
     private NRWidgetFragmentListener mListener;
     private NRResultFragment mResultFragment;
     private RelativeLayout mLoadingView;
+    private ArrayList<ArrayList<NRResult>> mResultStack;
+    private ArrayList<String> mSearchStrings;
 
     private boolean resetSuggestions = false;
 
     public NRWidgetFragment() {
         // Required empty public constructor
+    }
+
+    @Override
+    public void onChannelSelected(NRChannelItem channelItem) {
+
+    }
+
+    @Override
+    public void onLinkedArticleClicked(String articleId) {
+
+    }
+
+    @Override
+    public void onLinkClicked(String url) {
+
+    }
+
+
+    @Override
+    public void onLikeClicked(final NRLikeView likeView, String resultId, boolean isLike) {
+        final NRResult likedResult = mQueryResults.get(0);
+        if (!likedResult.getFetchedResult().getId().equals(resultId)) {
+            return;
+        }
+        if (isLike) {
+            likedResult.getFetchedResult().setLikeState(NRQueryResult.LikeState.positive);
+            mFetchedDataManager.sendLike(NRLikeType.POSITIVE, likedResult.getFetchedResult(), new Nanorep.OnLikeSentListener() {
+                @Override
+                public void onLikeSent(String resultId, int type, boolean success) {
+                    for (NRResult result: mQueryResults) {
+                        if (result.getFetchedResult().getId().equals(resultId) && !success) {
+                            result.getFetchedResult().setLikeState(NRQueryResult.LikeState.notSelected);
+                            break;
+                        }
+                    }
+                }
+            });
+        } else {
+            String reasons[] = new String[] {"Incorrect answer", "Missing or incorrect information", "Didn't find what I was looking for"};
+            DislikeDialog dislikeAlert = new DislikeDialog(getContext());
+            dislikeAlert.setTitle("What's wrong with this answer");
+            dislikeAlert.setListener(new DislikeDialog.Listener() {
+                @Override
+                public void onCancel() {
+                    likeView.resetLikeView();
+                }
+
+                @Override
+                public void onDislike(NRLikeType type) {
+                    likedResult.getFetchedResult().setLikeState(NRQueryResult.LikeState.negative);
+                    mFetchedDataManager.sendLike(type, likedResult.getFetchedResult(), new Nanorep.OnLikeSentListener() {
+                        @Override
+                        public void onLikeSent(String resultId, int type, boolean success) {
+                            for (NRResult result: mQueryResults) {
+                                if (result.getFetchedResult().getId().equals(resultId) && !success) {
+                                    result.getFetchedResult().setLikeState(NRQueryResult.LikeState.notSelected);
+                                    break;
+                                }
+                            }
+                        }
+                    });
+                }
+            });
+            dislikeAlert.setDislikeOptions(reasons);
+        }
     }
 
     public interface NRWidgetFragmentListener {
@@ -146,8 +214,7 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
             public void insertRows(ArrayList<NRResult> rows) {
                 mLoadingView.setVisibility(View.INVISIBLE);
                 mResutlsAdapter.setShouldResetLikeView(true);
-                mQueryResults = rows;
-                mResutlsAdapter.notifyDataSetChanged();
+                loadResults(rows);
             }
 
             @Override
@@ -168,7 +235,7 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
         mSuggestionsView = (NRSuggestionsView)nanoView.findViewById(R.id.suggestions);
         mSuggestionsView.setListener(this);
         mResultsRecyclerView = (RecyclerView) nanoView.findViewById(R.id.resultsView);
-        mResultsRecyclerView.setLayoutManager(new GridLayoutManager(this.getContext(), 1));
+        mResultsRecyclerView.setLayoutManager(new NRLinearLayoutManager(getContext()));
         mResultsRecyclerView.setAdapter(mResutlsAdapter);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             mResultsRecyclerView.setOnScrollChangeListener(new View.OnScrollChangeListener() {
@@ -179,6 +246,30 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
             });
         }
         return nanoView;
+    }
+
+    private void loadResults(ArrayList<NRResult> rows) {
+        if (mQueryResults == null) {
+            mQueryResults = new ArrayList<NRResult>();
+        }
+        if (rows.size() == 1) {
+            rows.get(0).setSingle(true);
+        }
+        for (NRResult addedResult : rows) {
+            mQueryResults.add(addedResult);
+            mResutlsAdapter.notifyItemInserted(mQueryResults.size());
+        }
+        if (rows.size() == 1) {
+            mQueryResults.get(0).setUnfolded(false);
+            unfoldItem(mQueryResults.get(0));
+        }
+        if (mResultStack == null) {
+            mResultStack = new ArrayList<ArrayList<NRResult>>();
+        }
+        if (!mResultStack.contains(rows)) {
+            mResultStack.add(rows);
+        }
+        mQueryCopyResults = rows;
     }
 
     @Override
@@ -193,11 +284,18 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
                 if (mListener != null) {
                     if (event.getAction() == KeyEvent.ACTION_DOWN) {
                         if (keyCode == KeyEvent.KEYCODE_BACK) {
-                            if (getChildFragmentManager().getBackStackEntryCount() > 0) {
-                                mLoadingView.setVisibility(View.INVISIBLE);
-                                getChildFragmentManager().popBackStack();
-                            } else {
-                                mListener.onCancelWidget(NRWidgetFragment.this);
+//                            if (getChildFragmentManager().getBackStackEntryCount() > 0) {
+//                                mLoadingView.setVisibility(View.INVISIBLE);
+//                                getChildFragmentManager().popBackStack();
+//                            } else {
+//                                mListener.onCancelWidget(NRWidgetFragment.this);
+//                            }
+                            if (mResultStack != null && mResultStack.size() > 1) {
+                                onClear();
+                                loadResults(mResultStack.get(mResultStack.size() - 2));
+                                mSearchBar.updateText(mSearchStrings.get(mSearchStrings.size() - 2), true);
+                                mSearchStrings.remove(mSearchStrings.size() - 1);
+                                mResultStack.remove(mResultStack.size() - 1);
                             }
                             return true;
                         }
@@ -257,6 +355,11 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
 
     @Override
     public void onSelectSuggestion(String suggestion) {
+        if (mSearchStrings == null) {
+            mSearchStrings = new ArrayList<>();
+            mSearchStrings.add("");
+        }
+        mSearchStrings.add(suggestion);
         mSearchBar.dismissKeyboard();
         mSearchBar.updateText(suggestion);
         resetSuggestions = true;
@@ -267,11 +370,32 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
     }
 
     @Override
-    public void unfoldItem(NRResultItem item) {
-        getResultFragment().setListener(this);
-        getResultFragment().setResult(item.getResult());
-        mLoadingView.setVisibility(View.VISIBLE);
-        getChildFragmentManager().beginTransaction().add(R.id.fragment_place_holder, getResultFragment()).addToBackStack("nanowidget").commit();
+    public void unfoldItem(NRResult result) {
+        if (result.isUnfolded()) {
+            mQueryResults.remove(1);
+            mResutlsAdapter.notifyItemRemoved(1);
+            int pos = mQueryCopyResults.indexOf(result);
+            for (int i = 0; i < mQueryCopyResults.size(); i++) {
+                if (i != pos) {
+                    mQueryResults.add(i, mQueryCopyResults.get(i));
+                    mResutlsAdapter.notifyItemInserted(i);
+                }
+            }
+        } else {
+            ArrayList<NRResult> temp = new ArrayList<>(mQueryResults);
+            for (NRResult item1 : temp) {
+                int pos = mQueryResults.indexOf(item1);
+                if (!item1.equals(result)) {
+                    mQueryResults.remove(item1);
+                    mResutlsAdapter.notifyItemRemoved(pos);
+                }
+            }
+            temp.clear();
+            NRResult content = new NRResult(result.getFetchedResult());
+            content.setRowType(NRViewHolder.RowType.unfolded);
+            mQueryResults.add(content);
+            mResutlsAdapter.notifyItemInserted(1);
+        }
     }
 
     @Override
@@ -284,54 +408,64 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
     }
 
     @Override
-    public void onLikeClicked(final NRResultItem item) {
-
-    }
-
-    @Override
-    public void onResultFragmentDismissed(NRResultFragment resultFragment) {
-
-    }
-
-    @Override
-    public void resultFragmentWillDismiss(NRResultFragment resultFragment) {
-//                getChildFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_left).remove(resultFragment).commit();
-    }
-
-    @Override
-    public void onLikeSelected(final NRResultView resultView, final NRLikeType likeType, NRQueryResult currentResult) {
-        mFetchedDataManager.sendLike(likeType, currentResult, new Nanorep.OnLikeSentListener() {
-            @Override
-            public void onLikeSent(String resultId, int type, boolean success) {
-                resultView.setLikeState(resultId, success);
-            }
-        });
-    }
-
-    @Override
-    public void fetchBodyForResult(final NRResultFragment resultFragment, final String resultID) {
+    public void fetchBodyForResult(final NRContentItem item, String resultID) {
         mFetchedDataManager.faqAnswer(resultID, new OnFAQAnswerFetched() {
             @Override
             public void onAnswerFetched(NRQueryResult result) {
-                resultFragment.setBody(result.getBody());
+                item.setBody(result.getBody());
             }
         });
     }
 
-    @Override
-    public void onChannelSelected(NRResultFragment resultFragment, NRChannelItem channelItem) {
-        NRChannelStrategy.presentor(channelItem.getChanneling(), resultFragment, mFetchedDataManager.getNanoRep()).present();
-    }
-
-    @Override
-    public void onLikeFailed(String resultId) {
-        mFetchedDataManager.resetLike(resultId);
-    }
-
-    @Override
-    public void onLinkedArticleClicked(OnFAQAnswerFetched listener, String articleId) {
-        mFetchedDataManager.faqAnswer(articleId, listener);
-    }
+//    @Override
+//    public void onLikeClicked(final NRResultItem item) {
+//
+//    }
+//
+//    @Override
+//    public void onResultFragmentDismissed(NRResultFragment resultFragment) {
+//
+//    }
+//
+//    @Override
+//    public void resultFragmentWillDismiss(NRResultFragment resultFragment) {
+////                getChildFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_left).remove(resultFragment).commit();
+//    }
+//
+//    @Override
+//    public void onLikeSelected(final NRResultView resultView, final NRLikeType likeType, NRQueryResult currentResult) {
+//        mFetchedDataManager.sendLike(likeType, currentResult, new Nanorep.OnLikeSentListener() {
+//            @Override
+//            public void onLikeSent(String resultId, int type, boolean success) {
+//                resultView.setLikeState(resultId, success);
+//            }
+//        });
+//    }
+//
+//    @Override
+//    public void fetchBodyForResult(final NRContentItem resultFragment, final String resultID) {
+//        mFetchedDataManager.faqAnswer(resultID, new OnFAQAnswerFetched() {
+//            @Override
+//            public void onAnswerFetched(NRQueryResult result) {
+//                resultFragment.setBody(result.getBody());
+//            }
+//        });
+//    }
+//
+//    @Override
+//    public void onChannelSelected(NRResultFragment resultFragment, NRChannelItem channelItem) {
+//        NRChannelStrategy.presentor(channelItem.getChanneling(), resultFragment, mFetchedDataManager.getNanoRep()).present();
+//    }
+//
+//    @Override
+//    public void onLikeFailed(String resultId) {
+//        mFetchedDataManager.resetLike(resultId);
+//    }
+//
+//    @Override
+//    public void onLinkedArticleClicked(OnFAQAnswerFetched listener, String articleId) {
+//        mFetchedDataManager.faqAnswer(articleId, listener);
+//    }
 
     private class NRResutlsAdapter extends RecyclerView.Adapter<NRResultItem> {
         private boolean mShouldResetLikeView = false;
@@ -342,8 +476,13 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
 
         @Override
         public NRResultItem onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.result_item, parent, false);
-            NRResultItem item = new NRResultItem(view, mResultsRecyclerView.getHeight());
+            View view = LayoutInflater.from(parent.getContext()).inflate(viewType == 1 ? R.layout.result_item : R.layout.content_item, parent, false);
+            NRResultItem item;
+            if (viewType == 1) {
+                item = new NRResultItem(view, mResultsRecyclerView.getHeight());
+            } else {
+                item = new NRContentItem(view, mResultsRecyclerView.getHeight());
+            }
 
             item.setListener(NRWidgetFragment.this);
             return item;
@@ -355,12 +494,19 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
         }
 
         @Override
+        public int getItemViewType(int position) {
+            return mQueryResults.get(position).getRowType() == NRViewHolder.RowType.standard ? 1 : 0;
+        }
+
+        @Override
         public int getItemCount() {
             if (mQueryResults == null) {
                 return 0;
             }
             return mQueryResults.size();
         }
+
+
     }
 
 

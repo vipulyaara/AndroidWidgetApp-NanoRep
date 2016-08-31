@@ -63,6 +63,17 @@ public class NRSearchBar extends RelativeLayout implements View.OnClickListener,
         mSearchEditText.clearFocus();
     }
 
+    public void updateText(String text, boolean withListener) {
+        mSearchEditText.removeTextChangedListener(this);
+        mSpeechButton.setVisibility(text.length() > 0 ? VISIBLE : INVISIBLE);
+        updateText(text);
+        mSearchEditText.addTextChangedListener(this);
+    }
+
+    public String getText() {
+        return mSearchEditText.getText().toString();
+    }
+
     @Override
     public void onClick(View v) {
         if ((Boolean) v.getTag()) {

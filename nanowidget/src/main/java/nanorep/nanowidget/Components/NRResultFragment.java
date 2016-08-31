@@ -193,7 +193,7 @@ public class NRResultFragment extends Fragment implements View.OnClickListener, 
 
 
     @Override
-    public void onLikeClicked() {
+    public void onLikeClicked(NRLikeView likeView, String resultId, boolean isLike) {
         if (mLikeView.getLikeSelection()) {
             mResult.getFetchedResult().setLikeState(NRQueryResult.LikeState.positive);
             mListener.onLikeSelected(this, NRLikeType.POSITIVE, mResult.getFetchedResult());
