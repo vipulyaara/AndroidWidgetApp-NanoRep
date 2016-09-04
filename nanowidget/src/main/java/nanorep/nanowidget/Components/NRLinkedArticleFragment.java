@@ -13,6 +13,7 @@ import android.widget.RelativeLayout;
 
 import com.nanorep.nanoclient.Channeling.NRChanneling;
 import com.nanorep.nanoclient.Interfaces.NRQueryResult;
+import com.nanorep.nanoclient.Nanorep;
 import com.nanorep.nanoclient.RequestParams.NRLikeType;
 
 import java.util.ArrayList;
@@ -32,7 +33,7 @@ import nanorep.nanowidget.interfaces.OnLinkedArticle;
  * Use the {@link NRLinkedArticleFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class NRLinkedArticleFragment extends Fragment implements NRWebView.Listener, OnFAQAnswerFetched, NRChannelItem.OnChannelSelectedListener, OnLikeListener, NRResultView {
+public class NRLinkedArticleFragment extends Fragment implements NRWebView.Listener, OnFAQAnswerFetched, NRChannelItem.OnChannelSelectedListener, Nanorep.OnLikeSentListener, NRResultView, OnLikeListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -52,6 +53,12 @@ public class NRLinkedArticleFragment extends Fragment implements NRWebView.Liste
     private NRLikeView mLikeView;
     private Button mBackButton;
     private OnDismissListener mDismissListener;
+    private NRQueryResult mResult;
+
+    @Override
+    public void onLikeSent(String resultId, int type, boolean success) {
+
+    }
 
     public interface OnDismissListener {
         void onBackClicked();
@@ -138,6 +145,27 @@ public class NRLinkedArticleFragment extends Fragment implements NRWebView.Liste
             }
         });
         updateArticle(mLinkedArticles.get(0));
+
+        if (mFeedbackView != null) {
+            RelativeLayout.LayoutParams params = null;
+            if (mResult.getChanneling() == null) {
+                params = (RelativeLayout.LayoutParams) mFeedbackView.getLayoutParams();
+                params.height = (int) Calculate.pxFromDp(getContext(), 50);
+            }else {
+                mChannelingView = (NRChannelingView) view.findViewById(R.id.linkedArtChanneling);
+                if (mChannelingView != null) {
+                    mChannelingView.setListener(this);
+                    ArrayList<NRChanneling> channelings = mResult.getChanneling();
+                    for (NRChanneling channeling: channelings) {
+                        channeling.setQueryResult(mResult);
+                    }
+                    mChannelingView.setChannelings(channelings);
+                    params = (RelativeLayout.LayoutParams) mFeedbackView.getLayoutParams();
+                    params.height = (int) Calculate.pxFromDp(getContext(), 100);
+                }
+            }
+            mFeedbackView.setLayoutParams(params);
+        }
         return view;
     }
 
@@ -155,6 +183,7 @@ public class NRLinkedArticleFragment extends Fragment implements NRWebView.Liste
     }
 
     private void updateArticle(NRQueryResult result) {
+        mResult = result;
         mTitleView.setTitle(result.getTitle());
         mWebView.loadData(result.getBody(), "html/text", "UTF-8");
         if (mLinkedArticles.size() > 1) {
@@ -170,27 +199,6 @@ public class NRLinkedArticleFragment extends Fragment implements NRWebView.Liste
             mLikeView.resetLikeView();
         } else {
             mLikeView.updateLikeButton(result.getLikeState() == NRQueryResult.LikeState.positive);
-        }
-
-        if (mFeedbackView != null) {
-            RelativeLayout.LayoutParams params = null;
-            if (result.getChanneling() == null) {
-                params = (RelativeLayout.LayoutParams) mFeedbackView.getLayoutParams();
-                params.height = (int) Calculate.pxFromDp(getContext(), 50);
-            }else {
-                mChannelingView = (NRChannelingView) getView().findViewById(R.id.linkedArtChanneling);
-                if (mChannelingView != null) {
-                    mChannelingView.setListener(this);
-                    ArrayList<NRChanneling> channelings = result.getChanneling();
-                    for (NRChanneling channeling: channelings) {
-                        channeling.setQueryResult(result);
-                    }
-                    mChannelingView.setChannelings(channelings);
-                    params = (RelativeLayout.LayoutParams) mFeedbackView.getLayoutParams();
-                    params.height = (int) Calculate.pxFromDp(getContext(), 100);
-                }
-            }
-            mFeedbackView.setLayoutParams(params);
         }
     }
 

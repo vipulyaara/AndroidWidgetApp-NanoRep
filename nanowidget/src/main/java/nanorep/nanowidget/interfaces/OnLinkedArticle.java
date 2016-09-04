@@ -1,6 +1,7 @@
 package nanorep.nanowidget.interfaces;
 
 import com.nanorep.nanoclient.Interfaces.NRQueryResult;
+import com.nanorep.nanoclient.Nanorep;
 import com.nanorep.nanoclient.RequestParams.NRLikeType;
 
 
@@ -10,5 +11,5 @@ import com.nanorep.nanoclient.RequestParams.NRLikeType;
 
 public interface OnLinkedArticle {
     void onLinkedArticleClicked(OnFAQAnswerFetched listener, String articleId);
-    void onLikeSelected(NRResultView resultView, NRLikeType likeType, NRQueryResult currentResult);
+    void onLikeSelected(Nanorep.OnLikeSentListener likeListener, NRLikeType likeType, NRQueryResult currentResult);
 }

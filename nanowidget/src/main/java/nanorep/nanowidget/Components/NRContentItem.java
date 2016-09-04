@@ -48,6 +48,9 @@ public class NRContentItem extends NRResultItem  {
         mWebView.loadData(body, "text/html", "UTF-8");
     }
 
+    public void resetBody() {
+        mWebView.loadUrl("about:blank");
+    }
 
     public void setResult(NRResult result) {
         mResult = result;

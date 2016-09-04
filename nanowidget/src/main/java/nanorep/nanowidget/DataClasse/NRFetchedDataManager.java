@@ -120,7 +120,7 @@ public class NRFetchedDataManager {
                 if (error != null) {
                     Log.d("Fetcher", error.getDomain());
                 } else if (suggestions != null && suggestions.getSuggestions() != null){
-                    mFetcherListener.presentSuggestion(suggestions.getSuggestions());
+                    mFetcherListener.presentSuggestion(suggestion, suggestions.getSuggestions());
                 }
             }
         });
@@ -134,6 +134,7 @@ public class NRFetchedDataManager {
         if (true){//result.isCNF()) {
             NRFAQLikeParams likeParams = new NRFAQLikeParams(result);
             likeParams.setLikeType(likeType);
+            likeParams.setAnswerId(result.getId());
             mNanoRep.likeForFAQResult(likeParams, completion);
         } else {
             NRSearchLikeParams likeParams = new NRSearchLikeParams(result);

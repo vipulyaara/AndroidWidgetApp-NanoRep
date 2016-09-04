@@ -194,27 +194,27 @@ public class NRResultFragment extends Fragment implements View.OnClickListener, 
 
     @Override
     public void onLikeClicked(NRLikeView likeView, String resultId, boolean isLike) {
-        if (mLikeView.getLikeSelection()) {
-            mResult.getFetchedResult().setLikeState(NRQueryResult.LikeState.positive);
-            mListener.onLikeSelected(this, NRLikeType.POSITIVE, mResult.getFetchedResult());
-        } else {
-            String reasons[] = new String[] {"Incorrect answer", "Missing or incorrect information", "Didn't find what I was looking for"};
-            DislikeDialog dislikeAlert = new DislikeDialog(getContext());
-            dislikeAlert.setTitle("What's wrong with this answer");
-            dislikeAlert.setListener(new DislikeDialog.Listener() {
-                @Override
-                public void onCancel() {
-                    mLikeView.resetLikeView();
-                }
-
-                @Override
-                public void onDislike(NRLikeType type) {
-                    mResult.getFetchedResult().setLikeState(NRQueryResult.LikeState.negative);
-                    mListener.onLikeSelected(NRResultFragment.this, type, mResult.getFetchedResult());
-                }
-            });
-            dislikeAlert.setDislikeOptions(reasons);
-        }
+//        if (mLikeView.getLikeSelection()) {
+//            mResult.getFetchedResult().setLikeState(NRQueryResult.LikeState.positive);
+//            mListener.onLikeSelected(this, NRLikeType.POSITIVE, mResult.getFetchedResult());
+//        } else {
+//            String reasons[] = new String[] {"Incorrect answer", "Missing or incorrect information", "Didn't find what I was looking for"};
+//            DislikeDialog dislikeAlert = new DislikeDialog(getContext());
+//            dislikeAlert.setTitle("What's wrong with this answer");
+//            dislikeAlert.setListener(new DislikeDialog.Listener() {
+//                @Override
+//                public void onCancel() {
+//                    mLikeView.resetLikeView();
+//                }
+//
+//                @Override
+//                public void onDislike(NRLikeType type) {
+//                    mResult.getFetchedResult().setLikeState(NRQueryResult.LikeState.negative);
+//                    mListener.onLikeSelected(NRResultFragment.this, type, mResult.getFetchedResult());
+//                }
+//            });
+//            dislikeAlert.setDislikeOptions(reasons);
+//        }
     }
 
     @Override

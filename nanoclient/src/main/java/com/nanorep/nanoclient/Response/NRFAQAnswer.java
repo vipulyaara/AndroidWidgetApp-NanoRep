@@ -12,6 +12,8 @@ import java.util.HashMap;
  */
 public class NRFAQAnswer implements NRQueryResult {
     HashMap<String, Object> mParams;
+    private ArrayList<NRChanneling> mChanneling;
+
     private LikeState mLikeState = LikeState.notSelected;
 
     /**
@@ -25,7 +27,7 @@ public class NRFAQAnswer implements NRQueryResult {
 
     @Override
     public String getId() {
-        return null;
+        return (String) mParams.get("id");
     }
 
     /**
@@ -69,7 +71,18 @@ public class NRFAQAnswer implements NRQueryResult {
 
     @Override
     public ArrayList<NRChanneling> getChanneling() {
-        return null;
+        if (mChanneling == null) {
+            ArrayList<HashMap<String, ?>> channels = (ArrayList)mParams.get("rechanneling");
+            if (channels != null && channels.size() > 0) {
+                mChanneling = new ArrayList<>();
+                for (HashMap channel : channels) {
+                    mChanneling.add(NRChanneling.channelForParams(channel));
+                }
+            } else {
+                return null;
+            }
+        }
+        return mChanneling;
     }
 
     /**

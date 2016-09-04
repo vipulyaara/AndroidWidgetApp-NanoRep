@@ -11,4 +11,5 @@ public interface NRChannelPresentor {
     void present();
     void setChannel(NRChanneling channeling);
     NRResult getResult();
+    String getUrl();
 }

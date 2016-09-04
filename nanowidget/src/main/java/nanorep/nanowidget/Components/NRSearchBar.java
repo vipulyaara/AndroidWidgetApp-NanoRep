@@ -6,12 +6,18 @@ import android.graphics.PorterDuff;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
+import android.view.ActionMode;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import nanorep.nanowidget.R;
 import nanorep.nanowidget.interfaces.NRSearchBarListener;
@@ -21,10 +27,10 @@ import nanorep.nanowidget.interfaces.NRSearchBarListener;
 /**
  * Created by nissimpardo on 07/06/16.
  */
-public class NRSearchBar extends RelativeLayout implements View.OnClickListener, TextWatcher {
+public class NRSearchBar extends RelativeLayout implements View.OnClickListener, TextWatcher, TextView.OnEditorActionListener {
     private NRSearchBarListener mListener;
     private ImageButton mSpeechButton;
-    private EditText mSearchEditText;
+    private NREditText mSearchEditText;
 
     public NRSearchBar(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -34,12 +40,13 @@ public class NRSearchBar extends RelativeLayout implements View.OnClickListener,
     @Override
     public void onViewAdded(View child) {
         super.onViewAdded(child);
-        mSearchEditText = (EditText) child.findViewById(R.id.searchText);
+        mSearchEditText = (NREditText) child.findViewById(R.id.searchText);
         mSearchEditText.addTextChangedListener(this);
         mSearchEditText.setHint("Type Your Question Here");
         mSearchEditText.setTextColor(Color.WHITE);
         mSearchEditText.setHintTextColor(Color.LTGRAY);
         mSearchEditText.getBackground().setColorFilter(Color.TRANSPARENT, PorterDuff.Mode.SRC_IN);
+        mSearchEditText.setOnEditorActionListener(this);
         mSpeechButton = (ImageButton) child.findViewById(R.id.speechButton);
         mSpeechButton.setOnClickListener(this);
     }
@@ -83,7 +90,7 @@ public class NRSearchBar extends RelativeLayout implements View.OnClickListener,
 
     @Override
     public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-        mListener.fetchSuggestionsForText(charSequence.toString());
+
     }
 
     @Override
@@ -101,6 +108,16 @@ public class NRSearchBar extends RelativeLayout implements View.OnClickListener,
 
     @Override
     public void afterTextChanged(Editable editable) {
+        mListener.fetchSuggestionsForText(mSearchEditText.getText().toString());
+    }
 
+    @Override
+    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+        if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+            mListener.searchForText(mSearchEditText.getText().toString());
+            dismissKeyboard();
+            return true;
+        }
+        return false;
     }
 }

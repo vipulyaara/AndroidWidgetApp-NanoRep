@@ -71,4 +71,9 @@ public class NRPhoneChannelPresentor implements NRChannelPresentor {
     public NRResult getResult() {
         return null;
     }
+
+    @Override
+    public String getUrl() {
+        return null;
+    }
 }

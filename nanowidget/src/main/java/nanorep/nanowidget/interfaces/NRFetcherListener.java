@@ -13,6 +13,6 @@ public interface NRFetcherListener {
     void reloadWithAimation();
     void reload();
     void insertRows(ArrayList<NRResult> rows);
-    void presentSuggestion(ArrayList<String> suggestions);
+    void presentSuggestion(String querytext, ArrayList<String> suggestions);
     void onConnectionFailed(HashMap<String, Object> errorParams);
 }

@@ -17,4 +17,6 @@ public class NRLinearLayoutManager extends LinearLayoutManager {
     public boolean supportsPredictiveItemAnimations() {
         return true;
     }
+
+
 }

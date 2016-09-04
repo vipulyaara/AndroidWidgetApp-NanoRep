@@ -22,7 +22,8 @@
                 android:textAlignment="viewStart"
                 android:text="title"
                 android:textStyle="bold"
-                android:paddingLeft="10dp"/>
+                android:paddingLeft="10dp"
+                android:textAllCaps="false"/>
             <ImageButton
                 android:layout_width="40dp"
                 android:layout_height="match_parent"

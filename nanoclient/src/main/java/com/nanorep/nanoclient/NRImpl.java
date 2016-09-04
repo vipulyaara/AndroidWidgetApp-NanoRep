@@ -231,7 +231,7 @@ public class NRImpl implements Nanorep {
     }
 
     @Override
-    public void fetchFAQAnswer(String answerId, final OnFAQAnswerFetchedListener onFAQAnswerFetchedListener) {
+    public void fetchFAQAnswer(final String answerId, final OnFAQAnswerFetchedListener onFAQAnswerFetchedListener) {
         Uri.Builder uriBuilder = mAccountParams.getUri();
         uriBuilder.appendPath("api/faq/v1/answer.js");
         uriBuilder.appendQueryParameter("id", answerId);
@@ -241,6 +241,7 @@ public class NRImpl implements Nanorep {
                 if (error != null) {
                     onFAQAnswerFetchedListener.onFAQAnswerFetched(null, error);
                 } else  if (responseParam != null) {
+                    ((HashMap<String, Object>) responseParam).put("id", answerId);
                     onFAQAnswerFetchedListener.onFAQAnswerFetched(new NRFAQAnswer((HashMap<String, Object>) responseParam), null);
                 }
             }
