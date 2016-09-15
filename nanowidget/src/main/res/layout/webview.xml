@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/webLoadingView"
-        android:background="@color/white">
+        android:background="#55000000">
 
         <ProgressBar
             style="?android:attr/progressBarStyleSmall"

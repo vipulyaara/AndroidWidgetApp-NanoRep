@@ -27,12 +27,14 @@ public class NRAnswer implements NRQueryResult {
      * @param params HashMap generated from json string
      */
     public NRAnswer(HashMap<String, Object> params) {
-        mParams = params;
-        mArticleId = (String)params.get("id");
-        mKeywordsetId = (String)params.get("keywordsetId");
-        mLikes = (int)params.get("likes");
-        mTitle = (String)params.get("title");
-        mSummary = (String)params.get("summary");
+        if (params != null) {
+            mParams = params;
+            mArticleId = (String) params.get("id");
+            mKeywordsetId = (String) params.get("keywordsetId");
+            mLikes = (int) params.get("likes");
+            mTitle = (String) params.get("title");
+            mSummary = (String) params.get("summary");
+        }
     }
 
     /**
@@ -78,7 +80,7 @@ public class NRAnswer implements NRQueryResult {
 
     @Override
     public void setBody(String body) {
-
+        mSummary = body;
     }
 
     @Override

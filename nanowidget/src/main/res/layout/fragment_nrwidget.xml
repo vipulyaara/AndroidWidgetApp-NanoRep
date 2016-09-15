@@ -38,16 +38,32 @@
 
         </android.support.v7.widget.RecyclerView>
     </nanorep.nanowidget.Components.NRSuggestionsView>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:id="@+id/noTiltleView"
+            android:layout_below="@+id/suggestions"
+            android:background="@android:color/darker_gray"
+            android:layout_height="0dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:id="@+id/noTitleTextView"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                android:paddingLeft="10dp"
+                android:layout_centerInParent="true"/>
+        </RelativeLayout>
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/suggestions"
+        android:layout_below="@+id/noTiltleView"
         android:layout_alignParentBottom="true"
         android:id="@+id/resultsView"
         android:background="@color/white"
         android:layout_alignParentEnd="true"
         android:layout_alignParentStart="true"
-        android:layout_below="@id/suggestions">
+        >
 
     </android.support.v7.widget.RecyclerView>
     </RelativeLayout>
