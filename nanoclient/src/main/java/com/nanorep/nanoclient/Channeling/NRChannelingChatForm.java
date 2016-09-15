@@ -10,30 +10,32 @@ public class NRChannelingChatForm extends NRChanneling {
     private String initialiseStatus;
     private String agentSkill;
     private String waitTime;
-    private String preChat;
-    private String postChat;
-    private boolean hideSendToEmail;
-    private boolean isPopup;
+    private Boolean preChat;
+    private Boolean postChat;
+    private Boolean hideSendToEmail;
+    private Boolean isPopup;
     private String popupSize;
     private String otherChatProviderValues;
     private String accountNum;
 
     public NRChannelingChatForm(HashMap<String, Object> params) {
         super(params);
-        chatProvider = (String)params.get("chatProvider");
-        accountNum = (String)params.get("accountNum");
-        initialiseStatus = (String)params.get("initialiseStatus");
-        agentSkill = (String)params.get("agentSkill");
-        waitTime = (String)params.get("waitTime");
-        preChat = (String)params.get("preChat");
-        postChat = (String)params.get("postChat");
-        hideSendToEmail = Boolean.parseBoolean((String)params.get("hideSendToEmail"));
-        isPopup = Boolean.parseBoolean((String)params.get("isPopup"));
-        popupSize = (String)params.get("popupSize");
-        otherChatProviderValues = (String)params.get("otherChatProviderValues");
-        accountNum = (String)params.get("accountNum");
+        chatProvider = value("chatProvider");
+        accountNum = value("accountNum");
+        initialiseStatus = value("initialiseStatus");
+        agentSkill = value("agentSkill");
+        waitTime = value("waitTime");
+        preChat = booleanValue("preChat");
+        postChat = booleanValue("postChat");
+        hideSendToEmail = booleanValue("hideSendToEmail");
+        isPopup = booleanValue("isPopup");
+        popupSize = value("popupSize");
+        otherChatProviderValues = value("otherChatProviderValues");
+        accountNum = value("accountNum");
         this.type = NRChannelingType.ChatForm;
     }
+    
+    
 
     public String getChatProvider() {
         return chatProvider;
@@ -55,11 +57,11 @@ public class NRChannelingChatForm extends NRChanneling {
         return waitTime;
     }
 
-    public String getPreChat() {
+    public Boolean getPreChat() {
         return preChat;
     }
 
-    public String getPostChat() {
+    public Boolean getPostChat() {
         return postChat;
     }
 

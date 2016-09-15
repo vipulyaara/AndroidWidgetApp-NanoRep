@@ -14,10 +14,10 @@ public class NRChannelingContactForm extends NRChanneling {
 
     public NRChannelingContactForm(HashMap<String, Object> params) {
         super(params);
-        contactForms = (String)params.get("contactForms");
-        ticketingInterface = (String)params.get("ticketingInterface");
-        showInArticle = (Boolean) params.get("showInArticle");
-        thankYouMessage = (String)params.get("thankYouMessage");
+        contactForms = value("contactForms");
+        ticketingInterface = value("ticketingInterface");
+        showInArticle = booleanValue("showInArticle");
+        thankYouMessage = value("thankYouMessage");
         this.type = NRChannelingType.ContactForm;
     }
 

@@ -11,8 +11,8 @@ public class NRChannelingPhoneNumber extends NRChanneling {
 
     public NRChannelingPhoneNumber(HashMap<String, Object> params) {
         super(params);
-        phoneNumber = (String)params.get("phoneNumber");
-        customContent = (String)params.get("customContent");
+        phoneNumber = value("phoneNumber");
+        customContent = value("customContent");
         this.type = NRChannelingType.PhoneNumber;
     }
 

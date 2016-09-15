@@ -13,6 +13,7 @@ public class NRChanneling {
     protected String channelDescription;
     protected NRChannelingType type;
     protected NRQueryResult mQueryResult;
+    protected HashMap<String, Object> mParams;
 
     public enum NRChannelingType {
         PhoneNumber,
@@ -23,8 +24,23 @@ public class NRChanneling {
     }
 
     public NRChanneling(HashMap <String, ?> params) {
-        buttonText = (String)params.get("buttonText");
-        channelDescription = (String)params.get("description");
+        mParams = (HashMap<String, Object>) params;
+        buttonText = value("buttonText");
+        channelDescription = value("description");
+    }
+
+    protected String value(String key) {
+        if (key != null) {
+            return (String) mParams.get(key);
+        }
+        return null;
+    }
+
+    protected Boolean booleanValue(String key) {
+        if (key != null) {
+            return (Boolean) mParams.get(key);
+        }
+        return null;
     }
 
     public String getButtonText() {

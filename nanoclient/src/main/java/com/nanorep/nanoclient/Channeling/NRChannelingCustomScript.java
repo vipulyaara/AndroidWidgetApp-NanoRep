@@ -10,7 +10,7 @@ public class NRChannelingCustomScript extends NRChanneling {
 
     public NRChannelingCustomScript(HashMap<String, Object> params) {
         super(params);
-        scriptContent = (String)params.get("scriptContent");
+        scriptContent = value("scriptContent");
         this.type = NRChannelingType.CustomScript;
     }
 
