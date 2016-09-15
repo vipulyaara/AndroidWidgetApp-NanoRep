@@ -95,6 +95,14 @@ public class NRConfiguration {
         return mIsContextDependent;
     }
 
+    public String getCustomNoAnswersTextContext(String context) {
+        String text = (String)mParams.get("customNoAnswersTextContext");
+        if (text == null) {
+            text = "No results for '{CONTEXT}'. Try a different phrasing or ask an agent.";
+        }
+        return  text.replace("{CONTEXT}", context);
+    }
+
     public void setFaqData(ArrayList<HashMap<String, Object>> faqList) {
         mParams.put("faqData", faqList);
         mIsContextDependent = false;
