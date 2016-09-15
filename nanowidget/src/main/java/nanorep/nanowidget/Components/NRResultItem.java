@@ -61,7 +61,9 @@ public class NRResultItem extends RecyclerView.ViewHolder implements View.OnClic
 
     public void setResult(NRResult result) {
         mResult = result;
-        mTitleButton.setText(result.getFetchedResult().getTitle());
+        if (result.getFetchedResult() != null) {
+            mTitleButton.setText(result.getFetchedResult().getTitle());
+        }
         setHeight(result.getHeight());
 //        int visibility = result.getRowType() == NRViewHolder.RowType.shrinked ? View.INVISIBLE : View.VISIBLE;
 //        mTitleButton.setVisibility(visibility);
@@ -113,8 +115,8 @@ public class NRResultItem extends RecyclerView.ViewHolder implements View.OnClic
         }
         if (v.getId() == R.id.titleButton || v.getId() == R.id.unFoldButton) {
             ObjectAnimator.ofFloat(mUnFoldButton, "rotation", 0, mResult.isUnfolded() ? 0 : -180).start();
-            mListener.unfoldItem(mResult);
-            mResult.setUnfolded(!mResult.isUnfolded());
+            mListener.unfoldItem(mResult, false);
+//            mResult.setUnfolded(!mResult.isUnfolded());
         } else if (v.getId() == R.id.shareButton) {
             mListener.onShareClicked(this, mResult.getFetchedResult().getTitle());
         }

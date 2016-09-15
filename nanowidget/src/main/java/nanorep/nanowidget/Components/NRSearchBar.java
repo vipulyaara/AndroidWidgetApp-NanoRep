@@ -6,15 +6,11 @@ import android.graphics.PorterDuff;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
-import android.view.ActionMode;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -84,6 +80,9 @@ public class NRSearchBar extends RelativeLayout implements View.OnClickListener,
     @Override
     public void onClick(View v) {
         if ((Boolean) v.getTag()) {
+            mSearchEditText.clearFocus();
+            dismissKeyboard();
+            mListener.onClearClicked(true);
             mSearchEditText.setText("");
         }
     }
@@ -100,15 +99,15 @@ public class NRSearchBar extends RelativeLayout implements View.OnClickListener,
         Boolean state = Boolean.valueOf(charSequence.length() > 0);
         mSpeechButton.setTag(state);
         if (charSequence.length() == 0) {
-            mSearchEditText.clearFocus();
-            dismissKeyboard();
-            mListener.onClear();
+
         }
     }
 
     @Override
     public void afterTextChanged(Editable editable) {
-        mListener.fetchSuggestionsForText(mSearchEditText.getText().toString());
+        if (editable != null && editable.length() > 0) {
+            mListener.fetchSuggestionsForText(mSearchEditText.getText().toString());
+        }
     }
 
     @Override

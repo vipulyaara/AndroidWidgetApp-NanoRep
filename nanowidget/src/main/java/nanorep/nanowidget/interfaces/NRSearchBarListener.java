@@ -9,5 +9,5 @@ public interface NRSearchBarListener {
     void onStartRecording(ImageButton button);
     void fetchSuggestionsForText(String text);
     void searchForText(String text);
-    void onClear();
+    void onClearClicked(boolean byUser);
 }

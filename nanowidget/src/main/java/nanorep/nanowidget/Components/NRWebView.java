@@ -16,6 +16,7 @@ import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
+import com.nanorep.nanoclient.Connection.NRUtilities;
 import com.nanorep.nanoclient.Response.NRHtmlParser;
 
 import nanorep.nanowidget.R;
@@ -47,6 +48,8 @@ public class NRWebView extends FrameLayout {
         super.onViewAdded(child);
         mWebView = (MyWebView) child.findViewById(R.id.nrWebview);
         mWebView.getSettings().setJavaScriptEnabled(true);
+//        mWebView.getSettings().setLoadWithOverviewMode(true);
+//        mWebView.getSettings().setUseWideViewPort(true);
         mWebView.setWebViewClient(new NRWebClient());
         mWebView.setWebChromeClient(new WebChromeClient() {
             @Override
@@ -69,6 +72,51 @@ public class NRWebView extends FrameLayout {
         mLoadingView.setVisibility(VISIBLE);
         NRHtmlParser parser = new NRHtmlParser(data);
         String parsed = parser.getParsedHtml();
+//        String parsed = "<div style=\"width=300px\" >" + parser.getParsedHtml() + "</div>";
+        String script = "\n" +
+                "<style>\n" +
+                "        img {\n" +
+                "            max-width: 100% !important;\n" +
+                "            height: auto !important;\n" +
+                "            }\n" +
+                "</style>\n" +
+                "\n" +
+                "\n" +
+                "<script>\n" +
+                "\t\t(function() {\n" +
+                "\t\t\tvar embeds = document.querySelectorAll('iframe');\n" +
+                "\t\t\tfor (var i = 0, embed, content, width, height, ratio, wrapper; i < embeds.length; i++) {\n" +
+                "\t\t\t\tembed = embeds[i];\n" +
+                "\t\t\t\twidth = embed.getAttribute('width'),\n" +
+                "\t\t\t\theight = embed.getAttribute('height')\n" +
+                "\t\t\t\tratio = width / height;\n" +
+                "\n" +
+                "\t\t\t\t// skip frames with relative dimensions\n" +
+                "\t\t\t\tif (isNaN(ratio)) continue;\n" +
+                "\n" +
+                "\t\t\t\t// set wrapper styles\n" +
+                "\t\t\t\twrapper = document.createElement('div');\n" +
+                "\t\t\t\twrapper.style.position = 'relative';\n" +
+                "\t\t\t\twrapper.style.width = width.indexOf('%') < 0 ? parseFloat(width) + 'px' : width;\n" +
+                "\t\t\t\twrapper.style.maxWidth = '100%';\n" +
+                "\n" +
+                "\t\t\t\t// set content styles\n" +
+                "\t\t\t\tcontent = document.createElement('div');\n" +
+                "\t\t\t\tcontent.style.paddingBottom = 100 / ratio + '%';\n" +
+                "\n" +
+                "\t\t\t\t// set embed styles\n" +
+                "\t\t\t\tembed.style.position = 'absolute';\n" +
+                "\t\t\t\tembed.style.width = '100%';\n" +
+                "\t\t\t\tembed.style.height = '100%';\n" +
+                "\n" +
+                "\t\t\t\t// update DOM structure\n" +
+                "\t\t\t\tembed.parentNode.insertBefore(wrapper, embed);\n" +
+                "\t\t\t\tcontent.appendChild(embed);\n" +
+                "\t\t\t\twrapper.appendChild(content);\n" +
+                "\t\t\t}\n" +
+                "\t\t}());\n" +
+                "\t</script>";
+        parsed += script;
         mWebView.loadDataWithBaseURL("file://", parsed, mimeType, encoding, "file://");
     }
 

@@ -12,6 +12,6 @@ public interface NRViewHolder {
     RowType getRowType();
 
     enum RowType {
-        standard, shrinked, unfolded
+        standard, shrinked, unfolded, noResults
     }
 }

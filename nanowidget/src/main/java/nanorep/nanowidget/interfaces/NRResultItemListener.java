@@ -10,7 +10,7 @@ import nanorep.nanowidget.DataClasse.NRResult;
  * Created by nissimpardo on 18/06/16.
  */
 public interface NRResultItemListener extends NRWebView.Listener, OnLikeListener, NRChannelItem.OnChannelSelectedListener {
-    void unfoldItem(NRResult result);
+    void unfoldItem(NRResult result, boolean clear);
     void onShareClicked(NRResultItem item, String linkToShare);
     void fetchBodyForResult(NRContentItem item, String resultID);
 }

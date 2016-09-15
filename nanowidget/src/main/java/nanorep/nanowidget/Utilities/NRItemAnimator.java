@@ -17,6 +17,10 @@ import nanorep.nanowidget.Components.NRResultItem;
 public class NRItemAnimator extends DefaultItemAnimator {
     private OnAnimation mListener;
 
+    public NRItemAnimator() {
+        setRemoveDuration(200);
+    }
+
     public interface OnAnimation {
         void onItemRemoved(NRResultItem item);
     }

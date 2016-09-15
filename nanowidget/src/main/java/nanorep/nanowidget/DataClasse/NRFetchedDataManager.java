@@ -30,6 +30,7 @@ public class NRFetchedDataManager {
     private NRFAQData mFaqData;
     private NRFetcherListener mFetcherListener;
     Context mContext;
+    private NRConfiguration mConfiguration;
 
     private int mRows;
 
@@ -42,6 +43,7 @@ public class NRFetchedDataManager {
                 @Override
                 public void onConfigurationFetched(NRConfiguration configuration, NRError error) {
                     if (error == null && configuration != null) {
+                        mConfiguration = configuration;
                         mFaqData = configuration.getFaqData();
                         if (configuration.getTitle() != null) {
                             mFetcherListener.updateTitle(configuration.getTitle());
@@ -58,6 +60,10 @@ public class NRFetchedDataManager {
     public void setFetcherListener(NRFetcherListener listener) {
         mFetcherListener = listener;
 
+    }
+
+    public NRConfiguration getConfiguration() {
+        return mConfiguration;
     }
 
     private void prepareDatasource() {
@@ -77,6 +83,8 @@ public class NRFetchedDataManager {
             }
             mRows = queryResults.size();
             mFetcherListener.insertRows(results);
+        } else {
+            mFetcherListener.insertRows(null);
         }
     }
 
