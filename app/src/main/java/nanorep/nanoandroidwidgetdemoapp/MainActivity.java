@@ -9,6 +9,7 @@ import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
+import android.widget.EditText;
 
 import com.crittercism.app.Crittercism;
 import com.nanorep.nanoclient.Connection.NRError;
@@ -24,7 +25,6 @@ import nanorep.nanowidget.NRWidgetFragment;
 public class MainActivity extends AppCompatActivity implements NRWidgetFragment.NRWidgetFragmentListener {
 
     private NRWidgetFragment nanoFragment;
-    private WebView mWebView;
 
     @SuppressLint("SetJavaScriptEnabled")
     @Override
@@ -36,33 +36,21 @@ public class MainActivity extends AppCompatActivity implements NRWidgetFragment.
         nanoFragment.setListener(this);
         Crittercism.initialize(getApplicationContext(), "d59e30ede3c34d0bbf19d0237c2f1bc800444503");
         Button loadButton = (Button)findViewById(R.id.button);
-        mWebView = (WebView) findViewById(R.id.nanaorepWebview);
-        mWebView.getSettings().setJavaScriptEnabled(true);
-        mWebView.setWebChromeClient(new AppChromClient());
-        mWebView.setWebViewClient(new WebViewClient() {
-            @Override
-            public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                return super.shouldOverrideUrlLoading(view, url);
-            }
-
-            @Override
-            public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
-                return super.shouldOverrideUrlLoading(view, request);
-            }
-        });
-
-        mWebView.loadUrl("https://www.nanorep.com/howitworks");
         if (loadButton != null) {
             loadButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(final View v) {
                     v.setVisibility(View.INVISIBLE);
                     Nanorep.AccountParams accountParams = new Nanorep.AccountParams();
-                    accountParams.setAccount("nanorep");
-                    accountParams.setKnowledgeBase("english");
-                    HashMap<String, String> channel = new HashMap();
-                    channel.put("channel", "mobile");
-                    accountParams.setContext(channel);
+//                    accountParams.setAccount("yatra");
+//                    accountParams.setKnowledgeBase("79848779");
+                    EditText accountName = (EditText) findViewById(R.id.accountNameId);
+                    EditText kb = (EditText) findViewById(R.id.kbId);
+                    accountParams.setAccount(accountName.getText().toString());
+                    accountParams.setKnowledgeBase(accountName.getText().toString());
+//                    HashMap<String, String> channel = new HashMap();
+//                    channel.put("channel", "mobile");
+//                    accountParams.setContext(channel);
                     Nanorep test = NanorepBuilder.createNanorep(getApplicationContext(), accountParams);
                     nanoFragment.setNanoRep(test);
                     getSupportFragmentManager().beginTransaction().add(R.id.root_layout, nanoFragment, "test").commit();

@@ -9,16 +9,36 @@
     android:background="#e41414">
 
 
-    <WebView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/nanaorepWebview"/>
-
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Load Nanorep"
         android:id="@+id/button"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"/>
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="46dp"/>
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="text"
+        android:ems="10"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="56dp"
+        android:id="@+id/accountNameId"
+        android:textAlignment="center"
+        android:hint="account name"/>
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:layout_below="@+id/accountNameId"
+        android:layout_alignStart="@+id/accountNameId"
+        android:layout_marginTop="23dp"
+        android:id="@+id/kbId"
+        android:textAlignment="center"
+        android:inputType="text"
+        android:hint="knowledge base"/>
 </RelativeLayout>
