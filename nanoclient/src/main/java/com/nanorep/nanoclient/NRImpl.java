@@ -276,6 +276,7 @@ public class NRImpl implements Nanorep {
             if (mAccountParams.getKnowledgeBase() != null) {
                 uri.appendQueryParameter("kb", mAccountParams.getKnowledgeBase());
             }
+            uri.appendQueryParameter("isFloat", "true");
             NRConnection.connectionWithRequest(uri.build(), new NRConnection.Listener() {
                 @Override
                 public void response(Object responseParam, int status, NRError error) {
