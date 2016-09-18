@@ -54,12 +54,12 @@ public class MainActivity extends AppCompatActivity implements NRWidgetFragment.
                     Nanorep test = NanorepBuilder.createNanorep(getApplicationContext(), accountParams);
                     nanoFragment.setNanoRep(test);
                     getSupportFragmentManager().beginTransaction().add(R.id.root_layout, nanoFragment, "test").commit();
-                    test.fetchConfiguration(new Nanorep.OnConfigurationFetchedListener() {
-                        @Override
-                        public void onConfigurationFetched(NRConfiguration configuration, NRError error) {
-
-                        }
-                    });
+//                    test.fetchConfiguration(new Nanorep.OnConfigurationFetchedListener() {
+//                        @Override
+//                        public void onConfigurationFetched(NRConfiguration configuration, NRError error) {
+//
+//                        }
+//                    });
                 }
             });
         }
