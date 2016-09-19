@@ -104,7 +104,9 @@ public class NRCacheManager extends SQLiteOpenHelper {
             e.printStackTrace();
         }
     }
+
     public static void deleteAnswerById(Context context, String answerId) {
+
         mContext = context;
 
         SQLiteDatabase db = getCacheManager().getWritableDatabase();
@@ -117,6 +119,7 @@ public class NRCacheManager extends SQLiteOpenHelper {
     public static void storeFAQAnswer(HashMap<String, Object> answerParams) {
         storeAnswerById(mContext, (String) answerParams.get("id"), answerParams);
     }
+
 
     public static HashMap<String, Object> fetchFAQAnswer(String answerId, Integer answerHash) {
         // if exist in cache and hash is equal return it,
