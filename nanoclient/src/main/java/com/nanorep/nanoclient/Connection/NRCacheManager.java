@@ -103,5 +103,13 @@ public class NRCacheManager extends SQLiteOpenHelper {
         }
     }
 
+    public static void storeFAQAnswer(String answerId, String hash) {
+
+    }
+
+    public static HashMap<String, Object> fetchFAQAnswer(String answerId, String hash) {
+        return null;
+    }
+
 
 }
