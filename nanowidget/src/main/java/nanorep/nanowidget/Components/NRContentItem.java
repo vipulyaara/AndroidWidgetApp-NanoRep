@@ -57,7 +57,7 @@ public class NRContentItem extends NRResultItem  {
         if (mResult.getFetchedResult().getBody() != null) {
             setBody(mResult.getFetchedResult().getBody());
         } else {
-            mListener.fetchBodyForResult(this, mResult.getFetchedResult().getId());
+            mListener.fetchBodyForResult(this, mResult.getFetchedResult().getId(), mResult.getFetchedResult().getHash());
         }
         mLikeView.setResultId(result.getFetchedResult().getId());
         if (result.getFetchedResult().getLikeState() == NRQueryResult.LikeState.notSelected) {

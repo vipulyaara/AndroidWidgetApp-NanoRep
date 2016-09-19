@@ -65,6 +65,11 @@ public class NRFAQAnswer implements NRQueryResult {
     }
 
     @Override
+    public Integer getHash() {
+        return (Integer) mParams.get("titleAndBodyHash");
+    }
+
+    @Override
     public boolean isCNF() {
         return false;
     }
@@ -103,4 +108,8 @@ public class NRFAQAnswer implements NRQueryResult {
         return (String)mParams.get("likesCount");
     }
 
+    @Override
+    public HashMap<String, Object> getParams() {
+        return mParams;
+    }
 }

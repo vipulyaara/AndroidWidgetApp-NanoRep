@@ -159,8 +159,8 @@ public class NRFetchedDataManager {
         }
     }
 
-    public void faqAnswer(String answerId, final nanorep.nanowidget.interfaces.OnFAQAnswerFetched answerFetcher) {
-        mNanoRep.fetchFAQAnswer(answerId, new Nanorep.OnFAQAnswerFetchedListener() {
+    public void faqAnswer(String answerId, Integer answerHash, final nanorep.nanowidget.interfaces.OnFAQAnswerFetched answerFetcher) {
+        mNanoRep.fetchFAQAnswer(answerId, answerHash, new Nanorep.OnFAQAnswerFetchedListener() {
             @Override
             public void onFAQAnswerFetched(NRFAQAnswer faqAnswer, NRError error) {
                 if (error == null) {

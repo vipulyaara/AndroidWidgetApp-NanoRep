@@ -11,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Interpolator;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -103,7 +104,7 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
 
     @Override
     public void onLinkedArticleClicked(String articleId) {
-        mFetchedDataManager.faqAnswer(articleId, new OnFAQAnswerFetched() {
+        mFetchedDataManager.faqAnswer(articleId, null, new OnFAQAnswerFetched() {
             @Override
             public void onAnswerFetched(final NRQueryResult result) {
                 clearResults();
@@ -533,8 +534,8 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
     }
 
     @Override
-    public void fetchBodyForResult(final NRContentItem item, String resultID) {
-        mFetchedDataManager.faqAnswer(resultID, new OnFAQAnswerFetched() {
+    public void fetchBodyForResult(final NRContentItem item, String resultID, Integer resultHash) {
+        mFetchedDataManager.faqAnswer(resultID, resultHash, new OnFAQAnswerFetched() {
             @Override
             public void onAnswerFetched(NRQueryResult result) {
                 item.setBody(result.getBody());
