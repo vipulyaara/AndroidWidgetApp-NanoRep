@@ -6,13 +6,14 @@ import com.nanorep.nanoclient.RequestParams.NRLikeType;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
 
 
 /**
  * Created by nissopa on 9/12/15.
  */
 public class NRAnswer implements NRQueryResult {
-    private HashMap<String, ?> mParams;
+    private HashMap<String, Object> mParams;
     private String mArticleId;
     private String mKeywordsetId;
     private int mLikes;
@@ -96,6 +97,16 @@ public class NRAnswer implements NRQueryResult {
     @Override
     public String getBody() {
         return getSummary();
+    }
+
+    @Override
+    public Integer getHash() {
+        return (Integer) mParams.get("titleAndBodyHash");
+    }
+
+    @Override
+    public HashMap<String, Object> getParams() {
+        return mParams;
     }
 
     @Override

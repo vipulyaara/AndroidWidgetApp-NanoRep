@@ -6,6 +6,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.nanorep.nanoclient.Response.NRFAQAnswer;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -103,11 +105,11 @@ public class NRCacheManager extends SQLiteOpenHelper {
         }
     }
 
-    public static void storeFAQAnswer(String answerId, String hash) {
+    public static void storeFAQAnswer(HashMap<String, Object> answerObjectParams) {
 
     }
 
-    public static HashMap<String, Object> fetchFAQAnswer(String answerId, String hash) {
+    public static HashMap<String, Object> fetchFAQAnswer(String answerId, Integer hash) {
         return null;
     }
 

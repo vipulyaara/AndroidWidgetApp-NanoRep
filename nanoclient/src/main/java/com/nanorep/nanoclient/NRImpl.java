@@ -10,6 +10,7 @@ import com.nanorep.nanoclient.Connection.NRCacheManager;
 import com.nanorep.nanoclient.Connection.NRConnection;
 import com.nanorep.nanoclient.Connection.NRError;
 import com.nanorep.nanoclient.Connection.NRUtilities;
+import com.nanorep.nanoclient.Interfaces.NRQueryResult;
 import com.nanorep.nanoclient.RequestParams.NRFAQLikeParams;
 import com.nanorep.nanoclient.RequestParams.NRSearchLikeParams;
 import com.nanorep.nanoclient.Response.NRConfiguration;
@@ -231,21 +232,35 @@ public class NRImpl implements Nanorep {
     }
 
     @Override
-    public void fetchFAQAnswer(final String answerId, final OnFAQAnswerFetchedListener onFAQAnswerFetchedListener) {
+    public void fetchFAQAnswer(final String answerId, final Integer answerHash, final OnFAQAnswerFetchedListener onFAQAnswerFetchedListener) {
         Uri.Builder uriBuilder = mAccountParams.getUri();
         uriBuilder.appendPath("api/faq/v1/answer.js");
         uriBuilder.appendQueryParameter("id", answerId);
-        executeRequest(uriBuilder, new NRConnection.Listener() {
-            @Override
-            public void response(Object responseParam, int status, NRError error) {
-                if (error != null) {
-                    onFAQAnswerFetchedListener.onFAQAnswerFetched(null, error);
-                } else  if (responseParam != null) {
-                    ((HashMap<String, Object>) responseParam).put("id", answerId);
-                    onFAQAnswerFetchedListener.onFAQAnswerFetched(new NRFAQAnswer((HashMap<String, Object>) responseParam), null);
+
+        // if exist and updated in cache, fetch from cache,
+        // else call to server
+        HashMap<String, Object> answerParams = NRCacheManager.fetchFAQAnswer(answerId, answerHash);
+
+        if(answerParams != null) {
+            ((HashMap<String, Object>) answerParams).put("id", answerId);
+            onFAQAnswerFetchedListener.onFAQAnswerFetched(new NRFAQAnswer((HashMap<String, Object>) answerParams), null);
+        }
+        else {
+            executeRequest(uriBuilder, new NRConnection.Listener() {
+                @Override
+                public void response(Object responseParam, int status, NRError error) {
+                    if (error != null) {
+                        onFAQAnswerFetchedListener.onFAQAnswerFetched(null, error);
+                    } else if (responseParam != null) {
+                        ((HashMap<String, Object>) responseParam).put("id", answerId);
+                        onFAQAnswerFetchedListener.onFAQAnswerFetched(new NRFAQAnswer((HashMap<String, Object>) responseParam), null);
+
+                        // store to cahce the answer from server
+                        NRCacheManager.storeFAQAnswer((HashMap<String, Object>)responseParam);
+                    }
                 }
-            }
-        });
+            });
+        }
     }
 
     @Override
@@ -303,6 +318,20 @@ public class NRImpl implements Nanorep {
                                             onConfigurationFetchedListener.onConfigurationFetched(null, error);
                                         } else if (responseParam != null) {
                                             onConfigurationFetchedListener.onConfigurationFetched(cnf, null);
+                                            NRCacheManager.storeAnswerById(mContext, NRUtilities.md5(mAccountParams.getKnowledgeBase() + mAccountParams.getNanorepContext()), (HashMap) responseParam);
+
+                                            // get contents for all Answers
+                                            for (NRQueryResult queryResult : cnf.getFaqData().getGroups().get(0).getAnswers())
+                                            {
+                                                fetchFAQAnswer(queryResult.getId(), queryResult.getHash(), new OnFAQAnswerFetchedListener() {
+                                                    @Override
+                                                    public void onFAQAnswerFetched(NRFAQAnswer faqAnswer, NRError error) {
+                                                        // update cache with this Answer (has body now..)
+                                                        NRCacheManager.storeFAQAnswer(faqAnswer.getParams());
+                                                    }
+                                                });
+                                            }
+
                                         } else {
                                             onConfigurationFetchedListener.onConfigurationFetched(null, NRError.error("com.nanorepfaq", 1002, "faqData empty"));
                                         }
