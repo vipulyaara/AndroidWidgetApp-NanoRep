@@ -103,6 +103,11 @@ public class NRFAQAnswerItem implements NRQueryResult {
     }
 
     @Override
+    public Integer getHash() {
+        return (Integer) mParams.get("titleAndBodyHash");
+    }
+
+    @Override
     public boolean isCNF() {
         return true;
     }
@@ -110,5 +115,10 @@ public class NRFAQAnswerItem implements NRQueryResult {
     @Override
     public ArrayList<NRChanneling> getChanneling() {
         return null;
+    }
+
+    @Override
+    public HashMap<String, Object> getParams() {
+        return mParams;
     }
 }

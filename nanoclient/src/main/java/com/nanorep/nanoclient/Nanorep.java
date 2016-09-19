@@ -48,7 +48,7 @@ public interface Nanorep {
 
     void likeForSearchResult(NRSearchLikeParams likeParams, OnLikeSentListener onLikeSentListener);
 
-    void fetchFAQAnswer(String answerId, OnFAQAnswerFetchedListener onFAQAnswerFetchedListener);
+    void fetchFAQAnswer(String answerId, Integer answerHash, OnFAQAnswerFetchedListener onFAQAnswerFetchedListener);
 
     void likeForFAQResult(NRFAQLikeParams likeParams, OnLikeSentListener onLikeSentListener);
 
