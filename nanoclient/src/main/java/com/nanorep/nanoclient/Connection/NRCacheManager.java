@@ -103,11 +103,42 @@ public class NRCacheManager extends SQLiteOpenHelper {
         }
     }
 
-    public static void storeFAQAnswer(String answerId, String hash) {
+    public static void deleteAnswerById(Context context, String answerId) {
 
+        mContext = context;
+
+        SQLiteDatabase db = getCacheManager().getWritableDatabase();
+
+        String[] whereArgs = new String[] { String.valueOf(answerId.trim()) };
+        db.delete(TABLE_ANSWERS, COLUMN_ID + "=?" , whereArgs);
+        db.close();
     }
 
-    public static HashMap<String, Object> fetchFAQAnswer(String answerId, String hash) {
+    public static void storeFAQAnswer(HashMap<String, Object> answerParams) {
+        storeAnswerById(mContext, (String) answerParams.get("objectId"), answerParams);
+    }
+
+    public static HashMap<String, Object> fetchFAQAnswer(String answerId, Integer answerHash) {
+        // if exist in cache and hash is equal return it,
+        // else, if exist but hast NOT equal, delete from cache and return NULL
+        // else, return NULL
+
+        HashMap<String, Object> answerParams = getAnswerById(mContext, answerId);
+
+        if(answerParams != null) {
+
+            if(answerHash == null) { // linked article
+                return answerParams;
+            }
+
+            if( (answerHash.equals((Integer)answerParams.get("titleAndBodyHash")))) {
+                return answerParams;
+            } else {
+                // delete..
+                deleteAnswerById(mContext, answerId);
+            }
+        }
+
         return null;
     }
 
