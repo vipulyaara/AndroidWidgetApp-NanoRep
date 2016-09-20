@@ -21,6 +21,7 @@ import java.util.ArrayList;
 
 import nanorep.nanowidget.Utilities.Calculate;
 import nanorep.nanowidget.interfaces.NRFetcherListener;
+import nanorep.nanowidget.interfaces.OnFAQAnswerFetched;
 
 /**
  * Created by nissimpardo on 04/06/16.
@@ -31,6 +32,7 @@ public class NRFetchedDataManager {
     private NRFetcherListener mFetcherListener;
     Context mContext;
     private NRConfiguration mConfiguration;
+
 
     private int mRows;
 
@@ -159,8 +161,8 @@ public class NRFetchedDataManager {
         }
     }
 
-    public void faqAnswer(String answerId, final nanorep.nanowidget.interfaces.OnFAQAnswerFetched answerFetcher) {
-        mNanoRep.fetchFAQAnswer(answerId, new Nanorep.OnFAQAnswerFetchedListener() {
+    public void faqAnswer(final String answerId, Integer answerHash,final OnFAQAnswerFetched answerFetcher) {
+        mNanoRep.fetchFAQAnswer(answerId, answerHash, new Nanorep.OnFAQAnswerFetchedListener() {
             @Override
             public void onFAQAnswerFetched(NRFAQAnswer faqAnswer, NRError error) {
                 if (error == null) {
