@@ -35,6 +35,7 @@ public class NRImpl implements Nanorep {
     private long mDelay;
     private HashMap<String, NRSearchResponse> mCachedSearches;
     private HashMap<String, NRSuggestions> mCachedSuggestions;
+    private HashMap<String, ArrayList<OnFAQAnswerFetchedListener>> faqRequestListenersMap;
     private Handler mHandler;
 
     public NRImpl(Context context, AccountParams accountParams) {
@@ -54,6 +55,13 @@ public class NRImpl implements Nanorep {
             mCachedSuggestions = new HashMap<>();
         }
         return mCachedSuggestions;
+    }
+
+    private HashMap<String, ArrayList<OnFAQAnswerFetchedListener>> getFaqRequestListenersMap() {
+        if (faqRequestListenersMap == null) {
+            faqRequestListenersMap = new HashMap<>();
+        }
+        return faqRequestListenersMap;
     }
 
     private void fetchFaqList(NRConnection.Listener listener) {
@@ -256,21 +264,45 @@ public class NRImpl implements Nanorep {
             onFAQAnswerFetchedListener.onFAQAnswerFetched(new NRFAQAnswer((HashMap<String, Object>) answerParams), null);
         }
         else {
-            executeRequest(uriBuilder, new NRConnection.Listener() {
-                @Override
-                public void response(Object responseParam, int status, NRError error) {
-                    if (error != null) {
-                        onFAQAnswerFetchedListener.onFAQAnswerFetched(null, error);
-                    } else if (responseParam != null) {
+
+            // check if we already called fetch answer for this answer id
+            ArrayList<OnFAQAnswerFetchedListener> onFAQAnswerFetchedListenerArr = NRImpl.this.getFaqRequestListenersMap().get(answerId);
+
+            if(onFAQAnswerFetchedListenerArr == null) {// array is empty, no requests for this answer id
+
+                onFAQAnswerFetchedListenerArr = new ArrayList<OnFAQAnswerFetchedListener>();
+
+                onFAQAnswerFetchedListenerArr.add(onFAQAnswerFetchedListener);
+                NRImpl.this.getFaqRequestListenersMap().put(answerId, onFAQAnswerFetchedListenerArr);
+
+                final ArrayList<OnFAQAnswerFetchedListener> finalOnFAQAnswerFetchedListenerArr = onFAQAnswerFetchedListenerArr;
+
+
+                executeRequest(uriBuilder, new NRConnection.Listener() {
+                    @Override
+                    public void response(Object responseParam, int status, NRError error) {
+
                         ((HashMap<String, Object>) responseParam).put("id", answerId);
 
-                        // store to cahce the answer from server
-                        NRCacheManager.storeFAQAnswer((HashMap<String, Object>)responseParam);
+                        for (OnFAQAnswerFetchedListener listener : finalOnFAQAnswerFetchedListenerArr) {
+                            if (error != null) {
+                                listener.onFAQAnswerFetched(null, error);
+                            } else if (responseParam != null) {
 
-                        onFAQAnswerFetchedListener.onFAQAnswerFetched(new NRFAQAnswer((HashMap<String, Object>) responseParam), null);
+                                listener.onFAQAnswerFetched(new NRFAQAnswer((HashMap<String, Object>) responseParam), null);
+                            }
+                        }
+
+                        // store to cahce the answer from server
+                        NRCacheManager.storeFAQAnswer((HashMap<String, Object>) responseParam);
+
+                        NRImpl.this.getFaqRequestListenersMap().remove(answerId);
                     }
-                }
-            });
+                });
+            } else {
+                onFAQAnswerFetchedListenerArr.add(onFAQAnswerFetchedListener);
+                NRImpl.this.getFaqRequestListenersMap().put(answerId, onFAQAnswerFetchedListenerArr);
+            }
         }
     }
 
