@@ -71,7 +71,7 @@ public class NRImpl implements Nanorep {
         if (mAccountParams.getNanorepContext() != null) {
             uri.appendQueryParameter("context", mAccountParams.getKnowledgeBase());
         }
-        NRConnection.connectionWithRequest(uri.build(), listener);
+        NRConnection.getInstance().connectionWithRequest(uri.build(), listener);
     }
 
     private void startKeepAlive() {
@@ -105,7 +105,7 @@ public class NRImpl implements Nanorep {
     private void executeRequest(final Uri.Builder uriBuilder, final NRConnection.Listener listener) {
         if (mSessionId != null) {
             uriBuilder.appendQueryParameter("sid", mSessionId);
-            NRConnection.connectionWithRequest(uriBuilder.build(), listener);
+            NRConnection.getInstance().connectionWithRequest(uriBuilder.build(), listener);
         } else {
             hello(new NRConnection.Listener() {
                 @Override
@@ -121,7 +121,7 @@ public class NRImpl implements Nanorep {
         _uriBuilder.appendPath("api/widget/v1/hello.js");
         _uriBuilder.appendQueryParameter("nostats", "false");
         _uriBuilder.appendQueryParameter("url", "mobile");
-        NRConnection.connectionWithRequest(_uriBuilder.build(), new NRConnection.Listener() {
+        NRConnection.getInstance().connectionWithRequest(_uriBuilder.build(), new NRConnection.Listener() {
             @Override
             public void response(Object responseParam, int status, NRError error) {
                 if (error != null) {
@@ -314,7 +314,7 @@ public class NRImpl implements Nanorep {
         for (String key: likeParams.getParams().keySet()) {
             uriBuilder.appendQueryParameter(key, likeParams.getParams().get(key));
         }
-        NRConnection.connectionWithRequest(uriBuilder.build(), new NRConnection.Listener() {
+        NRConnection.getInstance().connectionWithRequest(uriBuilder.build(), new NRConnection.Listener() {
             @Override
             public void response(Object responseParam, int status, NRError error) {
                 if (error != null) {
@@ -339,7 +339,7 @@ public class NRImpl implements Nanorep {
             // check network connectivity speed
             final Long beforeCnfTs = System.currentTimeMillis()/1000;
 
-            NRConnection.connectionWithRequest(uri.build(), new NRConnection.Listener() {
+            NRConnection.getInstance().connectionWithRequest(uri.build(), new NRConnection.Listener() {
                 @Override
                 public void response(Object responseParam, int status, NRError error) {
                     Long afterCnfTs = System.currentTimeMillis()/1000;
