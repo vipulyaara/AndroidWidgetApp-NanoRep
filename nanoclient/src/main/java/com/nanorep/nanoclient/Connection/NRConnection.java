@@ -18,13 +18,31 @@ import java.util.ArrayList;
 public class NRConnection {
     public static String NRStatusKey = "status";
 
-    static private ArrayList<NRDownloader> mConnections;
+    private ArrayList<NRDownloader> mConnections;
+
+    private static NRConnection mInstance;
 
     public interface Listener {
         void response(Object responseParam, int status, NRError error);
     }
 
-    public static void connectionWithRequest(Uri uri, final Listener listener) {
+    private NRConnection() {
+    }
+
+    public static NRConnection getInstance() {
+
+        if  (mInstance == null) {
+            synchronized (NRConnection.class) {
+                if (mInstance == null) {
+                    mInstance = new NRConnection();
+                }
+            }
+        }
+
+        return mInstance;
+    }
+
+    public void connectionWithRequest(Uri uri, final Listener listener) {
         NRDownloader downloader = new NRDownloader(new NRDownloader.NRDownloaderListener() {
             @Override
             public void downloadCompleted(NRDownloader downloader, Object data, NRError error) {
@@ -37,8 +55,8 @@ public class NRConnection {
                         listener.response(retMap, downloader.getResponseStatus(), null);
                     }
                 }
-                if (NRConnection.mConnections != null && NRConnection.mConnections.contains(downloader)) {
-                    NRConnection.mConnections.remove(downloader);
+                if (mConnections != null && mConnections.contains(downloader)) {
+                    mConnections.remove(downloader);
                 }
             }
         });
@@ -50,7 +68,7 @@ public class NRConnection {
 
     }
 
-    public static void cancelAllConnections() {
+    public void cancelAllConnections() {
         ArrayList<NRDownloader> downloaders = new ArrayList<NRDownloader>(getConnections());
         for (NRDownloader downloader: downloaders) {
             downloader.cancel(true);
@@ -60,7 +78,7 @@ public class NRConnection {
         mConnections = null;
     }
 
-    static private ArrayList<NRDownloader> getConnections() {
+    private ArrayList<NRDownloader> getConnections() {
         synchronized (mConnections) {
             if (mConnections == null) {
                 mConnections = new ArrayList<NRDownloader>();
