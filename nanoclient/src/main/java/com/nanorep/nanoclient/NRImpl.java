@@ -369,7 +369,7 @@ public class NRImpl implements Nanorep {
                                             onConfigurationFetchedListener.onConfigurationFetched(null, error);
                                         } else if (responseParam != null) {
                                             onConfigurationFetchedListener.onConfigurationFetched(cnf, null);
-                                            NRCacheManager.storeAnswerById(mContext, NRUtilities.md5(mAccountParams.getKnowledgeBase() + mAccountParams.getNanorepContext()), (HashMap) responseParam);
+                                            NRCacheManager.storeAnswerById(mContext, NRUtilities.md5(mAccountParams.getKnowledgeBase() + mAccountParams.getNanorepContext()), responseParam);
 
 
                                             if(!fast) {
@@ -385,7 +385,7 @@ public class NRImpl implements Nanorep {
                             if (onConfigurationFetchedListener != null) {
                                 onConfigurationFetchedListener.onConfigurationFetched(new NRConfiguration((HashMap) responseParam), null);
                             }
-                            NRCacheManager.storeAnswerById(mContext, NRUtilities.md5(mAccountParams.getKnowledgeBase() + mAccountParams.getNanorepContext()), (HashMap) responseParam);
+                            NRCacheManager.storeAnswerById(mContext, NRUtilities.md5(mAccountParams.getKnowledgeBase() + mAccountParams.getNanorepContext()), responseParam);
 
                             if(!fast) {
                                 updateFAQContentsAndCallHello(cnf);
