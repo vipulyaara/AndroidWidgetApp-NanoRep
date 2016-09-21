@@ -35,6 +35,7 @@ public class NRResultTitleView extends RelativeLayout {
     }
 
     void setTitle(String title) {
+        title = title.replaceAll("(\\t|\\r?\\n)", " ");
         ((Button)findViewById(R.id.resultTitle)).setText(title);
     }
 
