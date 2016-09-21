@@ -14,6 +14,8 @@
         android:textColor="#189ac6"
         android:textAlignment="viewStart"
         android:textStyle="bold"
+        android:maxLines="2"
+        android:ellipsize="end"
         android:paddingLeft="10dp"/>
     <ImageButton
         android:layout_width="40dp"
