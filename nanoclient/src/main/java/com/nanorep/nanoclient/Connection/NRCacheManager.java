@@ -83,7 +83,7 @@ public class NRCacheManager extends SQLiteOpenHelper {
         return null;
     }
 
-    public static void storeAnswerById(Context context, String answerId, HashMap<String, Object> answerParams) {
+    public static void storeAnswerById(Context context, String answerId, Object answerParams) {
         // Convert Map to byte array
         mContext = context;
         ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
