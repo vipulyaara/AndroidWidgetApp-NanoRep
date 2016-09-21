@@ -21,6 +21,8 @@
                 android:textColor="#189ac6"
                 android:textAlignment="viewStart"
                 android:text="title"
+                android:ellipsize="end"
+                android:maxLines="2"
                 android:textStyle="bold"
                 android:paddingLeft="10dp"
                 android:textAllCaps="false"/>
