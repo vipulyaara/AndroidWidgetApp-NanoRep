@@ -11,6 +11,7 @@ public class NRConfiguration {
 
     private HashMap<String, Object> mParams;
     private boolean mIsContextDependent = false;
+    private NRTitle title;
 
     public NRConfiguration() {
         mParams = new HashMap<String, Object>();
@@ -38,17 +39,16 @@ public class NRConfiguration {
             mParams.put("titleBGColor", titleBGColor);
         }
 
-        public void setTitleNormalText(String titleNormalText) {
-            mParams.put("titleNormalText", titleNormalText);
-        }
-
-        public String getTitleNormalText() {
-            return (String)mParams.get("titleNormalText");
-        }
-
         public String getTitleBGColor() {
             return (String)mParams.get("titleBGColor");
         }
+    }
+
+    public NRTitle getTitle(){
+        if(title == null) {
+            title = new NRTitle();
+        }
+        return title;
     }
 
     public class NRSearchBar {
@@ -111,10 +111,6 @@ public class NRConfiguration {
         return (String)mParams.get("id");
     }
 
-    public String getTitle() {
-        return (String)mParams.get("titleNormalText");
-    }
-
     public String getKbId() {
         return (String)mParams.get("kbId");
     }
@@ -145,6 +141,17 @@ public class NRConfiguration {
     public String getSkinName() {
         return (String)mParams.get("skinName");
     }
+
+    //titleNormalText
+
+    public void setTitleNormalText(String titleNormalText) {
+        mParams.put("titleNormalText", titleNormalText);
+    }
+
+    public String getTitleNormalText() {
+        return (String)mParams.get("titleNormalText");
+    }
+
 
     public HashMap<String, Object> getmParams() {
         return mParams;

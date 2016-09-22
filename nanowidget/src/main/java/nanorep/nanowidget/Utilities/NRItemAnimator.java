@@ -1,14 +1,13 @@
 package nanorep.nanowidget.Utilities;
 
-import android.animation.ValueAnimator;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
-import android.view.animation.DecelerateInterpolator;
 
 import java.util.List;
 
 import nanorep.nanowidget.Components.NRResultItem;
+import nanorep.nanowidget.Components.NRTitleItem;
 
 /**
  * Created by nissimpardo on 01/09/2016.
@@ -32,7 +31,7 @@ public class NRItemAnimator extends DefaultItemAnimator {
     @Override
     public void onRemoveFinished(RecyclerView.ViewHolder item) {
         super.onRemoveFinished(item);
-        mListener.onItemRemoved((NRResultItem) item);
+        mListener.onItemRemoved((NRResultItem)item);
     }
 
 

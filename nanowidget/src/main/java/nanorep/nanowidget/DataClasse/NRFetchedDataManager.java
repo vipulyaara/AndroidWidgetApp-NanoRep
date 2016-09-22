@@ -47,8 +47,8 @@ public class NRFetchedDataManager {
                     if (error == null && configuration != null) {
                         mConfiguration = configuration;
                         mFaqData = configuration.getFaqData();
-                        if (configuration.getTitle() != null) {
-                            mFetcherListener.updateTitle(configuration.getTitle());
+                        if (configuration.getTitleNormalText() != null) {
+                            mFetcherListener.updateTitle(configuration.getTitleNormalText());
                             prepareDatasource();
                         }
                     } else if (error != null) {

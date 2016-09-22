@@ -1,10 +1,12 @@
 package nanorep.nanowidget.Components;
 
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.RelativeLayout;
 
 import com.nanorep.nanoclient.Channeling.NRChanneling;
 import com.nanorep.nanoclient.Interfaces.NRQueryResult;
+import com.nanorep.nanoclient.Response.NRConfiguration;
 
 import java.util.ArrayList;
 
@@ -23,24 +25,29 @@ public class NRContentItem extends NRResultItem  {
     private RelativeLayout mFeedbackView;
     private NRLikeView mLikeView;
     private NRChannelingView mChannelingView;
-    private NRResultItemListener mListener;
     private NRResult mResult;
 
 
-    public NRContentItem(View itemView, int height) {
-        super(itemView);
-        itemView.getLayoutParams().height = height - (int) Calculate.pxFromDp(itemView.getContext(), 80);
+    public NRContentItem(View view, int maxHeight, NRConfiguration config) {
+        super(view, maxHeight, config);
+    }
+
+    @Override
+    protected void configViewObjects(NRConfiguration config) {
+
+    }
+
+    @Override
+    protected void initObjectsView(View view, int maxHeight) {
+        itemView.getLayoutParams().height = maxHeight - (int) Calculate.pxFromDp(itemView.getContext(), 80);
         mWebView = (NRWebView) itemView.findViewById(R.id.cv_webview);
         mFeedbackView = (RelativeLayout) itemView.findViewById(R.id.cv_feedbackView);
         mLikeView = (NRLikeView) itemView.findViewById(R.id.cv_likeView);
         mChannelingView = (NRChannelingView) itemView.findViewById(R.id.cv_channelingView);
-    }
 
-    public void setListener(NRResultItemListener listener) {
-        mListener = listener;
-        mWebView.setListener(listener);
-        mLikeView.setListener(listener);
-        mChannelingView.setListener(listener);
+        mWebView.setListener(mListener);
+        mLikeView.setListener(mListener);
+        mChannelingView.setListener(mListener);
     }
 
     public void setBody(String body) {
@@ -88,4 +95,6 @@ public class NRContentItem extends NRResultItem  {
     public NRViewHolder.RowType getRowType() {
         return NRViewHolder.RowType.unfolded;
     }
+
+
 }

@@ -53,8 +53,7 @@ public class MainActivity extends AppCompatActivity implements NRWidgetFragment.
 //                    accountParams.setContext(channel);
                     Nanorep test = NanorepBuilder.createNanorep(getApplicationContext(), accountParams);
 
-                    NRConfiguration.NRTitle nrTitle = test.getNRConfiguration().new NRTitle();
-                    nrTitle.setTitleBGColor("#FF7F23");
+                    test.getNRConfiguration().getTitle().setTitleBGColor("#FF7F23");
 
                     nanoFragment.setNanoRep(test);
                     getSupportFragmentManager().beginTransaction().add(R.id.root_layout, nanoFragment, "test").commit();

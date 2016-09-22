@@ -405,8 +405,8 @@ public class NRImpl implements Nanorep {
     private void overrideCnfData(NRConfiguration nrConfiguration) {
         if(mCnf != null) {
             nrConfiguration.overrideCnfData(mCnf);
-            mCnf = nrConfiguration;
         }
+        mCnf = nrConfiguration;
     }
 
     @Override

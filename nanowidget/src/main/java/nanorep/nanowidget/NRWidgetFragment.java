@@ -11,7 +11,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Interpolator;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -31,6 +30,7 @@ import nanorep.nanowidget.Components.NRContentItem;
 import nanorep.nanowidget.Components.NRLikeView;
 import nanorep.nanowidget.Components.NRResultFragment;
 import nanorep.nanowidget.Components.NRResultItem;
+import nanorep.nanowidget.Components.NRTitleItem;
 import nanorep.nanowidget.Components.NRSearchBar;
 import nanorep.nanowidget.Components.NRSuggestionsView;
 import nanorep.nanowidget.DataClasse.NRFetchedDataManager;
@@ -525,7 +525,7 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
     }
 
     @Override
-    public void onShareClicked(NRResultItem item, String linkToShare) {
+    public void onShareClicked(NRTitleItem item, String linkToShare) {
         Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
         sharingIntent.setType("text/plain");
         sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "nanorep Result");
@@ -566,10 +566,10 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
             NRResultItem item = null;
             switch (viewType) {
                 case 0:
-                    item = new NRContentItem(view, mResultsRecyclerView.getHeight());
+                    item = new NRContentItem(view, mResultsRecyclerView.getHeight(), mNanoRep.getNRConfiguration());
                     break;
                 case 1:
-                    item = new NRResultItem(view, mResultsRecyclerView.getHeight());
+                    item = new NRTitleItem(view, mResultsRecyclerView.getHeight(), mNanoRep.getNRConfiguration());
                     break;
             }
 

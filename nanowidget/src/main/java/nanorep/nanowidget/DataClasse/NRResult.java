@@ -31,13 +31,6 @@ public class NRResult {
 
     private int mHeight;
     private boolean mIsSingle;
-    private NRResultType mType;
-
-    public enum NRResultType {
-        search,
-        suggestion,
-        faqAnswer,
-    }
 
     public NRResult(NRQueryResult result) {
         mFetchedResult = result;
