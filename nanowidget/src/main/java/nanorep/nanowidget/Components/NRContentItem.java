@@ -14,7 +14,6 @@ import nanorep.nanowidget.DataClasse.NRResult;
 import nanorep.nanowidget.R;
 import nanorep.nanowidget.Utilities.Calculate;
 import nanorep.nanowidget.interfaces.NRResultItemListener;
-import nanorep.nanowidget.interfaces.NRViewHolder;
 
 /**
  * Created by nissimpardo on 30/08/2016.
@@ -28,8 +27,8 @@ public class NRContentItem extends NRResultItem  {
     private NRResult mResult;
 
 
-    public NRContentItem(View view, int maxHeight, NRConfiguration config) {
-        super(view, maxHeight, config);
+    public NRContentItem(View view, NRResultItemListener listener, int maxHeight, NRConfiguration config) {
+        super(view, listener, maxHeight, config);
     }
 
     @Override
@@ -91,10 +90,4 @@ public class NRContentItem extends NRResultItem  {
             mFeedbackView.setLayoutParams(params);
         }
     }
-
-    public NRViewHolder.RowType getRowType() {
-        return NRViewHolder.RowType.unfolded;
-    }
-
-
 }

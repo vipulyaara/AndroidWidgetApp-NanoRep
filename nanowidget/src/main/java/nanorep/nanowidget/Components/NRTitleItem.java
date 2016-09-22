@@ -15,8 +15,6 @@ import com.nanorep.nanoclient.Response.NRConfiguration;
 import nanorep.nanowidget.DataClasse.NRResult;
 import nanorep.nanowidget.R;
 import nanorep.nanowidget.interfaces.NRResultItemListener;
-import nanorep.nanowidget.interfaces.NRViewHolder;
-import nanorep.nanowidget.interfaces.OnLikeListener;
 
 /**
  * Created by nissimpardo on 15/06/16.
@@ -48,8 +46,8 @@ public class NRTitleItem extends NRResultItem implements View.OnClickListener {
     }
 
 
-    public NRTitleItem(View view, int maxHeight, NRConfiguration config) {
-        super(view, maxHeight, config);
+    public NRTitleItem(View view, NRResultItemListener listener,int maxHeight, NRConfiguration config) {
+        super(view, listener,maxHeight, config);
     }
 
     @Override
@@ -79,10 +77,6 @@ public class NRTitleItem extends NRResultItem implements View.OnClickListener {
 
     public NRLikeView getLikeView() {
         return mLikeView;
-    }
-
-    public NRViewHolder.RowType getRowType() {
-        return NRViewHolder.RowType.standard;
     }
 
     public void setBody(String htmlString) {

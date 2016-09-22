@@ -16,12 +16,18 @@ public abstract class NRResultItem extends RecyclerView.ViewHolder {
 
     protected NRResultItemListener mListener;
 
-    public NRResultItem(View itemView, int maxHeight, NRConfiguration config) {
+    public enum RowType {
+        TITLE, CONTENT, LIKE, CHANNELING
+    }
+
+    public NRResultItem(View itemView, NRResultItemListener listener, int maxHeight, NRConfiguration config) {
         super(itemView);
 
         initObjectsView(itemView, maxHeight);
 
         configViewObjects(config);
+
+        setListener(listener);
     }
 
     protected abstract void configViewObjects(NRConfiguration config);
@@ -30,7 +36,7 @@ public abstract class NRResultItem extends RecyclerView.ViewHolder {
 
     public abstract void setResult(NRResult result);
 
-    public void setListener(NRResultItemListener listener) {
+    protected void setListener(NRResultItemListener listener) {
         mListener = listener;
     }
 
