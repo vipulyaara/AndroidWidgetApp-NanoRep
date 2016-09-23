@@ -32,7 +32,7 @@ public class NRTitleItem extends NRResultItem implements View.OnClickListener {
     private NRChannelingView mNRChannelingView;
 
     @Override
-    protected void initObjectsView(View view, int maxHeight) {
+    protected void bindViews(View view, int maxHeight) {
         mItemView = view;
         setHeight(maxHeight);
         mTitleButton = (Button) view.findViewById(R.id.titleButton);

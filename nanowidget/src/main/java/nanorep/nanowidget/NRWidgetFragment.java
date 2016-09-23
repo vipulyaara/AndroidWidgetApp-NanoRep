@@ -591,12 +591,6 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
             return mQueryResults.size();
         }
 
-
-
-
     }
-
-
-
 
 }

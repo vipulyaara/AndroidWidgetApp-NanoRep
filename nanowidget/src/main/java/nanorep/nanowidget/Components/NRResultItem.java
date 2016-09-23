@@ -23,16 +23,16 @@ public abstract class NRResultItem extends RecyclerView.ViewHolder {
     public NRResultItem(View itemView, NRResultItemListener listener, int maxHeight, NRConfiguration config) {
         super(itemView);
 
-        initObjectsView(itemView, maxHeight);
-
-        configViewObjects(config);
+        bindViews(itemView, maxHeight);
 
         setListener(listener);
+
+        configViewObjects(config);
     }
 
     protected abstract void configViewObjects(NRConfiguration config);
 
-    protected abstract void initObjectsView(View view, int maxHeight);
+    protected abstract void bindViews(View view, int maxHeight);
 
     public abstract void setResult(NRResult result);
 

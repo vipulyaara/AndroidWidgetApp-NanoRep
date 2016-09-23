@@ -37,12 +37,17 @@ public class NRContentItem extends NRResultItem  {
     }
 
     @Override
-    protected void initObjectsView(View view, int maxHeight) {
+    protected void bindViews(View view, int maxHeight) {
         itemView.getLayoutParams().height = maxHeight - (int) Calculate.pxFromDp(itemView.getContext(), 80);
         mWebView = (NRWebView) itemView.findViewById(R.id.cv_webview);
         mFeedbackView = (RelativeLayout) itemView.findViewById(R.id.cv_feedbackView);
         mLikeView = (NRLikeView) itemView.findViewById(R.id.cv_likeView);
         mChannelingView = (NRChannelingView) itemView.findViewById(R.id.cv_channelingView);
+    }
+
+    @Override
+    protected void setListener(NRResultItemListener listener) {
+        super.setListener(listener);
 
         mWebView.setListener(mListener);
         mLikeView.setListener(mListener);
