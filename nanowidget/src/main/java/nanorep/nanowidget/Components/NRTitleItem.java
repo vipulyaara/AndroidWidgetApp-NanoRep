@@ -23,13 +23,8 @@ public class NRTitleItem extends NRResultItem implements View.OnClickListener {
     private View mItemView;
     private Button mTitleButton;
     private ImageButton mUnFoldButton;
-    private WebView mWebView;
-    private RelativeLayout mFooterView;
-    private RelativeLayout mActionView;
     private ImageButton mShareButton;
-    private NRLikeView mLikeView;
     private NRResult mResult;
-    private NRChannelingView mNRChannelingView;
 
     @Override
     protected void bindViews(View view, int maxHeight) {
@@ -65,25 +60,11 @@ public class NRTitleItem extends NRResultItem implements View.OnClickListener {
             mTitleButton.setText(result.getFetchedResult().getTitle());
         }
         setHeight(result.getHeight());
-//        int visibility = result.getRowType() == NRViewHolder.RowType.shrinked ? View.INVISIBLE : View.VISIBLE;
-//        mTitleButton.setVisibility(visibility);
         mUnFoldButton.setVisibility(result.isSingle() ? View.INVISIBLE : View.VISIBLE);
-//        mShareButton.setVisibility(visibility);
     }
 
     public NRResult getResult() {
         return mResult;
-    }
-
-    public NRLikeView getLikeView() {
-        return mLikeView;
-    }
-
-    public void setBody(String htmlString) {
-        if (mResult.getFetchedResult().getBody() == null) {
-            mResult.getFetchedResult().setBody(htmlString);
-        }
-        mWebView.loadData(htmlString, "text/html", "UTF-8");
     }
 
     private void setHeight(int height) {
