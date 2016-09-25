@@ -37,6 +37,7 @@ public class NRImpl implements Nanorep {
     private HashMap<String, NRSuggestions> mCachedSuggestions;
     private HashMap<String, ArrayList<OnFAQAnswerFetchedListener>> faqRequestListenersMap;
     private Handler mHandler;
+    private NRConfiguration mCnf;
 
     public NRImpl(Context context, AccountParams accountParams) {
         mContext = context;
@@ -328,6 +329,7 @@ public class NRImpl implements Nanorep {
 
     @Override
     public void fetchConfiguration(final OnConfigurationFetchedListener onConfigurationFetchedListener) {
+
         if (mAccountParams != null) {
             final Uri.Builder uri = mAccountParams.getUri();
             uri.appendPath("widget/scripts/cnf.json");
@@ -363,18 +365,18 @@ public class NRImpl implements Nanorep {
                                 public void response(Object responseParam, int status, NRError error) {
                                     if (responseParam != null) {
                                         cnf.setFaqData((ArrayList) responseParam);
+                                        NRCacheManager.storeAnswerById(mContext, NRUtilities.md5(mAccountParams.getKnowledgeBase() + mAccountParams.getNanorepContext()), cnf.getmParams());
+                                        overrideCnfData(cnf);
+                                        if(!fast) {
+                                            updateFAQContentsAndCallHello(cnf);
+                                        }
                                     }
                                     if (onConfigurationFetchedListener != null) {
                                         if (error != null) {
                                             onConfigurationFetchedListener.onConfigurationFetched(null, error);
                                         } else if (responseParam != null) {
                                             onConfigurationFetchedListener.onConfigurationFetched(cnf, null);
-                                            NRCacheManager.storeAnswerById(mContext, NRUtilities.md5(mAccountParams.getKnowledgeBase() + mAccountParams.getNanorepContext()), responseParam);
 
-
-                                            if(!fast) {
-                                                updateFAQContentsAndCallHello(cnf);
-                                            }
                                         } else {
                                             onConfigurationFetchedListener.onConfigurationFetched(null, NRError.error("com.nanorepfaq", 1002, "faqData empty"));
                                         }
@@ -382,10 +384,13 @@ public class NRImpl implements Nanorep {
                                 }
                             });
                         } else {
+
+                            overrideCnfData(cnf);
+
                             if (onConfigurationFetchedListener != null) {
-                                onConfigurationFetchedListener.onConfigurationFetched(new NRConfiguration((HashMap) responseParam), null);
+                                onConfigurationFetchedListener.onConfigurationFetched(cnf, null);
                             }
-                            NRCacheManager.storeAnswerById(mContext, NRUtilities.md5(mAccountParams.getKnowledgeBase() + mAccountParams.getNanorepContext()), responseParam);
+                            NRCacheManager.storeAnswerById(mContext, NRUtilities.md5(mAccountParams.getKnowledgeBase() + mAccountParams.getNanorepContext()), cnf.getmParams());
 
                             if(!fast) {
                                 updateFAQContentsAndCallHello(cnf);
@@ -395,6 +400,21 @@ public class NRImpl implements Nanorep {
                 }
             });
         }
+    }
+
+    private void overrideCnfData(NRConfiguration nrConfiguration) {
+        if(mCnf != null) {
+            nrConfiguration.overrideCnfData(mCnf);
+        }
+        mCnf = nrConfiguration;
+    }
+
+    @Override
+    public NRConfiguration getNRConfiguration() {
+        if(mCnf == null)
+            mCnf = new NRConfiguration();
+
+        return mCnf;
     }
 
     private void updateFAQContentsAndCallHello(NRConfiguration cnf)

@@ -2,7 +2,7 @@ package nanorep.nanowidget.interfaces;
 
 import nanorep.nanowidget.Components.NRChannelItem;
 import nanorep.nanowidget.Components.NRContentItem;
-import nanorep.nanowidget.Components.NRResultItem;
+import nanorep.nanowidget.Components.NRTitleItem;
 import nanorep.nanowidget.Components.NRWebView;
 import nanorep.nanowidget.DataClasse.NRResult;
 
@@ -11,6 +11,6 @@ import nanorep.nanowidget.DataClasse.NRResult;
  */
 public interface NRResultItemListener extends NRWebView.Listener, OnLikeListener, NRChannelItem.OnChannelSelectedListener {
     void unfoldItem(NRResult result, boolean clear);
-    void onShareClicked(NRResultItem item, String linkToShare);
+    void onShareClicked(NRTitleItem item, String linkToShare);
     void fetchBodyForResult(NRContentItem item, String resultID, Integer resultHash);
 }

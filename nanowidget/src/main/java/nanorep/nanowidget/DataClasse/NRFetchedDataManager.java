@@ -19,6 +19,7 @@ import com.nanorep.nanoclient.Response.NRSuggestions;
 
 import java.util.ArrayList;
 
+import nanorep.nanowidget.Components.NRResultItem;
 import nanorep.nanowidget.Utilities.Calculate;
 import nanorep.nanowidget.interfaces.NRFetcherListener;
 import nanorep.nanowidget.interfaces.OnFAQAnswerFetched;
@@ -47,8 +48,8 @@ public class NRFetchedDataManager {
                     if (error == null && configuration != null) {
                         mConfiguration = configuration;
                         mFaqData = configuration.getFaqData();
-                        if (configuration.getTitle() != null) {
-                            mFetcherListener.updateTitle(configuration.getTitle());
+                        if (configuration.getTitleNormalText() != null) {
+                            mFetcherListener.updateTitle(configuration.getTitleNormalText());
                             prepareDatasource();
                         }
                     } else if (error != null) {
@@ -79,7 +80,7 @@ public class NRFetchedDataManager {
         if (queryResults != null) {
             ArrayList<NRResult> results = new ArrayList<>();
             for (NRQueryResult result : queryResults) {
-                NRResult currentResult = new NRResult(result);
+                NRResult currentResult = new NRResult(result, NRResultItem.RowType.TITLE);
                 currentResult.setHeight((int) Calculate.pxFromDp(mContext, 62));
                 results.add(currentResult);
             }

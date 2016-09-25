@@ -11,7 +11,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Interpolator;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -31,6 +30,7 @@ import nanorep.nanowidget.Components.NRContentItem;
 import nanorep.nanowidget.Components.NRLikeView;
 import nanorep.nanowidget.Components.NRResultFragment;
 import nanorep.nanowidget.Components.NRResultItem;
+import nanorep.nanowidget.Components.NRTitleItem;
 import nanorep.nanowidget.Components.NRSearchBar;
 import nanorep.nanowidget.Components.NRSuggestionsView;
 import nanorep.nanowidget.DataClasse.NRFetchedDataManager;
@@ -42,7 +42,6 @@ import nanorep.nanowidget.interfaces.NRFetcherListener;
 import nanorep.nanowidget.interfaces.NRResultItemListener;
 import nanorep.nanowidget.interfaces.NRSearchBarListener;
 import nanorep.nanowidget.interfaces.NRSuggestionsListener;
-import nanorep.nanowidget.interfaces.NRViewHolder;
 import nanorep.nanowidget.interfaces.OnFAQAnswerFetched;
 
 
@@ -112,7 +111,7 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
                     @Override
                     public void run() {
                         getSearchStrings().add("");
-                        NRResult newResult = new NRResult(result);
+                        NRResult newResult = new NRResult(result, NRResultItem.RowType.TITLE);
                         newResult.setHeight((int) Calculate.pxFromDp(getContext(), 62));
                         ArrayList<NRResult> linkedArray = new ArrayList<NRResult>();
                         linkedArray.add(newResult);
@@ -512,8 +511,7 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
             mUnfoldedResult = mQueryResults.get(0);
             mUnfoldedResult.setUnfolded(true);
             temp.clear();
-            NRResult content = new NRResult(result.getFetchedResult());
-            content.setRowType(NRViewHolder.RowType.unfolded);
+            NRResult content = new NRResult(result.getFetchedResult(), NRResultItem.RowType.CONTENT);
             mQueryResults.add(content);
             mResutlsAdapter.notifyItemInserted(1);
 
@@ -525,7 +523,7 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
     }
 
     @Override
-    public void onShareClicked(NRResultItem item, String linkToShare) {
+    public void onShareClicked(NRTitleItem item, String linkToShare) {
         Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
         sharingIntent.setType("text/plain");
         sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "nanorep Result");
@@ -553,30 +551,19 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
 
         @Override
         public NRResultItem onCreateViewHolder(ViewGroup parent, int viewType) {
-            int viewId = 0;
-            switch (viewType) {
-                case 0:
-                    viewId = R.layout.content_item;
-                    break;
-                case 1:
-                    viewId = R.layout.result_item;
-                    break;
-            }
-            View view = LayoutInflater.from(parent.getContext()).inflate(viewId, parent, false);
-            NRResultItem item = null;
-            switch (viewType) {
-                case 0:
-                    item = new NRContentItem(view, mResultsRecyclerView.getHeight());
-                    break;
-                case 1:
-                    item = new NRResultItem(view, mResultsRecyclerView.getHeight());
-                    break;
-            }
 
-            if (item != null) {
-                item.setListener(NRWidgetFragment.this);
+            View view;
+
+            switch (viewType) {
+                case 0: // title
+                    view = LayoutInflater.from(parent.getContext()).inflate(R.layout.result_item, parent, false);
+                    return new NRTitleItem(view, NRWidgetFragment.this, mResultsRecyclerView.getHeight(), mNanoRep.getNRConfiguration());
+                case 1: // content
+                    view = LayoutInflater.from(parent.getContext()).inflate(R.layout.content_item, parent, false);
+                    return new NRContentItem(view, NRWidgetFragment.this, mResultsRecyclerView.getHeight(), mNanoRep.getNRConfiguration());
+                default:
+                    return null;
             }
-            return item;
         }
 
         @Override
@@ -587,10 +574,13 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
         @Override
         public int getItemViewType(int position) {
             switch (mQueryResults.get(position).getRowType()) {
-                case standard:
+                case TITLE:
+                    return 0;
+                case CONTENT:
                     return 1;
+                default:
+                    return -1;
             }
-            return 0;
         }
 
         @Override
@@ -601,12 +591,6 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
             return mQueryResults.size();
         }
 
-
-
-
     }
-
-
-
 
 }

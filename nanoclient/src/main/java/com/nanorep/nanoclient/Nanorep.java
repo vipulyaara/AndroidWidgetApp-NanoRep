@@ -54,6 +54,8 @@ public interface Nanorep {
 
     void fetchConfiguration(OnConfigurationFetchedListener onConfigurationFetchedListener);
 
+    NRConfiguration getNRConfiguration();
+
 
     public class AccountParams {
         private String mAccount;

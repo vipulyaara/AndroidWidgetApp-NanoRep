@@ -1,10 +1,12 @@
 package nanorep.nanowidget.Components;
 
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.RelativeLayout;
 
 import com.nanorep.nanoclient.Channeling.NRChanneling;
 import com.nanorep.nanoclient.Interfaces.NRQueryResult;
+import com.nanorep.nanoclient.Response.NRConfiguration;
 
 import java.util.ArrayList;
 
@@ -12,7 +14,6 @@ import nanorep.nanowidget.DataClasse.NRResult;
 import nanorep.nanowidget.R;
 import nanorep.nanowidget.Utilities.Calculate;
 import nanorep.nanowidget.interfaces.NRResultItemListener;
-import nanorep.nanowidget.interfaces.NRViewHolder;
 
 /**
  * Created by nissimpardo on 30/08/2016.
@@ -23,24 +24,34 @@ public class NRContentItem extends NRResultItem  {
     private RelativeLayout mFeedbackView;
     private NRLikeView mLikeView;
     private NRChannelingView mChannelingView;
-    private NRResultItemListener mListener;
     private NRResult mResult;
 
 
-    public NRContentItem(View itemView, int height) {
-        super(itemView);
-        itemView.getLayoutParams().height = height - (int) Calculate.pxFromDp(itemView.getContext(), 80);
+    public NRContentItem(View view, NRResultItemListener listener, int maxHeight, NRConfiguration config) {
+        super(view, listener, maxHeight, config);
+    }
+
+    @Override
+    protected void configViewObjects(NRConfiguration config) {
+
+    }
+
+    @Override
+    protected void bindViews(View view, int maxHeight) {
+        itemView.getLayoutParams().height = maxHeight - (int) Calculate.pxFromDp(itemView.getContext(), 80);
         mWebView = (NRWebView) itemView.findViewById(R.id.cv_webview);
         mFeedbackView = (RelativeLayout) itemView.findViewById(R.id.cv_feedbackView);
         mLikeView = (NRLikeView) itemView.findViewById(R.id.cv_likeView);
         mChannelingView = (NRChannelingView) itemView.findViewById(R.id.cv_channelingView);
     }
 
-    public void setListener(NRResultItemListener listener) {
-        mListener = listener;
-        mWebView.setListener(listener);
-        mLikeView.setListener(listener);
-        mChannelingView.setListener(listener);
+    @Override
+    protected void setListener(NRResultItemListener listener) {
+        super.setListener(listener);
+
+        mWebView.setListener(mListener);
+        mLikeView.setListener(mListener);
+        mChannelingView.setListener(mListener);
     }
 
     public void setBody(String body) {
@@ -83,9 +94,5 @@ public class NRContentItem extends NRResultItem  {
             }
             mFeedbackView.setLayoutParams(params);
         }
-    }
-
-    public NRViewHolder.RowType getRowType() {
-        return NRViewHolder.RowType.unfolded;
     }
 }
