@@ -13,7 +13,10 @@ public class NRFAQLikeParams extends NRRequestParams {
 
     public NRFAQLikeParams(NRQueryResult result) {
         super(result);
-        setAnswerId(result.getId());
+//        setAnswerId(result.getId());
+        setValue(result.getId(), "articleId");
+        setValue(result.getTitle(), "text");
+        setValue("0", "ksId");
     }
 
 
@@ -44,8 +47,9 @@ public class NRFAQLikeParams extends NRRequestParams {
      */
     public void setAnswerId(String answerId) {
         mAnswerId = answerId;
-        setValue(answerId, "id");
+        setValue(answerId, "articleId");
     }
+
 
     public String getAnswerId() {
         return mAnswerId;
