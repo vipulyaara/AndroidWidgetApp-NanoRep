@@ -61,30 +61,6 @@ public class NRContentItem extends NRResultItem  {
         } else {
             mListener.fetchBodyForResult(this, mResult.getFetchedResult().getId(), mResult.getFetchedResult().getHash());
         }
-//        mLikeView.setResultId(result.getFetchedResult().getId());
-//        if (result.getFetchedResult().getLikeState() == NRQueryResult.LikeState.notSelected) {
-//            mLikeView.resetLikeView();
-//        } else {
-//            mLikeView.updateLikeButton(result.getFetchedResult().getLikeState() == NRQueryResult.LikeState.positive);
-//        }
-//        if (mFeedbackView != null) {
-//            RelativeLayout.LayoutParams params = null;
-//            if (mResult.getFetchedResult().getChanneling() == null) {
-//                params = (RelativeLayout.LayoutParams) mFeedbackView.getLayoutParams();
-//                params.height = (int) Calculate.pxFromDp(itemView.getContext(), 50);
-//            }else {
-//                if (mChannelingView != null) {
-//                    ArrayList<NRChanneling> channelings = mResult.getFetchedResult().getChanneling();
-//                    for (NRChanneling channeling: channelings) {
-//                        channeling.setQueryResult(mResult.getFetchedResult());
-//                    }
-//                    mChannelingView.setChannelings(channelings);
-//                    params = (RelativeLayout.LayoutParams) mFeedbackView.getLayoutParams();
-//                    params.height = (int) Calculate.pxFromDp(itemView.getContext(), 100);
-//                }
-//            }
-//            mFeedbackView.setLayoutParams(params);
-//        }
     }
 
     private void calculateItemViewHeight() {

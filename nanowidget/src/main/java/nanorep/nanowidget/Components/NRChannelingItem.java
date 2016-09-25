@@ -35,27 +35,13 @@ public class NRChannelingItem extends NRResultItem{
 
     @Override
     public void setData(NRResult result) {
-//        if (mFeedbackView != null) {
-//            RelativeLayout.LayoutParams params = null;
-//            if (result.getFetchedResult().getChanneling() == null) {
-//                params = (RelativeLayout.LayoutParams) mFeedbackView.getLayoutParams();
-//                params.height = (int) Calculate.pxFromDp(itemView.getContext(), 50);
-//            }else {
-//                if (mChannelingView != null) {
+
         ArrayList<NRChanneling> channelings = result.getFetchedResult().getChanneling();
 
         for (NRChanneling channeling : channelings) {
             channeling.setQueryResult(result.getFetchedResult());
         }
         mChannelingView.setChannelings(channelings);
-
-//                    params = (RelativeLayout.LayoutParams) mFeedbackView.getLayoutParams();
-//                    params.height = (int) Calculate.pxFromDp(itemView.getContext(), 100);
-//                }
-//            }
-//            mFeedbackView.setLayoutParams(params);
-//        }
-
     }
 
     @Override
