@@ -7,41 +7,42 @@
                                     android:layout_marginLeft="5dp"
                                     android:id="@+id/content_cardView">
 
-    <RelativeLayout
+    <!-- <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentTop="true"
-        android:id="@+id/contentView">
+        android:id="@+id/contentView">-->
         <nanorep.nanowidget.Components.NRWebView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/cv_webview"
-            android:layout_above="@+id/cv_feedbackView"/>
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:layout_marginBottom="5dp"
-            android:id="@+id/cv_feedbackView"
-            android:background="@color/white"
-            android:layout_alignParentBottom="true"
-            >
-            <nanorep.nanowidget.Components.NRLikeView
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:id="@+id/cv_likeView"/>
+            android:layout_alignParentTop="true"/>
+        <!--     android:layout_above="@+id/cv_feedbackView"/>
+         <RelativeLayout
+             android:layout_width="match_parent"
+             android:layout_height="100dp"
+             android:layout_marginBottom="5dp"
+             android:id="@+id/cv_feedbackView"
+             android:background="@color/white"
+             android:layout_alignParentBottom="true"
+             >
+             <nanorep.nanowidget.Components.NRLikeView
+                 android:layout_width="match_parent"
+                 android:layout_height="50dp"
+                 android:id="@+id/cv_likeView"/>
 
 
-            <nanorep.nanowidget.Components.NRChannelingView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/cv_channelingView"
-                android:layout_alignParentBottom="true"
-                android:layout_below="@+id/cv_likeView">
-            </nanorep.nanowidget.Components.NRChannelingView>
+             <nanorep.nanowidget.Components.NRChannelingView
+                 android:layout_width="match_parent"
+                 android:layout_height="match_parent"
+                 android:id="@+id/cv_channelingView"
+                 android:layout_alignParentBottom="true"
+                 android:layout_below="@+id/cv_likeView">
+             </nanorep.nanowidget.Components.NRChannelingView>
 
-        </RelativeLayout>
+         </RelativeLayout>
 
-    </RelativeLayout>
+    </RelativeLayout>-->
 
 
 

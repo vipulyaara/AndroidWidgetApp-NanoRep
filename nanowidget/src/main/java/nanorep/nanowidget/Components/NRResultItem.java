@@ -15,15 +15,16 @@ import nanorep.nanowidget.interfaces.NRResultItemListener;
 public abstract class NRResultItem extends RecyclerView.ViewHolder {
 
     protected NRResultItemListener mListener;
+    protected NRResult mResult;
 
     public enum RowType {
         TITLE, CONTENT, LIKE, CHANNELING
     }
 
-    public NRResultItem(View itemView, NRResultItemListener listener, int maxHeight, NRConfiguration config) {
+    public NRResultItem(View itemView, NRResultItemListener listener, NRConfiguration config) {
         super(itemView);
 
-        bindViews(itemView, maxHeight);
+        bindViews(itemView);
 
         setListener(listener);
 
@@ -32,9 +33,9 @@ public abstract class NRResultItem extends RecyclerView.ViewHolder {
 
     protected abstract void configViewObjects(NRConfiguration config);
 
-    protected abstract void bindViews(View view, int maxHeight);
+    protected abstract void bindViews(View view);
 
-    public abstract void setResult(NRResult result);
+    public abstract void setData(NRResult result);
 
     protected void setListener(NRResultItemListener listener) {
         mListener = listener;

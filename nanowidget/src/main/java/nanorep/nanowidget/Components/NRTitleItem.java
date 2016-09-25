@@ -24,12 +24,10 @@ public class NRTitleItem extends NRResultItem implements View.OnClickListener {
     private Button mTitleButton;
     private ImageButton mUnFoldButton;
     private ImageButton mShareButton;
-    private NRResult mResult;
 
     @Override
-    protected void bindViews(View view, int maxHeight) {
+    protected void bindViews(View view) {
         mItemView = view;
-        setHeight(maxHeight);
         mTitleButton = (Button) view.findViewById(R.id.titleButton);
 
         mUnFoldButton = (ImageButton) view.findViewById(R.id.unFoldButton);
@@ -41,8 +39,8 @@ public class NRTitleItem extends NRResultItem implements View.OnClickListener {
     }
 
 
-    public NRTitleItem(View view, NRResultItemListener listener,int maxHeight, NRConfiguration config) {
-        super(view, listener,maxHeight, config);
+    public NRTitleItem(View view, NRResultItemListener listener, NRConfiguration config) {
+        super(view, listener, config);
     }
 
     @Override
@@ -54,17 +52,13 @@ public class NRTitleItem extends NRResultItem implements View.OnClickListener {
         }
     }
 
-    public void setResult(NRResult result) {
+    public void setData(NRResult result) {
         mResult = result;
         if (result.getFetchedResult() != null) {
             mTitleButton.setText(result.getFetchedResult().getTitle());
         }
         setHeight(result.getHeight());
         mUnFoldButton.setVisibility(result.isSingle() ? View.INVISIBLE : View.VISIBLE);
-    }
-
-    public NRResult getResult() {
-        return mResult;
     }
 
     private void setHeight(int height) {

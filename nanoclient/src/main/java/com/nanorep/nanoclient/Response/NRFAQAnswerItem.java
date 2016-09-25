@@ -114,7 +114,16 @@ public class NRFAQAnswerItem implements NRQueryResult {
 
     @Override
     public ArrayList<NRChanneling> getChanneling() {
-        return null;
+        ArrayList<HashMap<String, ?>> channels = (ArrayList)mParams.get("rechanneling");
+        if (channels != null && channels.size() > 0) {
+            ArrayList<NRChanneling> channeling = new ArrayList<NRChanneling>();
+            for (HashMap channel : channels) {
+                channeling.add(NRChanneling.channelForParams(channel));
+            }
+            return channeling;
+        } else {
+            return null;
+        }
     }
 
     @Override
