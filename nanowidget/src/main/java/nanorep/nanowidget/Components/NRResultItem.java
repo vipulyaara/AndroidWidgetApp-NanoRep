@@ -3,6 +3,7 @@ package nanorep.nanowidget.Components;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.webkit.WebView;
 import android.widget.Button;
@@ -63,12 +64,13 @@ public class NRResultItem extends RecyclerView.ViewHolder implements View.OnClic
         mResult = result;
         if (result.getFetchedResult() != null) {
             mTitleButton.setText(result.getFetchedResult().getTitle());
+//            Log.d("Lines::", "" + mTitleButton.getLayout().getLineCount());
         }
         setHeight(result.getHeight());
 //        int visibility = result.getRowType() == NRViewHolder.RowType.shrinked ? View.INVISIBLE : View.VISIBLE;
 //        mTitleButton.setVisibility(visibility);
         mUnFoldButton.setVisibility(result.isSingle() ? View.INVISIBLE : View.VISIBLE);
-//        mShareButton.setVisibility(visibility);
+        mShareButton.setVisibility(View.INVISIBLE);
     }
 
     public NRResult getResult() {
