@@ -5,6 +5,7 @@ import android.animation.ValueAnimator;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -14,7 +15,10 @@ import com.nanorep.nanoclient.Response.NRConfiguration;
 
 import nanorep.nanowidget.DataClasse.NRResult;
 import nanorep.nanowidget.R;
+import nanorep.nanowidget.Utilities.Calculate;
 import nanorep.nanowidget.interfaces.NRResultItemListener;
+
+import static android.R.attr.width;
 
 /**
  * Created by nissimpardo on 15/06/16.
@@ -48,7 +52,7 @@ public class NRTitleItem extends NRResultItem implements View.OnClickListener {
         String titleBGColor = config.getTitle().getTitleBGColor();
 
         if(titleBGColor != null && !"".equals(titleBGColor)) {
-            mTitleButton.setBackgroundColor(Color.parseColor(titleBGColor));
+            mItemView.setBackgroundColor(Color.parseColor(titleBGColor));
         }
     }
 
@@ -57,7 +61,20 @@ public class NRTitleItem extends NRResultItem implements View.OnClickListener {
         if (result.getFetchedResult() != null) {
             mTitleButton.setText(result.getFetchedResult().getTitle());
         }
-        setHeight(result.getHeight());
+
+        if(mResult.isUnfolded()) {
+            mTitleButton.measure( View.MeasureSpec.makeMeasureSpec(mTitleButton.getWidth(), View.MeasureSpec.AT_MOST),
+                    View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+
+            final int targetHeight = mTitleButton.getMeasuredHeight();
+
+            setHeight(targetHeight);
+
+        } else {
+            setHeight(result.getHeight());
+        }
+
+
         mUnFoldButton.setVisibility(result.isSingle() ? View.INVISIBLE : View.VISIBLE);
     }
 

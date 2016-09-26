@@ -67,7 +67,7 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
 
     private ArrayList<NRResult> mQueryResults;
     private ArrayList<NRResult> mQueryCopyResults;
-    private NRResutlsAdapter mResutlsAdapter;
+    private NRResultsAdapter mResultsAdapter;
     private RecyclerView mResultsRecyclerView;
     private NRWidgetFragmentListener mListener;
     private NRResultFragment mResultFragment;
@@ -242,7 +242,7 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
 //        ((AppCompatActivity)getActivity()).getSupportActionBar().hide();
         View nanoView = inflater.inflate(R.layout.fragment_nrwidget, container, false);
         mLoadingView = (RelativeLayout) nanoView.findViewById(R.id.fragment_place_holder);
-        mResutlsAdapter = new NRResutlsAdapter();
+        mResultsAdapter = new NRResultsAdapter();
 
         mFetchedDataManager = new NRFetchedDataManager(mNanoRep, getContext());
         mFetchedDataManager.setFetcherListener(new NRFetcherListener() {
@@ -264,7 +264,7 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
             @Override
             public void insertRows(ArrayList<NRResult> rows) {
                 mLoadingView.setVisibility(View.INVISIBLE);
-                mResutlsAdapter.setShouldResetLikeView(true);
+                mResultsAdapter.setShouldResetLikeView(true);
                 if (rows == null && mSearchBar.getText() != null) {
                     mNotitleViewHolder.getLayoutParams().height = (int) Calculate.pxFromDp(getContext(), 120);
                     mNoTitleView.setText(mFetchedDataManager.getConfiguration().getCustomNoAnswersTextContext(mSearchBar.getText()));
@@ -295,7 +295,7 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
         mSuggestionsView.setListener(this);
         mResultsRecyclerView = (RecyclerView) nanoView.findViewById(R.id.resultsView);
         mResultsRecyclerView.setLayoutManager(new NRLinearLayoutManager(getContext()));
-        mResultsRecyclerView.setAdapter(mResutlsAdapter);
+        mResultsRecyclerView.setAdapter(mResultsAdapter);
         NRItemAnimator animator = new NRItemAnimator();
         animator.setListener(new NRItemAnimator.OnAnimation() {
             @Override
@@ -326,7 +326,7 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
         }
         for (NRResult addedResult : rows) {
             mQueryResults.add(addedResult);
-            mResutlsAdapter.notifyItemInserted(mQueryResults.size());
+            mResultsAdapter.notifyItemInserted(mQueryResults.size());
         }
         if (rows.size() == 1) {
             mQueryResults.get(0).setUnfolded(false);
@@ -427,7 +427,7 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
             for (NRResult queryResult : temp) {
                 int index = mQueryResults.indexOf(queryResult);
                 mQueryResults.remove(queryResult);
-                mResutlsAdapter.notifyItemRemoved(index);
+                mResultsAdapter.notifyItemRemoved(index);
             }
             temp.clear();
             mQueryResults = null;
@@ -492,12 +492,12 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
 
             // clear content
             mQueryResults.remove(1);
-            mResutlsAdapter.notifyItemRemoved(1);
+            mResultsAdapter.notifyItemRemoved(1);
 
             if (clear) { // clear title
 
                 mQueryResults.remove(0);
-                mResutlsAdapter.notifyItemRemoved(0);
+                mResultsAdapter.notifyItemRemoved(0);
 
             } else { // show all titles, except the one that is already opened..
 
@@ -505,7 +505,9 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
                 for (int i = 0; i < mQueryCopyResults.size(); i++) {
                     if (i != pos) {
                         mQueryResults.add(i, mQueryCopyResults.get(i));
-                        mResutlsAdapter.notifyItemInserted(i);
+                        mResultsAdapter.notifyItemInserted(i);
+                    } else {
+                        mResultsAdapter.notifyItemChanged(i);
                     }
                 }
             }
@@ -516,7 +518,7 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
                 int pos = mQueryResults.indexOf(item1);
                 if (!item1.equals(result)) {
                     mQueryResults.remove(item1);
-                    mResutlsAdapter.notifyItemRemoved(pos);
+                    mResultsAdapter.notifyItemRemoved(pos);
                 }
             }
 
@@ -525,21 +527,24 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
             mUnfoldedResult.setUnfolded(true);
             temp.clear();
 
+            //change the title's height to wrap content
+            mResultsAdapter.notifyItemChanged(0);
+
             //content
             NRResult content = new NRResult(result.getFetchedResult(), NRResultItem.RowType.CONTENT);
             mQueryResults.add(content);
-            mResutlsAdapter.notifyItemInserted(1);
+            mResultsAdapter.notifyItemInserted(1);
 
             //like
             NRResult like = new NRResult(result.getFetchedResult(), NRResultItem.RowType.LIKE);
             mQueryResults.add(like);
-            mResutlsAdapter.notifyItemInserted(2);
+            mResultsAdapter.notifyItemInserted(2);
 
             //channeling
             if(result.getFetchedResult().getChanneling() != null && result.getFetchedResult().getChanneling().size() > 0) {
                 NRResult channeling = new NRResult(result.getFetchedResult(), NRResultItem.RowType.CHANNELING);
                 mQueryResults.add(channeling);
-                mResutlsAdapter.notifyItemInserted(3);
+                mResultsAdapter.notifyItemInserted(3);
             }
         }
     }
@@ -568,7 +573,7 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
     }
 
 
-    private class NRResutlsAdapter extends RecyclerView.Adapter<NRResultItem> {
+    private class NRResultsAdapter extends RecyclerView.Adapter<NRResultItem> {
         private boolean mShouldResetLikeView = false;
 
         public void setShouldResetLikeView(boolean shouldResetLikeView) {
@@ -582,7 +587,7 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
 
             switch (viewType) {
                 case 0: // title
-                    view = LayoutInflater.from(parent.getContext()).inflate(R.layout.result_item, parent, false);
+                    view = LayoutInflater.from(parent.getContext()).inflate(R.layout.title_item, parent, false);
                     return new NRTitleItem(view, NRWidgetFragment.this, mNanoRep.getNRConfiguration());
                 case 1: // content
                     view = LayoutInflater.from(parent.getContext()).inflate(R.layout.content_item, parent, false);

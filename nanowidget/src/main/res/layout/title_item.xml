@@ -9,16 +9,17 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="62dp"
+            android:layout_height="wrap_content"
             android:id="@+id/topView">
 
             <Button
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:id="@+id/titleButton"
                 android:layout_toStartOf="@+id/shareButton"
                 android:background="#00ffffff"
                 android:textColor="#189ac6"
+                android:layout_centerVertical="true"
                 android:textAlignment="viewStart"
                 android:text="title"
                 android:textStyle="bold"
@@ -26,7 +27,7 @@
                 android:textAllCaps="false"/>
             <ImageButton
                 android:layout_width="40dp"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:id="@+id/shareButton"
                 android:layout_centerVertical="true"
                 android:layout_toLeftOf="@+id/unFoldButton"
@@ -34,7 +35,7 @@
                 android:background="#00ffffff"/>
             <ImageButton
                 android:layout_width="40dp"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:id="@+id/unFoldButton"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
