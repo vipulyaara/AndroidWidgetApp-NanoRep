@@ -12,14 +12,7 @@
   <component name="ChangeListManager">
     <list default="true" id="3ea088a1-8473-42ee-97ea-9cda6f51c996" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/nanoclient/build.gradle" afterPath="$PROJECT_DIR$/nanoclient/build.gradle" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/nanoclient/src/main/java/com/nanorep/nanoclient/NRImpl.java" afterPath="$PROJECT_DIR$/nanoclient/src/main/java/com/nanorep/nanoclient/NRImpl.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/nanoclient/src/main/java/com/nanorep/nanoclient/Nanorep.java" afterPath="$PROJECT_DIR$/nanoclient/src/main/java/com/nanorep/nanoclient/Nanorep.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/nanoclient/src/main/java/com/nanorep/nanoclient/Response/NRFAQAnswerItem.java" afterPath="$PROJECT_DIR$/nanoclient/src/main/java/com/nanorep/nanoclient/Response/NRFAQAnswerItem.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/nanowidget/build.gradle" afterPath="$PROJECT_DIR$/nanowidget/build.gradle" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/nanowidget/src/main/java/nanorep/nanowidget/Components/NRContentItem.java" afterPath="$PROJECT_DIR$/nanowidget/src/main/java/nanorep/nanowidget/Components/NRContentItem.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/nanowidget/src/main/java/nanorep/nanowidget/Components/NRTitleItem.java" afterPath="$PROJECT_DIR$/nanowidget/src/main/java/nanorep/nanowidget/Components/NRTitleItem.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/nanowidget/src/main/java/nanorep/nanowidget/DataClasse/NRFetchedDataManager.java" afterPath="$PROJECT_DIR$/nanowidget/src/main/java/nanorep/nanowidget/DataClasse/NRFetchedDataManager.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/nanowidget/src/main/java/nanorep/nanowidget/NRWidgetFragment.java" afterPath="$PROJECT_DIR$/nanowidget/src/main/java/nanorep/nanowidget/NRWidgetFragment.java" />
     </list>
     <ignored path="AndroidWidgetApp.iws" />
@@ -53,37 +46,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="NRFAQAnswerItem.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/nanoclient/src/main/java/com/nanorep/nanoclient/Response/NRFAQAnswerItem.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="536">
-              <caret line="102" column="43" selection-start-line="102" selection-start-column="43" selection-end-line="102" selection-end-column="43" />
-              <folding>
-                <element signature="e#734#735#0" expanded="true" />
-                <element signature="e#766#767#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="NRFAQAnswer.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/nanoclient/src/main/java/com/nanorep/nanoclient/Response/NRFAQAnswer.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="306">
-              <caret line="23" column="20" selection-start-line="23" selection-start-column="20" selection-end-line="23" selection-end-column="20" />
-              <folding>
-                <element signature="e#689#690#0" expanded="true" />
-                <element signature="e#721#722#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="NRContentItem.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/nanowidget/src/main/java/nanorep/nanowidget/Components/NRContentItem.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-50">
-              <caret line="25" column="38" selection-start-line="25" selection-start-column="38" selection-end-line="25" selection-end-column="38" />
+            <state relative-caret-position="402">
+              <caret line="69" column="0" selection-start-line="69" selection-start-column="0" selection-end-line="69" selection-end-column="0" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#546#547#0" expanded="true" />
@@ -96,24 +63,12 @@
       <file leaf-file-name="NRTitleItem.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/nanowidget/src/main/java/nanorep/nanowidget/Components/NRTitleItem.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-409">
-              <caret line="51" column="39" selection-start-line="51" selection-start-column="39" selection-end-line="51" selection-end-column="39" />
+            <state relative-caret-position="271">
+              <caret line="60" column="0" selection-start-line="60" selection-start-column="0" selection-end-line="60" selection-end-column="0" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#2242#2537#0" expanded="true" />
-                <element signature="e#2536#2537#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="NRResultItem.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/nanowidget/src/main/java/nanorep/nanowidget/Components/NRResultItem.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="629">
-              <caret line="37" column="25" selection-start-line="37" selection-start-column="25" selection-end-line="37" selection-end-column="25" />
-              <folding>
-                <element signature="imports" expanded="true" />
+                <element signature="e#2378#2673#0" expanded="true" />
+                <element signature="e#2672#2673#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -122,12 +77,12 @@
       <file leaf-file-name="NRWidgetFragment.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/nanowidget/src/main/java/nanorep/nanowidget/NRWidgetFragment.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="402">
-              <caret line="616" column="69" selection-start-line="616" selection-start-column="69" selection-end-line="616" selection-end-column="69" />
+            <state relative-caret-position="164">
+              <caret line="497" column="44" selection-start-line="497" selection-start-column="44" selection-end-line="497" selection-end-column="44" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#21991#22175#0" expanded="true" />
-                <element signature="e#22174#22175#0" expanded="true" />
+                <element signature="e#22281#22465#0" expanded="true" />
+                <element signature="e#22464#22465#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -3815,8 +3770,8 @@
         <option value="$PROJECT_DIR$/nanoclient/src/main/java/com/nanorep/nanoclient/Response/NRFAQAnswerItem.java" />
         <option value="$PROJECT_DIR$/nanowidget/build.gradle" />
         <option value="$PROJECT_DIR$/nanoclient/build.gradle" />
-        <option value="$PROJECT_DIR$/nanowidget/src/main/java/nanorep/nanowidget/Components/NRTitleItem.java" />
         <option value="$PROJECT_DIR$/nanowidget/src/main/java/nanorep/nanowidget/Components/NRContentItem.java" />
+        <option value="$PROJECT_DIR$/nanowidget/src/main/java/nanorep/nanowidget/Components/NRTitleItem.java" />
         <option value="$PROJECT_DIR$/nanowidget/src/main/java/nanorep/nanowidget/NRWidgetFragment.java" />
       </list>
     </option>
@@ -4220,13 +4175,13 @@
       <window_info id="Nl-Palette" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Build Variants" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.26605505" sideWeight="0.5021299" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Android Monitor" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.26197758" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
+      <window_info id="Android Monitor" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.26197758" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
       <window_info id="Properties" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.1605529" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Android Model" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2670744" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2670744" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32415903" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -4310,40 +4265,16 @@
           <option name="timeStamp" value="207" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/nanowidget/src/main/java/nanorep/nanowidget/Components/NRContentItem.java</url>
-          <line>69</line>
-          <properties />
-          <option name="timeStamp" value="244" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/nanowidget/src/main/java/nanorep/nanowidget/NRWidgetFragment.java</url>
-          <line>605</line>
+          <line>494</line>
           <properties />
-          <option name="timeStamp" value="248" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/nanowidget/src/main/java/nanorep/nanowidget/NRWidgetFragment.java</url>
-          <line>606</line>
-          <properties />
-          <option name="timeStamp" value="249" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/nanowidget/src/main/java/nanorep/nanowidget/NRWidgetFragment.java</url>
-          <line>608</line>
-          <properties />
-          <option name="timeStamp" value="250" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/nanowidget/src/main/java/nanorep/nanowidget/NRWidgetFragment.java</url>
-          <line>610</line>
-          <properties />
-          <option name="timeStamp" value="251" />
+          <option name="timeStamp" value="256" />
         </line-breakpoint>
       </breakpoints>
       <breakpoints-dialog>
         <breakpoints-dialog />
       </breakpoints-dialog>
-      <option name="time" value="253" />
+      <option name="time" value="257" />
     </breakpoint-manager>
     <watches-manager>
       <configuration name="app">
@@ -4784,18 +4715,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/nanowidget/src/main/java/nanorep/nanowidget/Components/NRContentItem.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-50">
-          <caret line="25" column="38" selection-start-line="25" selection-start-column="38" selection-end-line="25" selection-end-column="38" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#546#547#0" expanded="true" />
-            <element signature="e#590#591#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/nanowidget/src/main/java/nanorep/nanowidget/Components/NRResultItem.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="629">
@@ -4808,24 +4727,36 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/nanowidget/src/main/java/nanorep/nanowidget/Components/NRTitleItem.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-409">
-          <caret line="51" column="39" selection-start-line="51" selection-start-column="39" selection-end-line="51" selection-end-column="39" />
+        <state relative-caret-position="271">
+          <caret line="60" column="0" selection-start-line="60" selection-start-column="0" selection-end-line="60" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#2242#2537#0" expanded="true" />
-            <element signature="e#2536#2537#0" expanded="true" />
+            <element signature="e#2378#2673#0" expanded="true" />
+            <element signature="e#2672#2673#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/nanowidget/src/main/java/nanorep/nanowidget/Components/NRContentItem.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="402">
+          <caret line="69" column="0" selection-start-line="69" selection-start-column="0" selection-end-line="69" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#546#547#0" expanded="true" />
+            <element signature="e#590#591#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/nanowidget/src/main/java/nanorep/nanowidget/NRWidgetFragment.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="402">
-          <caret line="616" column="69" selection-start-line="616" selection-start-column="69" selection-end-line="616" selection-end-column="69" />
+        <state relative-caret-position="164">
+          <caret line="497" column="44" selection-start-line="497" selection-start-column="44" selection-end-line="497" selection-end-column="44" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#21991#22175#0" expanded="true" />
-            <element signature="e#22174#22175#0" expanded="true" />
+            <element signature="e#22281#22465#0" expanded="true" />
+            <element signature="e#22464#22465#0" expanded="true" />
           </folding>
         </state>
       </provider>

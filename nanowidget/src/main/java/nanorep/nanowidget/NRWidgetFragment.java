@@ -490,9 +490,16 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
             mUnfoldedResult.setUnfolded(false);
             mUnfoldedResult = null;
 
-            // clear content
-            mQueryResults.remove(1);
-            mResultsAdapter.notifyItemRemoved(1);
+            // clear content, like, etc..
+            ArrayList<NRResult> temp = new ArrayList<>(mQueryResults);
+            for (NRResult item1 : temp) {
+                int pos = mQueryResults.indexOf(item1);
+                if(pos > 0) {
+                    mQueryResults.remove(pos);
+                    mResultsAdapter.notifyItemRemoved(pos);
+                }
+            }
+            temp.clear();
 
             if (clear) { // clear title
 

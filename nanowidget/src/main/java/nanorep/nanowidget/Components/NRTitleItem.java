@@ -57,7 +57,10 @@ public class NRTitleItem extends NRResultItem implements View.OnClickListener {
 
         if(mResult.isUnfolded()) {
 
-            setHeight(getTitleMeasuredHeight());
+            int titleMeasuredHeight = getTitleMeasuredHeight();
+            if(titleMeasuredHeight > result.getHeight()) {
+                setHeight(titleMeasuredHeight);
+            }
 
         } else {
             setHeight(result.getHeight());
