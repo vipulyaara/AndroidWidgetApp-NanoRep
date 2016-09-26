@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -35,6 +36,7 @@ import nanorep.nanowidget.Components.NRResultItem;
 import nanorep.nanowidget.Components.NRTitleItem;
 import nanorep.nanowidget.Components.NRSearchBar;
 import nanorep.nanowidget.Components.NRSuggestionsView;
+import nanorep.nanowidget.Components.SimpleDividerItemDecoration;
 import nanorep.nanowidget.DataClasse.NRFetchedDataManager;
 import nanorep.nanowidget.DataClasse.NRResult;
 import nanorep.nanowidget.Utilities.Calculate;
@@ -48,17 +50,7 @@ import nanorep.nanowidget.interfaces.OnFAQAnswerFetched;
 
 
 public class NRWidgetFragment extends Fragment implements NRSearchBarListener, NRSuggestionsListener, NRResultItemListener {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
     private Nanorep mNanoRep;
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
 
     private NRFetchedDataManager mFetchedDataManager;
 
@@ -199,17 +191,11 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
      * @return A new instance of fragment NRWidgetFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static NRWidgetFragment newInstance(String param1, String param2) {
+    public static NRWidgetFragment newInstance() {
         NRWidgetFragment fragment = new NRWidgetFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
         return fragment;
     }
 
@@ -227,10 +213,8 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+
+        mFetchedDataManager = new NRFetchedDataManager(mNanoRep, getContext());
     }
 
     @Override
@@ -240,15 +224,17 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
 //        setHasOptionsMenu(true);
 //        assert ((AppCompatActivity)getActivity()).getSupportActionBar() != null;
 //        ((AppCompatActivity)getActivity()).getSupportActionBar().hide();
-        View nanoView = inflater.inflate(R.layout.fragment_nrwidget, container, false);
+        final View nanoView = inflater.inflate(R.layout.fragment_nrwidget, container, false);
         mLoadingView = (RelativeLayout) nanoView.findViewById(R.id.fragment_place_holder);
+
         mResultsAdapter = new NRResultsAdapter();
 
-        mFetchedDataManager = new NRFetchedDataManager(mNanoRep, getContext());
         mFetchedDataManager.setFetcherListener(new NRFetcherListener() {
             @Override
-            public void updateTitle(String title) {
-
+            public void onConfigurationReady() {
+                updateTitleNormalText();
+                updateSerchBarHint();
+                showSuggestionsView(nanoView);
             }
 
             @Override
@@ -267,7 +253,7 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
                 mResultsAdapter.setShouldResetLikeView(true);
                 if (rows == null && mSearchBar.getText() != null) {
                     mNotitleViewHolder.getLayoutParams().height = (int) Calculate.pxFromDp(getContext(), 120);
-                    mNoTitleView.setText(mFetchedDataManager.getConfiguration().getCustomNoAnswersTextContext(mSearchBar.getText()));
+                    mNoTitleView.setText(mNanoRep.getNRConfiguration().getCustomNoAnswersTextContext(mSearchBar.getText()));
                     rows = mResultStack.get(0);
                 }
                 loadResults(rows, true);
@@ -293,8 +279,11 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
         mNoTitleView = (TextView) nanoView.findViewById(R.id.noTitleTextView);
         mSuggestionsView = (NRSuggestionsView)nanoView.findViewById(R.id.suggestions);
         mSuggestionsView.setListener(this);
+
         mResultsRecyclerView = (RecyclerView) nanoView.findViewById(R.id.resultsView);
         mResultsRecyclerView.setLayoutManager(new NRLinearLayoutManager(getContext()));
+        mResultsRecyclerView.addItemDecoration(new SimpleDividerItemDecoration(getResources()));
+
         mResultsRecyclerView.setAdapter(mResultsAdapter);
         NRItemAnimator animator = new NRItemAnimator();
         animator.setListener(new NRItemAnimator.OnAnimation() {
@@ -315,6 +304,20 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
             });
         }
         return nanoView;
+    }
+
+    private void showSuggestionsView(View nanoView) {
+        if(!mNanoRep.getNRConfiguration().getAutocompleteEnabled()) {
+            
+        }
+    }
+
+    private void updateSerchBarHint() {
+        mSearchBar.setHint(mNanoRep.getNRConfiguration().getSearchBar().getInitialText());
+    }
+
+    private void updateTitleNormalText() {
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(mNanoRep.getNRConfiguration().getTitleNormalText());
     }
 
     private void loadResults(ArrayList<NRResult> rows, boolean addToStack) {

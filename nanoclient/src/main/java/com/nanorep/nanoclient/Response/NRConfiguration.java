@@ -12,6 +12,7 @@ public class NRConfiguration {
     private HashMap<String, Object> mParams;
     private boolean mIsContextDependent = false;
     private NRTitle title;
+    private NRSearchBar searchBar;
 
     public NRConfiguration() {
         mParams = new HashMap<String, Object>();
@@ -72,6 +73,13 @@ public class NRConfiguration {
         }
     }
 
+    public NRSearchBar getSearchBar(){
+        if(searchBar == null) {
+            searchBar = new NRSearchBar();
+        }
+        return searchBar;
+    }
+
     public class NRAutoComplete {
 
         public void setChatConfiguration(String chatConfiguration) {
@@ -130,8 +138,8 @@ public class NRConfiguration {
         mParams.put("autocompleteEnabled", autocompleteEnabled);
     }
 
-    public String getAutocompleteEnabled() {
-        return (String)mParams.get("autocompleteEnabled");
+    public boolean getAutocompleteEnabled() {
+        return Boolean.valueOf((String)mParams.get("autocompleteEnabled"));
     }
 
     public void setSkinName(String skinName) {

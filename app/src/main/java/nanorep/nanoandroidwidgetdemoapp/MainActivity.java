@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity implements NRWidgetFragment.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         getSupportActionBar().setElevation(0);
-        nanoFragment = NRWidgetFragment.newInstance(null, null);
+        nanoFragment = NRWidgetFragment.newInstance();
         nanoFragment.setListener(this);
         Crittercism.initialize(getApplicationContext(), "d59e30ede3c34d0bbf19d0237c2f1bc800444503");
         Button loadButton = (Button)findViewById(R.id.button);
@@ -54,12 +54,14 @@ public class MainActivity extends AppCompatActivity implements NRWidgetFragment.
                     Nanorep test = NanorepBuilder.createNanorep(getApplicationContext(), accountParams);
 
                     test.getNRConfiguration().getTitle().setTitleBGColor("#FF7F23");
+                    test.getNRConfiguration().setAutocompleteEnabled("noa");
+                    test.getNRConfiguration().getSearchBar().setInitialText("noa noa");
 
                     nanoFragment.setNanoRep(test);
                     getSupportFragmentManager().beginTransaction().add(R.id.root_layout, nanoFragment, "test").commit();
 //                    test.fetchConfiguration(new Nanorep.OnConfigurationFetchedListener() {
 //                        @Override
-//                        public void onConfigurationFetched(NRConfiguration configuration, NRError error) {
+//                        public void onConfigurationReady(NRConfiguration configuration, NRError error) {
 //
 //                        }
 //                    });

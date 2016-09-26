@@ -38,7 +38,7 @@ public interface Nanorep {
     }
 
     interface OnConfigurationFetchedListener {
-        void onConfigurationFetched(NRConfiguration configuration, NRError error);
+        void onConfigurationFetched(NRError error);
     }
 
     AccountParams getAccountParams();

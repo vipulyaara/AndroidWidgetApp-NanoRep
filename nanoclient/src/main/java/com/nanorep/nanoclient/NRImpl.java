@@ -353,9 +353,10 @@ public class NRImpl implements Nanorep {
                         HashMap<String, Object> cachedResponse = NRCacheManager.getAnswerById(mContext, NRUtilities.md5(mAccountParams.getKnowledgeBase() + mAccountParams.getNanorepContext()));
                         if (onConfigurationFetchedListener != null) {
                             if (cachedResponse != null) {
-                                onConfigurationFetchedListener.onConfigurationFetched(new NRConfiguration(cachedResponse), null);
+                                mCnf = new NRConfiguration(cachedResponse);
+                                onConfigurationFetchedListener.onConfigurationFetched(null);
                             } else {
-                                onConfigurationFetchedListener.onConfigurationFetched(null, error);
+                                onConfigurationFetchedListener.onConfigurationFetched(error);
                             }
                         }
                     } else {
@@ -374,12 +375,12 @@ public class NRImpl implements Nanorep {
                                     }
                                     if (onConfigurationFetchedListener != null) {
                                         if (error != null) {
-                                            onConfigurationFetchedListener.onConfigurationFetched(null, error);
+                                            onConfigurationFetchedListener.onConfigurationFetched(error);
                                         } else if (responseParam != null) {
-                                            onConfigurationFetchedListener.onConfigurationFetched(cnf, null);
+                                            onConfigurationFetchedListener.onConfigurationFetched(null);
 
                                         } else {
-                                            onConfigurationFetchedListener.onConfigurationFetched(null, NRError.error("com.nanorepfaq", 1002, "faqData empty"));
+                                            onConfigurationFetchedListener.onConfigurationFetched(NRError.error("com.nanorepfaq", 1002, "faqData empty"));
                                         }
                                     }
                                 }
@@ -389,7 +390,7 @@ public class NRImpl implements Nanorep {
                             overrideCnfData(cnf);
 
                             if (onConfigurationFetchedListener != null) {
-                                onConfigurationFetchedListener.onConfigurationFetched(cnf, null);
+                                onConfigurationFetchedListener.onConfigurationFetched(null);
                             }
                             NRCacheManager.storeAnswerById(mContext, NRUtilities.md5(mAccountParams.getKnowledgeBase() + mAccountParams.getNanorepContext()), cnf.getmParams());
 

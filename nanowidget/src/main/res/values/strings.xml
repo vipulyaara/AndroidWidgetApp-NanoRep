@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">NanoWidget</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="type_question_here">Type Your Question Here</string>
 </resources>
