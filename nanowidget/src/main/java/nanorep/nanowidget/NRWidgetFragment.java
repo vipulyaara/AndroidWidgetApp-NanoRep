@@ -308,7 +308,7 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
 
     private void showSuggestionsView(View nanoView) {
         if(!mNanoRep.getNRConfiguration().getAutocompleteEnabled()) {
-            
+
         }
     }
 

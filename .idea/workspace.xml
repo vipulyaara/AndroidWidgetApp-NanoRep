@@ -11,24 +11,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3ea088a1-8473-42ee-97ea-9cda6f51c996" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/nanowidget/src/main/java/nanorep/nanowidget/Components/SimpleDividerItemDecoration.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/nanowidget/src/main/res/drawable/line_divider.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/nanorep/nanoandroidwidgetdemoapp/MainActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/nanorep/nanoandroidwidgetdemoapp/MainActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/nanoclient/src/main/java/com/nanorep/nanoclient/NRImpl.java" afterPath="$PROJECT_DIR$/nanoclient/src/main/java/com/nanorep/nanoclient/NRImpl.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/nanoclient/src/main/java/com/nanorep/nanoclient/Nanorep.java" afterPath="$PROJECT_DIR$/nanoclient/src/main/java/com/nanorep/nanoclient/Nanorep.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/nanoclient/src/main/java/com/nanorep/nanoclient/NanorepBuilder.java" afterPath="$PROJECT_DIR$/nanoclient/src/main/java/com/nanorep/nanoclient/NanorepBuilder.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/nanoclient/src/main/java/com/nanorep/nanoclient/Response/NRConfiguration.java" afterPath="$PROJECT_DIR$/nanoclient/src/main/java/com/nanorep/nanoclient/Response/NRConfiguration.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/nanowidget/src/main/java/nanorep/nanowidget/Components/NRContentItem.java" afterPath="$PROJECT_DIR$/nanowidget/src/main/java/nanorep/nanowidget/Components/NRContentItem.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/nanowidget/src/main/java/nanorep/nanowidget/Components/NRSearchBar.java" afterPath="$PROJECT_DIR$/nanowidget/src/main/java/nanorep/nanowidget/Components/NRSearchBar.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/nanowidget/src/main/java/nanorep/nanowidget/DataClasse/NRFetchedDataManager.java" afterPath="$PROJECT_DIR$/nanowidget/src/main/java/nanorep/nanowidget/DataClasse/NRFetchedDataManager.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/nanowidget/src/main/java/nanorep/nanowidget/NRWidgetFragment.java" afterPath="$PROJECT_DIR$/nanowidget/src/main/java/nanorep/nanowidget/NRWidgetFragment.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/nanowidget/src/main/java/nanorep/nanowidget/interfaces/NRFetcherListener.java" afterPath="$PROJECT_DIR$/nanowidget/src/main/java/nanorep/nanowidget/interfaces/NRFetcherListener.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/nanowidget/src/main/res/layout/content_item.xml" afterPath="$PROJECT_DIR$/nanowidget/src/main/res/layout/content_item.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/nanowidget/src/main/res/layout/fragment_nrwidget.xml" afterPath="$PROJECT_DIR$/nanowidget/src/main/res/layout/fragment_nrwidget.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/nanowidget/src/main/res/layout/like_item.xml" afterPath="$PROJECT_DIR$/nanowidget/src/main/res/layout/like_item.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/nanowidget/src/main/res/layout/title_item.xml" afterPath="$PROJECT_DIR$/nanowidget/src/main/res/layout/title_item.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/nanowidget/src/main/res/values/strings.xml" afterPath="$PROJECT_DIR$/nanowidget/src/main/res/values/strings.xml" />
     </list>
     <ignored path="AndroidWidgetApp.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -61,16 +46,6 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="NanorepBuilder.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/nanoclient/src/main/java/com/nanorep/nanoclient/NanorepBuilder.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="170">
-              <caret line="12" column="9" selection-start-line="12" selection-start-column="9" selection-end-line="15" selection-end-column="7" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="NRImpl.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/nanoclient/src/main/java/com/nanorep/nanoclient/NRImpl.java">
           <provider selected="true" editor-type-id="text-editor">
@@ -143,15 +118,27 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="NRWidgetFragment.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/nanowidget/src/main/java/nanorep/nanowidget/NRWidgetFragment.java">
+      <file leaf-file-name="NRContentItem.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/nanowidget/src/main/java/nanorep/nanowidget/Components/NRContentItem.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="767">
-              <caret line="310" column="12" selection-start-line="310" selection-start-column="12" selection-end-line="310" selection-end-column="12" />
+            <state relative-caret-position="664">
+              <caret line="69" column="22" selection-start-line="69" selection-start-column="22" selection-end-line="69" selection-end-column="22" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#22307#22491#0" expanded="true" />
-                <element signature="e#22490#22491#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="NRWidgetFragment.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/nanowidget/src/main/java/nanorep/nanowidget/NRWidgetFragment.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="155">
+              <caret line="271" column="0" selection-start-line="271" selection-start-column="0" selection-end-line="271" selection-end-column="0" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="e#22295#22479#0" expanded="true" />
+                <element signature="e#22478#22479#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -3851,7 +3838,6 @@
         <option value="$PROJECT_DIR$/nanowidget/src/main/res/layout/title_item.xml" />
         <option value="$PROJECT_DIR$/nanowidget/src/main/java/nanorep/nanowidget/Components/SimpleDividerItemDecoration.java" />
         <option value="$PROJECT_DIR$/nanowidget/src/main/res/drawable/line_divider.xml" />
-        <option value="$PROJECT_DIR$/nanowidget/src/main/java/nanorep/nanowidget/Components/NRContentItem.java" />
         <option value="$PROJECT_DIR$/nanowidget/src/main/res/values/strings.xml" />
         <option value="$PROJECT_DIR$/nanoclient/src/main/java/com/nanorep/nanoclient/NanorepBuilder.java" />
         <option value="$PROJECT_DIR$/nanoclient/src/main/java/com/nanorep/nanoclient/Nanorep.java" />
@@ -3862,6 +3848,7 @@
         <option value="$PROJECT_DIR$/nanoclient/src/main/java/com/nanorep/nanoclient/NRImpl.java" />
         <option value="$PROJECT_DIR$/nanoclient/src/main/java/com/nanorep/nanoclient/Response/NRConfiguration.java" />
         <option value="$PROJECT_DIR$/nanowidget/src/main/java/nanorep/nanowidget/NRWidgetFragment.java" />
+        <option value="$PROJECT_DIR$/nanowidget/src/main/java/nanorep/nanowidget/Components/NRContentItem.java" />
       </list>
     </option>
   </component>
@@ -4793,16 +4780,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/nanowidget/src/main/java/nanorep/nanowidget/Components/NRContentItem.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="664">
-          <caret line="69" column="22" selection-start-line="69" selection-start-column="22" selection-end-line="69" selection-end-column="22" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/nanowidget/src/main/res/layout/fragment_nrwidget.xml">
       <provider editor-type-id="android-designer2">
         <state />
@@ -4908,12 +4885,22 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/nanowidget/src/main/java/nanorep/nanowidget/NRWidgetFragment.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="767">
-          <caret line="310" column="12" selection-start-line="310" selection-start-column="12" selection-end-line="310" selection-end-column="12" />
+        <state relative-caret-position="155">
+          <caret line="271" column="0" selection-start-line="271" selection-start-column="0" selection-end-line="271" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#22307#22491#0" expanded="true" />
-            <element signature="e#22490#22491#0" expanded="true" />
+            <element signature="e#22295#22479#0" expanded="true" />
+            <element signature="e#22478#22479#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/nanowidget/src/main/java/nanorep/nanowidget/Components/NRContentItem.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="664">
+          <caret line="69" column="22" selection-start-line="69" selection-start-column="22" selection-end-line="69" selection-end-column="22" />
+          <folding>
+            <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>

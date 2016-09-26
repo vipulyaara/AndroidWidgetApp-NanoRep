@@ -67,7 +67,7 @@ public class NRContentItem extends NRResultItem  {
 
     private void calculateItemViewHeight() {
 
-        int delta = 100; // 50 for like's height
+        int delta = 60; // 50 for like's height
         if(mResult.getFetchedResult().getChanneling() != null) { //channeling height
             delta += 50;
         }
