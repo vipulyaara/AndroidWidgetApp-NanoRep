@@ -15,6 +15,7 @@ import com.nanorep.nanoclient.RequestParams.NRFAQLikeParams;
 import com.nanorep.nanoclient.RequestParams.NRSearchLikeParams;
 import com.nanorep.nanoclient.Response.NRConfiguration;
 import com.nanorep.nanoclient.Response.NRFAQAnswer;
+import com.nanorep.nanoclient.Response.NRFAQAnswerItem;
 import com.nanorep.nanoclient.Response.NRSearchResponse;
 import com.nanorep.nanoclient.Response.NRSuggestions;
 
@@ -262,7 +263,7 @@ public class NRImpl implements Nanorep {
 
         if(answerParams != null) {
             ((HashMap<String, Object>) answerParams).put("id", answerId);
-            onFAQAnswerFetchedListener.onFAQAnswerFetched(new NRFAQAnswer((HashMap<String, Object>) answerParams), null);
+            onFAQAnswerFetchedListener.onFAQAnswerFetched(new NRFAQAnswerItem((HashMap<String, Object>) answerParams), null);
         }
         else {
 
@@ -290,7 +291,7 @@ public class NRImpl implements Nanorep {
                                 listener.onFAQAnswerFetched(null, error);
                             } else if (responseParam != null) {
 
-                                listener.onFAQAnswerFetched(new NRFAQAnswer((HashMap<String, Object>) responseParam), null);
+                                listener.onFAQAnswerFetched(new NRFAQAnswerItem((HashMap<String, Object>) responseParam), null);
                             }
                         }
 
@@ -430,7 +431,7 @@ public class NRImpl implements Nanorep {
         for (NRQueryResult queryResult : cnf.getFaqData().getGroups().get(0).getAnswers()) {
             fetchFAQAnswer(queryResult.getId(), queryResult.getHash(), new OnFAQAnswerFetchedListener() {
                 @Override
-                public void onFAQAnswerFetched(NRFAQAnswer faqAnswer, NRError error) {
+                public void onFAQAnswerFetched(NRFAQAnswerItem faqAnswer, NRError error) {
                     // update cache with this Answer (has body now..)
                     NRCacheManager.storeFAQAnswer(faqAnswer.getParams());
                 }

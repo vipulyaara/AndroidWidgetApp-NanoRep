@@ -3,22 +3,15 @@ package nanorep.nanowidget.Components;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.graphics.Color;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.view.ViewGroup;
-import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.RelativeLayout;
 
 import com.nanorep.nanoclient.Response.NRConfiguration;
 
 import nanorep.nanowidget.DataClasse.NRResult;
 import nanorep.nanowidget.R;
-import nanorep.nanowidget.Utilities.Calculate;
 import nanorep.nanowidget.interfaces.NRResultItemListener;
-
-import static android.R.attr.width;
 
 /**
  * Created by nissimpardo on 15/06/16.
@@ -63,12 +56,8 @@ public class NRTitleItem extends NRResultItem implements View.OnClickListener {
         }
 
         if(mResult.isUnfolded()) {
-            mTitleButton.measure( View.MeasureSpec.makeMeasureSpec(mTitleButton.getWidth(), View.MeasureSpec.AT_MOST),
-                    View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
 
-            final int targetHeight = mTitleButton.getMeasuredHeight();
-
-            setHeight(targetHeight);
+            setHeight(getTitleMeasuredHeight());
 
         } else {
             setHeight(result.getHeight());
@@ -110,4 +99,14 @@ public class NRTitleItem extends NRResultItem implements View.OnClickListener {
         }
     }
 
+    /**
+     *
+     * @return
+     */
+    public int getTitleMeasuredHeight() {
+        mTitleButton.measure( View.MeasureSpec.makeMeasureSpec(mTitleButton.getWidth(), View.MeasureSpec.AT_MOST),
+                View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+
+        return mTitleButton.getMeasuredHeight();
+    }
 }

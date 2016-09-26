@@ -15,6 +15,7 @@ public class NRFAQAnswerItem implements NRQueryResult {
     private HashMap<String, Object> mParams;
     private LikeState mLikeState = LikeState.notSelected;
     private String mBody;
+    private ArrayList<NRChanneling> mChanneling;
     /**
      * Converts JSON string to NRFAQAnswerItem object
      *
@@ -99,7 +100,7 @@ public class NRFAQAnswerItem implements NRQueryResult {
 
     @Override
     public String getBody() {
-        return mBody;
+        return (String)mParams.get("body");
     }
 
     @Override
@@ -114,16 +115,28 @@ public class NRFAQAnswerItem implements NRQueryResult {
 
     @Override
     public ArrayList<NRChanneling> getChanneling() {
-        ArrayList<HashMap<String, ?>> channels = (ArrayList)mParams.get("rechanneling");
-        if (channels != null && channels.size() > 0) {
-            ArrayList<NRChanneling> channeling = new ArrayList<NRChanneling>();
-            for (HashMap channel : channels) {
-                channeling.add(NRChanneling.channelForParams(channel));
+//        ArrayList<HashMap<String, ?>> channels = (ArrayList)mParams.get("rechanneling");
+//        if (channels != null && channels.size() > 0) {
+//            ArrayList<NRChanneling> channeling = new ArrayList<NRChanneling>();
+//            for (HashMap channel : channels) {
+//                channeling.add(NRChanneling.channelForParams(channel));
+//            }
+//            return channeling;
+//        } else {
+//            return null;
+//        }
+        if (mChanneling == null) {
+            ArrayList<HashMap<String, ?>> channels = (ArrayList)mParams.get("rechanneling");
+            if (channels != null && channels.size() > 0) {
+                mChanneling = new ArrayList<>();
+                for (HashMap channel : channels) {
+                    mChanneling.add(NRChanneling.channelForParams(channel));
+                }
+            } else {
+                return null;
             }
-            return channeling;
-        } else {
-            return null;
         }
+        return mChanneling;
     }
 
     @Override

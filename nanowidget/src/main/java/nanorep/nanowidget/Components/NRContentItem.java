@@ -18,10 +18,12 @@ public class NRContentItem extends NRResultItem  {
     private NRWebView mWebView;
     private int mMaxHeight;
 
-    public NRContentItem(View view, NRResultItemListener listener, NRConfiguration config, int maxHeight) {
-        super(view, listener, config);
+    public void setmMaxHeight(int mMaxHeight) {
+        this.mMaxHeight = mMaxHeight;
+    }
 
-        mMaxHeight = maxHeight;
+    public NRContentItem(View view, NRResultItemListener listener, NRConfiguration config) {
+        super(view, listener, config);
     }
 
     @Override

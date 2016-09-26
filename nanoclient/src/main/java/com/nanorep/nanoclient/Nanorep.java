@@ -9,6 +9,7 @@ import com.nanorep.nanoclient.RequestParams.NRFAQLikeParams;
 import com.nanorep.nanoclient.RequestParams.NRSearchLikeParams;
 import com.nanorep.nanoclient.Response.NRConfiguration;
 import com.nanorep.nanoclient.Response.NRFAQAnswer;
+import com.nanorep.nanoclient.Response.NRFAQAnswerItem;
 import com.nanorep.nanoclient.Response.NRSearchResponse;
 import com.nanorep.nanoclient.Response.NRSuggestions;
 
@@ -33,7 +34,7 @@ public interface Nanorep {
     }
 
     interface OnFAQAnswerFetchedListener {
-        void onFAQAnswerFetched(NRFAQAnswer faqAnswer, NRError error);
+        void onFAQAnswerFetched(NRFAQAnswerItem faqAnswer, NRError error);
     }
 
     interface OnConfigurationFetchedListener {

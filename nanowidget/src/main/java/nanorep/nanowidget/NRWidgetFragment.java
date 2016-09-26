@@ -572,7 +572,6 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
         });
     }
 
-
     private class NRResultsAdapter extends RecyclerView.Adapter<NRResultItem> {
         private boolean mShouldResetLikeView = false;
 
@@ -591,9 +590,7 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
                     return new NRTitleItem(view, NRWidgetFragment.this, mNanoRep.getNRConfiguration());
                 case 1: // content
                     view = LayoutInflater.from(parent.getContext()).inflate(R.layout.content_item, parent, false);
-
-                    NRContentItem nrContentItem = new NRContentItem(view, NRWidgetFragment.this, mNanoRep.getNRConfiguration(), getMaxHeight(mResultsRecyclerView));
-                    return  nrContentItem;
+                    return new NRContentItem(view, NRWidgetFragment.this, mNanoRep.getNRConfiguration());
                 case 2: // like
                     view = LayoutInflater.from(parent.getContext()).inflate(R.layout.like_item, parent, false);
                     return new NRLikeItem(view, NRWidgetFragment.this, mNanoRep.getNRConfiguration());
@@ -605,17 +602,20 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
             }
         }
 
-        int getMaxHeight(RecyclerView mResultsRecyclerView) {
-            RecyclerView.ViewHolder titleViewHolder = mResultsRecyclerView.findViewHolderForLayoutPosition(0);
-            int titleHeight = titleViewHolder.itemView.getHeight();
+        private  int getMaxHeight() {
+            NRTitleItem titleViewHolder = (NRTitleItem)mResultsRecyclerView.findViewHolderForLayoutPosition(0);
+            int titleHeight = titleViewHolder.getTitleMeasuredHeight();
 
             int maxHeight = mResultsRecyclerView.getHeight();
 
-            return maxHeight - titleHeight;// - (int) Calculate.pxFromDp(getContext(), delta);
+            return maxHeight - titleHeight;
         }
 
         @Override
         public void onBindViewHolder(NRResultItem holder, int position) {
+            if(holder instanceof NRContentItem) {
+                ((NRContentItem) holder).setmMaxHeight(getMaxHeight());
+            }
             holder.setData(mQueryResults.get(position));
         }
 

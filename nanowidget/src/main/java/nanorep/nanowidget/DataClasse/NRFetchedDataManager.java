@@ -13,6 +13,7 @@ import com.nanorep.nanoclient.RequestParams.NRLikeType;
 import com.nanorep.nanoclient.RequestParams.NRSearchLikeParams;
 import com.nanorep.nanoclient.Response.NRConfiguration;
 import com.nanorep.nanoclient.Response.NRFAQAnswer;
+import com.nanorep.nanoclient.Response.NRFAQAnswerItem;
 import com.nanorep.nanoclient.Response.NRFAQData;
 import com.nanorep.nanoclient.Response.NRSearchResponse;
 import com.nanorep.nanoclient.Response.NRSuggestions;
@@ -165,7 +166,7 @@ public class NRFetchedDataManager {
     public void faqAnswer(final String answerId, Integer answerHash,final OnFAQAnswerFetched answerFetcher) {
         mNanoRep.fetchFAQAnswer(answerId, answerHash, new Nanorep.OnFAQAnswerFetchedListener() {
             @Override
-            public void onFAQAnswerFetched(NRFAQAnswer faqAnswer, NRError error) {
+            public void onFAQAnswerFetched(NRFAQAnswerItem faqAnswer, NRError error) {
                 if (error == null) {
                     answerFetcher.onAnswerFetched(faqAnswer);
                 } else {
