@@ -9,7 +9,7 @@ Nanorep native widget
 Gradle:
 
 ```
-compile 'com.nanorep:nanowidget:1.0.0'
+compile 'com.nanorep:nanowidget:1.0.1'
 ```
 
 Add to your Project's build.gradle :
