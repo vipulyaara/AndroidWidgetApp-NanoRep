@@ -11,6 +11,7 @@ import com.nanorep.nanoclient.Connection.NRConnection;
 import com.nanorep.nanoclient.Connection.NRError;
 import com.nanorep.nanoclient.Connection.NRUtilities;
 import com.nanorep.nanoclient.Interfaces.NRQueryResult;
+import com.nanorep.nanoclient.Log.NRLogger;
 import com.nanorep.nanoclient.RequestParams.NRFAQLikeParams;
 import com.nanorep.nanoclient.RequestParams.NRSearchLikeParams;
 import com.nanorep.nanoclient.Response.NRConfiguration;
@@ -38,7 +39,7 @@ public class NRImpl implements Nanorep {
     private HashMap<String, ArrayList<OnFAQAnswerFetchedListener>> faqRequestListenersMap;
     private Handler mHandler;
     private NRConfiguration mCnf;
-    private boolean debug = false;
+    private NRLogger nrLogger;
 
     public NRImpl(Context context, AccountParams accountParams) {
         mContext = context;
@@ -73,7 +74,7 @@ public class NRImpl implements Nanorep {
         if (mAccountParams.getNanorepContext() != null) {
             uri.appendQueryParameter("context", mAccountParams.getKnowledgeBase());
         }
-        NRConnection.getInstance(debug).connectionWithRequest(uri.build(), listener);
+        NRConnection.getInstance().connectionWithRequest(uri.build(), listener);
     }
 
     private void startKeepAlive() {
@@ -92,6 +93,11 @@ public class NRImpl implements Nanorep {
                     keepAlive(mDelay);
                 }
             }
+
+            @Override
+            public void log(String tag, String msg) {
+                nrLogger.log(tag, msg);
+            }
         });
     }
 
@@ -107,12 +113,17 @@ public class NRImpl implements Nanorep {
     private void executeRequest(final Uri.Builder uriBuilder, final NRConnection.Listener listener) {
         if (mSessionId != null) {
             uriBuilder.appendQueryParameter("sid", mSessionId);
-            NRConnection.getInstance(debug).connectionWithRequest(uriBuilder.build(), listener);
+            NRConnection.getInstance().connectionWithRequest(uriBuilder.build(), listener);
         } else {
             hello(new NRConnection.Listener() {
                 @Override
                 public void response(Object responseParam, int status, NRError error) {
                     executeRequest(uriBuilder, listener);
+                }
+
+                @Override
+                public void log(String tag, String msg) {
+                    nrLogger.log(tag, msg);
                 }
             });
         }
@@ -123,7 +134,7 @@ public class NRImpl implements Nanorep {
         _uriBuilder.appendPath("api/widget/v1/hello.js");
         _uriBuilder.appendQueryParameter("nostats", "false");
         _uriBuilder.appendQueryParameter("url", "mobile");
-        NRConnection.getInstance(debug).connectionWithRequest(_uriBuilder.build(), new NRConnection.Listener() {
+        NRConnection.getInstance().connectionWithRequest(_uriBuilder.build(), new NRConnection.Listener() {
             @Override
             public void response(Object responseParam, int status, NRError error) {
                 if (error != null) {
@@ -141,6 +152,11 @@ public class NRImpl implements Nanorep {
 
                     listener.response(responseParam, status, error);
                 }
+            }
+
+            @Override
+            public void log(String tag, String msg) {
+                nrLogger.log(tag, msg);
             }
         });
     }
@@ -175,6 +191,11 @@ public class NRImpl implements Nanorep {
                         NRImpl.this.getCachedSearches().put(text, response);
                         onSearchResultsFetchedListener.onSearchResponse(response, null);
                     }
+                }
+
+                @Override
+                public void log(String tag, String msg) {
+                    nrLogger.log(tag, msg);
                 }
             });
         }
@@ -228,6 +249,11 @@ public class NRImpl implements Nanorep {
                         }
                     }
                 }
+
+                @Override
+                public void log(String tag, String msg) {
+                    nrLogger.log(tag, msg);
+                }
             });
         }
     }
@@ -247,6 +273,11 @@ public class NRImpl implements Nanorep {
                 } else if (responseParam != null) {
                     onLikeSentListener.onLikeSent(likeParams.getArticleId(), (Integer) ((HashMap) responseParam).get("type"), ((HashMap) responseParam).get("result").equals("True"));
                 }
+            }
+
+            @Override
+            public void log(String tag, String msg) {
+                nrLogger.log(tag, msg);
             }
         });
     }
@@ -300,6 +331,11 @@ public class NRImpl implements Nanorep {
 
                         NRImpl.this.getFaqRequestListenersMap().remove(answerId);
                     }
+
+                    @Override
+                    public void log(String tag, String msg) {
+                        nrLogger.log(tag, msg);
+                    }
                 });
             } else {
                 onFAQAnswerFetchedListenerArr.add(onFAQAnswerFetchedListener);
@@ -318,7 +354,7 @@ public class NRImpl implements Nanorep {
         if (mSessionId != null) {
             uriBuilder.appendQueryParameter("sid", mSessionId);
         }
-        NRConnection.getInstance(debug).connectionWithRequest(uriBuilder.build(), new NRConnection.Listener() {
+        NRConnection.getInstance().connectionWithRequest(uriBuilder.build(), new NRConnection.Listener() {
             @Override
             public void response(Object responseParam, int status, NRError error) {
                 if (error != null) {
@@ -326,6 +362,11 @@ public class NRImpl implements Nanorep {
                 } else {
                     onLikeSentListener.onLikeSent(likeParams.getAnswerId(), Integer.parseInt(likeParams.getParams().get("type")), responseParam == null);
                 }
+            }
+
+            @Override
+            public void log(String tag, String msg) {
+                nrLogger.log(tag, msg);
             }
         });
     }
@@ -344,7 +385,7 @@ public class NRImpl implements Nanorep {
             // check network connectivity speed
             final Long beforeCnfTs = System.currentTimeMillis()/1000;
 
-            NRConnection.getInstance(debug).connectionWithRequest(uri.build(), new NRConnection.Listener() {
+            NRConnection.getInstance().connectionWithRequest(uri.build(), new NRConnection.Listener() {
                 @Override
                 public void response(Object responseParam, int status, NRError error) {
                     Long afterCnfTs = System.currentTimeMillis()/1000;
@@ -386,6 +427,11 @@ public class NRImpl implements Nanorep {
                                         }
                                     }
                                 }
+
+                                @Override
+                                public void log(String tag, String msg) {
+                                    nrLogger.log(tag, msg);
+                                }
                             });
                         } else {
 
@@ -401,6 +447,11 @@ public class NRImpl implements Nanorep {
                             }
                         }
                     }
+                }
+
+                @Override
+                public void log(String tag, String msg) {
+                    nrLogger.log(tag, msg);
                 }
             });
         }
@@ -422,13 +473,12 @@ public class NRImpl implements Nanorep {
     }
 
     @Override
-    public boolean isDebugMode() {
-        return debug;
-    }
-
-    @Override
     public void setDebugMode(boolean checked) {
-        debug = checked;
+        if (nrLogger == null) {
+            nrLogger = new NRLogger();
+        }
+
+        nrLogger.setDebug(checked);
     }
 
     private void updateFAQContentsAndCallHello(NRConfiguration cnf)
@@ -437,6 +487,11 @@ public class NRImpl implements Nanorep {
             @Override
             public void response(Object responseParam, int status, NRError error) {
 
+            }
+
+            @Override
+            public void log(String tag, String msg) {
+                nrLogger.log(tag, msg);
             }
         });
 
