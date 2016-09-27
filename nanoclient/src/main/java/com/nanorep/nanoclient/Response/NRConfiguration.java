@@ -139,7 +139,7 @@ public class NRConfiguration {
     }
 
     public boolean getAutocompleteEnabled() {
-        return Boolean.valueOf((String)mParams.get("autocompleteEnabled"));
+        return (Boolean) mParams.get("autocompleteEnabled");
     }
 
     public void setSkinName(String skinName) {

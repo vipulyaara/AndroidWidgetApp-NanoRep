@@ -9,6 +9,7 @@ import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 
 import com.crittercism.app.Crittercism;
@@ -25,6 +26,7 @@ import nanorep.nanowidget.NRWidgetFragment;
 public class MainActivity extends AppCompatActivity implements NRWidgetFragment.NRWidgetFragmentListener {
 
     private NRWidgetFragment nanoFragment;
+    private CheckBox checkBox;
 
     @SuppressLint("SetJavaScriptEnabled")
     @Override
@@ -32,6 +34,9 @@ public class MainActivity extends AppCompatActivity implements NRWidgetFragment.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         getSupportActionBar().setElevation(0);
+
+        checkBox = (CheckBox) findViewById(R.id.checkbox);
+
         nanoFragment = NRWidgetFragment.newInstance();
         nanoFragment.setListener(this);
         Crittercism.initialize(getApplicationContext(), "d59e30ede3c34d0bbf19d0237c2f1bc800444503");
@@ -51,15 +56,17 @@ public class MainActivity extends AppCompatActivity implements NRWidgetFragment.
 //                    HashMap<String, String> channel = new HashMap();
 //                    channel.put("channel", "mobile");
 //                    accountParams.setContext(channel);
-                    Nanorep test = NanorepBuilder.createNanorep(getApplicationContext(), accountParams);
+                    Nanorep nanorep = NanorepBuilder.createNanorep(getApplicationContext(), accountParams);
 
-                    test.getNRConfiguration().getTitle().setTitleBGColor("#FF7F23");
-                    test.getNRConfiguration().setAutocompleteEnabled("false");
-                    test.getNRConfiguration().getSearchBar().setInitialText("noa noa");
+//                    nanorep.getNRConfiguration().getTitle().setTitleBGColor("#FF7F23");
+//                    nanorep.getNRConfiguration().setAutocompleteEnabled("false");
+//                    nanorep.getNRConfiguration().getSearchBar().setInitialText("noa noa");
 
-                    nanoFragment.setNanoRep(test);
-                    getSupportFragmentManager().beginTransaction().add(R.id.root_layout, nanoFragment, "test").commit();
-//                    test.fetchConfiguration(new Nanorep.OnConfigurationFetchedListener() {
+                    nanorep.setDebugMode(checkBox.isChecked());
+
+                    nanoFragment.setNanoRep(nanorep);
+                    getSupportFragmentManager().beginTransaction().add(R.id.root_layout, nanoFragment, "nanorep").commit();
+//                    nanorep.fetchConfiguration(new Nanorep.OnConfigurationFetchedListener() {
 //                        @Override
 //                        public void onConfigurationReady(NRConfiguration configuration, NRError error) {
 //

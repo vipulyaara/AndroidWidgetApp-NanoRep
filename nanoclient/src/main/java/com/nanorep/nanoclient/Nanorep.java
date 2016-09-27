@@ -57,6 +57,9 @@ public interface Nanorep {
 
     NRConfiguration getNRConfiguration();
 
+    boolean isDebugMode();
+
+    void setDebugMode(boolean checked);
 
     public class AccountParams {
         private String mAccount;

@@ -41,4 +41,14 @@
         android:textAlignment="center"
         android:inputType="text"
         android:hint="knowledge base"/>
+
+
+    <CheckBox
+        android:id="@+id/checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:text="debug"
+        android:layout_below="@+id/kbId"/>
 </RelativeLayout>

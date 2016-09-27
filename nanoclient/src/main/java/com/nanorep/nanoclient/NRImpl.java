@@ -14,7 +14,6 @@ import com.nanorep.nanoclient.Interfaces.NRQueryResult;
 import com.nanorep.nanoclient.RequestParams.NRFAQLikeParams;
 import com.nanorep.nanoclient.RequestParams.NRSearchLikeParams;
 import com.nanorep.nanoclient.Response.NRConfiguration;
-import com.nanorep.nanoclient.Response.NRFAQAnswer;
 import com.nanorep.nanoclient.Response.NRFAQAnswerItem;
 import com.nanorep.nanoclient.Response.NRSearchResponse;
 import com.nanorep.nanoclient.Response.NRSuggestions;
@@ -39,6 +38,7 @@ public class NRImpl implements Nanorep {
     private HashMap<String, ArrayList<OnFAQAnswerFetchedListener>> faqRequestListenersMap;
     private Handler mHandler;
     private NRConfiguration mCnf;
+    private boolean debug = false;
 
     public NRImpl(Context context, AccountParams accountParams) {
         mContext = context;
@@ -73,7 +73,7 @@ public class NRImpl implements Nanorep {
         if (mAccountParams.getNanorepContext() != null) {
             uri.appendQueryParameter("context", mAccountParams.getKnowledgeBase());
         }
-        NRConnection.getInstance().connectionWithRequest(uri.build(), listener);
+        NRConnection.getInstance(debug).connectionWithRequest(uri.build(), listener);
     }
 
     private void startKeepAlive() {
@@ -107,7 +107,7 @@ public class NRImpl implements Nanorep {
     private void executeRequest(final Uri.Builder uriBuilder, final NRConnection.Listener listener) {
         if (mSessionId != null) {
             uriBuilder.appendQueryParameter("sid", mSessionId);
-            NRConnection.getInstance().connectionWithRequest(uriBuilder.build(), listener);
+            NRConnection.getInstance(debug).connectionWithRequest(uriBuilder.build(), listener);
         } else {
             hello(new NRConnection.Listener() {
                 @Override
@@ -123,7 +123,7 @@ public class NRImpl implements Nanorep {
         _uriBuilder.appendPath("api/widget/v1/hello.js");
         _uriBuilder.appendQueryParameter("nostats", "false");
         _uriBuilder.appendQueryParameter("url", "mobile");
-        NRConnection.getInstance().connectionWithRequest(_uriBuilder.build(), new NRConnection.Listener() {
+        NRConnection.getInstance(debug).connectionWithRequest(_uriBuilder.build(), new NRConnection.Listener() {
             @Override
             public void response(Object responseParam, int status, NRError error) {
                 if (error != null) {
@@ -316,7 +316,7 @@ public class NRImpl implements Nanorep {
         for (String key: likeParams.getParams().keySet()) {
             uriBuilder.appendQueryParameter(key, likeParams.getParams().get(key));
         }
-        NRConnection.getInstance().connectionWithRequest(uriBuilder.build(), new NRConnection.Listener() {
+        NRConnection.getInstance(debug).connectionWithRequest(uriBuilder.build(), new NRConnection.Listener() {
             @Override
             public void response(Object responseParam, int status, NRError error) {
                 if (error != null) {
@@ -342,7 +342,7 @@ public class NRImpl implements Nanorep {
             // check network connectivity speed
             final Long beforeCnfTs = System.currentTimeMillis()/1000;
 
-            NRConnection.getInstance().connectionWithRequest(uri.build(), new NRConnection.Listener() {
+            NRConnection.getInstance(debug).connectionWithRequest(uri.build(), new NRConnection.Listener() {
                 @Override
                 public void response(Object responseParam, int status, NRError error) {
                     Long afterCnfTs = System.currentTimeMillis()/1000;
@@ -417,6 +417,16 @@ public class NRImpl implements Nanorep {
             mCnf = new NRConfiguration();
 
         return mCnf;
+    }
+
+    @Override
+    public boolean isDebugMode() {
+        return debug;
+    }
+
+    @Override
+    public void setDebugMode(boolean checked) {
+        debug = checked;
     }
 
     private void updateFAQContentsAndCallHello(NRConfiguration cnf)
