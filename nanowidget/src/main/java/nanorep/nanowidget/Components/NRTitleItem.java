@@ -3,9 +3,11 @@ package nanorep.nanowidget.Components;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.graphics.Color;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 
 import com.nanorep.nanoclient.Response.NRConfiguration;
 
@@ -21,6 +23,7 @@ public class NRTitleItem extends NRResultItem implements View.OnClickListener {
     private Button mTitleButton;
     private ImageButton mUnFoldButton;
     private ImageButton mShareButton;
+    private RelativeLayout topView;
 
     @Override
     protected void bindViews(View view) {
@@ -33,6 +36,8 @@ public class NRTitleItem extends NRResultItem implements View.OnClickListener {
         mTitleButton.setOnClickListener(this);
         mShareButton = (ImageButton) view.findViewById(R.id.shareButton);
         mShareButton.setOnClickListener(this);
+
+        topView = (RelativeLayout) view.findViewById(R.id.topView);
     }
 
 
@@ -55,27 +60,27 @@ public class NRTitleItem extends NRResultItem implements View.OnClickListener {
             mTitleButton.setText(result.getFetchedResult().getTitle());
         }
 
-        if(mResult.isUnfolded()) {
+        int height = result.getHeight();
 
+        if(mResult.isUnfolded()) { // title's height should wrap content
             int titleMeasuredHeight = getTitleMeasuredHeight();
             if(titleMeasuredHeight > result.getHeight()) {
-                setHeight(titleMeasuredHeight);
+                height = titleMeasuredHeight;
             }
-
-        } else {
-            setHeight(result.getHeight());
         }
 
+        setHeight(height);
 
         mUnFoldButton.setVisibility(result.isSingle() ? View.INVISIBLE : View.VISIBLE);
     }
 
-    private void setHeight(int height) {
+    private void setHeight(final int height) {
         ValueAnimator animator = ValueAnimator.ofInt(mItemView.getHeight(), height);
         animator.setDuration(400);
         animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
+                topView.getLayoutParams().height = height;
                 mItemView.getLayoutParams().height = (Integer) animation.getAnimatedValue();
                 mItemView.requestLayout();
             }

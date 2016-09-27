@@ -5,6 +5,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -73,6 +74,7 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
 
     private TextView mNoTitleView;
     private RelativeLayout mNotitleViewHolder;
+    private boolean autocompleteEnabled = true;
 
 
     public NRWidgetFragment() {
@@ -218,7 +220,7 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 //        setHasOptionsMenu(true);
@@ -234,7 +236,9 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
             public void onConfigurationReady() {
                 updateTitleNormalText();
                 updateSerchBarHint();
-                showSuggestionsView(nanoView);
+
+                final ViewGroup _container = container;
+                showSuggestionsView(_container);
             }
 
             @Override
@@ -262,7 +266,7 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
 
             @Override
             public void presentSuggestion(String query, ArrayList<String> suggestions) {
-                if (!resetSuggestions && mSearchBar.getText().length() - query.length() <= 1) {
+                if (!resetSuggestions && mSearchBar.getText().length() - query.length() <= 1 && autocompleteEnabled) {
                     mSuggestionsView.setSuggestions(suggestions);
                 }
             }
@@ -306,9 +310,9 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
         return nanoView;
     }
 
-    private void showSuggestionsView(View nanoView) {
+    private void showSuggestionsView(ViewGroup container) {
         if(!mNanoRep.getNRConfiguration().getAutocompleteEnabled()) {
-
+            autocompleteEnabled = false;
         }
     }
 
@@ -612,9 +616,13 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
             }
         }
 
-        private  int getMaxHeight() {
+        private  int getMaxHeight(int minResultHeight) {
             NRTitleItem titleViewHolder = (NRTitleItem)mResultsRecyclerView.findViewHolderForLayoutPosition(0);
             int titleHeight = titleViewHolder.getTitleMeasuredHeight();
+
+            if(titleHeight < minResultHeight) {
+                titleHeight = minResultHeight;
+            }
 
             int maxHeight = mResultsRecyclerView.getHeight();
 
@@ -624,7 +632,7 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
         @Override
         public void onBindViewHolder(NRResultItem holder, int position) {
             if(holder instanceof NRContentItem) {
-                ((NRContentItem) holder).setmMaxHeight(getMaxHeight());
+                ((NRContentItem) holder).setmMaxHeight(getMaxHeight(mQueryResults.get(position-1).getHeight()));
             }
             holder.setData(mQueryResults.get(position));
         }

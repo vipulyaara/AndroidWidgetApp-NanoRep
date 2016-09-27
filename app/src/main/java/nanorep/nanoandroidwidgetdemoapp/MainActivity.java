@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity implements NRWidgetFragment.
                     Nanorep test = NanorepBuilder.createNanorep(getApplicationContext(), accountParams);
 
                     test.getNRConfiguration().getTitle().setTitleBGColor("#FF7F23");
-                    test.getNRConfiguration().setAutocompleteEnabled("noa");
+                    test.getNRConfiguration().setAutocompleteEnabled("false");
                     test.getNRConfiguration().getSearchBar().setInitialText("noa noa");
 
                     nanoFragment.setNanoRep(test);
