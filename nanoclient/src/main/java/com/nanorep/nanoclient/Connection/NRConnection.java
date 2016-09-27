@@ -8,6 +8,8 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.util.Log;
 
+import com.nanorep.nanoclient.Log.NRLogger;
+
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
@@ -21,7 +23,6 @@ public class NRConnection {
     private static String TAG_RESPONSE = "nanoRepDebugResponse";
 
     private ArrayList<NRDownloader> mConnections;
-    private boolean debug;
 
     private static NRConnection mInstance;
 
@@ -29,16 +30,15 @@ public class NRConnection {
         void response(Object responseParam, int status, NRError error);
     }
 
-    private NRConnection(boolean debug) {
-        this.debug = debug;
+    private NRConnection() {
     }
 
-    public static NRConnection getInstance(boolean debug) {
+    public static NRConnection getInstance() {
 
         if  (mInstance == null) {
             synchronized (NRConnection.class) {
                 if (mInstance == null) {
-                    mInstance = new NRConnection(debug);
+                    mInstance = new NRConnection();
                 }
             }
         }
@@ -59,9 +59,7 @@ public class NRConnection {
                         String jsonString = new String((byte[])data);
 
                         //log
-                        if(debug) {
-                            Log.d(TAG_RESPONSE, jsonString);
-                        }
+                        NRLogger.getInstance().log(TAG_RESPONSE, jsonString);
 
                         Object retMap = NRUtilities.jsonStringToPropertyList(jsonString);
                         listener.response(retMap, downloader.getResponseStatus(), null);
@@ -74,9 +72,7 @@ public class NRConnection {
         });
 
         //log
-        if(debug) {
-            Log.d(TAG_REQUEST, uri.toString());
-        }
+        NRLogger.getInstance().log(TAG_REQUEST, uri.toString());
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             downloader.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, uri);
