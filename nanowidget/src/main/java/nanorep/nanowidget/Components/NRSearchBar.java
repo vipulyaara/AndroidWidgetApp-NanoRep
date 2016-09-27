@@ -38,7 +38,7 @@ public class NRSearchBar extends RelativeLayout implements View.OnClickListener,
         super.onViewAdded(child);
         mSearchEditText = (NREditText) child.findViewById(R.id.searchText);
         mSearchEditText.addTextChangedListener(this);
-        mSearchEditText.setHint("Type Your Question Here");
+        mSearchEditText.setHint(getResources().getString(R.string.type_question_here));
         mSearchEditText.setTextColor(Color.WHITE);
         mSearchEditText.setHintTextColor(Color.LTGRAY);
         mSearchEditText.getBackground().setColorFilter(Color.TRANSPARENT, PorterDuff.Mode.SRC_IN);
@@ -64,6 +64,10 @@ public class NRSearchBar extends RelativeLayout implements View.OnClickListener,
     public void updateText(String text) {
         mSearchEditText.setText(text);
         mSearchEditText.clearFocus();
+    }
+
+    public void setHint(String text) {
+        mSearchEditText.setHint(text);
     }
 
     public void updateText(String text, boolean withListener) {

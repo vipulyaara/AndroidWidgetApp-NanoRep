@@ -11,8 +11,7 @@ import com.nanorep.nanoclient.Nanorep;
 import com.nanorep.nanoclient.RequestParams.NRFAQLikeParams;
 import com.nanorep.nanoclient.RequestParams.NRLikeType;
 import com.nanorep.nanoclient.RequestParams.NRSearchLikeParams;
-import com.nanorep.nanoclient.Response.NRConfiguration;
-import com.nanorep.nanoclient.Response.NRFAQAnswer;
+import com.nanorep.nanoclient.Response.NRFAQAnswerItem;
 import com.nanorep.nanoclient.Response.NRFAQData;
 import com.nanorep.nanoclient.Response.NRSearchResponse;
 import com.nanorep.nanoclient.Response.NRSuggestions;
@@ -32,8 +31,6 @@ public class NRFetchedDataManager {
     private NRFAQData mFaqData;
     private NRFetcherListener mFetcherListener;
     Context mContext;
-    private NRConfiguration mConfiguration;
-
 
     private int mRows;
 
@@ -44,12 +41,11 @@ public class NRFetchedDataManager {
             mNanoRep = nanoRep;
             mNanoRep.fetchConfiguration(new Nanorep.OnConfigurationFetchedListener() {
                 @Override
-                public void onConfigurationFetched(NRConfiguration configuration, NRError error) {
-                    if (error == null && configuration != null) {
-                        mConfiguration = configuration;
-                        mFaqData = configuration.getFaqData();
-                        if (configuration.getTitleNormalText() != null) {
-                            mFetcherListener.updateTitle(configuration.getTitleNormalText());
+                public void onConfigurationFetched(NRError error) {
+                    if (error == null) {
+                        mFaqData = mNanoRep.getNRConfiguration().getFaqData();
+                        if (mNanoRep.getNRConfiguration() != null) {
+                            mFetcherListener.onConfigurationReady();
                             prepareDatasource();
                         }
                     } else if (error != null) {
@@ -63,10 +59,6 @@ public class NRFetchedDataManager {
     public void setFetcherListener(NRFetcherListener listener) {
         mFetcherListener = listener;
 
-    }
-
-    public NRConfiguration getConfiguration() {
-        return mConfiguration;
     }
 
     private void prepareDatasource() {
@@ -165,7 +157,7 @@ public class NRFetchedDataManager {
     public void faqAnswer(final String answerId, Integer answerHash,final OnFAQAnswerFetched answerFetcher) {
         mNanoRep.fetchFAQAnswer(answerId, answerHash, new Nanorep.OnFAQAnswerFetchedListener() {
             @Override
-            public void onFAQAnswerFetched(NRFAQAnswer faqAnswer, NRError error) {
+            public void onFAQAnswerFetched(NRFAQAnswerItem faqAnswer, NRError error) {
                 if (error == null) {
                     answerFetcher.onAnswerFetched(faqAnswer);
                 } else {

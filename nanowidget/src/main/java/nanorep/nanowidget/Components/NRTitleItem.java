@@ -3,9 +3,8 @@ package nanorep.nanowidget.Components;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.graphics.Color;
-import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
 import android.view.View;
-import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
@@ -24,12 +23,11 @@ public class NRTitleItem extends NRResultItem implements View.OnClickListener {
     private Button mTitleButton;
     private ImageButton mUnFoldButton;
     private ImageButton mShareButton;
-    private NRResult mResult;
+    private RelativeLayout topView;
 
     @Override
-    protected void bindViews(View view, int maxHeight) {
+    protected void bindViews(View view) {
         mItemView = view;
-        setHeight(maxHeight);
         mTitleButton = (Button) view.findViewById(R.id.titleButton);
 
         mUnFoldButton = (ImageButton) view.findViewById(R.id.unFoldButton);
@@ -38,11 +36,13 @@ public class NRTitleItem extends NRResultItem implements View.OnClickListener {
         mTitleButton.setOnClickListener(this);
         mShareButton = (ImageButton) view.findViewById(R.id.shareButton);
         mShareButton.setOnClickListener(this);
+
+        topView = (RelativeLayout) view.findViewById(R.id.topView);
     }
 
 
-    public NRTitleItem(View view, NRResultItemListener listener,int maxHeight, NRConfiguration config) {
-        super(view, listener,maxHeight, config);
+    public NRTitleItem(View view, NRResultItemListener listener, NRConfiguration config) {
+        super(view, listener, config);
     }
 
     @Override
@@ -50,29 +50,37 @@ public class NRTitleItem extends NRResultItem implements View.OnClickListener {
         String titleBGColor = config.getTitle().getTitleBGColor();
 
         if(titleBGColor != null && !"".equals(titleBGColor)) {
-            mTitleButton.setBackgroundColor(Color.parseColor(titleBGColor));
+            mItemView.setBackgroundColor(Color.parseColor(titleBGColor));
         }
     }
 
-    public void setResult(NRResult result) {
+    public void setData(NRResult result) {
         mResult = result;
         if (result.getFetchedResult() != null) {
             mTitleButton.setText(result.getFetchedResult().getTitle());
         }
-        setHeight(result.getHeight());
+
+        int height = result.getHeight();
+
+        if(mResult.isUnfolded()) { // title's height should wrap content
+            int titleMeasuredHeight = getTitleMeasuredHeight();
+            if(titleMeasuredHeight > result.getHeight()) {
+                height = titleMeasuredHeight;
+            }
+        }
+
+        setHeight(height);
+
         mUnFoldButton.setVisibility(result.isSingle() ? View.INVISIBLE : View.VISIBLE);
     }
 
-    public NRResult getResult() {
-        return mResult;
-    }
-
-    private void setHeight(int height) {
+    private void setHeight(final int height) {
         ValueAnimator animator = ValueAnimator.ofInt(mItemView.getHeight(), height);
         animator.setDuration(400);
         animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
+                topView.getLayoutParams().height = height;
                 mItemView.getLayoutParams().height = (Integer) animation.getAnimatedValue();
                 mItemView.requestLayout();
             }
@@ -99,4 +107,14 @@ public class NRTitleItem extends NRResultItem implements View.OnClickListener {
         }
     }
 
+    /**
+     *
+     * @return
+     */
+    public int getTitleMeasuredHeight() {
+        mTitleButton.measure( View.MeasureSpec.makeMeasureSpec(mTitleButton.getWidth(), View.MeasureSpec.AT_MOST),
+                View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+
+        return mTitleButton.getMeasuredHeight();
+    }
 }

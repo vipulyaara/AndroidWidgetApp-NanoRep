@@ -16,9 +16,12 @@ import java.util.ArrayList;
  * Created by nissopa on 9/12/15.
  */
 public class NRConnection {
-    public static String NRStatusKey = "status";
+    private static String NRStatusKey = "status";
+    private static String TAG_REQUEST = "nanoRepDebugRequest";
+    private static String TAG_RESPONSE = "nanoRepDebugResponse";
 
     private ArrayList<NRDownloader> mConnections;
+    private boolean debug;
 
     private static NRConnection mInstance;
 
@@ -26,15 +29,16 @@ public class NRConnection {
         void response(Object responseParam, int status, NRError error);
     }
 
-    private NRConnection() {
+    private NRConnection(boolean debug) {
+        this.debug = debug;
     }
 
-    public static NRConnection getInstance() {
+    public static NRConnection getInstance(boolean debug) {
 
         if  (mInstance == null) {
             synchronized (NRConnection.class) {
                 if (mInstance == null) {
-                    mInstance = new NRConnection();
+                    mInstance = new NRConnection(debug);
                 }
             }
         }
@@ -46,11 +50,19 @@ public class NRConnection {
         NRDownloader downloader = new NRDownloader(new NRDownloader.NRDownloaderListener() {
             @Override
             public void downloadCompleted(NRDownloader downloader, Object data, NRError error) {
+
+
                 if (listener != null) {
                     if (error != null) {
                         listener.response(null, -1, error);
                     } else if (data != null) {
                         String jsonString = new String((byte[])data);
+
+                        //log
+                        if(debug) {
+                            Log.d(TAG_RESPONSE, jsonString);
+                        }
+
                         Object retMap = NRUtilities.jsonStringToPropertyList(jsonString);
                         listener.response(retMap, downloader.getResponseStatus(), null);
                     }
@@ -60,6 +72,12 @@ public class NRConnection {
                 }
             }
         });
+
+        //log
+        if(debug) {
+            Log.d(TAG_REQUEST, uri.toString());
+        }
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             downloader.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, uri);
         } else {

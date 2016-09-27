@@ -14,7 +14,7 @@ import com.nanorep.nanoclient.Interfaces.NRQueryResult;
 import com.nanorep.nanoclient.RequestParams.NRFAQLikeParams;
 import com.nanorep.nanoclient.RequestParams.NRSearchLikeParams;
 import com.nanorep.nanoclient.Response.NRConfiguration;
-import com.nanorep.nanoclient.Response.NRFAQAnswer;
+import com.nanorep.nanoclient.Response.NRFAQAnswerItem;
 import com.nanorep.nanoclient.Response.NRSearchResponse;
 import com.nanorep.nanoclient.Response.NRSuggestions;
 
@@ -38,6 +38,7 @@ public class NRImpl implements Nanorep {
     private HashMap<String, ArrayList<OnFAQAnswerFetchedListener>> faqRequestListenersMap;
     private Handler mHandler;
     private NRConfiguration mCnf;
+    private boolean debug = false;
 
     public NRImpl(Context context, AccountParams accountParams) {
         mContext = context;
@@ -72,7 +73,7 @@ public class NRImpl implements Nanorep {
         if (mAccountParams.getNanorepContext() != null) {
             uri.appendQueryParameter("context", mAccountParams.getKnowledgeBase());
         }
-        NRConnection.getInstance().connectionWithRequest(uri.build(), listener);
+        NRConnection.getInstance(debug).connectionWithRequest(uri.build(), listener);
     }
 
     private void startKeepAlive() {
@@ -106,7 +107,7 @@ public class NRImpl implements Nanorep {
     private void executeRequest(final Uri.Builder uriBuilder, final NRConnection.Listener listener) {
         if (mSessionId != null) {
             uriBuilder.appendQueryParameter("sid", mSessionId);
-            NRConnection.getInstance().connectionWithRequest(uriBuilder.build(), listener);
+            NRConnection.getInstance(debug).connectionWithRequest(uriBuilder.build(), listener);
         } else {
             hello(new NRConnection.Listener() {
                 @Override
@@ -122,7 +123,7 @@ public class NRImpl implements Nanorep {
         _uriBuilder.appendPath("api/widget/v1/hello.js");
         _uriBuilder.appendQueryParameter("nostats", "false");
         _uriBuilder.appendQueryParameter("url", "mobile");
-        NRConnection.getInstance().connectionWithRequest(_uriBuilder.build(), new NRConnection.Listener() {
+        NRConnection.getInstance(debug).connectionWithRequest(_uriBuilder.build(), new NRConnection.Listener() {
             @Override
             public void response(Object responseParam, int status, NRError error) {
                 if (error != null) {
@@ -262,7 +263,7 @@ public class NRImpl implements Nanorep {
 
         if(answerParams != null) {
             ((HashMap<String, Object>) answerParams).put("id", answerId);
-            onFAQAnswerFetchedListener.onFAQAnswerFetched(new NRFAQAnswer((HashMap<String, Object>) answerParams), null);
+            onFAQAnswerFetchedListener.onFAQAnswerFetched(new NRFAQAnswerItem((HashMap<String, Object>) answerParams), null);
         }
         else {
 
@@ -290,7 +291,7 @@ public class NRImpl implements Nanorep {
                                 listener.onFAQAnswerFetched(null, error);
                             } else if (responseParam != null) {
 
-                                listener.onFAQAnswerFetched(new NRFAQAnswer((HashMap<String, Object>) responseParam), null);
+                                listener.onFAQAnswerFetched(new NRFAQAnswerItem((HashMap<String, Object>) responseParam), null);
                             }
                         }
 
@@ -315,7 +316,7 @@ public class NRImpl implements Nanorep {
         for (String key: likeParams.getParams().keySet()) {
             uriBuilder.appendQueryParameter(key, likeParams.getParams().get(key));
         }
-        NRConnection.getInstance().connectionWithRequest(uriBuilder.build(), new NRConnection.Listener() {
+        NRConnection.getInstance(debug).connectionWithRequest(uriBuilder.build(), new NRConnection.Listener() {
             @Override
             public void response(Object responseParam, int status, NRError error) {
                 if (error != null) {
@@ -341,7 +342,7 @@ public class NRImpl implements Nanorep {
             // check network connectivity speed
             final Long beforeCnfTs = System.currentTimeMillis()/1000;
 
-            NRConnection.getInstance().connectionWithRequest(uri.build(), new NRConnection.Listener() {
+            NRConnection.getInstance(debug).connectionWithRequest(uri.build(), new NRConnection.Listener() {
                 @Override
                 public void response(Object responseParam, int status, NRError error) {
                     Long afterCnfTs = System.currentTimeMillis()/1000;
@@ -352,9 +353,10 @@ public class NRImpl implements Nanorep {
                         HashMap<String, Object> cachedResponse = NRCacheManager.getAnswerById(mContext, NRUtilities.md5(mAccountParams.getKnowledgeBase() + mAccountParams.getNanorepContext()));
                         if (onConfigurationFetchedListener != null) {
                             if (cachedResponse != null) {
-                                onConfigurationFetchedListener.onConfigurationFetched(new NRConfiguration(cachedResponse), null);
+                                mCnf = new NRConfiguration(cachedResponse);
+                                onConfigurationFetchedListener.onConfigurationFetched(null);
                             } else {
-                                onConfigurationFetchedListener.onConfigurationFetched(null, error);
+                                onConfigurationFetchedListener.onConfigurationFetched(error);
                             }
                         }
                     } else {
@@ -373,12 +375,12 @@ public class NRImpl implements Nanorep {
                                     }
                                     if (onConfigurationFetchedListener != null) {
                                         if (error != null) {
-                                            onConfigurationFetchedListener.onConfigurationFetched(null, error);
+                                            onConfigurationFetchedListener.onConfigurationFetched(error);
                                         } else if (responseParam != null) {
-                                            onConfigurationFetchedListener.onConfigurationFetched(cnf, null);
+                                            onConfigurationFetchedListener.onConfigurationFetched(null);
 
                                         } else {
-                                            onConfigurationFetchedListener.onConfigurationFetched(null, NRError.error("com.nanorepfaq", 1002, "faqData empty"));
+                                            onConfigurationFetchedListener.onConfigurationFetched(NRError.error("com.nanorepfaq", 1002, "faqData empty"));
                                         }
                                     }
                                 }
@@ -388,7 +390,7 @@ public class NRImpl implements Nanorep {
                             overrideCnfData(cnf);
 
                             if (onConfigurationFetchedListener != null) {
-                                onConfigurationFetchedListener.onConfigurationFetched(cnf, null);
+                                onConfigurationFetchedListener.onConfigurationFetched(null);
                             }
                             NRCacheManager.storeAnswerById(mContext, NRUtilities.md5(mAccountParams.getKnowledgeBase() + mAccountParams.getNanorepContext()), cnf.getmParams());
 
@@ -417,6 +419,16 @@ public class NRImpl implements Nanorep {
         return mCnf;
     }
 
+    @Override
+    public boolean isDebugMode() {
+        return debug;
+    }
+
+    @Override
+    public void setDebugMode(boolean checked) {
+        debug = checked;
+    }
+
     private void updateFAQContentsAndCallHello(NRConfiguration cnf)
     {
         hello(new NRConnection.Listener() {
@@ -430,7 +442,7 @@ public class NRImpl implements Nanorep {
         for (NRQueryResult queryResult : cnf.getFaqData().getGroups().get(0).getAnswers()) {
             fetchFAQAnswer(queryResult.getId(), queryResult.getHash(), new OnFAQAnswerFetchedListener() {
                 @Override
-                public void onFAQAnswerFetched(NRFAQAnswer faqAnswer, NRError error) {
+                public void onFAQAnswerFetched(NRFAQAnswerItem faqAnswer, NRError error) {
                     // update cache with this Answer (has body now..)
                     NRCacheManager.storeFAQAnswer(faqAnswer.getParams());
                 }

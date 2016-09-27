@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -26,13 +28,16 @@ import nanorep.nanowidget.Components.ChannelPresenters.NRChannelStrategy;
 import nanorep.nanowidget.Components.ChannelPresenters.NRWebContentFragment;
 import nanorep.nanowidget.Components.DislikeDialog;
 import nanorep.nanowidget.Components.NRChannelItem;
+import nanorep.nanowidget.Components.NRChannelingItem;
 import nanorep.nanowidget.Components.NRContentItem;
+import nanorep.nanowidget.Components.NRLikeItem;
 import nanorep.nanowidget.Components.NRLikeView;
 import nanorep.nanowidget.Components.NRResultFragment;
 import nanorep.nanowidget.Components.NRResultItem;
 import nanorep.nanowidget.Components.NRTitleItem;
 import nanorep.nanowidget.Components.NRSearchBar;
 import nanorep.nanowidget.Components.NRSuggestionsView;
+import nanorep.nanowidget.Components.SimpleDividerItemDecoration;
 import nanorep.nanowidget.DataClasse.NRFetchedDataManager;
 import nanorep.nanowidget.DataClasse.NRResult;
 import nanorep.nanowidget.Utilities.Calculate;
@@ -46,17 +51,7 @@ import nanorep.nanowidget.interfaces.OnFAQAnswerFetched;
 
 
 public class NRWidgetFragment extends Fragment implements NRSearchBarListener, NRSuggestionsListener, NRResultItemListener {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
     private Nanorep mNanoRep;
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
 
     private NRFetchedDataManager mFetchedDataManager;
 
@@ -65,7 +60,7 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
 
     private ArrayList<NRResult> mQueryResults;
     private ArrayList<NRResult> mQueryCopyResults;
-    private NRResutlsAdapter mResutlsAdapter;
+    private NRResultsAdapter mResultsAdapter;
     private RecyclerView mResultsRecyclerView;
     private NRWidgetFragmentListener mListener;
     private NRResultFragment mResultFragment;
@@ -79,7 +74,9 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
 
     private TextView mNoTitleView;
     private RelativeLayout mNotitleViewHolder;
+    private boolean autocompleteEnabled = true;
 
+    private SimpleDividerItemDecoration simpleDividerItemDecoration;
 
     public NRWidgetFragment() {
         // Required empty public constructor
@@ -197,17 +194,11 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
      * @return A new instance of fragment NRWidgetFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static NRWidgetFragment newInstance(String param1, String param2) {
+    public static NRWidgetFragment newInstance() {
         NRWidgetFragment fragment = new NRWidgetFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
         return fragment;
     }
 
@@ -225,28 +216,30 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+
+        mFetchedDataManager = new NRFetchedDataManager(mNanoRep, getContext());
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 //        setHasOptionsMenu(true);
 //        assert ((AppCompatActivity)getActivity()).getSupportActionBar() != null;
 //        ((AppCompatActivity)getActivity()).getSupportActionBar().hide();
-        View nanoView = inflater.inflate(R.layout.fragment_nrwidget, container, false);
+        final View nanoView = inflater.inflate(R.layout.fragment_nrwidget, container, false);
         mLoadingView = (RelativeLayout) nanoView.findViewById(R.id.fragment_place_holder);
-        mResutlsAdapter = new NRResutlsAdapter();
 
-        mFetchedDataManager = new NRFetchedDataManager(mNanoRep, getContext());
+        mResultsAdapter = new NRResultsAdapter();
+
         mFetchedDataManager.setFetcherListener(new NRFetcherListener() {
             @Override
-            public void updateTitle(String title) {
+            public void onConfigurationReady() {
+                updateTitleNormalText();
+                updateSerchBarHint();
 
+                final ViewGroup _container = container;
+                showSuggestionsView(_container);
             }
 
             @Override
@@ -262,10 +255,10 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
             @Override
             public void insertRows(ArrayList<NRResult> rows) {
                 mLoadingView.setVisibility(View.INVISIBLE);
-                mResutlsAdapter.setShouldResetLikeView(true);
+                mResultsAdapter.setShouldResetLikeView(true);
                 if (rows == null && mSearchBar.getText() != null) {
                     mNotitleViewHolder.getLayoutParams().height = (int) Calculate.pxFromDp(getContext(), 120);
-                    mNoTitleView.setText(mFetchedDataManager.getConfiguration().getCustomNoAnswersTextContext(mSearchBar.getText()));
+                    mNoTitleView.setText(mNanoRep.getNRConfiguration().getCustomNoAnswersTextContext(mSearchBar.getText()));
                     rows = mResultStack.get(0);
                 }
                 loadResults(rows, true);
@@ -274,7 +267,7 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
 
             @Override
             public void presentSuggestion(String query, ArrayList<String> suggestions) {
-                if (!resetSuggestions && mSearchBar.getText().length() - query.length() <= 1) {
+                if (!resetSuggestions && mSearchBar.getText().length() - query.length() <= 1 && autocompleteEnabled) {
                     mSuggestionsView.setSuggestions(suggestions);
                 }
             }
@@ -291,9 +284,14 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
         mNoTitleView = (TextView) nanoView.findViewById(R.id.noTitleTextView);
         mSuggestionsView = (NRSuggestionsView)nanoView.findViewById(R.id.suggestions);
         mSuggestionsView.setListener(this);
+
         mResultsRecyclerView = (RecyclerView) nanoView.findViewById(R.id.resultsView);
         mResultsRecyclerView.setLayoutManager(new NRLinearLayoutManager(getContext()));
-        mResultsRecyclerView.setAdapter(mResutlsAdapter);
+
+        simpleDividerItemDecoration = new SimpleDividerItemDecoration(getResources());
+        mResultsRecyclerView.addItemDecoration(simpleDividerItemDecoration);
+
+        mResultsRecyclerView.setAdapter(mResultsAdapter);
         NRItemAnimator animator = new NRItemAnimator();
         animator.setListener(new NRItemAnimator.OnAnimation() {
             @Override
@@ -315,6 +313,20 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
         return nanoView;
     }
 
+    private void showSuggestionsView(ViewGroup container) {
+        if(!mNanoRep.getNRConfiguration().getAutocompleteEnabled()) {
+            autocompleteEnabled = false;
+        }
+    }
+
+    private void updateSerchBarHint() {
+        mSearchBar.setHint(mNanoRep.getNRConfiguration().getSearchBar().getInitialText());
+    }
+
+    private void updateTitleNormalText() {
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(mNanoRep.getNRConfiguration().getTitleNormalText());
+    }
+
     private void loadResults(ArrayList<NRResult> rows, boolean addToStack) {
         if (mQueryResults == null) {
             mQueryResults = new ArrayList<NRResult>();
@@ -324,7 +336,7 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
         }
         for (NRResult addedResult : rows) {
             mQueryResults.add(addedResult);
-            mResutlsAdapter.notifyItemInserted(mQueryResults.size());
+            mResultsAdapter.notifyItemInserted(mQueryResults.size());
         }
         if (rows.size() == 1) {
             mQueryResults.get(0).setUnfolded(false);
@@ -425,7 +437,7 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
             for (NRResult queryResult : temp) {
                 int index = mQueryResults.indexOf(queryResult);
                 mQueryResults.remove(queryResult);
-                mResutlsAdapter.notifyItemRemoved(index);
+                mResultsAdapter.notifyItemRemoved(index);
             }
             temp.clear();
             mQueryResults = null;
@@ -482,39 +494,81 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
 
     @Override
     public void unfoldItem(NRResult result, boolean clear) {
-        if (result.isUnfolded()) {
+
+        if (result.isUnfolded()) { // close answer, show titles..
+
+            simpleDividerItemDecoration.setDisableDecoration(false);
+
             mUnfoldedResult.setUnfolded(false);
             mUnfoldedResult = null;
-            mQueryResults.remove(1);
-            mResutlsAdapter.notifyItemRemoved(1);
-            if (clear) {
+
+            // clear content, like, etc..
+            ArrayList<NRResult> temp = new ArrayList<>(mQueryResults);
+            for (NRResult item1 : temp) {
+                int pos = mQueryResults.indexOf(item1);
+                if(pos > 0) {
+                    mQueryResults.remove(pos);
+                    mResultsAdapter.notifyItemRemoved(pos);
+                }
+            }
+            temp.clear();
+
+            if (clear) { // clear title
+
                 mQueryResults.remove(0);
-                mResutlsAdapter.notifyItemRemoved(0);
-            } else {
+                mResultsAdapter.notifyItemRemoved(0);
+
+            } else { // show all titles, except the one that is already opened..
+
                 int pos = mQueryCopyResults.indexOf(result);
                 for (int i = 0; i < mQueryCopyResults.size(); i++) {
                     if (i != pos) {
                         mQueryResults.add(i, mQueryCopyResults.get(i));
-                        mResutlsAdapter.notifyItemInserted(i);
+                        mResultsAdapter.notifyItemInserted(i);
+                    } else {
+                        mResultsAdapter.notifyItemChanged(i);
                     }
                 }
             }
-        } else {
+        } else { // title was clicked, show answer
+
+            simpleDividerItemDecoration.setDisableDecoration(true);
+
+            mResultsRecyclerView.addItemDecoration(simpleDividerItemDecoration);
+
             ArrayList<NRResult> temp = new ArrayList<>(mQueryResults);
             for (NRResult item1 : temp) {
                 int pos = mQueryResults.indexOf(item1);
                 if (!item1.equals(result)) {
                     mQueryResults.remove(item1);
-                    mResutlsAdapter.notifyItemRemoved(pos);
+                    mResultsAdapter.notifyItemRemoved(pos);
                 }
             }
+
+            // set the NRResult of the answer we clicked..
             mUnfoldedResult = mQueryResults.get(0);
             mUnfoldedResult.setUnfolded(true);
             temp.clear();
+
+            //change the title's height to wrap content
+            mResultsAdapter.notifyItemChanged(0);
+
+            //content
             NRResult content = new NRResult(result.getFetchedResult(), NRResultItem.RowType.CONTENT);
             mQueryResults.add(content);
-            mResutlsAdapter.notifyItemInserted(1);
+            mResultsAdapter.notifyItemInserted(1);
 
+            //like
+            NRResult like = new NRResult(result.getFetchedResult(), NRResultItem.RowType.LIKE);
+            mQueryResults.add(like);
+            mResultsAdapter.notifyItemInserted(2);
+
+            //channeling
+            if(result.getFetchedResult().getChanneling() != null && result.getFetchedResult().getChanneling().size() > 0) {
+                NRResult channeling = new NRResult(result.getFetchedResult(), NRResultItem.RowType.CHANNELING);
+                mQueryResults.add(channeling);
+                mResultsAdapter.notifyItemInserted(3);
+            }
         }
     }
 
@@ -541,8 +595,7 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
         });
     }
 
-
-    private class NRResutlsAdapter extends RecyclerView.Adapter<NRResultItem> {
+    private class NRResultsAdapter extends RecyclerView.Adapter<NRResultItem> {
         private boolean mShouldResetLikeView = false;
 
         public void setShouldResetLikeView(boolean shouldResetLikeView) {
@@ -556,19 +609,41 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
 
             switch (viewType) {
                 case 0: // title
-                    view = LayoutInflater.from(parent.getContext()).inflate(R.layout.result_item, parent, false);
-                    return new NRTitleItem(view, NRWidgetFragment.this, mResultsRecyclerView.getHeight(), mNanoRep.getNRConfiguration());
+                    view = LayoutInflater.from(parent.getContext()).inflate(R.layout.title_item, parent, false);
+                    return new NRTitleItem(view, NRWidgetFragment.this, mNanoRep.getNRConfiguration());
                 case 1: // content
                     view = LayoutInflater.from(parent.getContext()).inflate(R.layout.content_item, parent, false);
-                    return new NRContentItem(view, NRWidgetFragment.this, mResultsRecyclerView.getHeight(), mNanoRep.getNRConfiguration());
+                    return new NRContentItem(view, NRWidgetFragment.this, mNanoRep.getNRConfiguration());
+                case 2: // like
+                    view = LayoutInflater.from(parent.getContext()).inflate(R.layout.like_item, parent, false);
+                    return new NRLikeItem(view, NRWidgetFragment.this, mNanoRep.getNRConfiguration());
+                case 3: // channeling
+                    view = LayoutInflater.from(parent.getContext()).inflate(R.layout.channeling_item, parent, false);
+                    return new NRChannelingItem(view, NRWidgetFragment.this, mNanoRep.getNRConfiguration());
                 default:
                     return null;
             }
         }
 
+        private  int getMaxHeight(int minResultHeight) {
+            NRTitleItem titleViewHolder = (NRTitleItem)mResultsRecyclerView.findViewHolderForLayoutPosition(0);
+            int titleHeight = titleViewHolder.getTitleMeasuredHeight();
+
+            if(titleHeight < minResultHeight) {
+                titleHeight = minResultHeight;
+            }
+
+            int maxHeight = mResultsRecyclerView.getHeight();
+
+            return maxHeight - titleHeight;
+        }
+
         @Override
         public void onBindViewHolder(NRResultItem holder, int position) {
-            holder.setResult(mQueryResults.get(position));
+            if(holder instanceof NRContentItem) {
+                ((NRContentItem) holder).setmMaxHeight(getMaxHeight(mQueryResults.get(position-1).getHeight()));
+            }
+            holder.setData(mQueryResults.get(position));
         }
 
         @Override
@@ -578,6 +653,10 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
                     return 0;
                 case CONTENT:
                     return 1;
+                case LIKE:
+                    return 2;
+                case CHANNELING:
+                    return 3;
                 default:
                     return -1;
             }

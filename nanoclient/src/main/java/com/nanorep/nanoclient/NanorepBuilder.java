@@ -10,10 +10,10 @@ import java.util.HashMap;
  */
 
 public class NanorepBuilder {
-    public static void initializeNanorep(Context context, String accountName) {
-        Nanorep nanorep = createNanorep(context, accountName, null, null);
-        nanorep.fetchConfiguration(null);
-    }
+//    public static void initializeNanorep(Context context, String accountName) {
+//        Nanorep nanorep = createNanorep(context, accountName, null, null);
+//        nanorep.fetchConfiguration(null);
+//    }
 
     public static Nanorep createNanorep(Context context, String accountName, String knowledgeBase, HashMap<String, String> nanorepContext) {
         Nanorep.AccountParams accountParams = new Nanorep.AccountParams();

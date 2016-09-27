@@ -59,6 +59,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/noTiltleView"
         android:layout_alignParentBottom="true"
+        android:padding="5dp"
         android:id="@+id/resultsView"
         android:background="@color/white"
         android:layout_alignParentEnd="true"
