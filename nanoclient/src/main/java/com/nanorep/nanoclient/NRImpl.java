@@ -311,10 +311,12 @@ public class NRImpl implements Nanorep {
     @Override
     public void likeForFAQResult(final NRFAQLikeParams likeParams, final OnLikeSentListener onLikeSentListener) {
         Uri.Builder uriBuilder = mAccountParams.getUri();
-        uriBuilder.appendPath("widget");
-        uriBuilder.appendPath("faqAction.gif");
+        uriBuilder.appendPath("api/widget/v1/thumb.js");
         for (String key: likeParams.getParams().keySet()) {
             uriBuilder.appendQueryParameter(key, likeParams.getParams().get(key));
+        }
+        if (mSessionId != null) {
+            uriBuilder.appendQueryParameter("sid", mSessionId);
         }
         NRConnection.getInstance(debug).connectionWithRequest(uriBuilder.build(), new NRConnection.Listener() {
             @Override

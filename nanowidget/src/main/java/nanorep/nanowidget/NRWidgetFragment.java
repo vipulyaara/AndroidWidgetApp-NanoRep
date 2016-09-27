@@ -351,7 +351,9 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
             }
         }
         mQueryCopyResults = new ArrayList<NRResult>(mQueryResults);
-        getView().requestFocus();
+        if (getView() != null) {
+            getView().requestFocus();
+        }
     }
 
     @Override
@@ -373,8 +375,10 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
                                     if (mUnfoldedResult != null) {
                                         mUnfoldedResult = null;
                                     }
-                                    loadResults(mResultStack.get(mResultStack.size() - 2), false);
-                                    mSearchBar.updateText(getSearchStrings().get(getSearchStrings().size() - 2), true);
+                                    if (mResultStack.size() >= 2) {
+                                        loadResults(mResultStack.get(mResultStack.size() - 2), false);
+                                        mSearchBar.updateText(getSearchStrings().get(getSearchStrings().size() - 2), true);
+                                    }
                                     getSearchStrings().remove(getSearchStrings().size() - 1);
                                     mResultStack.remove(mResultStack.size() - 1);
                                 }
@@ -446,10 +450,16 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
 
     @Override
     public void searchForText(String text) {
+
+        // clear autocomplete view
         resetSuggestions = true;
         mSuggestionsView.setSuggestions(null);
-        getSearchStrings().add(text);
-        mFetchedDataManager.searchText(text);
+
+        // check the last search and search only if it is different 
+        if (!getSearchStrings().get(getSearchStrings().size() - 1).equals(text)) {
+            getSearchStrings().add(text);
+            mFetchedDataManager.searchText(text);
+        }
     }
 
     @Override
