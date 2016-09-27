@@ -15,13 +15,15 @@ import nanorep.nanowidget.R;
 public class SimpleDividerItemDecoration extends RecyclerView.ItemDecoration{
     private Drawable mDivider;
 
+    private boolean disableDecoration = false;
+
     public SimpleDividerItemDecoration(Resources resources) {
         mDivider = resources.getDrawable(R.drawable.line_divider);
     }
 
     public void onDrawOver(Canvas c, RecyclerView parent, RecyclerView.State state) {
 
-        if(parent.getItemAnimator() != null && parent.getItemAnimator().isRunning()) {
+        if((parent.getItemAnimator() != null && parent.getItemAnimator().isRunning()) || disableDecoration) {
             return;
         }
 
@@ -41,6 +43,11 @@ public class SimpleDividerItemDecoration extends RecyclerView.ItemDecoration{
             mDivider.draw(c);
         }
     }
+
+    public void setDisableDecoration(boolean disableDecoration) {
+        this.disableDecoration = disableDecoration;
+    }
+
 
 //    @Override
 //    public void onDraw(Canvas c, RecyclerView parent, RecyclerView.State state) {

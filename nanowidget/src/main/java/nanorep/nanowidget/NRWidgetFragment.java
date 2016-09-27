@@ -76,6 +76,7 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
     private RelativeLayout mNotitleViewHolder;
     private boolean autocompleteEnabled = true;
 
+    private SimpleDividerItemDecoration simpleDividerItemDecoration;
 
     public NRWidgetFragment() {
         // Required empty public constructor
@@ -286,7 +287,9 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
 
         mResultsRecyclerView = (RecyclerView) nanoView.findViewById(R.id.resultsView);
         mResultsRecyclerView.setLayoutManager(new NRLinearLayoutManager(getContext()));
-        mResultsRecyclerView.addItemDecoration(new SimpleDividerItemDecoration(getResources()));
+
+        simpleDividerItemDecoration = new SimpleDividerItemDecoration(getResources());
+        mResultsRecyclerView.addItemDecoration(simpleDividerItemDecoration);
 
         mResultsRecyclerView.setAdapter(mResultsAdapter);
         NRItemAnimator animator = new NRItemAnimator();
@@ -494,6 +497,8 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
 
         if (result.isUnfolded()) { // close answer, show titles..
 
+            simpleDividerItemDecoration.setDisableDecoration(false);
+
             mUnfoldedResult.setUnfolded(false);
             mUnfoldedResult = null;
 
@@ -526,6 +531,10 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
                 }
             }
         } else { // title was clicked, show answer
+
+            simpleDividerItemDecoration.setDisableDecoration(true);
+
+            mResultsRecyclerView.addItemDecoration(simpleDividerItemDecoration);
 
             ArrayList<NRResult> temp = new ArrayList<>(mQueryResults);
             for (NRResult item1 : temp) {
