@@ -39,6 +39,7 @@ public class NRImpl implements Nanorep {
     private HashMap<String, ArrayList<OnFAQAnswerFetchedListener>> faqRequestListenersMap;
     private Handler mHandler;
     private NRConfiguration mCnf;
+    private NRLogger nrLogger;
 
     public NRImpl(Context context, AccountParams accountParams) {
         mContext = context;
@@ -92,6 +93,11 @@ public class NRImpl implements Nanorep {
                     keepAlive(mDelay);
                 }
             }
+
+            @Override
+            public void log(String tag, String msg) {
+                nrLogger.log(tag, msg);
+            }
         });
     }
 
@@ -113,6 +119,11 @@ public class NRImpl implements Nanorep {
                 @Override
                 public void response(Object responseParam, int status, NRError error) {
                     executeRequest(uriBuilder, listener);
+                }
+
+                @Override
+                public void log(String tag, String msg) {
+                    nrLogger.log(tag, msg);
                 }
             });
         }
@@ -141,6 +152,11 @@ public class NRImpl implements Nanorep {
 
                     listener.response(responseParam, status, error);
                 }
+            }
+
+            @Override
+            public void log(String tag, String msg) {
+                nrLogger.log(tag, msg);
             }
         });
     }
@@ -175,6 +191,11 @@ public class NRImpl implements Nanorep {
                         NRImpl.this.getCachedSearches().put(text, response);
                         onSearchResultsFetchedListener.onSearchResponse(response, null);
                     }
+                }
+
+                @Override
+                public void log(String tag, String msg) {
+                    nrLogger.log(tag, msg);
                 }
             });
         }
@@ -228,6 +249,11 @@ public class NRImpl implements Nanorep {
                         }
                     }
                 }
+
+                @Override
+                public void log(String tag, String msg) {
+                    nrLogger.log(tag, msg);
+                }
             });
         }
     }
@@ -247,6 +273,11 @@ public class NRImpl implements Nanorep {
                 } else if (responseParam != null) {
                     onLikeSentListener.onLikeSent(likeParams.getArticleId(), (Integer) ((HashMap) responseParam).get("type"), ((HashMap) responseParam).get("result").equals("True"));
                 }
+            }
+
+            @Override
+            public void log(String tag, String msg) {
+                nrLogger.log(tag, msg);
             }
         });
     }
@@ -300,6 +331,11 @@ public class NRImpl implements Nanorep {
 
                         NRImpl.this.getFaqRequestListenersMap().remove(answerId);
                     }
+
+                    @Override
+                    public void log(String tag, String msg) {
+                        nrLogger.log(tag, msg);
+                    }
                 });
             } else {
                 onFAQAnswerFetchedListenerArr.add(onFAQAnswerFetchedListener);
@@ -324,6 +360,11 @@ public class NRImpl implements Nanorep {
                 } else {
                     onLikeSentListener.onLikeSent(likeParams.getAnswerId(), Integer.parseInt(likeParams.getParams().get("type")), responseParam == null);
                 }
+            }
+
+            @Override
+            public void log(String tag, String msg) {
+                nrLogger.log(tag, msg);
             }
         });
     }
@@ -384,6 +425,11 @@ public class NRImpl implements Nanorep {
                                         }
                                     }
                                 }
+
+                                @Override
+                                public void log(String tag, String msg) {
+                                    nrLogger.log(tag, msg);
+                                }
                             });
                         } else {
 
@@ -399,6 +445,11 @@ public class NRImpl implements Nanorep {
                             }
                         }
                     }
+                }
+
+                @Override
+                public void log(String tag, String msg) {
+                    nrLogger.log(tag, msg);
                 }
             });
         }
@@ -421,7 +472,11 @@ public class NRImpl implements Nanorep {
 
     @Override
     public void setDebugMode(boolean checked) {
-        NRLogger.getInstance().setDebug(checked);
+        if (nrLogger == null) {
+            nrLogger = new NRLogger();
+        }
+
+        nrLogger.setDebug(checked);
     }
 
     private void updateFAQContentsAndCallHello(NRConfiguration cnf)
@@ -430,6 +485,11 @@ public class NRImpl implements Nanorep {
             @Override
             public void response(Object responseParam, int status, NRError error) {
 
+            }
+
+            @Override
+            public void log(String tag, String msg) {
+                nrLogger.log(tag, msg);
             }
         });
 

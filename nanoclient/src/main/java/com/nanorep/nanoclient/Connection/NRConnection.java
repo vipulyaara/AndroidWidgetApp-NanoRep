@@ -28,6 +28,7 @@ public class NRConnection {
 
     public interface Listener {
         void response(Object responseParam, int status, NRError error);
+        void log(String tag, String msg);
     }
 
     private NRConnection() {
@@ -59,7 +60,7 @@ public class NRConnection {
                         String jsonString = new String((byte[])data);
 
                         //log
-                        NRLogger.getInstance().log(TAG_RESPONSE, jsonString);
+                        listener.log(TAG_RESPONSE, jsonString);
 
                         Object retMap = NRUtilities.jsonStringToPropertyList(jsonString);
                         listener.response(retMap, downloader.getResponseStatus(), null);
@@ -72,7 +73,7 @@ public class NRConnection {
         });
 
         //log
-        NRLogger.getInstance().log(TAG_REQUEST, uri.toString());
+        listener.log(TAG_REQUEST, uri.toString());
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             downloader.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, uri);
