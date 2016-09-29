@@ -1,6 +1,9 @@
 package nanorep.nanoandroidwidgetdemoapp;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -19,11 +22,18 @@ import com.nanorep.nanoclient.NanorepBuilder;
 import com.nanorep.nanoclient.Response.NRConfiguration;
 
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
+import nanorep.nanowidget.Components.AbstractViews.NRCustomSearchBar;
+import nanorep.nanowidget.Components.AbstractViews.NRCustomSuggestionsView;
+import nanorep.nanowidget.Components.NRSearchBar;
+import nanorep.nanowidget.Components.NRSuggestionsView;
+import nanorep.nanowidget.Components.NRViewAdapter;
 import nanorep.nanowidget.NRWidgetFragment;
+import nanorep.nanowidget.interfaces.NRCustomViewAdapter;
 
-public class MainActivity extends AppCompatActivity implements NRWidgetFragment.NRWidgetFragmentListener {
+public class MainActivity extends AppCompatActivity implements NRWidgetFragment.NRWidgetFragmentListener, NRCustomViewAdapter {
 
     private NRWidgetFragment nanoFragment;
     private CheckBox checkBox;
@@ -34,12 +44,16 @@ public class MainActivity extends AppCompatActivity implements NRWidgetFragment.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         getSupportActionBar().setElevation(0);
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#0aa0ff")));
 
         checkBox = (CheckBox) findViewById(R.id.checkbox);
 
         nanoFragment = NRWidgetFragment.newInstance();
         nanoFragment.setListener(this);
         Crittercism.initialize(getApplicationContext(), "d59e30ede3c34d0bbf19d0237c2f1bc800444503");
+
+        nanoFragment.setViewAdapter(this);
+
         Button loadButton = (Button)findViewById(R.id.button);
         if (loadButton != null) {
             loadButton.setOnClickListener(new View.OnClickListener() {
@@ -81,6 +95,21 @@ public class MainActivity extends AppCompatActivity implements NRWidgetFragment.
     public void onCancelWidget(NRWidgetFragment widgetFragment) {
         ((Button)findViewById(R.id.button)).setVisibility(View.VISIBLE);
         getSupportFragmentManager().beginTransaction().remove(nanoFragment).commit();
+    }
+
+
+    @Override
+    public NRCustomSearchBar getSearchBar(Context context) {
+        NRCustomSearchBar searchBar = new NRSearchBar(context);
+
+        return searchBar;
+    }
+
+    @Override
+    public NRCustomSuggestionsView getSuggestionsView(Context context) {
+        NRSuggestionsView suggestionsView = new NRSuggestionsView(context);
+
+        return suggestionsView;
     }
 
     private class AppWebviewClient extends WebViewClient {

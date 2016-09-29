@@ -14,6 +14,7 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -24,6 +25,8 @@ import com.nanorep.nanoclient.RequestParams.NRLikeType;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import nanorep.nanowidget.Components.AbstractViews.NRCustomSearchBar;
+import nanorep.nanowidget.Components.AbstractViews.NRCustomSuggestionsView;
 import nanorep.nanowidget.Components.ChannelPresenters.NRChannelStrategy;
 import nanorep.nanowidget.Components.ChannelPresenters.NRWebContentFragment;
 import nanorep.nanowidget.Components.DislikeDialog;
@@ -37,12 +40,14 @@ import nanorep.nanowidget.Components.NRResultItem;
 import nanorep.nanowidget.Components.NRTitleItem;
 import nanorep.nanowidget.Components.NRSearchBar;
 import nanorep.nanowidget.Components.NRSuggestionsView;
+import nanorep.nanowidget.Components.NRViewAdapter;
 import nanorep.nanowidget.Components.SimpleDividerItemDecoration;
 import nanorep.nanowidget.DataClasse.NRFetchedDataManager;
 import nanorep.nanowidget.DataClasse.NRResult;
 import nanorep.nanowidget.Utilities.Calculate;
 import nanorep.nanowidget.Utilities.NRItemAnimator;
 import nanorep.nanowidget.Utilities.NRLinearLayoutManager;
+import nanorep.nanowidget.interfaces.NRCustomViewAdapter;
 import nanorep.nanowidget.interfaces.NRFetcherListener;
 import nanorep.nanowidget.interfaces.NRResultItemListener;
 import nanorep.nanowidget.interfaces.NRSearchBarListener;
@@ -55,8 +60,13 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
 
     private NRFetchedDataManager mFetchedDataManager;
 
-    private NRSearchBar mSearchBar;
-    private NRSuggestionsView mSuggestionsView;
+    // search bar
+    private NRCustomSearchBar mSearchBar;
+    private LinearLayout mSearchBarContainer;
+
+    // suggestion view
+    private NRCustomSuggestionsView mSuggestionsView;
+    private LinearLayout mSuggestionViewContainer;
 
     private ArrayList<NRResult> mQueryResults;
     private ArrayList<NRResult> mQueryCopyResults;
@@ -77,6 +87,8 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
     private boolean autocompleteEnabled = true;
 
     private SimpleDividerItemDecoration simpleDividerItemDecoration;
+
+    private NRCustomViewAdapter viewAdapter;
 
     public NRWidgetFragment() {
         // Required empty public constructor
@@ -277,13 +289,15 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
 
             }
         });
+        
+        setViews(nanoView);
 
-        mSearchBar = (NRSearchBar) nanoView.findViewById(R.id.searchBar);
-        mSearchBar.setListener(this);
+//        mSearchBar = (NRSearchBar) nanoView.findViewById(R.id.searchBar);
+//        mSearchBar.setListener(this);
         mNotitleViewHolder = (RelativeLayout) nanoView.findViewById(R.id.noTiltleView);
         mNoTitleView = (TextView) nanoView.findViewById(R.id.noTitleTextView);
-        mSuggestionsView = (NRSuggestionsView)nanoView.findViewById(R.id.suggestions);
-        mSuggestionsView.setListener(this);
+//        mSuggestionsView = (NRSuggestionsView)nanoView.findViewById(R.id.suggestions);
+//        mSuggestionsView.setListener(this);
 
         mResultsRecyclerView = (RecyclerView) nanoView.findViewById(R.id.resultsView);
         mResultsRecyclerView.setLayoutManager(new NRLinearLayoutManager(getContext()));
@@ -311,6 +325,38 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
             });
         }
         return nanoView;
+    }
+
+    private void setViews(View nanoView) {
+        if(viewAdapter == null) {
+            viewAdapter  = new NRViewAdapter();
+        }
+
+        // search bar
+        mSearchBarContainer = (LinearLayout) nanoView.findViewById(R.id.search_bar_container);
+
+        mSearchBar = viewAdapter.getSearchBar(getContext());
+
+        if(mSearchBar == null) {
+            mSearchBar = new NRSearchBar(getContext());
+        }
+
+        mSearchBar.setListener(this);
+
+        mSearchBarContainer.addView(mSearchBar, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT));
+
+        // suggestion view
+        mSuggestionViewContainer = (LinearLayout) nanoView.findViewById(R.id.suggestion_view_container);
+
+        mSuggestionsView = viewAdapter.getSuggestionsView(getContext());
+
+        if(mSuggestionsView == null)  {
+            mSuggestionsView = new NRSuggestionsView(getContext());
+        }
+
+        mSuggestionsView.setListener(this);
+
+        mSuggestionViewContainer.addView(mSuggestionsView);
     }
 
     private void showSuggestionsView(ViewGroup container) {
@@ -377,7 +423,7 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
                                     }
                                     if (mResultStack.size() >= 2) {
                                         loadResults(mResultStack.get(mResultStack.size() - 2), false);
-                                        mSearchBar.updateText(getSearchStrings().get(getSearchStrings().size() - 2), true);
+                                        mSearchBar.updateText(getSearchStrings().get(getSearchStrings().size() - 2));
                                     }
                                     getSearchStrings().remove(getSearchStrings().size() - 1);
                                     mResultStack.remove(mResultStack.size() - 1);
@@ -681,5 +727,10 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
         }
 
     }
+
+    public void setViewAdapter(NRCustomViewAdapter viewAdapter) {
+        this.viewAdapter = viewAdapter;
+    }
+
 
 }

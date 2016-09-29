@@ -15,6 +15,7 @@ import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import nanorep.nanowidget.Components.AbstractViews.NRCustomSearchBar;
 import nanorep.nanowidget.R;
 import nanorep.nanowidget.interfaces.NRSearchBarListener;
 
@@ -23,13 +24,13 @@ import nanorep.nanowidget.interfaces.NRSearchBarListener;
 /**
  * Created by nissimpardo on 07/06/16.
  */
-public class NRSearchBar extends RelativeLayout implements View.OnClickListener, TextWatcher, TextView.OnEditorActionListener {
+public class NRSearchBar extends NRCustomSearchBar implements View.OnClickListener, TextWatcher, TextView.OnEditorActionListener {
     private NRSearchBarListener mListener;
     private ImageButton mSpeechButton;
     private NREditText mSearchEditText;
 
-    public NRSearchBar(Context context, AttributeSet attrs) {
-        super(context, attrs);
+    public NRSearchBar(Context context) {
+        super(context);
         LayoutInflater.from(context).inflate(R.layout.search_bar, this);
     }
 
@@ -39,9 +40,9 @@ public class NRSearchBar extends RelativeLayout implements View.OnClickListener,
         mSearchEditText = (NREditText) child.findViewById(R.id.searchText);
         mSearchEditText.addTextChangedListener(this);
         mSearchEditText.setHint(getResources().getString(R.string.type_question_here));
-        mSearchEditText.setTextColor(Color.WHITE);
-        mSearchEditText.setHintTextColor(Color.LTGRAY);
-        mSearchEditText.getBackground().setColorFilter(Color.TRANSPARENT, PorterDuff.Mode.SRC_IN);
+//        mSearchEditText.setTextColor(Color.WHITE);
+        mSearchEditText.setHintTextColor(Color.WHITE);
+//        mSearchEditText.getBackground().setColorFilter(Color.TRANSPARENT, PorterDuff.Mode.SRC_IN);
         mSearchEditText.setOnEditorActionListener(this);
         mSpeechButton = (ImageButton) child.findViewById(R.id.speechButton);
         mSpeechButton.setOnClickListener(this);
@@ -70,7 +71,7 @@ public class NRSearchBar extends RelativeLayout implements View.OnClickListener,
         mSearchEditText.setHint(text);
     }
 
-    public void updateText(String text, boolean withListener) {
+    public void updateEditTextView(String text) {
         mSearchEditText.removeTextChangedListener(this);
         mSpeechButton.setVisibility(text.length() > 0 ? VISIBLE : INVISIBLE);
         updateText(text);
