@@ -9,11 +9,11 @@ import nanorep.nanowidget.interfaces.NRSearchBarListener;
  * Created by nanorep on 29/09/2016.
  */
 
-public abstract class NRCustomSearchBar extends LinearLayout{
+public abstract class NRCustomSearchBarView extends LinearLayout{
 
     protected NRSearchBarListener mListener;
 
-    public NRCustomSearchBar(Context context) {
+    public NRCustomSearchBarView(Context context) {
         super(context);
     }
 
