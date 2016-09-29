@@ -25,7 +25,7 @@ import com.nanorep.nanoclient.Response.NRConfiguration;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import nanorep.nanowidget.Components.AbstractViews.NRCustomSearchBar;
+import nanorep.nanowidget.Components.AbstractViews.NRCustomSearchBarView;
 import nanorep.nanowidget.Components.AbstractViews.NRCustomSuggestionsView;
 import nanorep.nanowidget.Components.NRSearchBar;
 import nanorep.nanowidget.Components.NRSuggestionsView;
@@ -99,8 +99,8 @@ public class MainActivity extends AppCompatActivity implements NRWidgetFragment.
 
 
     @Override
-    public NRCustomSearchBar getSearchBar(Context context) {
-        NRCustomSearchBar searchBar = new NRSearchBar(context);
+    public NRCustomSearchBarView getSearchBar(Context context) {
+        NRCustomSearchBarView searchBar = new NRSearchBar(context);
 
         return searchBar;
     }

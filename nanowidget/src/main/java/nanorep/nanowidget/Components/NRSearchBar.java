@@ -15,7 +15,7 @@ import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import nanorep.nanowidget.Components.AbstractViews.NRCustomSearchBar;
+import nanorep.nanowidget.Components.AbstractViews.NRCustomSearchBarView;
 import nanorep.nanowidget.R;
 import nanorep.nanowidget.interfaces.NRSearchBarListener;
 
@@ -24,7 +24,7 @@ import nanorep.nanowidget.interfaces.NRSearchBarListener;
 /**
  * Created by nissimpardo on 07/06/16.
  */
-public class NRSearchBar extends NRCustomSearchBar implements View.OnClickListener, TextWatcher, TextView.OnEditorActionListener {
+public class NRSearchBar extends NRCustomSearchBarView implements View.OnClickListener, TextWatcher, TextView.OnEditorActionListener {
     private NRSearchBarListener mListener;
     private ImageButton mSpeechButton;
     private NREditText mSearchEditText;

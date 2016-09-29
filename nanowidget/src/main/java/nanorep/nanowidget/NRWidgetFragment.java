@@ -25,7 +25,7 @@ import com.nanorep.nanoclient.RequestParams.NRLikeType;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import nanorep.nanowidget.Components.AbstractViews.NRCustomSearchBar;
+import nanorep.nanowidget.Components.AbstractViews.NRCustomSearchBarView;
 import nanorep.nanowidget.Components.AbstractViews.NRCustomSuggestionsView;
 import nanorep.nanowidget.Components.ChannelPresenters.NRChannelStrategy;
 import nanorep.nanowidget.Components.ChannelPresenters.NRWebContentFragment;
@@ -61,7 +61,7 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
     private NRFetchedDataManager mFetchedDataManager;
 
     // search bar
-    private NRCustomSearchBar mSearchBar;
+    private NRCustomSearchBarView mSearchBar;
     private LinearLayout mSearchBarContainer;
 
     // suggestion view

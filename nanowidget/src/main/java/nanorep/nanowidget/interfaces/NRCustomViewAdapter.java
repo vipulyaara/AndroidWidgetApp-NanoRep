@@ -2,7 +2,7 @@ package nanorep.nanowidget.interfaces;
 
 import android.content.Context;
 
-import nanorep.nanowidget.Components.AbstractViews.NRCustomSearchBar;
+import nanorep.nanowidget.Components.AbstractViews.NRCustomSearchBarView;
 import nanorep.nanowidget.Components.AbstractViews.NRCustomSuggestionsView;
 
 /**
@@ -11,7 +11,7 @@ import nanorep.nanowidget.Components.AbstractViews.NRCustomSuggestionsView;
 
 public interface NRCustomViewAdapter {
 
-    NRCustomSearchBar getSearchBar(Context context);
+    NRCustomSearchBarView getSearchBar(Context context);
 
     NRCustomSuggestionsView getSuggestionsView(Context context);
 }
