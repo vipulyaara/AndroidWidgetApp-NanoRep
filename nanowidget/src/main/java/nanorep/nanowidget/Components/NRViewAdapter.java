@@ -4,6 +4,7 @@ import android.content.Context;
 
 import nanorep.nanowidget.Components.AbstractViews.NRCustomSearchBarView;
 import nanorep.nanowidget.Components.AbstractViews.NRCustomSuggestionsView;
+import nanorep.nanowidget.Components.AbstractViews.NRCustomTitleView;
 import nanorep.nanowidget.interfaces.NRCustomViewAdapter;
 
 /**
@@ -20,5 +21,10 @@ public class NRViewAdapter implements NRCustomViewAdapter {
     @Override
     public NRCustomSuggestionsView getSuggestionsView(Context context) {
         return new NRSuggestionsView(context);
+    }
+
+    @Override
+    public NRCustomTitleView getTitle(Context context) {
+        return new NRTitleView(context);
     }
 }

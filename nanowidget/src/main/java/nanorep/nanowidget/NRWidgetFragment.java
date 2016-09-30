@@ -27,6 +27,7 @@ import java.util.HashMap;
 
 import nanorep.nanowidget.Components.AbstractViews.NRCustomSearchBarView;
 import nanorep.nanowidget.Components.AbstractViews.NRCustomSuggestionsView;
+import nanorep.nanowidget.Components.AbstractViews.NRCustomTitleView;
 import nanorep.nanowidget.Components.ChannelPresenters.NRChannelStrategy;
 import nanorep.nanowidget.Components.ChannelPresenters.NRWebContentFragment;
 import nanorep.nanowidget.Components.DislikeDialog;
@@ -40,6 +41,7 @@ import nanorep.nanowidget.Components.NRResultItem;
 import nanorep.nanowidget.Components.NRTitleItem;
 import nanorep.nanowidget.Components.NRSearchBar;
 import nanorep.nanowidget.Components.NRSuggestionsView;
+import nanorep.nanowidget.Components.NRTitleView;
 import nanorep.nanowidget.Components.NRViewAdapter;
 import nanorep.nanowidget.Components.SimpleDividerItemDecoration;
 import nanorep.nanowidget.DataClasse.NRFetchedDataManager;
@@ -666,7 +668,14 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
             switch (viewType) {
                 case 0: // title
                     view = LayoutInflater.from(parent.getContext()).inflate(R.layout.title_item, parent, false);
-                    return new NRTitleItem(view, NRWidgetFragment.this, mNanoRep.getNRConfiguration());
+
+                    NRCustomTitleView titleView = viewAdapter.getTitle(getContext());
+
+                    LinearLayout titleContainer = (LinearLayout) view.findViewById(R.id.title_container);
+
+                    titleContainer.addView(titleView);
+
+                    return new NRTitleItem(view, NRWidgetFragment.this, mNanoRep.getNRConfiguration(), titleView);
                 case 1: // content
                     view = LayoutInflater.from(parent.getContext()).inflate(R.layout.content_item, parent, false);
                     return new NRContentItem(view, NRWidgetFragment.this, mNanoRep.getNRConfiguration());

@@ -1,47 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
                                     android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
+                                    android:layout_height="wrap_content"
                                     android:id="@+id/cardView">
+<!--
+    <nanorep.nanowidget.Components.NRTitleView
+        android:id="@+id/title_view"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent">
+    </nanorep.nanowidget.Components.NRTitleView>
+-->
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/topView">
-
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/titleButton"
-                android:layout_toStartOf="@+id/shareButton"
-                android:background="#00ffffff"
-                android:textColor="#189ac6"
-                android:layout_centerVertical="true"
-                android:textAlignment="viewStart"
-                android:text="title"
-                android:ellipsize="end"
-                android:maxLines="2"
-                android:textStyle="bold"
-                android:paddingLeft="10dp"
-                android:textAllCaps="false"/>
-            <ImageButton
-                android:layout_width="40dp"
-                android:layout_height="wrap_content"
-                android:id="@+id/shareButton"
-                android:layout_centerVertical="true"
-                android:layout_toLeftOf="@+id/unFoldButton"
-                android:src="@drawable/share_icon"
-                android:background="#00ffffff"/>
-            <ImageButton
-                android:layout_width="40dp"
-                android:layout_height="wrap_content"
-                android:id="@+id/unFoldButton"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:src="@drawable/answer_arrowdown_icon"
-                android:background="#00ffffff"/>
-        </RelativeLayout>
-
-
+    <LinearLayout
+        android:id="@+id/title_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="vertical">
+    </LinearLayout>
 
 </android.support.v7.widget.CardView>
