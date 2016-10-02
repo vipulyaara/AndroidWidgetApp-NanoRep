@@ -2,4 +2,5 @@
     <string name="app_name">NanoWidget</string>
 
     <string name="type_question_here">Type Your Question Here</string>
+    <string name="frequently_asked_questions">Frequently Asked Questions</string>
 </resources>

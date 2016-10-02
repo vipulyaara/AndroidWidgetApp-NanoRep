@@ -2,6 +2,7 @@
              xmlns:tools="http://schemas.android.com/tools"
              android:layout_width="match_parent"
              android:layout_height="match_parent"
+             android:layoutDirection="ltr"
              xmlns:app="http://schemas.android.com/apk/res-auto"
              android:background="#eaeaea"
              tools:context="nanorep.nanowidget.NRWidgetFragment">
@@ -10,19 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/contentId">
-<!--
-    <nanorep.nanowidget.Components.NRSearchBar
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="55.2dp"
-        android:id="@+id/searchBar"
-        android:background="#3F51B5"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentStart="true"
-        >
-    </nanorep.nanowidget.Components.NRSearchBar>
--->
+
         <LinearLayout
             android:id="@+id/search_bar_container"
             android:layout_width="match_parent"
@@ -37,21 +26,6 @@
             android:layout_below="@id/search_bar_container"
             android:orientation="vertical">
         </LinearLayout>
-<!--
-        <nanorep.nanowidget.Components.NRSuggestionsView
-            android:id="@+id/suggestions"
-            android:layout_width="match_parent"
-
-            android:layout_below="@id/search_bar_container"
-            android:layout_height="0dp">
-                <android.support.v7.widget.RecyclerView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="#ffffffff"
-                    android:id="@+id/recyclerSuggestions">
-                </android.support.v7.widget.RecyclerView>
-        </nanorep.nanowidget.Components.NRSuggestionsView>
--->
 
         <RelativeLayout
             android:id="@+id/noTiltleView"
@@ -68,11 +42,25 @@
                 android:layout_centerInParent="true"/>
         </RelativeLayout>
 
+        <TextView
+            android:id="@+id/frequently_questions_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/frequently_asked_questions"
+            android:layout_below="@+id/noTiltleView"
+            android:gravity="left"
+            android:textSize="16.6sp"
+            android:textColor="#0aa0ff"
+            android:layout_marginTop="18dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginBottom="16dp"/>
+
         <android.support.v7.widget.RecyclerView
             android:id="@+id/resultsView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/noTiltleView"
+            android:layout_below="@+id/frequently_questions_tv"
             android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true"
             android:layout_alignParentStart="true">
