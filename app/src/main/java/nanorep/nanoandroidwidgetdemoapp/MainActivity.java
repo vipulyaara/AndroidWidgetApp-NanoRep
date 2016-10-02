@@ -25,9 +25,11 @@ import com.nanorep.nanoclient.Response.NRConfiguration;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import nanorep.nanowidget.Components.AbstractViews.NRCustomContentView;
 import nanorep.nanowidget.Components.AbstractViews.NRCustomSearchBarView;
 import nanorep.nanowidget.Components.AbstractViews.NRCustomSuggestionsView;
 import nanorep.nanowidget.Components.AbstractViews.NRCustomTitleView;
+import nanorep.nanowidget.Components.NRContentView;
 import nanorep.nanowidget.Components.NRSearchBar;
 import nanorep.nanowidget.Components.NRSuggestionsView;
 import nanorep.nanowidget.Components.NRTitleView;
@@ -119,6 +121,13 @@ public class MainActivity extends AppCompatActivity implements NRWidgetFragment.
         NRTitleView titleView = new NRTitleView(context);
 
         return titleView;
+    }
+
+    @Override
+    public NRCustomContentView getContent(Context context) {
+        NRContentView contentView = new NRContentView(context);
+
+        return contentView;
     }
 
     private class AppWebviewClient extends WebViewClient {

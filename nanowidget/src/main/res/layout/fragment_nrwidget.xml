@@ -36,31 +36,36 @@
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:id="@+id/noTitleTextView"
-                android:textColor="@color/white"
-                android:textSize="18sp"
-                android:paddingLeft="10dp"
+                android:textColor="#4a4a4a"
+                android:textSize="16sp"
+                android:layout_marginLeft="15dp"
                 android:layout_centerInParent="true"/>
         </RelativeLayout>
 
-        <TextView
-            android:id="@+id/frequently_questions_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/frequently_asked_questions"
+        <RelativeLayout
+            android:id="@+id/frequentlyQuestions"
+            android:layout_width="match_parent"
             android:layout_below="@+id/noTiltleView"
-            android:gravity="left"
-            android:textSize="16.6sp"
-            android:textColor="#0aa0ff"
-            android:layout_marginTop="18dp"
-            android:layout_marginRight="15dp"
-            android:layout_marginLeft="15dp"
-            android:layout_marginBottom="16dp"/>
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/frequentlyQuestionsTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/frequently_asked_questions"
+                android:gravity="left"
+                android:textSize="16.6sp"
+                android:textColor="#0aa0ff"
+                android:layout_marginTop="18dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginBottom="16dp"/>
+        </RelativeLayout>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/resultsView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/frequently_questions_tv"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/frequentlyQuestions"
             android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true"
             android:layout_alignParentStart="true">

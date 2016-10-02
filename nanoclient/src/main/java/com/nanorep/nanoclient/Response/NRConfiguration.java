@@ -178,7 +178,7 @@ public class NRConfiguration {
     public String getCustomNoAnswersTextContext(String context) {
         String text = (String)mParams.get("customNoAnswersTextContext");
         if (text == null) {
-            text = "No results for '{CONTEXT}'. Try a different phrasing or ask an agent.";
+            text = "We couldn't find any results matching '{CONTEXT}'. Please try rephrasing your request.";
         }
         return  text.replace("{CONTEXT}", context);
     }

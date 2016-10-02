@@ -2,6 +2,7 @@ package nanorep.nanowidget.Components;
 
 import android.content.Context;
 
+import nanorep.nanowidget.Components.AbstractViews.NRCustomContentView;
 import nanorep.nanowidget.Components.AbstractViews.NRCustomSearchBarView;
 import nanorep.nanowidget.Components.AbstractViews.NRCustomSuggestionsView;
 import nanorep.nanowidget.Components.AbstractViews.NRCustomTitleView;
@@ -16,6 +17,7 @@ public class NRViewAdapter implements NRCustomViewAdapter {
     NRSearchBar searchBar;
     NRSuggestionsView suggestionsView;
     NRTitleView titleView;
+    NRContentView contentView;
 
     @Override
     public NRCustomSearchBarView getSearchBar(Context context) {
@@ -39,5 +41,13 @@ public class NRViewAdapter implements NRCustomViewAdapter {
             titleView = new NRTitleView(context);
         }
         return titleView;
+    }
+
+    @Override
+    public NRCustomContentView getContent(Context context) {
+        if(contentView == null) {
+            contentView = new NRContentView(context);
+        }
+        return contentView;
     }
 }

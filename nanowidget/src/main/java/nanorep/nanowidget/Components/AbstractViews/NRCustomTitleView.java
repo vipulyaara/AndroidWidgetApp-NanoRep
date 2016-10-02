@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import nanorep.nanowidget.interfaces.NRResultItemListener;
 import nanorep.nanowidget.interfaces.NRSuggestionsListener;
@@ -30,9 +31,9 @@ public abstract class NRCustomTitleView extends LinearLayout{
 
     abstract public void hideUnfoldButton(boolean fold);
 
-    abstract public String getTitleText();
-
     abstract public int getTitleMeasuredHeight();
 
     abstract public ImageButton getUnFoldButton();
+
+    abstract public void setTitleColor(String color);
 }

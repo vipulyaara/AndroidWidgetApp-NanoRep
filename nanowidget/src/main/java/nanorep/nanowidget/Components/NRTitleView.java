@@ -1,6 +1,7 @@
 package nanorep.nanowidget.Components;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -73,11 +74,6 @@ public class NRTitleView extends NRCustomTitleView{
     }
 
     @Override
-    public String getTitleText() {
-        return mTitleButton.getText().toString();
-    }
-
-    @Override
     public int getTitleMeasuredHeight() {
         mTitleButton.measure( View.MeasureSpec.makeMeasureSpec(mTitleButton.getWidth(), View.MeasureSpec.AT_MOST),
                 View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
@@ -87,5 +83,10 @@ public class NRTitleView extends NRCustomTitleView{
 
     public ImageButton getUnFoldButton() {
         return mUnFoldButton;
+    }
+
+    @Override
+    public void setTitleColor(String color) {
+        mTitleButton.setTextColor(Color.parseColor(color));
     }
 }

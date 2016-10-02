@@ -75,9 +75,22 @@ public class NRTitleItem extends NRResultItem implements NRTitleListener{
 
         setItemMargins(mResult.isUnfolded());
 
+        setTitleColor(mResult.isUnfolded());
+
         setHeight(height);
 
         titleView.hideUnfoldButton(result.isSingle());
+    }
+
+    private void setTitleColor(boolean unfolded) {
+
+        String color = "#4a4a4a";
+
+        if(unfolded) {
+            color = "#0aa0ff";
+        }
+
+        titleView.setTitleColor(color);
     }
 
     private void setItemMargins(boolean unfolded) {

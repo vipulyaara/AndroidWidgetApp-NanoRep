@@ -3,11 +3,9 @@ package nanorep.nanowidget.Components;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceRequest;
@@ -16,9 +14,9 @@ import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
-import com.nanorep.nanoclient.Connection.NRUtilities;
 import com.nanorep.nanoclient.Response.NRHtmlParser;
 
+import nanorep.nanowidget.Components.AbstractViews.NRCustomContentView;
 import nanorep.nanowidget.R;
 
 
@@ -26,9 +24,9 @@ import nanorep.nanowidget.R;
  * Created by nissimpardo on 21/08/2016.
  */
 
-public class NRWebView extends FrameLayout {
+public class NRContentView extends NRCustomContentView {
 
-    private NRWebView.Listener mListener;
+//    private NRContentView.Listener mListener;
     private MyWebView mWebView;
     private RelativeLayout mLoadingView;
 
@@ -37,9 +35,9 @@ public class NRWebView extends FrameLayout {
         void onLinkClicked(String url);
     }
 
-    public NRWebView(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        LayoutInflater.from(context).inflate(R.layout.webview, this);
+    public NRContentView(Context context) {
+        super(context);
+        LayoutInflater.from(context).inflate(R.layout.content, this);
     }
 
     @SuppressLint("SetJavaScriptEnabled")
@@ -62,12 +60,12 @@ public class NRWebView extends FrameLayout {
         mLoadingView = (RelativeLayout) child.findViewById(R.id.webLoadingView);
     }
 
-    public void setListener(NRWebView.Listener listener) {
+    public void setListener(NRContentView.Listener listener) {
         mListener = listener;
     }
 
 
-
+    @Override
     public void loadData(String data, String mimeType, String encoding) {
         mLoadingView.setVisibility(VISIBLE);
         NRHtmlParser parser = new NRHtmlParser(data);
@@ -120,6 +118,7 @@ public class NRWebView extends FrameLayout {
         mWebView.loadDataWithBaseURL("file://", parsed, mimeType, encoding, "file://");
     }
 
+    @Override
     public void loadUrl(String url) {
         mWebView.loadUrl(url);
     }

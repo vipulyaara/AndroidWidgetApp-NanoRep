@@ -3,7 +3,6 @@ package nanorep.nanowidget.Components;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,7 +32,7 @@ import nanorep.nanowidget.interfaces.OnLinkedArticle;
  * Use the {@link NRLinkedArticleFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class NRLinkedArticleFragment extends Fragment implements NRWebView.Listener, OnFAQAnswerFetched, NRChannelItem.OnChannelSelectedListener, Nanorep.OnLikeSentListener, NRResultView, OnLikeListener {
+public class NRLinkedArticleFragment extends Fragment implements NRContentView.Listener, OnFAQAnswerFetched, NRChannelItem.OnChannelSelectedListener, Nanorep.OnLikeSentListener, NRResultView, OnLikeListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -44,7 +43,7 @@ public class NRLinkedArticleFragment extends Fragment implements NRWebView.Liste
     private String mParam2;
     private OnLinkedArticle mListener;
     private NRResultTitleView mTitleView;
-    private NRWebView mWebView;
+    private NRContentView mWebView;
     private NRLinkedArticlesBrowserView mBrowserView;
     private ArrayList<NRQueryResult> mLinkedArticles = new ArrayList<>();
     private int mIndex;
@@ -121,7 +120,7 @@ public class NRLinkedArticleFragment extends Fragment implements NRWebView.Liste
                 mDismissListener.onBackClicked();
             }
         });
-        mWebView = (NRWebView) view.findViewById(R.id.linkedArtWebView);
+        mWebView = (NRContentView) view.findViewById(R.id.linkedArtWebView);
         mWebView.setListener(this);
         mFeedbackView = (LinearLayout) view.findViewById(R.id.linkedArtFeedback);
         mLikeView = (NRLikeView) view.findViewById(R.id.linkedArtLikeView);

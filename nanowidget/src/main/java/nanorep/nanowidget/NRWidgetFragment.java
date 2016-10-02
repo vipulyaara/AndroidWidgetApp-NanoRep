@@ -5,7 +5,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -13,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -25,6 +25,7 @@ import com.nanorep.nanoclient.RequestParams.NRLikeType;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import nanorep.nanowidget.Components.AbstractViews.NRCustomContentView;
 import nanorep.nanowidget.Components.AbstractViews.NRCustomSearchBarView;
 import nanorep.nanowidget.Components.AbstractViews.NRCustomSuggestionsView;
 import nanorep.nanowidget.Components.AbstractViews.NRCustomTitleView;
@@ -39,9 +40,6 @@ import nanorep.nanowidget.Components.NRLikeView;
 import nanorep.nanowidget.Components.NRResultFragment;
 import nanorep.nanowidget.Components.NRResultItem;
 import nanorep.nanowidget.Components.NRTitleItem;
-import nanorep.nanowidget.Components.NRSearchBar;
-import nanorep.nanowidget.Components.NRSuggestionsView;
-import nanorep.nanowidget.Components.NRTitleView;
 import nanorep.nanowidget.Components.NRViewAdapter;
 import nanorep.nanowidget.Components.SimpleDividerItemDecoration;
 import nanorep.nanowidget.DataClasse.NRFetchedDataManager;
@@ -87,6 +85,8 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
     private TextView mNoTitleView;
     private RelativeLayout mNotitleViewHolder;
     private boolean autocompleteEnabled = true;
+
+    private RelativeLayout frequentlyQuestions;
 
     private SimpleDividerItemDecoration simpleDividerItemDecoration;
 
@@ -281,6 +281,10 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
 
             @Override
             public void presentSuggestion(String query, ArrayList<String> suggestions) {
+                if(frequentlyQuestions.getLayoutParams().height == RelativeLayout.LayoutParams.WRAP_CONTENT) {
+                    frequentlyQuestions.getLayoutParams().height = 0;
+                }
+
                 if (!resetSuggestions && mSearchBar.getText().length() - query.length() <= 1 && autocompleteEnabled) {
                     mSuggestionsView.setSuggestions(suggestions);
                 }
@@ -296,6 +300,8 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
 
         mNotitleViewHolder = (RelativeLayout) nanoView.findViewById(R.id.noTiltleView);
         mNoTitleView = (TextView) nanoView.findViewById(R.id.noTitleTextView);
+
+        frequentlyQuestions = (RelativeLayout) nanoView.findViewById(R.id.frequentlyQuestions);
 
         mResultsRecyclerView = (RecyclerView) nanoView.findViewById(R.id.resultsView);
         mResultsRecyclerView.setLayoutManager(new NRLinearLayoutManager(getContext()));
@@ -461,6 +467,7 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
             mNotitleViewHolder.getLayoutParams().height = 0;
             clearResults();
         }
+
         resetSuggestions = false;
         mFetchedDataManager.searchSuggestion(text);
         if (mUnfoldedResult != null) {
@@ -486,7 +493,6 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
 
     @Override
     public void searchForText(String text) {
-
         // clear autocomplete view
         resetSuggestions = true;
         mSuggestionsView.setSuggestions(null);
@@ -503,6 +509,7 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
         if (mNotitleViewHolder.getLayoutParams().height > 0) {
             mNotitleViewHolder.getLayoutParams().height = 0;
         }
+
         resetSuggestions = true;
         mSuggestionsView.setSuggestions(null);
 
@@ -543,6 +550,8 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
 
         if (result.isUnfolded()) { // close answer, show titles..
 
+            frequentlyQuestions.getLayoutParams().height = RelativeLayout.LayoutParams.WRAP_CONTENT;
+
             simpleDividerItemDecoration.setDisableDecoration(false);
 
 //            mUnfoldedResult.setUnfolded(false);
@@ -578,6 +587,8 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
                 }
             }
         } else { // title was clicked, show answer
+
+            frequentlyQuestions.getLayoutParams().height = 0;
 
             simpleDividerItemDecoration.setDisableDecoration(true);
 
@@ -667,7 +678,14 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
                     return new NRTitleItem(view, NRWidgetFragment.this, mNanoRep.getNRConfiguration(), titleView);
                 case 1: // content
                     view = LayoutInflater.from(parent.getContext()).inflate(R.layout.content_item, parent, false);
-                    return new NRContentItem(view, NRWidgetFragment.this, mNanoRep.getNRConfiguration());
+
+                    NRCustomContentView contentView = viewAdapter.getContent(getContext());
+
+                    FrameLayout contentContainer = (FrameLayout) view.findViewById(R.id.content_container);
+
+                    contentContainer.addView(contentView);
+
+                    return new NRContentItem(view, NRWidgetFragment.this, mNanoRep.getNRConfiguration(), contentView);
                 case 2: // like
                     view = LayoutInflater.from(parent.getContext()).inflate(R.layout.like_item, parent, false);
                     return new NRLikeItem(view, NRWidgetFragment.this, mNanoRep.getNRConfiguration());

@@ -11,7 +11,6 @@ import android.widget.RelativeLayout;
 
 import com.nanorep.nanoclient.Channeling.NRChanneling;
 import com.nanorep.nanoclient.Interfaces.NRQueryResult;
-import com.nanorep.nanoclient.RequestParams.NRLikeType;
 
 import java.util.ArrayList;
 
@@ -25,11 +24,11 @@ import nanorep.nanowidget.interfaces.OnLikeListener;
 import nanorep.nanowidget.interfaces.OnLinkedArticle;
 
 
-public class NRResultFragment extends Fragment implements View.OnClickListener, OnLikeListener, NRChannelItem.OnChannelSelectedListener, NRWebView.Listener, OnFAQAnswerFetched, NRResultView {
+public class NRResultFragment extends Fragment implements View.OnClickListener, OnLikeListener, NRChannelItem.OnChannelSelectedListener, NRContentView.Listener, OnFAQAnswerFetched, NRResultView {
 
     private NRResult mResult;
 
-    private NRWebView mWebView;
+    private NRContentView mWebView;
     private RelativeLayout mFeedbackView;
     private NRResultTitleView mTitle;
     private ImageButton mShareButton;
@@ -147,7 +146,7 @@ public class NRResultFragment extends Fragment implements View.OnClickListener, 
                 mShareButton.setOnClickListener(NRResultFragment.this);
             }
 
-            mWebView = (NRWebView) view.findViewById(R.id.resultWebView);
+            mWebView = (NRContentView) view.findViewById(R.id.resultWebView);
             if (mWebView != null) {
                 mWebView.setListener(NRResultFragment.this);
                 if (mResult.getFetchedResult().getBody() != null) {
