@@ -25,12 +25,14 @@
         android:layout_width="40dp"
         android:layout_height="wrap_content"
         android:id="@+id/shareButton"
+        android:visibility="gone"
         android:src="@drawable/share_icon"
         android:background="#00ffffff"/>
     <ImageButton
         android:layout_width="40dp"
         android:layout_height="wrap_content"
         android:id="@+id/unFoldButton"
+        android:rotation="0"
         android:src="@drawable/answer_arrowdown_icon"
         android:background="#00ffffff"/>
 

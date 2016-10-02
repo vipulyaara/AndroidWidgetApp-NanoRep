@@ -13,18 +13,31 @@ import nanorep.nanowidget.interfaces.NRCustomViewAdapter;
 
 public class NRViewAdapter implements NRCustomViewAdapter {
 
+    NRSearchBar searchBar;
+    NRSuggestionsView suggestionsView;
+    NRTitleView titleView;
+
     @Override
     public NRCustomSearchBarView getSearchBar(Context context) {
-        return new NRSearchBar(context);
+        if(searchBar == null) {
+            searchBar = new NRSearchBar(context);
+        }
+        return searchBar;
     }
 
     @Override
     public NRCustomSuggestionsView getSuggestionsView(Context context) {
-        return new NRSuggestionsView(context);
+        if(suggestionsView == null) {
+            suggestionsView = new NRSuggestionsView(context);
+        }
+        return suggestionsView;
     }
 
     @Override
     public NRCustomTitleView getTitle(Context context) {
-        return new NRTitleView(context);
+        if(titleView == null) {
+            titleView = new NRTitleView(context);
+        }
+        return titleView;
     }
 }

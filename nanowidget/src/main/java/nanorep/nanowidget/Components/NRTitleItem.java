@@ -3,8 +3,10 @@ package nanorep.nanowidget.Components;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.graphics.Color;
+import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
@@ -14,6 +16,7 @@ import com.nanorep.nanoclient.Response.NRConfiguration;
 import nanorep.nanowidget.Components.AbstractViews.NRCustomTitleView;
 import nanorep.nanowidget.DataClasse.NRResult;
 import nanorep.nanowidget.R;
+import nanorep.nanowidget.Utilities.Calculate;
 import nanorep.nanowidget.interfaces.NRResultItemListener;
 import nanorep.nanowidget.interfaces.NRTitleListener;
 
@@ -22,28 +25,12 @@ import nanorep.nanowidget.interfaces.NRTitleListener;
  */
 public class NRTitleItem extends NRResultItem implements NRTitleListener{
     private View mItemView;
-//    private Button mTitleButton;
-//    private ImageButton mUnFoldButton;
-//    private ImageButton mShareButton;
-//    private RelativeLayout topView;
 
     private NRCustomTitleView titleView;
 
     @Override
     protected void bindViews(View view) {
         mItemView = view;
-//        mTitleButton = (Button) view.findViewById(R.id.titleButton);
-//
-//        mUnFoldButton = (ImageButton) view.findViewById(R.id.unFoldButton);
-//        mUnFoldButton.setOnClickListener(this);
-//
-//        mTitleButton.setOnClickListener(this);
-//        mShareButton = (ImageButton) view.findViewById(R.id.shareButton);
-//        mShareButton.setOnClickListener(this);
-//
-//        topView = (RelativeLayout) view.findViewById(R.id.topView);
-
-//        titleView = (NRTitleView) itemView.findViewById(R.id.title_view);
     }
 
 
@@ -71,7 +58,6 @@ public class NRTitleItem extends NRResultItem implements NRTitleListener{
     public void setData(NRResult result) {
         mResult = result;
         if (result.getFetchedResult() != null) {
-//            mTitleButton.setText(result.getFetchedResult().getTitle());
             titleView.setTitleText(result.getFetchedResult().getTitle(), mResult.isUnfolded());
         }
 
@@ -82,12 +68,29 @@ public class NRTitleItem extends NRResultItem implements NRTitleListener{
             if(titleMeasuredHeight > height) {
                 height = titleMeasuredHeight;
             }
+        } else {
+            // if unfold button is UP, turn it DOWN
+            setUnfoldButtonImage();
         }
+
+        setItemMargins(mResult.isUnfolded());
 
         setHeight(height);
 
         titleView.hideUnfoldButton(result.isSingle());
-//        mUnFoldButton.setVisibility(result.isSingle() ? View.INVISIBLE : View.VISIBLE);
+    }
+
+    private void setItemMargins(boolean unfolded) {
+        int margin = 0;
+
+        if(!unfolded) {
+            margin = 15;
+        }
+
+        ViewGroup.MarginLayoutParams p = (ViewGroup.MarginLayoutParams) mItemView.getLayoutParams();
+        p.leftMargin = (int) Calculate.pxFromDp(mItemView.getContext(), margin);
+        p.rightMargin = (int) Calculate.pxFromDp(mItemView.getContext(), margin);
+        mItemView.requestLayout();
     }
 
     private void setHeight(final int height) {
@@ -104,56 +107,34 @@ public class NRTitleItem extends NRResultItem implements NRTitleListener{
         animator.start();
     }
 
-    public String getText() {
-        return titleView.getTitleText();
-    }
-
-
-//    @Override
-//    public void onClick(View v) {
-//        if (v.getId() == R.id.titleButton && mResult.isSingle()) {
-//            return;
-//        }
-//        if (v.getId() == R.id.titleButton || v.getId() == R.id.unFoldButton) {
-//            ObjectAnimator.ofFloat(mUnFoldButton, "rotation", 0, mResult.isUnfolded() ? 0 : -180).start();
-//            mListener.unfoldItem(mResult, false);
-////            mResult.setUnfolded(!mResult.isUnfolded());
-//        } else if (v.getId() == R.id.shareButton) {
-//            mListener.onShareClicked(this, mResult.getFetchedResult().getTitle());
-//        }
-//    }
-
     /**
      *
      * @return
      */
     public int getTitleMeasuredHeight() {
-//        mTitleButton.measure( View.MeasureSpec.makeMeasureSpec(mTitleButton.getWidth(), View.MeasureSpec.AT_MOST),
-//                View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
-//
-//        return mTitleButton.getMeasuredHeight();
         return titleView.getTitleMeasuredHeight();
     }
 
     @Override
     public void onTitleClicked() {
         if(!mResult.isSingle()) {
-            unfoldButton();
+            mListener.unfoldItem(mResult, false);
+            setUnfoldButtonImage();
         }
     }
 
-    public void unfoldButton() {
+    private void setUnfoldButtonImage() {
         ImageButton imageButton = titleView.getUnFoldButton();
-        if(imageButton != null) {
-            ObjectAnimator.ofFloat(imageButton, "rotation", 0, mResult.isUnfolded() ? 0 : -180).start();
+        if(imageButton != null && (imageButton.getRotation() == -180 && !mResult.isUnfolded()) || (imageButton.getRotation() == 0 && mResult.isUnfolded()) ) {
+                ObjectAnimator.ofFloat(imageButton, "rotation", 0, mResult.isUnfolded() ? -180 : 0).start();
         }
-
-        mListener.unfoldItem(mResult, false);
     }
 
     @Override
     public void onUnfoldClicked() {
-        unfoldButton();
+        mListener.unfoldItem(mResult, false);
+        setUnfoldButtonImage();
+
     }
 
     @Override

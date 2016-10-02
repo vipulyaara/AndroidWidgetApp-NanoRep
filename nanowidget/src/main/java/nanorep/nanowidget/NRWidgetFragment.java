@@ -294,12 +294,8 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
         
         setViews(nanoView);
 
-//        mSearchBar = (NRSearchBar) nanoView.findViewById(R.id.searchBar);
-//        mSearchBar.setListener(this);
         mNotitleViewHolder = (RelativeLayout) nanoView.findViewById(R.id.noTiltleView);
         mNoTitleView = (TextView) nanoView.findViewById(R.id.noTitleTextView);
-//        mSuggestionsView = (NRSuggestionsView)nanoView.findViewById(R.id.suggestions);
-//        mSuggestionsView.setListener(this);
 
         mResultsRecyclerView = (RecyclerView) nanoView.findViewById(R.id.resultsView);
         mResultsRecyclerView.setLayoutManager(new NRLinearLayoutManager(getContext()));
@@ -339,10 +335,6 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
 
         mSearchBar = viewAdapter.getSearchBar(getContext());
 
-        if(mSearchBar == null) {
-            mSearchBar = new NRSearchBar(getContext());
-        }
-
         mSearchBar.setListener(this);
 
         mSearchBarContainer.addView(mSearchBar, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT));
@@ -351,10 +343,6 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
         mSuggestionViewContainer = (LinearLayout) nanoView.findViewById(R.id.suggestion_view_container);
 
         mSuggestionsView = viewAdapter.getSuggestionsView(getContext());
-
-        if(mSuggestionsView == null)  {
-            mSuggestionsView = new NRSuggestionsView(getContext());
-        }
 
         mSuggestionsView.setListener(this);
 
@@ -557,7 +545,7 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
 
             simpleDividerItemDecoration.setDisableDecoration(false);
 
-            mUnfoldedResult.setUnfolded(false);
+//            mUnfoldedResult.setUnfolded(false);
             mUnfoldedResult = null;
 
             // clear content, like, etc..
@@ -584,6 +572,7 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
                         mQueryResults.add(i, mQueryCopyResults.get(i));
                         mResultsAdapter.notifyItemInserted(i);
                     } else {
+                        mQueryResults.get(i).setUnfolded(false);
                         mResultsAdapter.notifyItemChanged(i);
                     }
                 }
