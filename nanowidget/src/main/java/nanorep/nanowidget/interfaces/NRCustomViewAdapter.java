@@ -3,6 +3,7 @@ package nanorep.nanowidget.interfaces;
 import android.content.Context;
 
 import nanorep.nanowidget.Components.AbstractViews.NRCustomContentView;
+import nanorep.nanowidget.Components.AbstractViews.NRCustomLikeView;
 import nanorep.nanowidget.Components.AbstractViews.NRCustomSearchBarView;
 import nanorep.nanowidget.Components.AbstractViews.NRCustomSuggestionsView;
 import nanorep.nanowidget.Components.AbstractViews.NRCustomTitleView;
@@ -20,4 +21,6 @@ public interface NRCustomViewAdapter {
     NRCustomTitleView getTitle(Context context);
 
     NRCustomContentView getContent(Context context);
+
+    NRCustomLikeView getLikeView(Context context);
 }

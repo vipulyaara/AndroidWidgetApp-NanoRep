@@ -3,10 +3,18 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:id="@+id/like_cardView">
-
+<!--
     <nanorep.nanowidget.Components.NRLikeView
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:id="@+id/cv_likeView"/>
+-->
+    <LinearLayout
+        android:id="@+id/like_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="vertical">
+    </LinearLayout>
 
 </android.support.v7.widget.CardView>

@@ -9,33 +9,30 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
+import nanorep.nanowidget.Components.AbstractViews.NRCustomLikeView;
 import nanorep.nanowidget.R;
 import nanorep.nanowidget.interfaces.OnLikeListener;
 
 /**
  * Created by nissimpardo on 18/06/16.
  */
-public class NRLikeView extends LinearLayout implements View.OnClickListener {
-    private OnLikeListener mListener;
+public class NRLikeView extends NRCustomLikeView implements View.OnClickListener {
+
     private ImageButton mLikeButton;
     private ImageButton mDislikeButton;
     private boolean mLikeSelection;
-    private String mResultId;
 
 
-    public NRLikeView(Context context, AttributeSet attrs) {
-        super(context, attrs);
+    public NRLikeView(Context context) {
+        super(context);
         LayoutInflater.from(context).inflate(R.layout.like_view, this);
     }
 
-    public void setListener(OnLikeListener listener) {
-        mListener = listener;
-    }
+//    public void setResultId(String resultId) {
+//        mResultId = resultId;
+//    }
 
-    public void setResultId(String resultId) {
-        mResultId = resultId;
-    }
-
+    @Override
     public void updateLikeButton(boolean isLike) {
         resetLikeView();
         if (isLike) {
@@ -50,6 +47,7 @@ public class NRLikeView extends LinearLayout implements View.OnClickListener {
         mLikeSelection = isLike;
     }
 
+    @Override
     public void resetLikeView() {
         mLikeButton.setEnabled(true);
         mDislikeButton.setEnabled(true);
@@ -72,20 +70,21 @@ public class NRLikeView extends LinearLayout implements View.OnClickListener {
         mDislikeButton.setOnClickListener(this);
     }
 
+    @Override
     public boolean getLikeSelection() {
         return mLikeSelection;
     }
 
-    public void cancelLike() {
-        mLikeButton.setEnabled(true);
-        mDislikeButton.setEnabled(true);
-    }
+//    public void cancelLike() {
+//        mLikeButton.setEnabled(true);
+//        mDislikeButton.setEnabled(true);
+//    }
 
 
     @Override
     public void onClick(View v) {
         mLikeSelection = v.getId() == R.id.likeButton;
         updateLikeButton(mLikeSelection);
-        mListener.onLikeClicked(this, mResultId, mLikeSelection);
+        mListener.onLikeClicked(this, null, mLikeSelection);
     }
 }

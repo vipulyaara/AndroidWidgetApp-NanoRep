@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import nanorep.nanowidget.Components.AbstractViews.NRCustomContentView;
+import nanorep.nanowidget.Components.AbstractViews.NRCustomLikeView;
 import nanorep.nanowidget.Components.AbstractViews.NRCustomSearchBarView;
 import nanorep.nanowidget.Components.AbstractViews.NRCustomSuggestionsView;
 import nanorep.nanowidget.Components.AbstractViews.NRCustomTitleView;
@@ -714,7 +715,18 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
                     return new NRContentItem(view, NRWidgetFragment.this, mNanoRep.getNRConfiguration(), contentView);
                 case 2: // like
                     view = LayoutInflater.from(parent.getContext()).inflate(R.layout.like_item, parent, false);
-                    return new NRLikeItem(view, NRWidgetFragment.this, mNanoRep.getNRConfiguration());
+
+                    NRCustomLikeView likeView = viewAdapter.getLikeView(getContext());
+
+                    if(likeView == null) {
+                        likeView = new NRLikeView(getContext());
+                    }
+
+                    LinearLayout likeContainer = (LinearLayout) view.findViewById(R.id.like_container);
+
+                    likeContainer.addView(likeView);
+
+                    return new NRLikeItem(view, NRWidgetFragment.this, mNanoRep.getNRConfiguration(), likeView);
                 case 3: // channeling
                     view = LayoutInflater.from(parent.getContext()).inflate(R.layout.channeling_item, parent, false);
                     return new NRChannelingItem(view, NRWidgetFragment.this, mNanoRep.getNRConfiguration());
