@@ -725,7 +725,7 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
 
         private  int getMaxHeight(int minResultHeight) {
             NRTitleItem titleViewHolder = (NRTitleItem)mResultsRecyclerView.findViewHolderForLayoutPosition(0);
-            int titleHeight = titleViewHolder.getTitleMeasuredHeight();
+            int titleHeight = titleViewHolder.getTitleHeight();
 
             if(titleHeight < minResultHeight) {
                 titleHeight = minResultHeight;

@@ -111,9 +111,11 @@ public class MainActivity extends AppCompatActivity implements NRWidgetFragment.
 
     @Override
     public NRCustomSuggestionsView getSuggestionsView(Context context) {
-        NRSuggestionsView suggestionsView = new NRSuggestionsView(context);
+//        NRSuggestionsView suggestionsView = new NRSuggestionsView(context);
+//
+//        return suggestionsView;
 
-        return suggestionsView;
+        return  null;
     }
 
     @Override

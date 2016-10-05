@@ -22,14 +22,7 @@ public class TitleView extends NRCustomTitleView {
     }
 
     @Override
-    public void onViewAdded(View child) {
-        super.onViewAdded(child);
-
-        mTitleButton = (Button) child.findViewById(nanorep.nanowidget.R.id.titleButton);
-    }
-
-    @Override
-    public void setTitleText(String text, boolean unfolded) {
+    public void setTitleText(String text) {
         mTitleButton.setText(text);
 
         mTitleButton.setOnClickListener(new OnClickListener() {
@@ -40,15 +33,21 @@ public class TitleView extends NRCustomTitleView {
         });
     }
 
-
     @Override
-    public ImageButton getUnFoldButton() {
-        return null;
+    public void unfold(boolean closed) {
+
     }
 
     @Override
-    public Button getTitleButton() {
-        return mTitleButton;
+    public int getTitleHeight() {
+        return 0;
+    }
+
+    @Override
+    public void onViewAdded(View child) {
+        super.onViewAdded(child);
+
+        mTitleButton = (Button) child.findViewById(nanorep.nanowidget.R.id.titleButton);
     }
 
 }

@@ -28,15 +28,15 @@ public abstract class NRCustomTitleView extends LinearLayout{
         mListener = listener;
     }
 
-    abstract public void setTitleText(String text, boolean unfolded);
+    abstract public void setTitleText(String text);
 
-//    abstract public void hideUnfoldButton(boolean fold);
+    abstract public void unfold(boolean closed);
 
-//    abstract public int getTitleMeasuredHeight();
+    abstract public int getTitleHeight();
 
-    abstract public ImageButton getUnFoldButton();
+//    abstract public ImageButton getUnFoldButton();
 
-    abstract public Button getTitleButton();
+//    abstract public Button getTitleButton();
 
 //    abstract public void setTitleColor(String color);
 }

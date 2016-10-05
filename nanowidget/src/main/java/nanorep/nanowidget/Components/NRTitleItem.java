@@ -57,41 +57,45 @@ public class NRTitleItem extends NRResultItem implements NRTitleListener{
 
     public void setData(NRResult result) {
         mResult = result;
+
+        titleView.unfold(mResult.isUnfolded());
+
         if (result.getFetchedResult() != null) {
-            titleView.setTitleText(result.getFetchedResult().getTitle(), mResult.isUnfolded());
+            titleView.setTitleText(result.getFetchedResult().getTitle());
         }
 
         int height = result.getHeight();
 
         if(mResult.isUnfolded()) { // title's height should wrap content
-            int titleMeasuredHeight = getTitleMeasuredHeight();
-            if(titleMeasuredHeight > height) {
+            int titleMeasuredHeight = titleView.getTitleHeight();
+            if (titleMeasuredHeight > height) {
                 height = titleMeasuredHeight;
             }
-        } else {
-            // if unfold button is UP, turn it DOWN
-            setUnfoldButtonImage();
         }
+//        } else {
+//            // if unfold button is UP, turn it DOWN
+//            setUnfoldButtonImage();
+//        }
 
         setItemMargins(mResult.isUnfolded());
 
-        setTitleColor(mResult.isUnfolded());
+//        setTitleColor(mResult.isUnfolded());
 
         setHeight(height);
 
-        titleView.getTitleButton().setVisibility(result.isSingle() ? View.INVISIBLE : View.VISIBLE);
+//        titleView.getTitleButton().setVisibility(result.isSingle() ? View.INVISIBLE : View.VISIBLE);
     }
 
-    private void setTitleColor(boolean unfolded) {
-
-        String color = "#4a4a4a";
-
-        if(unfolded) {
-            color = "#0aa0ff";
-        }
-
-        titleView.getTitleButton().setTextColor(Color.parseColor(color));
-    }
+//    private void setTitleColor(boolean unfolded) {
+//
+//        String color = "#4a4a4a";
+//
+//        if(unfolded) {
+//            color = "#0aa0ff";
+//        }
+//
+//        titleView.getTitleButton().setTextColor(Color.parseColor(color));
+//    }
 
     private void setItemMargins(boolean unfolded) {
         int margin = 0;
@@ -124,42 +128,42 @@ public class NRTitleItem extends NRResultItem implements NRTitleListener{
      *
      * @return
      */
-    public int getTitleMeasuredHeight() {
+    public int getTitleHeight() {
 
-        return getTitleMeasuredHeight(titleView.getTitleButton());
+        return titleView.getTitleHeight();
     }
 
-    private int getTitleMeasuredHeight(Button titleButton) {
-        titleButton.measure( View.MeasureSpec.makeMeasureSpec(titleButton.getWidth(), View.MeasureSpec.AT_MOST),
-                View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
-
-        return titleButton.getMeasuredHeight();
-    }
+//    private int getTitleMeasuredHeight(Button titleButton) {
+//        titleButton.measure( View.MeasureSpec.makeMeasureSpec(titleButton.getWidth(), View.MeasureSpec.AT_MOST),
+//                View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+//
+//        return titleButton.getMeasuredHeight();
+//    }
 
     @Override
     public void onTitleClicked() {
         if(!mResult.isSingle()) {
             mListener.unfoldItem(mResult, false);
-            setUnfoldButtonImage();
+//            setUnfoldButtonImage();
         }
     }
 
-    private void setUnfoldButtonImage() {
-        ImageButton imageButton = titleView.getUnFoldButton();
-        if(imageButton != null) {
-            if (imageButton.getRotation() == -180 && !mResult.isUnfolded() || imageButton.getRotation() == 0 && mResult.isUnfolded())  {
-                ObjectAnimator.ofFloat(imageButton, "rotation", 0, mResult.isUnfolded() ? -180 : 0).start();
-            }
-        }
-    }
+//    private void setUnfoldButtonImage() {
+//        ImageButton imageButton = titleView.getUnFoldButton();
+//        if(imageButton != null) {
+//            if (imageButton.getRotation() == -180 && !mResult.isUnfolded() || imageButton.getRotation() == 0 && mResult.isUnfolded())  {
+//                ObjectAnimator.ofFloat(imageButton, "rotation", 0, mResult.isUnfolded() ? -180 : 0).start();
+//            }
+//        }
+//    }
 
-    @Override
-    public void onUnfoldClicked() {
-        mListener.unfoldItem(mResult, false);
-        setUnfoldButtonImage();
-
-    }
-
+//    @Override
+//    public void onUnfoldClicked() {
+//        mListener.unfoldItem(mResult, false);
+//        setUnfoldButtonImage();
+//
+//    }
+//
     @Override
     public void onShareClicked() {
         mListener.onShareClicked(this, mResult.getFetchedResult().getTitle());
