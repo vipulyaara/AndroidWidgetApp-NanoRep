@@ -79,7 +79,7 @@ public class NRTitleItem extends NRResultItem implements NRTitleListener{
 
         setHeight(height);
 
-        titleView.hideUnfoldButton(result.isSingle());
+        titleView.getTitleButton().setVisibility(result.isSingle() ? View.INVISIBLE : View.VISIBLE);
     }
 
     private void setTitleColor(boolean unfolded) {
@@ -90,7 +90,7 @@ public class NRTitleItem extends NRResultItem implements NRTitleListener{
             color = "#0aa0ff";
         }
 
-        titleView.setTitleColor(color);
+        titleView.getTitleButton().setTextColor(Color.parseColor(color));
     }
 
     private void setItemMargins(boolean unfolded) {
@@ -125,7 +125,15 @@ public class NRTitleItem extends NRResultItem implements NRTitleListener{
      * @return
      */
     public int getTitleMeasuredHeight() {
-        return titleView.getTitleMeasuredHeight();
+
+        return getTitleMeasuredHeight(titleView.getTitleButton());
+    }
+
+    private int getTitleMeasuredHeight(Button titleButton) {
+        titleButton.measure( View.MeasureSpec.makeMeasureSpec(titleButton.getWidth(), View.MeasureSpec.AT_MOST),
+                View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+
+        return titleButton.getMeasuredHeight();
     }
 
     @Override
@@ -138,8 +146,10 @@ public class NRTitleItem extends NRResultItem implements NRTitleListener{
 
     private void setUnfoldButtonImage() {
         ImageButton imageButton = titleView.getUnFoldButton();
-        if(imageButton != null && (imageButton.getRotation() == -180 && !mResult.isUnfolded()) || (imageButton.getRotation() == 0 && mResult.isUnfolded()) ) {
+        if(imageButton != null) {
+            if (imageButton.getRotation() == -180 && !mResult.isUnfolded() || imageButton.getRotation() == 0 && mResult.isUnfolded())  {
                 ObjectAnimator.ofFloat(imageButton, "rotation", 0, mResult.isUnfolded() ? -180 : 0).start();
+            }
         }
     }
 

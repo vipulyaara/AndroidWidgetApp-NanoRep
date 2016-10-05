@@ -68,25 +68,30 @@ public class NRTitleView extends NRCustomTitleView{
         mTitleButton.setMaxLines(maxLines);
     }
 
-    @Override
-    public void hideUnfoldButton(boolean isSingle) {
-        mUnFoldButton.setVisibility(isSingle ? View.INVISIBLE : View.VISIBLE);
-    }
+//    @Override
+//    public void hideUnfoldButton(boolean isSingle) {
+//        mUnFoldButton.setVisibility(isSingle ? View.INVISIBLE : View.VISIBLE);
+//    }
 
-    @Override
-    public int getTitleMeasuredHeight() {
-        mTitleButton.measure( View.MeasureSpec.makeMeasureSpec(mTitleButton.getWidth(), View.MeasureSpec.AT_MOST),
-                View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
-
-        return mTitleButton.getMeasuredHeight();
-    }
+//    @Override
+//    public int getTitleMeasuredHeight() {
+//        mTitleButton.measure( View.MeasureSpec.makeMeasureSpec(mTitleButton.getWidth(), View.MeasureSpec.AT_MOST),
+//                View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+//
+//        return mTitleButton.getMeasuredHeight();
+//    }
 
     public ImageButton getUnFoldButton() {
         return mUnFoldButton;
     }
 
     @Override
-    public void setTitleColor(String color) {
-        mTitleButton.setTextColor(Color.parseColor(color));
+    public Button getTitleButton() {
+        return mTitleButton;
     }
+
+    //    @Override
+//    public void setTitleColor(String color) {
+//        mTitleButton.setTextColor(Color.parseColor(color));
+//    }
 }

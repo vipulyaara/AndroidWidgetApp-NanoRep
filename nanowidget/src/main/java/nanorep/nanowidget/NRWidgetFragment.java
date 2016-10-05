@@ -35,11 +35,15 @@ import nanorep.nanowidget.Components.DislikeDialog;
 import nanorep.nanowidget.Components.NRChannelItem;
 import nanorep.nanowidget.Components.NRChannelingItem;
 import nanorep.nanowidget.Components.NRContentItem;
+import nanorep.nanowidget.Components.NRContentView;
 import nanorep.nanowidget.Components.NRLikeItem;
 import nanorep.nanowidget.Components.NRLikeView;
 import nanorep.nanowidget.Components.NRResultFragment;
 import nanorep.nanowidget.Components.NRResultItem;
+import nanorep.nanowidget.Components.NRSearchBar;
+import nanorep.nanowidget.Components.NRSuggestionsView;
 import nanorep.nanowidget.Components.NRTitleItem;
+import nanorep.nanowidget.Components.NRTitleView;
 import nanorep.nanowidget.Components.NRViewAdapter;
 import nanorep.nanowidget.Components.SimpleDividerItemDecoration;
 import nanorep.nanowidget.DataClasse.NRFetchedDataManager;
@@ -281,9 +285,6 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
 
             @Override
             public void presentSuggestion(String query, ArrayList<String> suggestions) {
-                if(frequentlyQuestions.getLayoutParams().height == RelativeLayout.LayoutParams.WRAP_CONTENT) {
-                    frequentlyQuestions.getLayoutParams().height = 0;
-                }
 
                 if (!resetSuggestions && mSearchBar.getText().length() - query.length() <= 1 && autocompleteEnabled) {
                     mSuggestionsView.setSuggestions(suggestions);
@@ -302,6 +303,7 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
         mNoTitleView = (TextView) nanoView.findViewById(R.id.noTitleTextView);
 
         frequentlyQuestions = (RelativeLayout) nanoView.findViewById(R.id.frequentlyQuestions);
+        frequentlyQuestions.getLayoutParams().height = ViewGroup.LayoutParams.WRAP_CONTENT;
 
         mResultsRecyclerView = (RecyclerView) nanoView.findViewById(R.id.resultsView);
         mResultsRecyclerView.setLayoutManager(new NRLinearLayoutManager(getContext()));
@@ -341,6 +343,10 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
 
         mSearchBar = viewAdapter.getSearchBar(getContext());
 
+        if(mSearchBar == null){
+            mSearchBar = new NRSearchBar(getContext());
+        }
+
         mSearchBar.setListener(this);
 
         mSearchBarContainer.addView(mSearchBar, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT));
@@ -349,6 +355,10 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
         mSuggestionViewContainer = (LinearLayout) nanoView.findViewById(R.id.suggestion_view_container);
 
         mSuggestionsView = viewAdapter.getSuggestionsView(getContext());
+
+        if(mSuggestionsView == null){
+            mSuggestionsView = new NRSuggestionsView(getContext());
+        }
 
         mSuggestionsView.setListener(this);
 
@@ -419,6 +429,9 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
                                     }
                                     if (mResultStack.size() >= 2) {
                                         loadResults(mResultStack.get(mResultStack.size() - 2), false);
+
+                                        frequentlyQuestions.getLayoutParams().height = ViewGroup.LayoutParams.WRAP_CONTENT;
+
                                         mSearchBar.updateText(getSearchStrings().get(getSearchStrings().size() - 2));
                                     }
                                     getSearchStrings().remove(getSearchStrings().size() - 1);
@@ -463,6 +476,11 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
 
     @Override
     public void fetchSuggestionsForText(String text) {
+
+        if(frequentlyQuestions.getLayoutParams().height == RelativeLayout.LayoutParams.WRAP_CONTENT) {
+            frequentlyQuestions.getLayoutParams().height = 0;
+        }
+
         if (mNotitleViewHolder.getLayoutParams().height > 0) {
             mNotitleViewHolder.getLayoutParams().height = 0;
             clearResults();
@@ -671,6 +689,10 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
 
                     NRCustomTitleView titleView = viewAdapter.getTitle(getContext());
 
+                    if(titleView == null){
+                        titleView = new NRTitleView(getContext());
+                    }
+
                     LinearLayout titleContainer = (LinearLayout) view.findViewById(R.id.title_container);
 
                     titleContainer.addView(titleView);
@@ -680,6 +702,10 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
                     view = LayoutInflater.from(parent.getContext()).inflate(R.layout.content_item, parent, false);
 
                     NRCustomContentView contentView = viewAdapter.getContent(getContext());
+
+                    if(contentView == null){
+                        contentView = new NRContentView(getContext());
+                    }
 
                     FrameLayout contentContainer = (FrameLayout) view.findViewById(R.id.content_container);
 
@@ -747,6 +773,5 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
     public void setViewAdapter(NRCustomViewAdapter viewAdapter) {
         this.viewAdapter = viewAdapter;
     }
-
 
 }

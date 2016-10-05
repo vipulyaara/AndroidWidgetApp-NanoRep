@@ -118,9 +118,12 @@ public class MainActivity extends AppCompatActivity implements NRWidgetFragment.
 
     @Override
     public NRCustomTitleView getTitle(Context context) {
-        NRTitleView titleView = new NRTitleView(context);
+//        NRTitleView titleView = new NRTitleView(context);
+//        TitleView titleView = new TitleView(context);
 
-        return titleView;
+//        return titleView;
+
+        return null;
     }
 
     @Override
