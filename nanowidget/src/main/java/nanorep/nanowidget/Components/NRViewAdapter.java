@@ -2,6 +2,7 @@ package nanorep.nanowidget.Components;
 
 import android.content.Context;
 
+import nanorep.nanowidget.Components.AbstractViews.NRCustomChannelView;
 import nanorep.nanowidget.Components.AbstractViews.NRCustomContentView;
 import nanorep.nanowidget.Components.AbstractViews.NRCustomLikeView;
 import nanorep.nanowidget.Components.AbstractViews.NRCustomSearchBarView;
@@ -55,5 +56,10 @@ public class NRViewAdapter implements NRCustomViewAdapter {
     @Override
     public NRCustomLikeView getLikeView(Context context) {
         return new NRLikeView(context);
+    }
+
+    @Override
+    public NRCustomChannelView getChannelView(Context context) {
+        return new NRChannelingView(context);
     }
 }

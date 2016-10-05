@@ -13,32 +13,31 @@ import com.nanorep.nanoclient.Channeling.NRChanneling;
 
 import java.util.ArrayList;
 
+import nanorep.nanowidget.Components.AbstractViews.NRCustomChannelView;
 import nanorep.nanowidget.R;
 
 /**
  * Created by nissimpardo on 18/06/16.
  */
-public class NRChannelingView extends RelativeLayout implements NRChannelItem.OnChannelSelectedListener {
+public class NRChannelingView extends NRCustomChannelView implements NRChannelItem.OnChannelSelectedListener {
     private ArrayList<NRChanneling> mChannelings;
     private RecyclerView mChannelingsRecycleView;
     private ChannelingAdapter mAdapter;
-    private NRChannelItem.OnChannelSelectedListener mListener;
 
-    public NRChannelingView(Context context, AttributeSet attrs) {
-        super(context, attrs);
+
+    public NRChannelingView(Context context) {
+        super(context);
         mAdapter = new ChannelingAdapter();
         LayoutInflater.from(context).inflate(R.layout.channeling_view, this);
     }
 
+    @Override
     public void setChannelings(ArrayList<NRChanneling> channelings) {
         mChannelings = channelings;
         mChannelingsRecycleView.setLayoutManager(new GridLayoutManager(this.getContext(), mChannelings.size()));
         mAdapter.notifyDataSetChanged();
     }
 
-    public void setListener(NRChannelItem.OnChannelSelectedListener listener) {
-        mListener = listener;
-    }
 
     @Override
     public void onViewAdded(View child) {

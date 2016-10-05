@@ -25,6 +25,7 @@ import com.nanorep.nanoclient.Response.NRConfiguration;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import nanorep.nanowidget.Components.AbstractViews.NRCustomChannelView;
 import nanorep.nanowidget.Components.AbstractViews.NRCustomContentView;
 import nanorep.nanowidget.Components.AbstractViews.NRCustomLikeView;
 import nanorep.nanowidget.Components.AbstractViews.NRCustomSearchBarView;
@@ -138,6 +139,11 @@ public class MainActivity extends AppCompatActivity implements NRWidgetFragment.
 
     @Override
     public NRCustomLikeView getLikeView(Context context) {
+        return null;
+    }
+
+    @Override
+    public NRCustomChannelView getChannelView(Context context) {
         return null;
     }
 

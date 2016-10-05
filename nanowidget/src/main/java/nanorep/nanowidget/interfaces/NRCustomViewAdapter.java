@@ -2,6 +2,7 @@ package nanorep.nanowidget.interfaces;
 
 import android.content.Context;
 
+import nanorep.nanowidget.Components.AbstractViews.NRCustomChannelView;
 import nanorep.nanowidget.Components.AbstractViews.NRCustomContentView;
 import nanorep.nanowidget.Components.AbstractViews.NRCustomLikeView;
 import nanorep.nanowidget.Components.AbstractViews.NRCustomSearchBarView;
@@ -23,4 +24,6 @@ public interface NRCustomViewAdapter {
     NRCustomContentView getContent(Context context);
 
     NRCustomLikeView getLikeView(Context context);
+
+    NRCustomChannelView getChannelView(Context context);
 }

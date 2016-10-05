@@ -7,6 +7,7 @@ import com.nanorep.nanoclient.Response.NRConfiguration;
 
 import java.util.ArrayList;
 
+import nanorep.nanowidget.Components.AbstractViews.NRCustomChannelView;
 import nanorep.nanowidget.DataClasse.NRResult;
 import nanorep.nanowidget.R;
 import nanorep.nanowidget.interfaces.NRResultItemListener;
@@ -15,12 +16,15 @@ import nanorep.nanowidget.interfaces.NRResultItemListener;
  * Created by nanorep on 25/09/2016.
  */
 
-public class NRChannelingItem extends NRResultItem{
+public class NRChannelingItem extends NRResultItem implements NRChannelItem.OnChannelSelectedListener {
 
-    private NRChannelingView mChannelingView;
+    private NRCustomChannelView mChannelingView;
 
-    public NRChannelingItem(View view, NRResultItemListener listener, NRConfiguration config) {
+    public NRChannelingItem(View view, NRResultItemListener listener, NRConfiguration config, NRCustomChannelView channelView) {
         super(view, listener, config);
+
+        mChannelingView = channelView;
+        mChannelingView.setListener(this);
     }
 
     @Override
@@ -30,7 +34,7 @@ public class NRChannelingItem extends NRResultItem{
 
     @Override
     protected void bindViews(View view) {
-        mChannelingView = (NRChannelingView) itemView.findViewById(R.id.cv_channelingView);
+//        mChannelingView = (NRChannelingView) itemView.findViewById(R.id.cv_channelingView);
     }
 
     @Override
@@ -47,7 +51,10 @@ public class NRChannelingItem extends NRResultItem{
     @Override
     protected void setListener(NRResultItemListener listener) {
         super.setListener(listener);
+    }
 
-        mChannelingView.setListener(mListener);
+    @Override
+    public void onChannelSelected(NRChannelItem channelItem) {
+        mListener.onChannelSelected(channelItem);
     }
 }

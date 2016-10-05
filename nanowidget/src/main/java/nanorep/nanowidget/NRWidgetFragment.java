@@ -25,6 +25,7 @@ import com.nanorep.nanoclient.RequestParams.NRLikeType;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import nanorep.nanowidget.Components.AbstractViews.NRCustomChannelView;
 import nanorep.nanowidget.Components.AbstractViews.NRCustomContentView;
 import nanorep.nanowidget.Components.AbstractViews.NRCustomLikeView;
 import nanorep.nanowidget.Components.AbstractViews.NRCustomSearchBarView;
@@ -35,6 +36,7 @@ import nanorep.nanowidget.Components.ChannelPresenters.NRWebContentFragment;
 import nanorep.nanowidget.Components.DislikeDialog;
 import nanorep.nanowidget.Components.NRChannelItem;
 import nanorep.nanowidget.Components.NRChannelingItem;
+import nanorep.nanowidget.Components.NRChannelingView;
 import nanorep.nanowidget.Components.NRContentItem;
 import nanorep.nanowidget.Components.NRContentView;
 import nanorep.nanowidget.Components.NRLikeItem;
@@ -729,7 +731,18 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
                     return new NRLikeItem(view, NRWidgetFragment.this, mNanoRep.getNRConfiguration(), likeView);
                 case 3: // channeling
                     view = LayoutInflater.from(parent.getContext()).inflate(R.layout.channeling_item, parent, false);
-                    return new NRChannelingItem(view, NRWidgetFragment.this, mNanoRep.getNRConfiguration());
+
+                    NRCustomChannelView channelView = viewAdapter.getChannelView(getContext());
+
+                    if(channelView == null) {
+                        channelView = new NRChannelingView(getContext());
+                    }
+
+                    LinearLayout channelContainer = (LinearLayout) view.findViewById(R.id.channel_container);
+
+                    channelContainer.addView(channelView);
+
+                    return new NRChannelingItem(view, NRWidgetFragment.this, mNanoRep.getNRConfiguration(), channelView);
                 default:
                     return null;
             }
