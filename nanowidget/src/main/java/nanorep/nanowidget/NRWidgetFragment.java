@@ -278,10 +278,11 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
                 mLoadingView.setVisibility(View.INVISIBLE);
                 mResultsAdapter.setShouldResetLikeView(true);
                 if (rows == null && mSearchBar.getText() != null) {
-                    mNotitleViewHolder.getLayoutParams().height = (int) Calculate.pxFromDp(getContext(), 120);
+                    mNotitleViewHolder.getLayoutParams().height = ViewGroup.LayoutParams.WRAP_CONTENT;
                     mNoTitleView.setText(mNanoRep.getNRConfiguration().getCustomNoAnswersTextContext(mSearchBar.getText()));
                     rows = mResultStack.get(0);
                 }
+                frequentlyQuestions.getLayoutParams().height = ViewGroup.LayoutParams.WRAP_CONTENT;
                 loadResults(rows, true);
 
             }
@@ -306,7 +307,7 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
         mNoTitleView = (TextView) nanoView.findViewById(R.id.noTitleTextView);
 
         frequentlyQuestions = (RelativeLayout) nanoView.findViewById(R.id.frequentlyQuestions);
-        frequentlyQuestions.getLayoutParams().height = ViewGroup.LayoutParams.WRAP_CONTENT;
+//        frequentlyQuestions.getLayoutParams().height = ViewGroup.LayoutParams.WRAP_CONTENT;
 
         mResultsRecyclerView = (RecyclerView) nanoView.findViewById(R.id.resultsView);
         mResultsRecyclerView.setLayoutManager(new NRLinearLayoutManager(getContext()));
@@ -389,6 +390,7 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
         if (rows.size() == 1) {
             rows.get(0).setSingle(true);
         }
+        simpleDividerItemDecoration.setDisableDecoration(false);
         for (NRResult addedResult : rows) {
             mQueryResults.add(addedResult);
             mResultsAdapter.notifyItemInserted(mQueryResults.size());
@@ -484,7 +486,7 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
             frequentlyQuestions.getLayoutParams().height = 0;
         }
 
-        if (mNotitleViewHolder.getLayoutParams().height > 0) {
+        if (mNotitleViewHolder.getLayoutParams().height == RelativeLayout.LayoutParams.WRAP_CONTENT) {
             mNotitleViewHolder.getLayoutParams().height = 0;
             clearResults();
         }
@@ -527,9 +529,11 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
 
     @Override
     public void onClearClicked(boolean byUser) {
-        if (mNotitleViewHolder.getLayoutParams().height > 0) {
+        if (mNotitleViewHolder.getLayoutParams().height == RelativeLayout.LayoutParams.WRAP_CONTENT) {
             mNotitleViewHolder.getLayoutParams().height = 0;
         }
+
+        frequentlyQuestions.getLayoutParams().height = RelativeLayout.LayoutParams.WRAP_CONTENT;
 
         resetSuggestions = true;
         mSuggestionsView.setSuggestions(null);

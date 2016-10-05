@@ -7,6 +7,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.Transformation;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
@@ -104,10 +106,27 @@ public class NRTitleItem extends NRResultItem implements NRTitleListener{
             margin = 15;
         }
 
-        ViewGroup.MarginLayoutParams p = (ViewGroup.MarginLayoutParams) mItemView.getLayoutParams();
-        p.leftMargin = (int) Calculate.pxFromDp(mItemView.getContext(), margin);
-        p.rightMargin = (int) Calculate.pxFromDp(mItemView.getContext(), margin);
-        mItemView.requestLayout();
+//        ViewGroup.MarginLayoutParams p = (ViewGroup.MarginLayoutParams) mItemView.getLayoutParams();
+//        p.leftMargin = (int) Calculate.pxFromDp(mItemView.getContext(), margin);
+//        p.rightMargin = (int) Calculate.pxFromDp(mItemView.getContext(), margin);
+////        mItemView.requestLayout();
+//        mItemView.setLayoutParams(p);
+
+        final int _margin = margin;
+
+        Animation a = new Animation() {
+
+            @Override
+            protected void applyTransformation(float interpolatedTime, Transformation t) {
+                ViewGroup.MarginLayoutParams p = (ViewGroup.MarginLayoutParams) mItemView.getLayoutParams();
+                p.leftMargin = (int) Calculate.pxFromDp(mItemView.getContext(), _margin);
+                p.rightMargin = (int) Calculate.pxFromDp(mItemView.getContext(), _margin);
+//        mItemView.requestLayout();
+                mItemView.setLayoutParams(p);
+            }
+        };
+        a.setDuration(100); // in ms
+        mItemView.startAnimation(a);
     }
 
     private void setHeight(final int height) {
