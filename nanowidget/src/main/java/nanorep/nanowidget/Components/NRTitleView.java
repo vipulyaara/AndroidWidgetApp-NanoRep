@@ -3,6 +3,7 @@ package nanorep.nanowidget.Components;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -87,8 +88,19 @@ public class NRTitleView extends NRCustomTitleView{
     public void unfold(boolean closed) {
         this.closed = !closed;
         setTitleColor();
+        setTitleFont();
         setUnfoldButtonImage();
         setShareImage();
+    }
+
+    private void setTitleFont() {
+        String font = "sans-serif-light";
+
+        if(!closed) {
+            font = "sans-serif-medium";
+        }
+
+        mTitleButton.setTypeface(Typeface.create(font, Typeface.NORMAL));
     }
 
     private void setShareImage() {
