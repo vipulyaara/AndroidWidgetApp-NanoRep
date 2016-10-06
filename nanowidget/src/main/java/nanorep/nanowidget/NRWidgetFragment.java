@@ -768,6 +768,8 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
 
             if(titleHeight < minResultHeight) {
                 titleHeight = minResultHeight;
+            } else {
+                titleHeight -= 60;
             }
 
             int maxHeight = mResultsRecyclerView.getHeight();

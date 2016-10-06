@@ -6,8 +6,6 @@
     android:layoutDirection="ltr"
     android:paddingLeft="14dp"
     android:paddingRight="14dp"
-    android:paddingTop="2dp"
-    android:paddingBottom="2dp"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
