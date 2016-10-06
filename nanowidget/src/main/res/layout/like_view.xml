@@ -4,9 +4,10 @@
               android:layout_height="match_parent"
               android:gravity="center_vertical"
               android:orientation="horizontal"
-              android:weightSum="2"
+              android:paddingRight="28dp"
+              android:paddingLeft="28dp"
               android:layout_alignParentTop="true">
-
+<!--
     <ImageButton
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -20,5 +21,38 @@
         android:layout_weight="1"
         android:id="@+id/dislikeButton"
         android:src="@drawable/grey_dislike_icon"/>
+-->
+
+    <TextView
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:text="@string/was_this_article_helpful"
+        android:fontFamily="sans-serif-light"
+        android:textSize="16sp"
+        android:textColor="@color/nr_text_color"
+        />
+
+    <TextView
+        android:id="@+id/likeButton"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:text="@string/yes"
+        android:fontFamily="sans-serif-medium"
+        android:textSize="16sp"
+        android:layout_marginLeft="61dp"
+        android:textColor="@color/nr_text_color"
+        />
+
+    <TextView
+        android:id="@+id/dislikeButton"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:text="@string/no"
+        android:layout_marginLeft="18dp"
+        android:fontFamily="sans-serif-medium"
+        android:textSize="16sp"
+        android:textColor="@color/nr_text_color"
+        />
+
 
 </LinearLayout>

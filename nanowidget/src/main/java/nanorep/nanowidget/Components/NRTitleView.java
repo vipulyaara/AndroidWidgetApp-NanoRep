@@ -88,6 +88,16 @@ public class NRTitleView extends NRCustomTitleView{
         this.closed = !closed;
         setTitleColor();
         setUnfoldButtonImage();
+        setShareImage();
+    }
+
+    private void setShareImage() {
+        if(closed) { // answer is closed, max 2 lines
+            mShareButton.setVisibility(View.GONE);
+        } else
+        {
+            mShareButton.setVisibility(View.VISIBLE);
+        }
     }
 
 

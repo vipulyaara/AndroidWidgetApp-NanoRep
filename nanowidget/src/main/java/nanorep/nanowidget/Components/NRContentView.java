@@ -77,6 +77,10 @@ public class NRContentView extends NRCustomContentView {
                 "            max-width: 100% !important;\n" +
                 "            height: auto !important;\n" +
                 "            }\n" +
+                "        body {\n" +
+                "            font-family: Roboto-Light;\n" +
+                "            color: #6c6c6c;\n" +
+                "            }\n" +
                 "</style>\n" +
                 "\n" +
                 "\n" +

@@ -6,6 +6,8 @@
     android:layoutDirection="ltr"
     android:paddingLeft="14dp"
     android:paddingRight="14dp"
+    android:paddingTop="2dp"
+    android:paddingBottom="2dp"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -23,17 +25,18 @@
         android:ellipsize="end"
         android:textAllCaps="false"/>
     <ImageButton
-        android:layout_width="40dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/shareButton"
         android:visibility="gone"
-        android:src="@drawable/share_icon"
+        android:src="@drawable/share"
         android:background="#00ffffff"/>
     <ImageButton
-        android:layout_width="40dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/unFoldButton"
         android:rotation="0"
+        android:layout_marginLeft="21dp"
         android:src="@drawable/answer_arrowdown_icon"
         android:background="#00ffffff"/>
 

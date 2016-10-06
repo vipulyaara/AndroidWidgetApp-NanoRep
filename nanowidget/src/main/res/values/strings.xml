@@ -3,4 +3,8 @@
 
     <string name="type_question_here">Type Your Question Here</string>
     <string name="frequently_asked_questions">Frequently Asked Questions</string>
+    <string name="was_this_article_helpful">Was this article helpful?</string>
+    <string name="yes">YES</string>
+    <string name="no">NO</string>
+
 </resources>
