@@ -8,11 +8,13 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Medium Text"
+        android:text="17sp"
         android:id="@+id/suggestion"
         android:layout_gravity="center_vertical"
+        android:fontFamily="sans-serif-light"
+        android:textColor="#4a4a4a"
         android:gravity="center_vertical|left"
         android:singleLine="true"
-        android:layout_marginLeft="10dp"/>
+        android:paddingRight="28dp"
+        android:paddingLeft="28dp"/>
 </LinearLayout>

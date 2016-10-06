@@ -48,6 +48,7 @@ import nanorep.nanowidget.Components.NRSuggestionsView;
 import nanorep.nanowidget.Components.NRTitleItem;
 import nanorep.nanowidget.Components.NRTitleView;
 import nanorep.nanowidget.Components.NRViewAdapter;
+import nanorep.nanowidget.Components.SeparatorDecoration;
 import nanorep.nanowidget.Components.SimpleDividerItemDecoration;
 import nanorep.nanowidget.DataClasse.NRFetchedDataManager;
 import nanorep.nanowidget.DataClasse.NRResult;
@@ -95,7 +96,7 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
 
     private RelativeLayout frequentlyQuestions;
 
-    private SimpleDividerItemDecoration simpleDividerItemDecoration;
+    private RecyclerView.ItemDecoration simpleDividerItemDecoration;
 
     private NRCustomViewAdapter viewAdapter;
 
@@ -312,8 +313,9 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
         mResultsRecyclerView = (RecyclerView) nanoView.findViewById(R.id.resultsView);
         mResultsRecyclerView.setLayoutManager(new NRLinearLayoutManager(getContext()));
 
-        simpleDividerItemDecoration = new SimpleDividerItemDecoration(getResources());
-        mResultsRecyclerView.addItemDecoration(simpleDividerItemDecoration);
+//        simpleDividerItemDecoration = new SimpleDividerItemDecoration(getResources());
+        simpleDividerItemDecoration = new SeparatorDecoration(getResources().getColor(R.color.nr_background_color), (int) Calculate.dpFromPx(getContext(), 62));
+//        mResultsRecyclerView.addItemDecoration(simpleDividerItemDecoration);
 
         mResultsRecyclerView.setAdapter(mResultsAdapter);
         NRItemAnimator animator = new NRItemAnimator();
@@ -389,8 +391,11 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
         }
         if (rows.size() == 1) {
             rows.get(0).setSingle(true);
+        } else {
+            mResultsRecyclerView.addItemDecoration(simpleDividerItemDecoration);
         }
-        simpleDividerItemDecoration.setDisableDecoration(false);
+//        simpleDividerItemDecoration.setDisableDecoration(false);
+
         for (NRResult addedResult : rows) {
             mQueryResults.add(addedResult);
             mResultsAdapter.notifyItemInserted(mQueryResults.size());
@@ -502,6 +507,8 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
     }
 
     private void clearResults() {
+        mResultsRecyclerView.removeItemDecoration(simpleDividerItemDecoration);
+
         if (mQueryResults != null) {
             ArrayList<NRResult> temp = new ArrayList<>(mQueryResults);
             for (NRResult queryResult : temp) {
@@ -577,7 +584,8 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
 
             frequentlyQuestions.getLayoutParams().height = RelativeLayout.LayoutParams.WRAP_CONTENT;
 
-            simpleDividerItemDecoration.setDisableDecoration(false);
+//            simpleDividerItemDecoration.setDisableDecoration(false);
+            mResultsRecyclerView.addItemDecoration(simpleDividerItemDecoration);
 
 //            mUnfoldedResult.setUnfolded(false);
             mUnfoldedResult = null;
@@ -615,9 +623,11 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
 
             frequentlyQuestions.getLayoutParams().height = 0;
 
-            simpleDividerItemDecoration.setDisableDecoration(true);
+//            simpleDividerItemDecoration.setDisableDecoration(true);
 
-            mResultsRecyclerView.addItemDecoration(simpleDividerItemDecoration);
+//            mResultsRecyclerView.addItemDecoration(simpleDividerItemDecoration);
+
+            mResultsRecyclerView.removeItemDecoration(simpleDividerItemDecoration);
 
             ArrayList<NRResult> temp = new ArrayList<>(mQueryResults);
             for (NRResult item1 : temp) {

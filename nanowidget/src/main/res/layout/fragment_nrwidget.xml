@@ -4,7 +4,7 @@
              android:layout_height="match_parent"
              android:layoutDirection="ltr"
              xmlns:app="http://schemas.android.com/apk/res-auto"
-             android:background="#eaeaea"
+             android:background="@color/nr_background_color"
              tools:context="nanorep.nanowidget.NRWidgetFragment">
 
     <RelativeLayout
@@ -53,6 +53,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/frequently_asked_questions"
+                android:fontFamily="sans-serif"
                 android:gravity="left"
                 android:textSize="16.6sp"
                 android:textColor="#0aa0ff"

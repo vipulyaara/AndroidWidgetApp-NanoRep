@@ -39,9 +39,9 @@ public class NRSearchBar extends NRCustomSearchBarView implements View.OnClickLi
         super.onViewAdded(child);
         mSearchEditText = (NREditText) child.findViewById(R.id.searchText);
         mSearchEditText.addTextChangedListener(this);
-        mSearchEditText.setHint(getResources().getString(R.string.type_question_here));
+//        mSearchEditText.setHint(getResources().getString(R.string.type_question_here));
 //        mSearchEditText.setTextColor(Color.WHITE);
-        mSearchEditText.setHintTextColor(Color.WHITE);
+//        mSearchEditText.setHintTextColor(Color.WHITE);
 //        mSearchEditText.getBackground().setColorFilter(Color.TRANSPARENT, PorterDuff.Mode.SRC_IN);
         mSearchEditText.setOnEditorActionListener(this);
         mSpeechButton = (ImageButton) child.findViewById(R.id.speechButton);
