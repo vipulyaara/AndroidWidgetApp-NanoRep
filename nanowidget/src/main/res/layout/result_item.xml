@@ -32,7 +32,8 @@
                 android:layout_centerVertical="true"
                 android:layout_toLeftOf="@+id/unFoldButton"
                 android:src="@drawable/share_icon"
-                android:background="#00ffffff"/>
+                android:background="#00ffffff"
+                android:visibility="gone"/>
             <ImageButton
                 android:layout_width="40dp"
                 android:layout_height="match_parent"

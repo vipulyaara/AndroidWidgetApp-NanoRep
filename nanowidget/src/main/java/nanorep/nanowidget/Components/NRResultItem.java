@@ -70,7 +70,7 @@ public class NRResultItem extends RecyclerView.ViewHolder implements View.OnClic
 //        int visibility = result.getRowType() == NRViewHolder.RowType.shrinked ? View.INVISIBLE : View.VISIBLE;
 //        mTitleButton.setVisibility(visibility);
         mUnFoldButton.setVisibility(result.isSingle() ? View.INVISIBLE : View.VISIBLE);
-        mShareButton.setVisibility(View.INVISIBLE);
+        mShareButton.setVisibility(View.GONE);
     }
 
     public NRResult getResult() {
