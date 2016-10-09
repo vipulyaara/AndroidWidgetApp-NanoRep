@@ -10,4 +10,5 @@ public interface NRSearchBarListener {
     void fetchSuggestionsForText(String text);
     void searchForText(String text);
     void onClearClicked(boolean byUser);
+    void onEmptyQuery();
 }

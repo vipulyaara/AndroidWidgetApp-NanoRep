@@ -143,6 +143,9 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
 
     @Override
     public void onLikeClicked(final NRLikeView likeView, String resultId, boolean isLike) {
+        if (mQueryResults == null || mQueryResults.size() == 0) {
+            return;
+        }
         final NRResult likedResult = mQueryResults.get(0);
         if (!likedResult.getFetchedResult().getId().equals(resultId)) {
             return;
@@ -275,7 +278,7 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
 
             @Override
             public void presentSuggestion(String query, ArrayList<String> suggestions) {
-                if (!resetSuggestions && mSearchBar.getText().length() - query.length() <= 1) {
+                if (!resetSuggestions && mSearchBar.getText().equals(query)) {
                     mSuggestionsView.setSuggestions(suggestions);
                 }
             }
@@ -357,6 +360,7 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
                 if (event.getAction() == KeyEvent.ACTION_DOWN) {
                     if (keyCode == KeyEvent.KEYCODE_BACK) {
                         if (mResultStack != null && mResultStack.size() > 1) {
+                            ((NRResultItem)mResultsRecyclerView.findViewHolderForAdapterPosition(0)).resetArrow();
                             clearResults();
                             mResultsRecyclerView.postDelayed(new Runnable() {
                                 @Override
@@ -469,8 +473,11 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
             mResultsRecyclerView.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    loadResults(mResultStack.get(0), false);
-                    mQueryResults = mResultStack.get(0);
+                    if (mResultStack != null && mResultStack.size() > 0) {
+                        loadResults(mResultStack.get(0), false);
+                        mQueryResults = mResultStack.get(0);
+                    }
+
                     mResultStack.clear();
                     getSearchStrings().clear();
                     mResultStack.add(new ArrayList<NRResult>(mQueryResults));
@@ -479,6 +486,11 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
             }, 500);
 
         }
+    }
+
+    @Override
+    public void onEmptyQuery() {
+        mSuggestionsView.setSuggestions(null);
     }
 
     @Override
@@ -505,9 +517,11 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
             } else {
                 int pos = mQueryCopyResults.indexOf(result);
                 for (int i = 0; i < mQueryCopyResults.size(); i++) {
-                    if (i != pos) {
+                    if (i != pos && mQueryCopyResults.size() >= i) {
                         mQueryResults.add(i, mQueryCopyResults.get(i));
                         mResutlsAdapter.notifyItemInserted(i);
+                    } else {
+                        ((NRResultItem)mResultsRecyclerView.findViewHolderForAdapterPosition(i)).resetArrow();
                     }
                 }
             }
@@ -520,13 +534,15 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
                     mResutlsAdapter.notifyItemRemoved(pos);
                 }
             }
-            mUnfoldedResult = mQueryResults.get(0);
-            mUnfoldedResult.setUnfolded(true);
-            temp.clear();
-            NRResult content = new NRResult(result.getFetchedResult());
-            content.setRowType(NRViewHolder.RowType.unfolded);
-            mQueryResults.add(content);
-            mResutlsAdapter.notifyItemInserted(1);
+            if (mQueryResults != null && mQueryResults.size() > 0) {
+                mUnfoldedResult = mQueryResults.get(0);
+                mUnfoldedResult.setUnfolded(true);
+                temp.clear();
+                NRResult content = new NRResult(result.getFetchedResult());
+                content.setRowType(NRViewHolder.RowType.unfolded);
+                mQueryResults.add(content);
+                mResutlsAdapter.notifyItemInserted(1);
+            }
 
         }
     }
@@ -592,11 +608,16 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
 
         @Override
         public void onBindViewHolder(NRResultItem holder, int position) {
-            holder.setResult(mQueryResults.get(position));
+            if (mQueryResults != null && mQueryResults.size() >= position) {
+                holder.setResult(mQueryResults.get(position));
+            }
         }
 
         @Override
         public int getItemViewType(int position) {
+            if (mQueryResults == null || mQueryResults.size() < position) {
+                return 0;
+            }
             switch (mQueryResults.get(position).getRowType()) {
                 case standard:
                     return 1;

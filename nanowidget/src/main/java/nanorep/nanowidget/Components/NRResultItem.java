@@ -56,6 +56,10 @@ public class NRResultItem extends RecyclerView.ViewHolder implements View.OnClic
 
     }
 
+    public void resetArrow() {
+        ObjectAnimator.ofFloat(mUnFoldButton, "rotation", 0, 0).start();
+    }
+
     public void setListener(NRResultItemListener listener) {
         mListener = listener;
     }
@@ -64,11 +68,8 @@ public class NRResultItem extends RecyclerView.ViewHolder implements View.OnClic
         mResult = result;
         if (result.getFetchedResult() != null) {
             mTitleButton.setText(result.getFetchedResult().getTitle());
-//            Log.d("Lines::", "" + mTitleButton.getLayout().getLineCount());
         }
         setHeight(result.getHeight());
-//        int visibility = result.getRowType() == NRViewHolder.RowType.shrinked ? View.INVISIBLE : View.VISIBLE;
-//        mTitleButton.setVisibility(visibility);
         mUnFoldButton.setVisibility(result.isSingle() ? View.INVISIBLE : View.VISIBLE);
         mShareButton.setVisibility(View.GONE);
     }

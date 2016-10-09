@@ -107,6 +107,8 @@ public class NRSearchBar extends RelativeLayout implements View.OnClickListener,
     public void afterTextChanged(Editable editable) {
         if (editable != null && editable.length() > 0) {
             mListener.fetchSuggestionsForText(mSearchEditText.getText().toString());
+        } else {
+            mListener.onEmptyQuery();
         }
     }
 
