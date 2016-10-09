@@ -357,7 +357,7 @@ public class NRImpl implements Nanorep {
                                 onConfigurationFetchedListener.onConfigurationFetched(null, error);
                             }
                         }
-                    } else {
+                    } else if (responseParam != null) {
                         final NRConfiguration cnf = new NRConfiguration((HashMap) responseParam);
                         if (cnf.getIsContextDependent()) {
                             fetchFaqList(new NRConnection.Listener() {
