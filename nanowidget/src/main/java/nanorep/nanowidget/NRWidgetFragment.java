@@ -439,6 +439,7 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
 
     @Override
     public void searchForText(String text) {
+        mLoadingView.setVisibility(View.VISIBLE);
 
         // clear autocomplete view
         resetSuggestions = true;
@@ -482,7 +483,7 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
 
     @Override
     public void onSelectSuggestion(String suggestion) {
-
+        mLoadingView.setVisibility(View.VISIBLE);
         getSearchStrings().add(suggestion);
         mSearchBar.dismissKeyboard();
         mSearchBar.updateText(suggestion);
