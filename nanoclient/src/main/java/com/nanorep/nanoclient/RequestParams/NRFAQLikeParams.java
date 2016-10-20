@@ -13,10 +13,8 @@ public class NRFAQLikeParams extends NRRequestParams {
 
     public NRFAQLikeParams(NRQueryResult result) {
         super(result);
-//        setAnswerId(result.getId());
-        setValue(result.getId(), "articleId");
-        setValue(result.getTitle(), "text");
-        setValue("0", "ksId");
+        setValue(result.getId(), "id");
+        setValue(result.getTitle(), "feedbackText");
     }
 
 
@@ -27,7 +25,7 @@ public class NRFAQLikeParams extends NRRequestParams {
      */
     public void setLikeType(NRLikeType likeType) {
         mLikeType = likeType;
-        setValue(likeType.toString(), "type");
+        setValue(likeType.toString(), "action");
     }
 
     /**
@@ -47,7 +45,7 @@ public class NRFAQLikeParams extends NRRequestParams {
      */
     public void setAnswerId(String answerId) {
         mAnswerId = answerId;
-        setValue(answerId, "articleId");
+        setValue(answerId, "id");
     }
 
 

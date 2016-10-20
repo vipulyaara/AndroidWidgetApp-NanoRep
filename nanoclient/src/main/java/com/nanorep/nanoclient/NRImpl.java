@@ -309,14 +309,14 @@ public class NRImpl implements Nanorep {
     @Override
     public void likeForFAQResult(final NRFAQLikeParams likeParams, final OnLikeSentListener onLikeSentListener) {
         Uri.Builder uriBuilder = mAccountParams.getUri();
-        uriBuilder.appendPath("api/widget/v1/thumb.js");
+        uriBuilder.appendPath("api/analytics/v1/addFeedback");
+        uriBuilder.appendQueryParameter("ignoreValidateCookie", "true");
         for (String key: likeParams.getParams().keySet()) {
             uriBuilder.appendQueryParameter(key, likeParams.getParams().get(key));
         }
-//        if (mSessionId != null) {
-//            uriBuilder.appendQueryParameter("sid", mSessionId);
-//        }
-        executeRequest(uriBuilder, new NRConnection.Listener() {
+        uriBuilder.appendQueryParameter("account", mAccountParams.getAccount());
+        uriBuilder.appendQueryParameter("kb", mAccountParams.getKnowledgeBase());
+        NRConnection.getInstance().connectionWithRequest(uriBuilder.build(), new NRConnection.Listener() {
             @Override
             public void response(Object responseParam, int status, NRError error) {
                 if (error != null) {

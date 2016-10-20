@@ -110,6 +110,11 @@ public class NRAnswer implements NRQueryResult {
     }
 
     @Override
+    public String getKeywordSetId() {
+        return mKeywordsetId;
+    }
+
+    @Override
     public boolean isCNF() {
         return false;
     }

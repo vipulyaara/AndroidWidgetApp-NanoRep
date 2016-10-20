@@ -121,4 +121,9 @@ public class NRFAQAnswerItem implements NRQueryResult {
     public HashMap<String, Object> getParams() {
         return mParams;
     }
+
+    @Override
+    public String getKeywordSetId() {
+        return null;
+    }
 }
