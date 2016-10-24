@@ -3,6 +3,7 @@ package nanorep.nanowidget.Utilities;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 
 import java.util.List;
 
@@ -22,6 +23,7 @@ public class NRItemAnimator extends DefaultItemAnimator {
 
     public interface OnAnimation {
         void onItemRemoved(NRResultItem item);
+        void onItemMoveFinished(NRResultItem item);
     }
 
     public void setListener(OnAnimation listener) {
@@ -34,7 +36,11 @@ public class NRItemAnimator extends DefaultItemAnimator {
         mListener.onItemRemoved((NRResultItem)item);
     }
 
-
+    @Override
+    public void onMoveFinished(RecyclerView.ViewHolder item) {
+        super.onMoveFinished(item);
+        mListener.onItemMoveFinished((NRResultItem)item);
+    }
 
     @Override
     public boolean canReuseUpdatedViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, @NonNull List<Object> payloads) {

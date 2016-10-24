@@ -45,8 +45,14 @@ public class NRContentItem extends NRResultItem {
         contentView.loadData(body, "text/html", "UTF-8");
     }
 
+    @Override
     public void resetBody() {
         contentView.loadUrl("about:blank");
+    }
+
+    @Override
+    public void updateBody() {
+
     }
 
     public void setData(NRResult result) {

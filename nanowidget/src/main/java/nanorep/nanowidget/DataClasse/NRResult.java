@@ -37,7 +37,6 @@ public class NRResult {
         mRowType = rowType;
     }
 
-
     public NRQueryResult getFetchedResult() {
         return mFetchedResult;
     }

@@ -1,17 +1,12 @@
 package nanorep.nanowidget.Components;
 
-import android.animation.ObjectAnimator;
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.graphics.Color;
-import android.support.v7.widget.RecyclerView;
-import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.Transformation;
-import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.RelativeLayout;
+import android.widget.LinearLayout;
 
 import com.nanorep.nanoclient.Response.NRConfiguration;
 
@@ -30,6 +25,8 @@ public class NRTitleItem extends NRResultItem implements NRTitleListener{
 
     private NRCustomTitleView titleView;
 
+    private LinearLayout title_container;
+
     @Override
     protected void bindViews(View view) {
         mItemView = view;
@@ -41,11 +38,45 @@ public class NRTitleItem extends NRResultItem implements NRTitleListener{
 
         this.titleView = titleView;
         this.titleView.setListener(this);
+
+        title_container = (LinearLayout) view.findViewById(R.id.title_container);
     }
 
     @Override
     protected void setListener(NRResultItemListener listener) {
         super.setListener(listener);
+    }
+
+    @Override
+    public void resetBody() {
+
+    }
+
+    @Override
+    public void updateBody() {
+
+        // set text color, style etc...
+        titleView.unfold(mResult.isUnfolded());
+
+        // set item margins
+//        setItemMargins(mResult.isUnfolded());
+
+        // set the correct height - to wrap the content
+        int height = mItemView.getHeight();
+
+        if(!mResult.isUnfolded()) {
+            height = mResult.getHeight();
+        } else {
+            int titleMeasuredHeight = titleView.getTitleHeight();
+            if (titleMeasuredHeight > height) {
+                height = titleMeasuredHeight;
+            } else {
+                mListener.unfoldItem(mResult, false, true);
+                return;
+            }
+        }
+        setHeight(height);
+
     }
 
     @Override
@@ -60,78 +91,64 @@ public class NRTitleItem extends NRResultItem implements NRTitleListener{
     public void setData(NRResult result) {
         mResult = result;
 
-        titleView.unfold(mResult.isUnfolded());
-
         if (result.getFetchedResult() != null) {
             titleView.setTitleText(result.getFetchedResult().getTitle());
         }
 
         int height = result.getHeight();
 
-        if(mResult.isUnfolded()) { // title's height should wrap content
+        if (mResult.isUnfolded()) { // title's height should wrap content
             int titleMeasuredHeight = titleView.getTitleHeight();
             if (titleMeasuredHeight > height) {
                 height = titleMeasuredHeight;
             }
         }
-//        } else {
-//            // if unfold button is UP, turn it DOWN
-//            setUnfoldButtonImage();
-//        }
-
-        setItemMargins(mResult.isUnfolded());
-
-//        setTitleColor(mResult.isUnfolded());
 
         setHeight(height);
-
-//        titleView.getTitleButton().setVisibility(result.isSingle() ? View.INVISIBLE : View.VISIBLE);
     }
 
-//    private void setTitleColor(boolean unfolded) {
-//
-//        String color = "#4a4a4a";
-//
-//        if(unfolded) {
-//            color = "#0aa0ff";
-//        }
-//
-//        titleView.getTitleButton().setTextColor(Color.parseColor(color));
-//    }
-
     private void setItemMargins(boolean unfolded) {
-        int margin = 0;
+        int startMargin = (int) Calculate.pxFromDp(title_container.getContext(), 0);
+        int endMargin = (int) Calculate.pxFromDp(title_container.getContext(), 15);
 
-        if(!unfolded) {
-            margin = 15;
+        if(unfolded) {
+            startMargin = (int) Calculate.pxFromDp(title_container.getContext(), 15);
+            endMargin = (int) Calculate.pxFromDp(title_container.getContext(), 0);
         }
 
-//        ViewGroup.MarginLayoutParams p = (ViewGroup.MarginLayoutParams) mItemView.getLayoutParams();
-//        p.leftMargin = (int) Calculate.pxFromDp(mItemView.getContext(), margin);
-//        p.rightMargin = (int) Calculate.pxFromDp(mItemView.getContext(), margin);
-////        mItemView.requestLayout();
-//        mItemView.setLayoutParams(p);
+        if(((ViewGroup.MarginLayoutParams) title_container.getLayoutParams()).rightMargin == endMargin) {
+            return;
+        }
 
-        final int _margin = margin;
-
-        Animation a = new Animation() {
+        ValueAnimator varl = ValueAnimator.ofInt(startMargin,endMargin);
+        varl.setDuration(80);
+        varl.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
 
             @Override
-            protected void applyTransformation(float interpolatedTime, Transformation t) {
-                ViewGroup.MarginLayoutParams p = (ViewGroup.MarginLayoutParams) mItemView.getLayoutParams();
-                p.leftMargin = (int) Calculate.pxFromDp(mItemView.getContext(), _margin);
-                p.rightMargin = (int) Calculate.pxFromDp(mItemView.getContext(), _margin);
-//        mItemView.requestLayout();
-                mItemView.setLayoutParams(p);
+            public void onAnimationUpdate(ValueAnimator animation) {
+                ((ViewGroup.MarginLayoutParams) title_container.getLayoutParams()).rightMargin = (Integer) animation.getAnimatedValue();
+                ((ViewGroup.MarginLayoutParams) title_container.getLayoutParams()).leftMargin = (Integer) animation.getAnimatedValue();
+                title_container.requestLayout();
             }
-        };
-        a.setDuration(100); // in ms
-        mItemView.startAnimation(a);
+        });
+
+        varl.addListener(new AnimatorListenerAdapter()
+        {
+            @Override
+            public void onAnimationEnd(Animator animation)
+            {
+                if(mResult.isUnfolded()) {
+                    mListener.unfoldItem(mResult, false, true);
+                }
+            }
+        });
+
+        varl.start();
     }
 
     private void setHeight(final int height) {
         ValueAnimator animator = ValueAnimator.ofInt(mItemView.getHeight(), height);
-        animator.setDuration(400);
+        animator.setDuration(300);
         animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
@@ -140,6 +157,18 @@ public class NRTitleItem extends NRResultItem implements NRTitleListener{
                 mItemView.requestLayout();
             }
         });
+
+        animator.addListener(new AnimatorListenerAdapter()
+        {
+            @Override
+            public void onAnimationEnd(Animator animation)
+            {
+                if(mResult.isUnfolded()) {
+                    mListener.unfoldItem(mResult, false, true);
+                }
+            }
+        });
+
         animator.start();
     }
 
@@ -152,37 +181,14 @@ public class NRTitleItem extends NRResultItem implements NRTitleListener{
         return titleView.getTitleHeight();
     }
 
-//    private int getTitleMeasuredHeight(Button titleButton) {
-//        titleButton.measure( View.MeasureSpec.makeMeasureSpec(titleButton.getWidth(), View.MeasureSpec.AT_MOST),
-//                View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
-//
-//        return titleButton.getMeasuredHeight();
-//    }
-
     @Override
     public void onTitleClicked() {
+
         if(!mResult.isSingle()) {
-            mListener.unfoldItem(mResult, false);
-//            setUnfoldButtonImage();
+            mListener.unfoldItem(mResult, false, false);
         }
     }
 
-//    private void setUnfoldButtonImage() {
-//        ImageButton imageButton = titleView.getUnFoldButton();
-//        if(imageButton != null) {
-//            if (imageButton.getRotation() == -180 && !mResult.isUnfolded() || imageButton.getRotation() == 0 && mResult.isUnfolded())  {
-//                ObjectAnimator.ofFloat(imageButton, "rotation", 0, mResult.isUnfolded() ? -180 : 0).start();
-//            }
-//        }
-//    }
-
-//    @Override
-//    public void onUnfoldClicked() {
-//        mListener.unfoldItem(mResult, false);
-//        setUnfoldButtonImage();
-//
-//    }
-//
     @Override
     public void onShareClicked() {
         mListener.onShareClicked(this, mResult.getFetchedResult().getTitle());

@@ -43,6 +43,16 @@ public class NRLikeItem extends NRResultItem implements OnLikeListener{
     }
 
     @Override
+    public void resetBody() {
+
+    }
+
+    @Override
+    public void updateBody() {
+
+    }
+
+    @Override
     public void setData(NRResult result) {
 //        mLikeView.setResultId(result.getFetchedResult().getId());
         mResult = result;

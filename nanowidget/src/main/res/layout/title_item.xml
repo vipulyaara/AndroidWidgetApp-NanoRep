@@ -7,6 +7,10 @@
                                     android:paddingBottom="2dp"
                                     card_view:cardElevation="0dp"
                                     card_view:cardCornerRadius="0dp"
+                                    android:layout_marginRight="15dp"
+                                    android:layout_marginLeft="15dp"
+                                    android:layout_marginBottom="5dp"
+                                    android:background="@color/nr_background_color"
                                     android:id="@+id/cardView">
 <!--
     <nanorep.nanowidget.Components.NRTitleView
@@ -21,6 +25,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
+        android:layout_gravity="center_horizontal"
         android:orientation="vertical">
     </LinearLayout>
 

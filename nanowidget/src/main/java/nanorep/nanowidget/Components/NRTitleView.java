@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.ImageButton;
 
@@ -38,18 +39,13 @@ public class NRTitleView extends NRCustomTitleView{
         mUnFoldButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-//                closed = !closed;
-//                unfold(closed);
                 mListener.onTitleClicked();
             }
         });
-//        mUnFoldButton.setVisibility(isSingle ? View.INVISIBLE : View.VISIBLE);
 
         mTitleButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-//                closed = !closed;
-//                unfold(closed);
                 mListener.onTitleClicked();
             }
         });
@@ -72,21 +68,24 @@ public class NRTitleView extends NRCustomTitleView{
     }
 
     @Override
-    public void setTitleText(String text) {
+    public void setTitleText(final String text) {
         mTitleButton.setText(text);
 
-        int maxLines = 100;
-
-        if(closed) { // answer is closed, max 2 lines
-            maxLines = 2;
-        }
-
-        mTitleButton.setMaxLines(maxLines);
+        mTitleButton.setLines(2);
     }
 
     @Override
     public void unfold(boolean closed) {
         this.closed = !closed;
+
+//        int maxLines = 100;
+//
+//        if(closed) { // answer is closed, max 2 lines
+//            maxLines = 2;
+//        }
+
+//        mTitleButton.setMaxLines(maxLines);
+
         setTitleColor();
         setTitleFont();
         setUnfoldButtonImage();
@@ -126,6 +125,8 @@ public class NRTitleView extends NRCustomTitleView{
 
     @Override
     public int getTitleHeight() {
+
+        mTitleButton.setMaxLines(100);
         mTitleButton.measure( View.MeasureSpec.makeMeasureSpec(mTitleButton.getWidth(), View.MeasureSpec.AT_MOST),
                 View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
 

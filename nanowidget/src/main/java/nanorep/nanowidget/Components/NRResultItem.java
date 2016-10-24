@@ -41,4 +41,7 @@ public abstract class NRResultItem extends RecyclerView.ViewHolder {
         mListener = listener;
     }
 
+    public abstract void resetBody();
+
+    public abstract void updateBody();
 }
