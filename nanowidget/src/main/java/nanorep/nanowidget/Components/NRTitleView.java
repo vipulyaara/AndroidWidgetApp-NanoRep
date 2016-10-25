@@ -71,7 +71,7 @@ public class NRTitleView extends NRCustomTitleView{
     public void setTitleText(final String text) {
         mTitleButton.setText(text);
 
-        mTitleButton.setLines(2);
+        mTitleButton.setMaxLines(2);
     }
 
     @Override

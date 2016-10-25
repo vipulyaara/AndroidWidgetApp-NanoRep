@@ -152,7 +152,7 @@ public class NRTitleItem extends NRResultItem implements NRTitleListener{
         animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
-                titleView.getLayoutParams().height = height;
+                titleView.getLayoutParams().height = (Integer) animation.getAnimatedValue();
                 mItemView.getLayoutParams().height = (Integer) animation.getAnimatedValue();
                 mItemView.requestLayout();
             }

@@ -72,11 +72,11 @@ public class MainActivity extends AppCompatActivity implements NRWidgetFragment.
                     EditText accountName = (EditText) findViewById(R.id.accountNameId);
                     EditText kb = (EditText) findViewById(R.id.kbId);
 
-//                    String _accountName = "qa";
-//                    String _kb = "qa";
+                    String _accountName = "qa";//"nanorep";
+                    String _kb = "qa";//"English";
 
-                    String _accountName = accountName.getText().toString();
-                    String _kb = kb.getText().toString();
+//                    String _accountName = accountName.getText().toString();
+//                    String _kb = kb.getText().toString();
 
                     accountParams.setAccount(_accountName);
                     accountParams.setKnowledgeBase(_kb);

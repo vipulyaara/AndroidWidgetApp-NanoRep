@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -18,6 +19,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -343,6 +345,7 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
 
             @Override
             public void onItemMoveFinished(NRResultItem item) {
+
                 item.updateBody();
             }
 
@@ -366,13 +369,11 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
             return;
         }
 
-        frequentlyQuestionsTv.setText("");
-
         int heightFrom = frequentlyQuestions.getHeight();
         int heightTo = 0;
 
         if(mUnfoldedResult != null && mUnfoldedResult.isUnfolded()) {
-
+            frequentlyQuestionsTv.setText("");
             if(frequentlyQuestions.getHeight() == 0) {
                 return;
             }
@@ -913,7 +914,6 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
             }
             return mQueryResults.size();
         }
-
     }
 
     public void setViewAdapter(NRCustomViewAdapter viewAdapter) {

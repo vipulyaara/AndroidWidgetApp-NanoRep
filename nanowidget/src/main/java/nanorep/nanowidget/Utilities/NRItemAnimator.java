@@ -1,9 +1,12 @@
 package nanorep.nanowidget.Utilities;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.animation.DecelerateInterpolator;
 
 import java.util.List;
 
@@ -46,4 +49,5 @@ public class NRItemAnimator extends DefaultItemAnimator {
     public boolean canReuseUpdatedViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, @NonNull List<Object> payloads) {
         return true;
     }
+
 }
