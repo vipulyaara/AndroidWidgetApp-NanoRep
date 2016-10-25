@@ -266,7 +266,7 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
             @Override
             public void insertRows(ArrayList<NRResult> rows) {
                 mLoadingView.setVisibility(View.INVISIBLE);
-                mResutlsAdapter.setShouldResetLikeView(true);
+//                mResutlsAdapter.setShouldResetLikeView(true);
                 if (rows == null && mSearchBar.getText() != null) {
                     mNotitleViewHolder.getLayoutParams().height = (int) Calculate.pxFromDp(getContext(), 120);
                     mNoTitleView.setText(mFetchedDataManager.getConfiguration().getCustomNoAnswersTextContext(mSearchBar.getText()));

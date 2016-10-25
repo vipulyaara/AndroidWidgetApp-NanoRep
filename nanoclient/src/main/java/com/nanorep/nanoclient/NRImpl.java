@@ -313,16 +313,17 @@ public class NRImpl implements Nanorep {
         for (String key: likeParams.getParams().keySet()) {
             uriBuilder.appendQueryParameter(key, likeParams.getParams().get(key));
         }
-        if (mSessionId != null) {
-            uriBuilder.appendQueryParameter("sid", mSessionId);
-        }
-        NRConnection.getInstance().connectionWithRequest(uriBuilder.build(), new NRConnection.Listener() {
+//        if (mSessionId != null) {
+//            uriBuilder.appendQueryParameter("sid", mSessionId);
+//        }
+        executeRequest(uriBuilder, new NRConnection.Listener() {
             @Override
             public void response(Object responseParam, int status, NRError error) {
                 if (error != null) {
                     onLikeSentListener.onLikeSent(likeParams.getAnswerId(), 0, false);
-                } else {
-                    onLikeSentListener.onLikeSent(likeParams.getAnswerId(), Integer.parseInt(likeParams.getParams().get("type")), responseParam == null);
+                } else if (responseParam instanceof HashMap){
+                    boolean result = Boolean.valueOf((String) ((HashMap)responseParam).get("result"));
+                    onLikeSentListener.onLikeSent(likeParams.getAnswerId(), Integer.parseInt(likeParams.getParams().get("type")), result);
                 }
             }
         });
