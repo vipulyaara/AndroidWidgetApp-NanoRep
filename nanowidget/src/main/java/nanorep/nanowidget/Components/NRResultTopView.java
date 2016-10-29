@@ -93,7 +93,11 @@ public class NRResultTopView extends LinearLayout implements NRTitleListener, On
             setChannel();
         }
 
-        setTitleAnimation(y, 0);
+        if(!mResult.isSingle()) {
+            setTitleAnimation(y, 0, mResult.isUnfolded());
+        } else {
+            titleView.unfold(true);
+        }
     }
 
     private void setChannel() {
@@ -122,7 +126,7 @@ public class NRResultTopView extends LinearLayout implements NRTitleListener, On
         }
     }
 
-    private void setTitleAnimation(int start, final int end) {
+    private void setTitleAnimation(final int start, final int end, final boolean isUnfolded) {
 
         ValueAnimator varl = ValueAnimator.ofInt(start,end);
         varl.setDuration(400);
@@ -142,11 +146,11 @@ public class NRResultTopView extends LinearLayout implements NRTitleListener, On
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                if(end == 0) { // going up
-                    titleView.unfold(true);
-                } else { // going down
+                if(!isUnfolded) { // going down
                     viewTitleContainer.removeAllViews();
                     viewTitleContainer.getLayoutParams().height=0;
+                } else { // going up
+                    titleView.unfold(true);
                 }
             }
 
@@ -164,7 +168,7 @@ public class NRResultTopView extends LinearLayout implements NRTitleListener, On
         varl.start();
     }
 
-    private void setTitleHeightAnimation(int start, int end,final int y) {
+    private void setTitleHeightAnimation(int start, int end,final int y, final boolean isUnfolded) {
 
         ValueAnimator varl = ValueAnimator.ofInt(start,end);
         varl.setDuration(200);
@@ -185,7 +189,7 @@ public class NRResultTopView extends LinearLayout implements NRTitleListener, On
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                setTitleAnimation(0, y);
+                setTitleAnimation(0, y, isUnfolded);
             }
 
             @Override
@@ -204,14 +208,16 @@ public class NRResultTopView extends LinearLayout implements NRTitleListener, On
 
     public void removeTopView(int y) {
 
-        setTitleHeightAnimation(viewTitleContainer.getHeight(), mResult.getHeight(), y);
-
-//        viewTitleContainer.removeAllViews();
+        if(!mResult.isSingle()) {
+            setTitleHeightAnimation(viewTitleContainer.getHeight(), mResult.getHeight(), y, false);
+        } else {
+            viewTitleContainer.removeAllViews();
+            viewTitleContainer.getLayoutParams().height=0;
+        }
         viewContentContainer.removeAllViews();
         viewLikeContainer.removeAllViews();
         viewChannelingContainer.removeAllViews();
 
-//        viewTitleContainer.getLayoutParams().height=0;
         viewContentContainer.getLayoutParams().height = 0;
         viewLikeContainer.getLayoutParams().height = 0;
         viewChannelingContainer.getLayoutParams().height=0;

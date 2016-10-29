@@ -653,8 +653,12 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
         nrResultTopView.removeTopView(y);
 
         y = 0;
-        
+
         mResultsRecyclerView.setVisibility(View.VISIBLE);
+
+//        if (mUnfoldedResult != null && mUnfoldedResult.isSingle()) {
+//            mUnfoldedResult.setUnfolded(true);
+//        }
 
         animateBGColor(300);
 
