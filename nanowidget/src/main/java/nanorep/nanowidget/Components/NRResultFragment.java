@@ -199,7 +199,7 @@ public class NRResultFragment extends Fragment implements View.OnClickListener, 
 //        } else {
 //            String reasons[] = new String[] {"Incorrect answer", "Missing or incorrect information", "Didn't find what I was looking for"};
 //            DislikeDialog dislikeAlert = new DislikeDialog(getContext());
-//            dislikeAlert.setTitle("What's wrong with this answer");
+//            dislikeAlert.openView("What's wrong with this answer");
 //            dislikeAlert.setListener(new DislikeDialog.Listener() {
 //                @Override
 //                public void onCancel() {

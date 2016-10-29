@@ -26,7 +26,6 @@ public class NRItemAnimator extends DefaultItemAnimator {
 
     public interface OnAnimation {
         void onItemRemoved(NRResultItem item);
-        void onItemMoveFinished(NRResultItem item);
     }
 
     public void setListener(OnAnimation listener) {
@@ -37,12 +36,6 @@ public class NRItemAnimator extends DefaultItemAnimator {
     public void onRemoveFinished(RecyclerView.ViewHolder item) {
         super.onRemoveFinished(item);
         mListener.onItemRemoved((NRResultItem)item);
-    }
-
-    @Override
-    public void onMoveFinished(RecyclerView.ViewHolder item) {
-        super.onMoveFinished(item);
-        mListener.onItemMoveFinished((NRResultItem)item);
     }
 
     @Override

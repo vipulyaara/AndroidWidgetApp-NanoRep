@@ -50,11 +50,6 @@ public class NRContentItem extends NRResultItem {
         contentView.loadUrl("about:blank");
     }
 
-    @Override
-    public void updateBody() {
-
-    }
-
     public void setData(NRResult result) {
         mResult = result;
         

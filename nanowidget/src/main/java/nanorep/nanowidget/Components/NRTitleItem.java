@@ -53,33 +53,6 @@ public class NRTitleItem extends NRResultItem implements NRTitleListener{
     }
 
     @Override
-    public void updateBody() {
-
-        // set text color, style etc...
-        titleView.unfold(mResult.isUnfolded());
-
-        // set item margins
-//        setItemMargins(mResult.isUnfolded());
-
-        // set the correct height - to wrap the content
-        int height = mItemView.getHeight();
-
-        if(!mResult.isUnfolded()) {
-            height = mResult.getHeight();
-        } else {
-            int titleMeasuredHeight = titleView.getTitleHeight();
-            if (titleMeasuredHeight > height) {
-                height = titleMeasuredHeight;
-            } else {
-                mListener.unfoldItem(mResult, false, true);
-                return;
-            }
-        }
-        setHeight(height);
-
-    }
-
-    @Override
     protected void configViewObjects(NRConfiguration config) {
         String titleBGColor = config.getTitle().getTitleBGColor();
 
@@ -97,53 +70,7 @@ public class NRTitleItem extends NRResultItem implements NRTitleListener{
 
         int height = result.getHeight();
 
-        if (mResult.isUnfolded()) { // title's height should wrap content
-            int titleMeasuredHeight = titleView.getTitleHeight();
-            if (titleMeasuredHeight > height) {
-                height = titleMeasuredHeight;
-            }
-        }
-
         setHeight(height);
-    }
-
-    private void setItemMargins(boolean unfolded) {
-        int startMargin = (int) Calculate.pxFromDp(title_container.getContext(), 0);
-        int endMargin = (int) Calculate.pxFromDp(title_container.getContext(), 15);
-
-        if(unfolded) {
-            startMargin = (int) Calculate.pxFromDp(title_container.getContext(), 15);
-            endMargin = (int) Calculate.pxFromDp(title_container.getContext(), 0);
-        }
-
-        if(((ViewGroup.MarginLayoutParams) title_container.getLayoutParams()).rightMargin == endMargin) {
-            return;
-        }
-
-        ValueAnimator varl = ValueAnimator.ofInt(startMargin,endMargin);
-        varl.setDuration(80);
-        varl.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                ((ViewGroup.MarginLayoutParams) title_container.getLayoutParams()).rightMargin = (Integer) animation.getAnimatedValue();
-                ((ViewGroup.MarginLayoutParams) title_container.getLayoutParams()).leftMargin = (Integer) animation.getAnimatedValue();
-                title_container.requestLayout();
-            }
-        });
-
-        varl.addListener(new AnimatorListenerAdapter()
-        {
-            @Override
-            public void onAnimationEnd(Animator animation)
-            {
-                if(mResult.isUnfolded()) {
-                    mListener.unfoldItem(mResult, false, true);
-                }
-            }
-        });
-
-        varl.start();
     }
 
     private void setHeight(final int height) {
@@ -155,17 +82,6 @@ public class NRTitleItem extends NRResultItem implements NRTitleListener{
                 titleView.getLayoutParams().height = (Integer) animation.getAnimatedValue();
                 mItemView.getLayoutParams().height = (Integer) animation.getAnimatedValue();
                 mItemView.requestLayout();
-            }
-        });
-
-        animator.addListener(new AnimatorListenerAdapter()
-        {
-            @Override
-            public void onAnimationEnd(Animator animation)
-            {
-                if(mResult.isUnfolded()) {
-                    mListener.unfoldItem(mResult, false, true);
-                }
             }
         });
 
@@ -185,12 +101,20 @@ public class NRTitleItem extends NRResultItem implements NRTitleListener{
     public void onTitleClicked() {
 
         if(!mResult.isSingle()) {
-            mListener.unfoldItem(mResult, false, false);
+            mListener.unfoldItem(mResult, false);
         }
+    }
+
+    @Override
+    public void onTitleCollapsed() {
     }
 
     @Override
     public void onShareClicked() {
         mListener.onShareClicked(this, mResult.getFetchedResult().getTitle());
+    }
+
+    public LinearLayout getTitle_container() {
+        return title_container;
     }
 }

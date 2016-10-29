@@ -12,28 +12,26 @@
     <Button
         android:layout_width="0dp"
         android:layout_weight="1"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:id="@+id/titleButton"
         android:background="#00ffffff"
         android:textColor="#4a4a4a"
         android:gravity="center_vertical|left"
         android:fontFamily="sans-serif-light"
         android:text="title"
-        android:paddingTop="12dp"
-        android:paddingBottom="12dp"
         android:textSize="16sp"
         android:ellipsize="end"
         android:textAllCaps="false"/>
     <ImageButton
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:id="@+id/shareButton"
         android:visibility="gone"
         android:src="@drawable/share"
         android:background="#00ffffff"/>
     <ImageButton
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:id="@+id/unFoldButton"
         android:rotation="0"
         android:layout_marginLeft="21dp"

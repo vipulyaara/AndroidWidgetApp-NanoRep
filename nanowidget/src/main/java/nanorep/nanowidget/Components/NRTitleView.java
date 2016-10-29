@@ -1,5 +1,6 @@
 package nanorep.nanowidget.Components;
 
+import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.Color;
@@ -78,18 +79,14 @@ public class NRTitleView extends NRCustomTitleView{
     public void unfold(boolean closed) {
         this.closed = !closed;
 
-//        int maxLines = 100;
-//
-//        if(closed) { // answer is closed, max 2 lines
-//            maxLines = 2;
-//        }
-
-//        mTitleButton.setMaxLines(maxLines);
-
         setTitleColor();
         setTitleFont();
         setUnfoldButtonImage();
         setShareImage();
+
+        if(!this.closed) {
+            collapseTextView();
+        }
     }
 
     private void setTitleFont() {
@@ -126,25 +123,39 @@ public class NRTitleView extends NRCustomTitleView{
     @Override
     public int getTitleHeight() {
 
-        mTitleButton.setMaxLines(100);
-        mTitleButton.measure( View.MeasureSpec.makeMeasureSpec(mTitleButton.getWidth(), View.MeasureSpec.AT_MOST),
-                View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
-
-        return mTitleButton.getMeasuredHeight();
-    }
-
-//    @Override
-//    public void hideUnfoldButton(boolean isSingle) {
-//        mUnFoldButton.setVisibility(isSingle ? View.INVISIBLE : View.VISIBLE);
-//    }
-
-//    @Override
-//    public int getTitleMeasuredHeight() {
+//        mTitleButton.setMaxLines(100);
 //        mTitleButton.measure( View.MeasureSpec.makeMeasureSpec(mTitleButton.getWidth(), View.MeasureSpec.AT_MOST),
 //                View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
-//
-//        return mTitleButton.getMeasuredHeight();
-//    }
 
+//        return mTitleButton.getHeight();
+        return 0;
+    }
+
+    private void collapseTextView(){
+        ObjectAnimator animation = ObjectAnimator.ofInt(mTitleButton, "maxLines", 100);
+        animation.setDuration(1000).start();
+
+        animation.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                mListener.onTitleCollapsed();
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+    }
 
 }

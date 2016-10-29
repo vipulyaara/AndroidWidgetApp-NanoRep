@@ -73,7 +73,7 @@ public class NRFetchedDataManager {
             ArrayList<NRResult> results = new ArrayList<>();
             for (NRQueryResult result : queryResults) {
                 NRResult currentResult = new NRResult(result, NRResultItem.RowType.TITLE);
-                currentResult.setHeight((int) Calculate.pxFromDp(mContext, 62));
+                currentResult.setHeight((int) Calculate.pxFromDp(mContext, 45));
                 results.add(currentResult);
             }
             mRows = queryResults.size();
