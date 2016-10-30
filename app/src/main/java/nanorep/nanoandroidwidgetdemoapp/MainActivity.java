@@ -71,12 +71,19 @@ public class MainActivity extends AppCompatActivity implements NRWidgetFragment.
 //                    accountParams.setKnowledgeBase("79848779");
                     EditText accountName = (EditText) findViewById(R.id.accountNameId);
                     EditText kb = (EditText) findViewById(R.id.kbId);
+                    EditText server = (EditText) findViewById(R.id.serverId);
 
-                    String _accountName = "qa";//"nanorep";
-                    String _kb = "qa";//"English";
+//                    String _accountName = "qa";//"nanorep";
+//                    String _kb = "qa";//"English";
 
-//                    String _accountName = accountName.getText().toString();
-//                    String _kb = kb.getText().toString();
+                    String _server = server.getText().toString();
+
+                    if(!_server.isEmpty()) {
+                        accountParams.setmHost(_server);
+                    }
+
+                    String _accountName = accountName.getText().toString();
+                    String _kb = kb.getText().toString();
 
                     accountParams.setAccount(_accountName);
                     accountParams.setKnowledgeBase(_kb);
@@ -92,7 +99,7 @@ public class MainActivity extends AppCompatActivity implements NRWidgetFragment.
                     nanorep.setDebugMode(checkBox.isChecked());
 
                     nanoFragment.setNanoRep(nanorep);
-                    getSupportFragmentManager().beginTransaction().add(R.id.root_layout, nanoFragment, "nanorep").commit();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.root_layout, nanoFragment, "nanorep").commit();
 //                    nanorep.fetchConfiguration(new Nanorep.OnConfigurationFetchedListener() {
 //                        @Override
 //                        public void onConfigurationReady(NRConfiguration configuration, NRError error) {

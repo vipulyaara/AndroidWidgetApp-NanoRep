@@ -60,6 +60,8 @@ public interface Nanorep {
     void setDebugMode(boolean checked);
 
     public class AccountParams {
+
+        private String mHost;
         private String mAccount;
         private String mKnowledgeBase;
         private HashMap<String, String> mContext;
@@ -71,6 +73,14 @@ public interface Nanorep {
 
         public void setAccount(String account) {
             mAccount = account;
+        }
+
+        public String getmHost() {
+            return mHost;
+        }
+
+        public void setmHost(String mHost) {
+            this.mHost = mHost;
         }
 
         public String getKnowledgeBase() {
@@ -109,7 +119,13 @@ public interface Nanorep {
         public Uri.Builder getUri() {
             Uri.Builder uri = new Uri.Builder();
             uri.scheme("https");
-            uri.authority(getAccount() + ".nanorep.co");
+
+            if(mHost != null) {
+                uri.authority(mHost + ".nanorep.com");
+                uri.appendEncodedPath("~" + getAccount());
+            } else {
+                uri.authority(getAccount() + ".nanorep.co");
+            }
             uri.appendQueryParameter("referer", NRUtilities.buildReferer(getReferrer()));
             return uri;
         }
