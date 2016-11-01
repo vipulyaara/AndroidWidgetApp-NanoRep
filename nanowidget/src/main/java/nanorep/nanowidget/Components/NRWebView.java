@@ -51,41 +51,19 @@ public class NRWebView extends FrameLayout {
     public void onViewAdded(View child) {
         super.onViewAdded(child);
         mWebView = (MyWebView) child.findViewById(R.id.nrWebview);
-        mWebView.getSettings().setJavaScriptEnabled(true);
-        mWebView.getSettings().setSupportMultipleWindows(true);
-        mWebView.getSettings().setAllowFileAccess(true);
-        mWebView.getSettings().setAllowContentAccess(true);
-        WebView.setWebContentsDebuggingEnabled(true);
-//        mWebView.getSettings().setUseWideViewPort(true);
-        mWebView.setWebViewClient(new NRWebClient());
-        mWebView.setWebChromeClient(new WebChromeClient() {
-            @Override
-            public void onProgressChanged(WebView view, int newProgress) {
-                if (newProgress == 100 && mLoadingView.getVisibility() == VISIBLE) {
-                    mLoadingView.setVisibility(INVISIBLE);
+        if (mWebView != null) {
+            mWebView.getSettings().setJavaScriptEnabled(true);
+            mWebView.setWebViewClient(new NRWebClient());
+            mWebView.setWebChromeClient(new WebChromeClient() {
+                @Override
+                public void onProgressChanged(WebView view, int newProgress) {
+                    if (newProgress == 100 && mLoadingView.getVisibility() == VISIBLE) {
+                        mLoadingView.setVisibility(INVISIBLE);
+                    }
                 }
-            }
-
-            @Override
-            public boolean onCreateWindow(WebView view, boolean isDialog, boolean isUserGesture, Message resultMsg) {
-                WebView newWebView = new WebView(getContext());
-                addView(newWebView);
-                WebView.WebViewTransport transport = (WebView.WebViewTransport) resultMsg.obj;
-                transport.setWebView(newWebView);
-                resultMsg.sendToTarget();
-                return true;
-            }
-
-            @Override
-            public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> filePathCallback, FileChooserParams fileChooserParams) {
-                return super.onShowFileChooser(webView, filePathCallback, fileChooserParams);
-            }
-
-            public void openFileChooser(ValueCallback<Uri> uploadMsg, String acceptType, String capture) {
-                Log.d("tst", "work");
-            }
-        });
-        mLoadingView = (RelativeLayout) child.findViewById(R.id.webLoadingView);
+            });
+            mLoadingView = (RelativeLayout) child.findViewById(R.id.webLoadingView);
+        }
     }
 
     public void setListener(NRWebView.Listener listener) {
@@ -143,7 +121,7 @@ public class NRWebView extends FrameLayout {
                 "\t\t}());\n" +
                 "\t</script>";
         parsed += script;
-        mWebView.loadDataWithBaseURL("file://", parsed, mimeType, encoding, "file://");
+        mWebView.loadDataWithBaseURL("http://nanorep.invalid/", parsed, mimeType, encoding, null);
     }
 
     public void loadUrl(String url) {
