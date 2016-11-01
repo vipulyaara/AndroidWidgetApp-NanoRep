@@ -118,6 +118,11 @@ public class NRFAQAnswerItem implements NRQueryResult {
     }
 
     @Override
+    public void setChanneling(ArrayList<NRChanneling> channeling) {
+
+    }
+
+    @Override
     public HashMap<String, Object> getParams() {
         return mParams;
     }

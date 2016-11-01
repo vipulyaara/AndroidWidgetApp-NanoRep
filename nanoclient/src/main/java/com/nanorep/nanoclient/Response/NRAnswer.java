@@ -139,4 +139,9 @@ public class NRAnswer implements NRQueryResult {
         return mChanneling;
     }
 
+    @Override
+    public void setChanneling(ArrayList<NRChanneling> channeling) {
+        mChanneling = channeling;
+    }
+
 }

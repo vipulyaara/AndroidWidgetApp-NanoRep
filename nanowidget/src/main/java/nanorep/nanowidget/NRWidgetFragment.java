@@ -270,10 +270,17 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
                 if (rows == null && mSearchBar.getText() != null) {
                     mNotitleViewHolder.getLayoutParams().height = (int) Calculate.pxFromDp(getContext(), 120);
                     mNoTitleView.setText(mFetchedDataManager.getConfiguration().getCustomNoAnswersTextContext(mSearchBar.getText()));
-                    rows = mResultStack.get(0);
+                    if (mResultStack != null) {
+                        rows = mResultStack.get(0);
+                    }
                 }
                 loadResults(rows, true);
 
+            }
+
+            @Override
+            public void noFAQs() {
+                mLoadingView.setVisibility(View.INVISIBLE);
             }
 
             @Override
@@ -320,6 +327,9 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
     }
 
     private void loadResults(ArrayList<NRResult> rows, boolean addToStack) {
+        if (rows == null) {
+            return;
+        }
         if (mQueryResults == null) {
             mQueryResults = new ArrayList<NRResult>();
         }
@@ -477,11 +487,12 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
                         loadResults(mResultStack.get(0), false);
                         mQueryResults = mResultStack.get(0);
                     }
-
-                    mResultStack.clear();
-                    getSearchStrings().clear();
-                    mResultStack.add(new ArrayList<NRResult>(mQueryResults));
-                    getSearchStrings().add("");
+                    if (mResultStack != null) {
+                        mResultStack.clear();
+                        getSearchStrings().clear();
+                        mResultStack.add(new ArrayList<NRResult>(mQueryResults));
+                        getSearchStrings().add("");
+                    }
                 }
             }, 500);
 
@@ -566,6 +577,7 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
             @Override
             public void onAnswerFetched(NRQueryResult result) {
                 item.setBody(result.getBody());
+                item.setChanneling(result.getChanneling());
             }
         });
     }

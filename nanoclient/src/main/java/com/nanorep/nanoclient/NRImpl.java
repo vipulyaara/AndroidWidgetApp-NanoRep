@@ -66,7 +66,7 @@ public class NRImpl implements Nanorep {
 
     private void fetchFaqList(NRConnection.Listener listener) {
         final Uri.Builder uri = mAccountParams.getUri();
-        uri.appendPath("api/faq/v1/list.json");
+        uri.appendEncodedPath("api/faq/v1/list.json");
         uri.appendQueryParameter("account", mAccountParams.getAccount());
         if (mAccountParams.getNanorepContext() != null) {
             uri.appendQueryParameter("context", mAccountParams.getKnowledgeBase());
@@ -76,7 +76,7 @@ public class NRImpl implements Nanorep {
 
     private void startKeepAlive() {
         Uri.Builder uri = mAccountParams.getUri();
-        uri.appendPath("api/widget/v1/keepAlive.js");
+        uri.appendEncodedPath("api/widget/v1/keepAlive.js");
         executeRequest(uri, new NRConnection.Listener() {
             @Override
             public void response(Object responseParam, int status, NRError error) {
@@ -118,7 +118,7 @@ public class NRImpl implements Nanorep {
 
     private void hello(final NRConnection.Listener listener) {
         final Uri.Builder _uriBuilder = mAccountParams.getUri();
-        _uriBuilder.appendPath("api/widget/v1/hello.js");
+        _uriBuilder.appendEncodedPath("api/widget/v1/hello.js");
         _uriBuilder.appendQueryParameter("nostats", "false");
         _uriBuilder.appendQueryParameter("url", "mobile");
         NRConnection.getInstance().connectionWithRequest(_uriBuilder.build(), new NRConnection.Listener() {
@@ -154,15 +154,9 @@ public class NRImpl implements Nanorep {
         if (mCachedSearches != null && mCachedSearches.get(text) != null) {
             onSearchResultsFetchedListener.onSearchResponse(mCachedSearches.get(text), null);
         } else if (text != null && text.length() > 0){
-            String encodedText = null;
-            try {
-                encodedText = URLEncoder.encode(text, "UTF-8");
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            }
             Uri.Builder uriBuilder = mAccountParams.getUri();
-            uriBuilder.appendPath("api/widget/v1/q.js");
-            uriBuilder.appendQueryParameter("text", encodedText);
+            uriBuilder.appendEncodedPath("api/widget/v1/q.js");
+            uriBuilder.appendQueryParameter("text", text);
             executeRequest(uriBuilder, new NRConnection.Listener() {
                 @Override
                 public void response(Object responseParam, int status, NRError error) {
@@ -183,15 +177,9 @@ public class NRImpl implements Nanorep {
         if (mCachedSuggestions != null && mCachedSuggestions.get(text) != null) {
             onSuggestionsFetchedListener.onSuggestionsFetched(mCachedSuggestions.get(text), null);
         } else if (text != null && text.length() > 0) {
-            String encodedText = null;
-            try {
-                encodedText = URLEncoder.encode(text, "UTF-8");
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            }
             Uri.Builder uriBuilder = mAccountParams.getUri();
-            uriBuilder.appendPath("api/widget/v1/suggest.js");
-            uriBuilder.appendQueryParameter("text", encodedText);
+            uriBuilder.appendEncodedPath("api/widget/v1/suggest.js");
+            uriBuilder.appendQueryParameter("text", text);
             uriBuilder.appendQueryParameter("stemming", "false");
             executeRequest(uriBuilder, new NRConnection.Listener() {
                 @Override
@@ -233,7 +221,7 @@ public class NRImpl implements Nanorep {
     @Override
     public void likeForSearchResult(final NRSearchLikeParams likeParams, final OnLikeSentListener onLikeSentListener) {
         Uri.Builder uriBuilder = mAccountParams.getUri();
-        uriBuilder.appendPath("api/widget/v1/thumb.js");
+        uriBuilder.appendEncodedPath("api/widget/v1/thumb.js");
         for (String key: likeParams.getParams().keySet()) {
             uriBuilder.appendQueryParameter(key, likeParams.getParams().get(key));
         }
@@ -252,7 +240,7 @@ public class NRImpl implements Nanorep {
     @Override
     public void fetchFAQAnswer(final String answerId, final Integer answerHash, final OnFAQAnswerFetchedListener onFAQAnswerFetchedListener) {
         Uri.Builder uriBuilder = mAccountParams.getUri();
-        uriBuilder.appendPath("api/faq/v1/answer.js");
+        uriBuilder.appendEncodedPath("api/faq/v1/answer.js");
         uriBuilder.appendQueryParameter("id", answerId);
 
         // if exist and updated in cache, fetch from cache,
@@ -309,7 +297,7 @@ public class NRImpl implements Nanorep {
     @Override
     public void likeForFAQResult(final NRFAQLikeParams likeParams, final OnLikeSentListener onLikeSentListener) {
         Uri.Builder uriBuilder = mAccountParams.getUri();
-        uriBuilder.appendPath("api/widget/v1/thumb.js");
+        uriBuilder.appendEncodedPath("api/widget/v1/thumb.js");
         for (String key: likeParams.getParams().keySet()) {
             uriBuilder.appendQueryParameter(key, likeParams.getParams().get(key));
         }
@@ -333,19 +321,19 @@ public class NRImpl implements Nanorep {
     public void fetchConfiguration(final OnConfigurationFetchedListener onConfigurationFetchedListener) {
         if (mAccountParams != null) {
             final Uri.Builder uri = mAccountParams.getUri();
-            uri.appendPath("widget/scripts/cnf.json");
+            uri.appendEncodedPath("widget/scripts/cnf.json");
             if (mAccountParams.getKnowledgeBase() != null) {
                 uri.appendQueryParameter("kb", mAccountParams.getKnowledgeBase());
             }
             uri.appendQueryParameter("isFloat", "true");
 
             // check network connectivity speed
-            final Long beforeCnfTs = System.currentTimeMillis()/1000;
+            final Long beforeCnfTs = System.currentTimeMillis() / 1000;
 
             NRConnection.getInstance().connectionWithRequest(uri.build(), new NRConnection.Listener() {
                 @Override
                 public void response(Object responseParam, int status, NRError error) {
-                    Long afterCnfTs = System.currentTimeMillis()/1000;
+                    Long afterCnfTs = System.currentTimeMillis() / 1000;
 
                     final boolean fast = (afterCnfTs - beforeCnfTs) <= 4;
 
@@ -386,7 +374,8 @@ public class NRImpl implements Nanorep {
                             });
                         } else {
                             if (onConfigurationFetchedListener != null) {
-                                onConfigurationFetchedListener.onConfigurationFetched(new NRConfiguration((HashMap) responseParam), null);
+                                NRConfiguration config = new NRConfiguration((HashMap) responseParam);
+                                onConfigurationFetchedListener.onConfigurationFetched(config, null);
                             }
                             NRCacheManager.storeAnswerById(mContext, NRUtilities.md5(mAccountParams.getKnowledgeBase() + mAccountParams.getNanorepContext()), responseParam);
 

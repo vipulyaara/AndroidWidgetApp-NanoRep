@@ -42,6 +42,7 @@ public class NRDownloader extends  AsyncTask <Uri, Integer, Object> {
         byte[] data = null;
         try{
             url = new URL(uri.toString());
+            Log.d("NRDownloader", url.toString());
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestProperty("Referer", uri.getQueryParameter("referer"));
             connection.connect();

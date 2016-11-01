@@ -5,6 +5,7 @@ import android.widget.RelativeLayout;
 
 import com.nanorep.nanoclient.Channeling.NRChanneling;
 import com.nanorep.nanoclient.Interfaces.NRQueryResult;
+import com.nanorep.nanoclient.Response.NRAnswer;
 
 import java.util.ArrayList;
 
@@ -48,31 +49,16 @@ public class NRContentItem extends NRResultItem  {
         mWebView.loadData(body, "text/html", "UTF-8");
     }
 
-    public void resetBody() {
-        mWebView.loadUrl("about:blank");
-    }
-
-    public void setResult(NRResult result) {
-        mResult = result;
-        if (mResult.getFetchedResult().getBody() != null) {
-            setBody(mResult.getFetchedResult().getBody());
-        } else {
-            mListener.fetchBodyForResult(this, mResult.getFetchedResult().getId(), mResult.getFetchedResult().getHash());
-        }
-        mLikeView.setResultId(result.getFetchedResult().getId());
-        if (result.getFetchedResult().getLikeState() == NRQueryResult.LikeState.notSelected) {
-            mLikeView.resetLikeView();
-        } else {
-            mLikeView.updateLikeButton(result.getFetchedResult().getLikeState() == NRQueryResult.LikeState.positive);
-        }
+    public void setChanneling(ArrayList<NRChanneling> channelings) {
+        mResult.getFetchedResult().setChanneling(channelings);
         if (mFeedbackView != null) {
             RelativeLayout.LayoutParams params = null;
-            if (mResult.getFetchedResult().getChanneling() == null) {
+            if (channelings == null) {
                 params = (RelativeLayout.LayoutParams) mFeedbackView.getLayoutParams();
                 params.height = (int) Calculate.pxFromDp(itemView.getContext(), 50);
             }else {
                 if (mChannelingView != null) {
-                    ArrayList<NRChanneling> channelings = mResult.getFetchedResult().getChanneling();
+//                    ArrayList<NRChanneling> channelings = mResult.getFetchedResult().getChanneling();
                     for (NRChanneling channeling: channelings) {
                         channeling.setQueryResult(mResult.getFetchedResult());
                     }
@@ -82,6 +68,36 @@ public class NRContentItem extends NRResultItem  {
                 }
             }
             mFeedbackView.setLayoutParams(params);
+            mFeedbackView.requestLayout();
+        }
+    }
+
+    public void resetBody() {
+        mWebView.loadUrl("about:blank");
+    }
+
+    public void setResult(NRResult result) {
+        mResult = result;
+        mLikeView.setResultId(result.getFetchedResult().getId());
+        if (result.getFetchedResult().getLikeState() == NRQueryResult.LikeState.notSelected) {
+            mLikeView.resetLikeView();
+        } else {
+            mLikeView.updateLikeButton(result.getFetchedResult().getLikeState() == NRQueryResult.LikeState.positive);
+        }
+        if (mResult.getFetchedResult() instanceof NRAnswer) {
+            setBody(mResult.getFetchedResult().getBody());
+        } else {
+            mListener.fetchBodyForResult(this, mResult.getFetchedResult().getId(), mResult.getFetchedResult().getHash());
+            return;
+        }
+        if (mResult.getFetchedResult().getChanneling() != null) {
+            setChanneling(mResult.getFetchedResult().getChanneling());
+        } else {
+            RelativeLayout.LayoutParams params = null;
+            params = (RelativeLayout.LayoutParams) mFeedbackView.getLayoutParams();
+            params.height = (int) Calculate.pxFromDp(itemView.getContext(), 50);
+            mFeedbackView.setLayoutParams(params);
+            mFeedbackView.requestLayout();
         }
     }
 

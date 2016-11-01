@@ -1,5 +1,7 @@
 package com.nanorep.nanoclient.Response;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 

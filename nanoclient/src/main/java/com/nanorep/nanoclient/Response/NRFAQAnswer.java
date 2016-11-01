@@ -90,6 +90,11 @@ public class NRFAQAnswer implements NRQueryResult {
         return mChanneling;
     }
 
+    @Override
+    public void setChanneling(ArrayList<NRChanneling> channeling) {
+        mChanneling = channeling;
+    }
+
     /**
      *
      * @return Value of attachments

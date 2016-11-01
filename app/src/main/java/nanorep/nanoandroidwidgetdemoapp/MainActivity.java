@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity implements NRWidgetFragment.
                     EditText accountName = (EditText) findViewById(R.id.accountNameId);
                     EditText kb = (EditText) findViewById(R.id.kbId);
                     accountParams.setAccount(accountName.getText().toString());
-                    accountParams.setKnowledgeBase(accountName.getText().toString());
+                    accountParams.setKnowledgeBase(kb.getText().toString());
 //                    HashMap<String, String> channel = new HashMap();
 //                    channel.put("channel", "mobile");
 //                    accountParams.setContext(channel);

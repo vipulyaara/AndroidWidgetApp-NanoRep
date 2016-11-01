@@ -72,6 +72,8 @@ public class NRFetchedDataManager {
         if (mFaqData != null && mFaqData.getGroups() != null && mFaqData.getGroups().size() > 0) {
             ArrayList<NRQueryResult> answers = mFaqData.getGroups().get(0).getAnswers();
             updateResults(answers);
+        } else {
+            mFetcherListener.noFAQs();
         }
     }
 
