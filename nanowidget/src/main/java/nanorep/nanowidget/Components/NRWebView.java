@@ -4,11 +4,15 @@ import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Build;
+import android.os.Message;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
@@ -48,7 +52,10 @@ public class NRWebView extends FrameLayout {
         super.onViewAdded(child);
         mWebView = (MyWebView) child.findViewById(R.id.nrWebview);
         mWebView.getSettings().setJavaScriptEnabled(true);
-//        mWebView.getSettings().setLoadWithOverviewMode(true);
+        mWebView.getSettings().setSupportMultipleWindows(true);
+        mWebView.getSettings().setAllowFileAccess(true);
+        mWebView.getSettings().setAllowContentAccess(true);
+        WebView.setWebContentsDebuggingEnabled(true);
 //        mWebView.getSettings().setUseWideViewPort(true);
         mWebView.setWebViewClient(new NRWebClient());
         mWebView.setWebChromeClient(new WebChromeClient() {
@@ -57,6 +64,25 @@ public class NRWebView extends FrameLayout {
                 if (newProgress == 100 && mLoadingView.getVisibility() == VISIBLE) {
                     mLoadingView.setVisibility(INVISIBLE);
                 }
+            }
+
+            @Override
+            public boolean onCreateWindow(WebView view, boolean isDialog, boolean isUserGesture, Message resultMsg) {
+                WebView newWebView = new WebView(getContext());
+                addView(newWebView);
+                WebView.WebViewTransport transport = (WebView.WebViewTransport) resultMsg.obj;
+                transport.setWebView(newWebView);
+                resultMsg.sendToTarget();
+                return true;
+            }
+
+            @Override
+            public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> filePathCallback, FileChooserParams fileChooserParams) {
+                return super.onShowFileChooser(webView, filePathCallback, fileChooserParams);
+            }
+
+            public void openFileChooser(ValueCallback<Uri> uploadMsg, String acceptType, String capture) {
+                Log.d("tst", "work");
             }
         });
         mLoadingView = (RelativeLayout) child.findViewById(R.id.webLoadingView);
@@ -69,10 +95,10 @@ public class NRWebView extends FrameLayout {
 
 
     public void loadData(String data, String mimeType, String encoding) {
+//        data = "<iframe width=\"420\" height=\"315\" src=\"http://example.com\" frameborder=\"5\" allowfullscreen></iframe>";
         mLoadingView.setVisibility(VISIBLE);
         NRHtmlParser parser = new NRHtmlParser(data);
         String parsed = parser.getParsedHtml();
-//        String parsed = "<div style=\"width=300px\" >" + parser.getParsedHtml() + "</div>";
         String script = "\n" +
                 "<style>\n" +
                 "        img {\n" +

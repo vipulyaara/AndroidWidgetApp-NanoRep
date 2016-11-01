@@ -8,9 +8,12 @@ import com.nanorep.nanoclient.Channeling.NRChannelingContactForm;
 import com.nanorep.nanoclient.Channeling.NRChannelingOpenCustomURL;
 import com.nanorep.nanoclient.Nanorep;
 
-import nanorep.nanowidget.Components.NRResultFragment;
+import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLDecoder;
+
 import nanorep.nanowidget.DataClasse.NRResult;
-import nanorep.nanowidget.R;
 
 /**
  * Created by nissimpardo on 28/06/16.
@@ -37,7 +40,7 @@ public class NRWebContentChannelPresentor implements NRChannelPresentor{
                 channelUri.appendPath("sdk/mobile/contactform.html");
                 channelUri.appendQueryParameter("account", mNanoRep.getAccountParams().getAccount());
                 channelUri.appendQueryParameter("articleId", mChanneling.getQueryResult().getId());
-                channelUri.appendQueryParameter("context", "null").appendQueryParameter("host", "my.nanorep.com");
+                channelUri.appendQueryParameter("context", "null").appendQueryParameter("host", "dev4.nanorep.com");
                 channelUri.appendQueryParameter("kb", mNanoRep.getAccountParams().getKnowledgeBase());
                 channelUri.appendQueryParameter("text", mChanneling.getQueryResult().getTitle());
                 channelUri.appendQueryParameter("contactFormId", ((NRChannelingContactForm)mChanneling).getContactForms());
@@ -60,20 +63,21 @@ public class NRWebContentChannelPresentor implements NRChannelPresentor{
     @Override
     public String getUrl() {
         Uri.Builder channelUri = new Uri.Builder();
-        channelUri.scheme("http").authority("dev4.nanorep.com");
+        channelUri.scheme("http").authority("my.nanorep.com");
         String url = null;
         switch (mChanneling.getType()) {
             case ContactForm:
-                channelUri.appendPath("sdk/mobile/contactform.html");
+                channelUri.appendEncodedPath("sdk/mobile/contactform.html");
                 channelUri.appendQueryParameter("account", mNanoRep.getAccountParams().getAccount());
                 channelUri.appendQueryParameter("articleId", mChanneling.getQueryResult().getId());
-                channelUri.appendQueryParameter("context", "null").appendQueryParameter("host", "my.nanorep.com");
+//                channelUri.appendQueryParameter("context", "null");
+                channelUri.appendQueryParameter("host", "my.nanorep.com");
                 channelUri.appendQueryParameter("kb", mNanoRep.getAccountParams().getKnowledgeBase());
                 channelUri.appendQueryParameter("text", mChanneling.getQueryResult().getTitle());
                 channelUri.appendQueryParameter("contactFormId", ((NRChannelingContactForm)mChanneling).getContactForms());
                 break;
             case ChatForm:
-                channelUri.appendPath("sdk/mobile/chat.html");
+                channelUri.appendEncodedPath("sdk/mobile/chat.html");
                 channelUri.appendQueryParameter("channel.chatProvider", ((NRChannelingChatForm) mChanneling).getChatProvider());
                 channelUri.appendQueryParameter("channelUri.appendQueryParameter", ((NRChannelingChatForm) mChanneling).getAccountNum());
                 channelUri.appendQueryParameter("channel.chatOptions.apiKey", "c774b56ff8a64cbba27743a8d4418b26");
@@ -83,6 +87,7 @@ public class NRWebContentChannelPresentor implements NRChannelPresentor{
                 url = ((NRChannelingOpenCustomURL)mChanneling).getLinkUrl();
                 break;
         }
+
         return url == null ? channelUri.toString() : url;
     }
 
