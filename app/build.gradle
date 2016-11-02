@@ -9,7 +9,7 @@ android {
         minSdkVersion 19
         targetSdkVersion 24
         versionCode 1
-        versionName "1.1.4"
+        versionName "1.2.0"
     }
     buildTypes {
         release {
@@ -23,5 +23,5 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
     compile project(':nanowidget')
-    compile 'com.crittercism:crittercism-android-agent:+'
+    compile 'com.crittercism:crittercism-android-agent:5.8.1-rc-1'
 }

@@ -114,7 +114,7 @@ public class NRFAQAnswerItem implements NRQueryResult {
 
     @Override
     public void setIsCNF(boolean isCNF) {
-        
+
     }
 
     @Override
