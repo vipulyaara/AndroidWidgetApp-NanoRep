@@ -143,7 +143,7 @@ public class NRFetchedDataManager {
     }
 
     public void sendLike(NRLikeType likeType, NRQueryResult result, Nanorep.OnLikeSentListener completion) {
-        if (true){//result.isCNF()) {
+        if (result.isCNF()) {
             NRFAQLikeParams likeParams = new NRFAQLikeParams(result);
             likeParams.setLikeType(likeType);
             likeParams.setAnswerId(result.getId());

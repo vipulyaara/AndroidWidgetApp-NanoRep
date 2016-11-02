@@ -20,7 +20,9 @@ public interface NRQueryResult {
     String getBody();
     Integer getHash();
     HashMap<String, Object> getParams();
+    String getKeywordSetId();
     boolean isCNF();
+    void setIsCNF(boolean isCNF);
     ArrayList<NRChanneling> getChanneling();
     void setChanneling(ArrayList<NRChanneling> channeling);
 

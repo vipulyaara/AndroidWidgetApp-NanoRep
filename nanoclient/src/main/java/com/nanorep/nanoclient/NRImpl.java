@@ -297,14 +297,14 @@ public class NRImpl implements Nanorep {
     @Override
     public void likeForFAQResult(final NRFAQLikeParams likeParams, final OnLikeSentListener onLikeSentListener) {
         Uri.Builder uriBuilder = mAccountParams.getUri();
-        uriBuilder.appendEncodedPath("api/widget/v1/thumb.js");
+        uriBuilder.appendEncodedPath("api/analytics/v1/addFeedback");
+        uriBuilder.appendQueryParameter("ignoreValidateCookie", "true");
         for (String key: likeParams.getParams().keySet()) {
             uriBuilder.appendQueryParameter(key, likeParams.getParams().get(key));
         }
-//        if (mSessionId != null) {
-//            uriBuilder.appendQueryParameter("sid", mSessionId);
-//        }
-        executeRequest(uriBuilder, new NRConnection.Listener() {
+        uriBuilder.appendQueryParameter("account", mAccountParams.getAccount());
+        uriBuilder.appendQueryParameter("kb", mAccountParams.getKnowledgeBase());
+        NRConnection.getInstance().connectionWithRequest(uriBuilder.build(), new NRConnection.Listener() {
             @Override
             public void response(Object responseParam, int status, NRError error) {
                 if (error != null) {
@@ -328,12 +328,12 @@ public class NRImpl implements Nanorep {
             uri.appendQueryParameter("isFloat", "true");
 
             // check network connectivity speed
-            final Long beforeCnfTs = System.currentTimeMillis() / 1000;
+            final Long beforeCnfTs = System.currentTimeMillis()/1000;
 
             NRConnection.getInstance().connectionWithRequest(uri.build(), new NRConnection.Listener() {
                 @Override
                 public void response(Object responseParam, int status, NRError error) {
-                    Long afterCnfTs = System.currentTimeMillis() / 1000;
+                    Long afterCnfTs = System.currentTimeMillis()/1000;
 
                     final boolean fast = (afterCnfTs - beforeCnfTs) <= 4;
 
@@ -374,8 +374,7 @@ public class NRImpl implements Nanorep {
                             });
                         } else {
                             if (onConfigurationFetchedListener != null) {
-                                NRConfiguration config = new NRConfiguration((HashMap) responseParam);
-                                onConfigurationFetchedListener.onConfigurationFetched(config, null);
+                                onConfigurationFetchedListener.onConfigurationFetched(new NRConfiguration((HashMap) responseParam), null);
                             }
                             NRCacheManager.storeAnswerById(mContext, NRUtilities.md5(mAccountParams.getKnowledgeBase() + mAccountParams.getNanorepContext()), responseParam);
 

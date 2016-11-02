@@ -104,8 +104,10 @@ public interface Nanorep {
 
         public Uri.Builder getUri() {
             Uri.Builder uri = new Uri.Builder();
-            uri.scheme("https");
+            uri.scheme("http");
             uri.authority(getAccount() + ".nanorep.co");
+//            uri.authority("dev-michal.nanorep.com");
+//            uri.appendPath("~" + getAccount());
             uri.appendQueryParameter("referer", NRUtilities.buildReferer(getReferrer()));
             return uri;
         }

@@ -19,6 +19,7 @@ public class NRAnswer implements NRQueryResult {
     private int mLikes;
     private String mTitle;
     private String mSummary;
+    private boolean mIsCNF = false;
     private LikeState mLikeState = LikeState.notSelected;
     private ArrayList<NRChanneling> mChanneling;
 
@@ -110,8 +111,18 @@ public class NRAnswer implements NRQueryResult {
     }
 
     @Override
+    public String getKeywordSetId() {
+        return mKeywordsetId;
+    }
+
+    @Override
     public boolean isCNF() {
-        return false;
+        return mIsCNF;
+    }
+
+    @Override
+    public void setIsCNF(boolean isCNF) {
+        mIsCNF = isCNF;
     }
 
     /**

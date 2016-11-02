@@ -113,6 +113,7 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
                     public void run() {
                         getSearchStrings().add("");
                         NRResult newResult = new NRResult(result);
+                        newResult.getFetchedResult().setIsCNF(true);
                         newResult.setHeight((int) Calculate.pxFromDp(getContext(), 62));
                         ArrayList<NRResult> linkedArray = new ArrayList<NRResult>();
                         linkedArray.add(newResult);
@@ -441,6 +442,9 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
     private void clearResults() {
         if (mQueryResults != null) {
             ArrayList<NRResult> temp = new ArrayList<>(mQueryResults);
+            if (mUnfoldedResult != null) {
+                unfoldItem(mUnfoldedResult, true);
+            }
             for (NRResult queryResult : temp) {
                 int index = mQueryResults.indexOf(queryResult);
                 mQueryResults.remove(queryResult);

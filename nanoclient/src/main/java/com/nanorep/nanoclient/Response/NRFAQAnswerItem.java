@@ -113,6 +113,11 @@ public class NRFAQAnswerItem implements NRQueryResult {
     }
 
     @Override
+    public void setIsCNF(boolean isCNF) {
+        
+    }
+
+    @Override
     public ArrayList<NRChanneling> getChanneling() {
         return null;
     }
@@ -125,5 +130,10 @@ public class NRFAQAnswerItem implements NRQueryResult {
     @Override
     public HashMap<String, Object> getParams() {
         return mParams;
+    }
+
+    @Override
+    public String getKeywordSetId() {
+        return null;
     }
 }
