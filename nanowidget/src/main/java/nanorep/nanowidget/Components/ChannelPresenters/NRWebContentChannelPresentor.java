@@ -1,6 +1,7 @@
 package nanorep.nanowidget.Components.ChannelPresenters;
 
 import android.net.Uri;
+import android.util.Log;
 
 import com.nanorep.nanoclient.Channeling.NRChanneling;
 import com.nanorep.nanoclient.Channeling.NRChannelingChatForm;
@@ -87,8 +88,9 @@ public class NRWebContentChannelPresentor implements NRChannelPresentor{
                 url = ((NRChannelingOpenCustomURL)mChanneling).getLinkUrl();
                 break;
         }
-
-        return url == null ? channelUri.toString() : url;
+        url = url == null ? channelUri.toString() : url;
+        Log.d("NRWebContentChannel", url);
+        return url;
     }
 
     @Override

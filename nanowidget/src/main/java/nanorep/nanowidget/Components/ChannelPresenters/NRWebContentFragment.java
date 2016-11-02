@@ -103,7 +103,7 @@ public class NRWebContentFragment extends Fragment {
                     Toast.makeText(getActivity().getApplicationContext(), "Cannot Open File Chooser", Toast.LENGTH_LONG).show();
                 }
 
-                return false;
+                return true;
             }
         });
         mWebView.setWebViewClient(new NRPresentorWebClient());
