@@ -162,11 +162,7 @@ public class NRTitleView extends NRCustomTitleView{
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                if(lines == 100){
-                    mListener.onTitleCollapsed();
-                } else {
-                    mListener.onTitleCollapsed();
-                }
+                mListener.onTitleCollapsed(!closed);
             }
 
             @Override

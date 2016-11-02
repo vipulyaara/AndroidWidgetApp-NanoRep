@@ -654,9 +654,13 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
     private void removeTopViewShowRecycleView() {
         nrResultTopView.removeTopView();
 
-        y = 0;
+        if(mUnfoldedResult != null && mUnfoldedResult.isSingle()) {
+            animateBGColor(300, false);
+            fadeViews(mResultsRecyclerView, 1.0f, 500, false);
+            fadeViews(nrResultTopView, 1.0f, 500, false);
+        }
 
-        animateBGColor(300, false);
+        y = 0;
 
         fadeViews(frequentlyQuestions, 1.0f, 300, false);
 
@@ -697,15 +701,17 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
                 int divider = (int) Calculate.pxFromDp(getContext(), 5) * unfoldItemPos;
 
                 y = marginTop - offSet + frequentlyQuestions.getHeight() + divider;
+
+                fadeViews(mResultsRecyclerView, 0.0f, 500, false);
+                fadeViews(frequentlyQuestions, 0.0f, 500, false);
+            } else {
+                fadeViews(mResultsRecyclerView, 0.0f, 50, false);
+                fadeViews(frequentlyQuestions, 0.0f, 50, false);
             }
 
             nrResultTopView.openView(y);
 
-//            mResultsRecyclerView.setVisibility(View.GONE);
-//            frequentlyQuestions.setVisibility(View.GONE);
 
-            fadeViews(mResultsRecyclerView, 0.0f, 500, false);
-            fadeViews(frequentlyQuestions, 0.0f, 500, false);
         }
     }
 
@@ -723,9 +729,6 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
                 public void onAnimationEnd(Animator animation) {
                     if(removeTopTitle) {
                         nrResultTopView.removeTitleView();
-                    } else {
-                        mResultsRecyclerView.setVisibility(View.GONE);
-                        nrResultTopView.setVisibility(View.VISIBLE);
                     }
                 }
 
@@ -779,18 +782,14 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
     }
 
     @Override
-    public void onFoldItemFinished() {
+    public void onFoldItemFinished(boolean beforeGoingDown) {
 
-        mResultsRecyclerView.setVisibility(View.VISIBLE);
-        fadeViews(mResultsRecyclerView, 1.0f, 500, true);
+        if(beforeGoingDown) {
+            animateBGColor(100, false);
 
-//        mResultsRecyclerView.setVisibility(View.VISIBLE);
-
-//        if (mUnfoldedResult != null && mUnfoldedResult.isSingle()) {
-//            mUnfoldedResult.setUnfolded(true);
-//        }
-
-
+        } else {
+            fadeViews(mResultsRecyclerView, 1.0f, 500, true);
+        }
     }
 
     private class NRResultsAdapter extends RecyclerView.Adapter<NRResultItem> {

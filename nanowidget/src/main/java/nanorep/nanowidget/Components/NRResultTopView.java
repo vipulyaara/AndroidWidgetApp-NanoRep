@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
+import android.view.animation.AnticipateOvershootInterpolator;
 import android.view.animation.Transformation;
 import android.view.animation.TranslateAnimation;
 import android.widget.FrameLayout;
@@ -128,51 +129,20 @@ public class NRResultTopView extends RelativeLayout implements NRTitleListener, 
 
     public void openViewAnimation() {
 
-        // create set of animations
-//        AnimationSet replaceAnimation = new AnimationSet(false);
-        // animations should be applied on the finish line
-//        replaceAnimation.setFillAfter(true);
-
         Animation fadeInContent = new AlphaAnimation(0, 1);
         fadeInContent.setDuration(700);
 
         Animation fadeInLike = new AlphaAnimation(0, 1);
         fadeInLike.setDuration(700);
-//        fadeInLike.setStartOffset(350);
+        fadeInLike.setStartOffset(350);
 
         Animation fadeInChannel = new AlphaAnimation(0, 1);
         fadeInChannel.setDuration(700);
-//        fadeInChannel.setStartOffset(350);
+        fadeInChannel.setStartOffset(350);
 
-        // create translation animation
-        TranslateAnimation trans = new TranslateAnimation(0, 0,
-                0,viewTitleContainer.getHeight());
-        trans.setDuration(700);
-
-        trans.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-
-            }
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)answerLayout.getLayoutParams();
-                params.topMargin = viewTitleContainer.getHeight();
-                answerLayout.setLayoutParams(params);
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-
-            }
-        });
-
-        // add new animations to the set
-//        replaceAnimation.addAnimation(trans);
-
-        // start our animation
-        answerLayout.startAnimation(trans);
+        ObjectAnimator objectAnimator = ObjectAnimator.ofFloat(answerLayout, "TranslationY", viewTitleContainer.getHeight());
+        objectAnimator.setDuration(700);
+        objectAnimator.start();
 
         viewContentContainer.startAnimation(fadeInContent);
         viewLikeContainer.startAnimation(fadeInLike);
@@ -188,34 +158,49 @@ public class NRResultTopView extends RelativeLayout implements NRTitleListener, 
 
         Animation fadeOutContent = new AlphaAnimation(1, 0);
         fadeOutContent.setDuration(700);
-        removeViewListener(fadeOutContent, viewContentContainer, 0);
+        removeViewListener(fadeOutContent, viewContentContainer);
 
         Animation fadeOutLike = new AlphaAnimation(1, 0);
         fadeOutLike.setDuration(700);
-        removeViewListener(fadeOutLike, viewLikeContainer, 0);
+        removeViewListener(fadeOutLike, viewLikeContainer);
 
         Animation fadeOutChannel = new AlphaAnimation(1, 0);
         fadeOutChannel.setDuration(700);
-        removeViewListener(fadeOutChannel, viewChannelingContainer, 0);
+        removeViewListener(fadeOutChannel, viewChannelingContainer);
 
         // create translation animation
-        TranslateAnimation trans = new TranslateAnimation(0, 0,
-                viewTitleContainer.getHeight(),0);
-        trans.setDuration(700);
-        removeViewListener(trans, answerLayout, y);
+        ObjectAnimator objectAnimator = ObjectAnimator.ofFloat(answerLayout, "TranslationY", 0);
+        objectAnimator.setDuration(700);
+        objectAnimator.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
 
-        // add new animations to the set
-        replaceAnimation.addAnimation(trans);
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                titleView.unfold(false);
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+        objectAnimator.setStartDelay(350);
+        objectAnimator.start();
 
         viewChannelingContainer.startAnimation(fadeOutChannel);
         viewLikeContainer.startAnimation(fadeOutLike);
         viewContentContainer.startAnimation(fadeOutContent);
-
-        // start our animation
-        answerLayout.startAnimation(replaceAnimation);
     }
 
-    private void removeViewListener(Animation animation, final ViewGroup view, final int y) {
+    private void removeViewListener(Animation animation, final ViewGroup view) {
         animation.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
@@ -224,14 +209,7 @@ public class NRResultTopView extends RelativeLayout implements NRTitleListener, 
 
             @Override
             public void onAnimationEnd(Animation animation) {
-
-                if(animation instanceof TranslateAnimation) {
-                    if(!mResult.isSingle()) {
-                        titleView.unfold(false);
-                    }
-                } else {
                     view.removeAllViews();
-                }
             }
 
             @Override
@@ -288,7 +266,7 @@ public class NRResultTopView extends RelativeLayout implements NRTitleListener, 
             @Override
             public void onAnimationEnd(Animator animation) {
                 if(!isUnfolded) { // going down
-                    mListener.onFoldItemFinished();
+                    mListener.onFoldItemFinished(false);
                 } else { // going up
                     titleView.unfold(true);
                 }
@@ -310,7 +288,14 @@ public class NRResultTopView extends RelativeLayout implements NRTitleListener, 
 
     public void removeTopView() {
 
-        closeViewAnimation();
+        if(!mResult.isSingle()) {
+            closeViewAnimation();
+        } else {
+            viewChannelingContainer.removeAllViews();
+            viewLikeContainer.removeAllViews();
+            viewContentContainer.removeAllViews();
+            viewTitleContainer.removeAllViews();
+        }
     }
 
     @Override
@@ -321,9 +306,9 @@ public class NRResultTopView extends RelativeLayout implements NRTitleListener, 
     }
 
     @Override
-    public void onTitleCollapsed() {
+    public void onTitleCollapsed(boolean unfold) {
 
-        if(mResult.isUnfolded()) {
+        if(unfold) {
 
             int feedbachHeight = 50;
 
@@ -344,12 +329,18 @@ public class NRResultTopView extends RelativeLayout implements NRTitleListener, 
 
             openViewAnimation();
         } else { //going down
+
             viewTitleContainer.getLayoutParams().height = mResult.getHeight();
             viewTitleContainer.requestLayout();
+
+            answerLayout.setTranslationY(0);
+
+            mListener.onFoldItemFinished(true);
+
             setTitleYAnimation(0, y, false);
         }
-
     }
+
 
     @Override
     public void onShareClicked() {
