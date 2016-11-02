@@ -63,9 +63,10 @@ import nanorep.nanowidget.interfaces.NRResultItemListener;
 import nanorep.nanowidget.interfaces.NRSearchBarListener;
 import nanorep.nanowidget.interfaces.NRSuggestionsListener;
 import nanorep.nanowidget.interfaces.OnFAQAnswerFetched;
+import nanorep.nanowidget.interfaces.OnLikeListener;
 
 
-public class NRWidgetFragment extends Fragment implements NRSearchBarListener, NRSuggestionsListener, NRResultItemListener {
+public class NRWidgetFragment extends Fragment implements NRSearchBarListener, NRSuggestionsListener, NRResultItemListener, OnLikeListener {
     private Nanorep mNanoRep;
 
     private NRFetchedDataManager mFetchedDataManager;
@@ -389,12 +390,13 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
         nrResultTopView.configViewObjects(mNanoRep.getNRConfiguration());
     }
 
-    private void animateBGColor(int milliseconds) {
+    private void animateBGColor(int milliseconds, boolean unfold) {
 
         int colorFrom = getResources().getColor(R.color.nr_background_color);
         int colorTo = getResources().getColor(R.color.white);
 
-        if(mUnfoldedResult != null && mUnfoldedResult.isUnfolded()) {
+//        if(mUnfoldedResult != null && mUnfoldedResult.isUnfolded()) {
+        if(!unfold){
             colorFrom = getResources().getColor(R.color.white);
             colorTo = getResources().getColor(R.color.nr_background_color);
         }
@@ -650,19 +652,13 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
     }
 
     private void removeTopViewShowRecycleView() {
-        nrResultTopView.removeTopView(y);
+        nrResultTopView.removeTopView();
 
         y = 0;
 
-        mResultsRecyclerView.setVisibility(View.VISIBLE);
+        animateBGColor(300, false);
 
-//        if (mUnfoldedResult != null && mUnfoldedResult.isSingle()) {
-//            mUnfoldedResult.setUnfolded(true);
-//        }
-
-        animateBGColor(300);
-
-        frequentlyQuestions.setVisibility(View.VISIBLE);
+        fadeViews(frequentlyQuestions, 1.0f, 300, false);
 
         frequentlyQuestionsTv.setText(getString(R.string.frequently_asked_questions));
     }
@@ -681,7 +677,7 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
 
             int unfoldItemPos = mQueryResults.indexOf(result);
 
-            animateBGColor(unfoldItemPos * 100);
+            animateBGColor(unfoldItemPos * 100, true);
 
             // set the NRResult of the answer we clicked..
             mUnfoldedResult = mQueryResults.get(unfoldItemPos);
@@ -705,10 +701,44 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
 
             nrResultTopView.openView(y);
 
-            mResultsRecyclerView.setVisibility(View.GONE);
-            frequentlyQuestions.setVisibility(View.GONE);
+//            mResultsRecyclerView.setVisibility(View.GONE);
+//            frequentlyQuestions.setVisibility(View.GONE);
 
+            fadeViews(mResultsRecyclerView, 0.0f, 500, false);
+            fadeViews(frequentlyQuestions, 0.0f, 500, false);
         }
+    }
+
+    private void fadeViews(View view, final float f, long duration, final boolean removeTopTitle) {
+        view.animate()
+            .alpha(f)
+            .setDuration(duration)
+            .setListener(new Animator.AnimatorListener() {
+                @Override
+                public void onAnimationStart(Animator animation) {
+
+                }
+
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    if(removeTopTitle) {
+                        nrResultTopView.removeTitleView();
+                    } else {
+                        mResultsRecyclerView.setVisibility(View.GONE);
+                        nrResultTopView.setVisibility(View.VISIBLE);
+                    }
+                }
+
+                @Override
+                public void onAnimationCancel(Animator animation) {
+
+                }
+
+                @Override
+                public void onAnimationRepeat(Animator animation) {
+
+                }
+            });
     }
 
     private int getRelativeTop(View myView) {
@@ -746,6 +776,21 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
                 view.loadData(result.getBody(), "text/html", "UTF-8");
             }
         });
+    }
+
+    @Override
+    public void onFoldItemFinished() {
+
+        mResultsRecyclerView.setVisibility(View.VISIBLE);
+        fadeViews(mResultsRecyclerView, 1.0f, 500, true);
+
+//        mResultsRecyclerView.setVisibility(View.VISIBLE);
+
+//        if (mUnfoldedResult != null && mUnfoldedResult.isSingle()) {
+//            mUnfoldedResult.setUnfolded(true);
+//        }
+
+
     }
 
     private class NRResultsAdapter extends RecyclerView.Adapter<NRResultItem> {

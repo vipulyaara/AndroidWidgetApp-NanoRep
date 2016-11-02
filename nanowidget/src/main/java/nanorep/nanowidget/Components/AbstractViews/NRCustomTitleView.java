@@ -1,6 +1,7 @@
 package nanorep.nanowidget.Components.AbstractViews;
 
 import android.content.Context;
+import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -32,7 +33,9 @@ public abstract class NRCustomTitleView extends LinearLayout{
 
     abstract public void unfold(boolean closed);
 
-    abstract public int getTitleHeight();
+    abstract public int getTitleHeight(String text);
+
+    public abstract void resetView();
 
 //    abstract public ImageButton getUnFoldButton();
 

@@ -1,15 +1,19 @@
 package nanorep.nanowidget.Components;
 
 import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
+import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Color;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
+import android.view.animation.AnimationSet;
+import android.view.animation.Transformation;
+import android.view.animation.TranslateAnimation;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -35,7 +39,7 @@ import nanorep.nanowidget.interfaces.OnLikeListener;
  * Created by nanorep on 27/10/2016.
  */
 
-public class NRResultTopView extends LinearLayout implements NRTitleListener, OnLikeListener, NRChannelItem.OnChannelSelectedListener {
+public class NRResultTopView extends RelativeLayout implements NRTitleListener, OnLikeListener, NRChannelItem.OnChannelSelectedListener {
 
     NRResultItemListener mListener;
     private NRResult mResult;
@@ -44,10 +48,15 @@ public class NRResultTopView extends LinearLayout implements NRTitleListener, On
     private LinearLayout viewLikeContainer;
     private LinearLayout viewChannelingContainer;
 
+    private LinearLayout answerLayout;
+
     private NRCustomChannelView channelView;
     private NRCustomContentView contentView;
     private NRCustomLikeView likeView;
     private NRCustomTitleView titleView;
+
+    private int y;
+
 
     public NRResultTopView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -57,7 +66,7 @@ public class NRResultTopView extends LinearLayout implements NRTitleListener, On
         viewContentContainer = (FrameLayout) view.findViewById(R.id.content_container);
         viewLikeContainer = (LinearLayout) view.findViewById(R.id.like_container);
         viewChannelingContainer = (LinearLayout) view.findViewById(R.id.channel_container);
-//        configViewObjects(configuration);
+        answerLayout = (LinearLayout) view.findViewById(R.id.answerLayout);
     }
 
     public void setListener(NRResultItemListener listener) {
@@ -79,6 +88,16 @@ public class NRResultTopView extends LinearLayout implements NRTitleListener, On
     }
 
     public void openView(int y) {
+
+        this.y = y;
+
+        remvoeAllViews(viewChannelingContainer);
+        remvoeAllViews(viewLikeContainer);
+        remvoeAllViews(viewContentContainer);
+        remvoeAllViews(viewTitleContainer);
+
+        titleView.resetView();
+
         titleView.setTitleText(mResult.getFetchedResult().getTitle());
 
         viewTitleContainer.addView(titleView);
@@ -94,10 +113,132 @@ public class NRResultTopView extends LinearLayout implements NRTitleListener, On
         }
 
         if(!mResult.isSingle()) {
-            setTitleAnimation(y, 0, mResult.isUnfolded());
+            setTitleYAnimation(y, 0, mResult.isUnfolded());
         } else {
             titleView.unfold(true);
         }
+    }
+
+    private void remvoeAllViews(ViewGroup view) {
+        if(view.getChildCount() > 0) {
+            view.removeAllViews();
+        }
+    }
+
+
+    public void openViewAnimation() {
+
+        // create set of animations
+//        AnimationSet replaceAnimation = new AnimationSet(false);
+        // animations should be applied on the finish line
+//        replaceAnimation.setFillAfter(true);
+
+        Animation fadeInContent = new AlphaAnimation(0, 1);
+        fadeInContent.setDuration(700);
+
+        Animation fadeInLike = new AlphaAnimation(0, 1);
+        fadeInLike.setDuration(700);
+//        fadeInLike.setStartOffset(350);
+
+        Animation fadeInChannel = new AlphaAnimation(0, 1);
+        fadeInChannel.setDuration(700);
+//        fadeInChannel.setStartOffset(350);
+
+        // create translation animation
+        TranslateAnimation trans = new TranslateAnimation(0, 0,
+                0,viewTitleContainer.getHeight());
+        trans.setDuration(700);
+
+        trans.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)answerLayout.getLayoutParams();
+                params.topMargin = viewTitleContainer.getHeight();
+                answerLayout.setLayoutParams(params);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+
+        // add new animations to the set
+//        replaceAnimation.addAnimation(trans);
+
+        // start our animation
+        answerLayout.startAnimation(trans);
+
+        viewContentContainer.startAnimation(fadeInContent);
+        viewLikeContainer.startAnimation(fadeInLike);
+        viewChannelingContainer.startAnimation(fadeInChannel);
+    }
+
+    public void closeViewAnimation() {
+
+        // create set of animations
+        AnimationSet replaceAnimation = new AnimationSet(false);
+        // animations should be applied on the finish line
+        replaceAnimation.setFillAfter(true);
+
+        Animation fadeOutContent = new AlphaAnimation(1, 0);
+        fadeOutContent.setDuration(700);
+        removeViewListener(fadeOutContent, viewContentContainer, 0);
+
+        Animation fadeOutLike = new AlphaAnimation(1, 0);
+        fadeOutLike.setDuration(700);
+        removeViewListener(fadeOutLike, viewLikeContainer, 0);
+
+        Animation fadeOutChannel = new AlphaAnimation(1, 0);
+        fadeOutChannel.setDuration(700);
+        removeViewListener(fadeOutChannel, viewChannelingContainer, 0);
+
+        // create translation animation
+        TranslateAnimation trans = new TranslateAnimation(0, 0,
+                viewTitleContainer.getHeight(),0);
+        trans.setDuration(700);
+        removeViewListener(trans, answerLayout, y);
+
+        // add new animations to the set
+        replaceAnimation.addAnimation(trans);
+
+        viewChannelingContainer.startAnimation(fadeOutChannel);
+        viewLikeContainer.startAnimation(fadeOutLike);
+        viewContentContainer.startAnimation(fadeOutContent);
+
+        // start our animation
+        answerLayout.startAnimation(replaceAnimation);
+    }
+
+    private void removeViewListener(Animation animation, final ViewGroup view, final int y) {
+        animation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+
+                if(animation instanceof TranslateAnimation) {
+                    if(!mResult.isSingle()) {
+                        titleView.unfold(false);
+                    }
+                } else {
+                    view.removeAllViews();
+                }
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
     }
 
     private void setChannel() {
@@ -126,7 +267,7 @@ public class NRResultTopView extends LinearLayout implements NRTitleListener, On
         }
     }
 
-    private void setTitleAnimation(final int start, final int end, final boolean isUnfolded) {
+    private void setTitleYAnimation(final int start, final int end, final boolean isUnfolded) {
 
         ValueAnimator varl = ValueAnimator.ofInt(start,end);
         varl.setDuration(400);
@@ -147,8 +288,7 @@ public class NRResultTopView extends LinearLayout implements NRTitleListener, On
             @Override
             public void onAnimationEnd(Animator animation) {
                 if(!isUnfolded) { // going down
-                    viewTitleContainer.removeAllViews();
-                    viewTitleContainer.getLayoutParams().height=0;
+                    mListener.onFoldItemFinished();
                 } else { // going up
                     titleView.unfold(true);
                 }
@@ -168,59 +308,9 @@ public class NRResultTopView extends LinearLayout implements NRTitleListener, On
         varl.start();
     }
 
-    private void setTitleHeightAnimation(int start, int end,final int y, final boolean isUnfolded) {
+    public void removeTopView() {
 
-        ValueAnimator varl = ValueAnimator.ofInt(start,end);
-        varl.setDuration(200);
-        varl.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                viewTitleContainer.getLayoutParams().height = (Integer) animation.getAnimatedValue();
-                viewTitleContainer.requestLayout();
-            }
-        });
-
-        varl.addListener(new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animation) {
-                titleView.unfold(false);
-            }
-
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                setTitleAnimation(0, y, isUnfolded);
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animation) {
-
-            }
-
-            @Override
-            public void onAnimationRepeat(Animator animation) {
-
-            }
-        });
-
-        varl.start();
-    }
-
-    public void removeTopView(int y) {
-
-        if(!mResult.isSingle()) {
-            setTitleHeightAnimation(viewTitleContainer.getHeight(), mResult.getHeight(), y, false);
-        } else {
-            viewTitleContainer.removeAllViews();
-            viewTitleContainer.getLayoutParams().height=0;
-        }
-        viewContentContainer.removeAllViews();
-        viewLikeContainer.removeAllViews();
-        viewChannelingContainer.removeAllViews();
-
-        viewContentContainer.getLayoutParams().height = 0;
-        viewLikeContainer.getLayoutParams().height = 0;
-        viewChannelingContainer.getLayoutParams().height=0;
+        closeViewAnimation();
     }
 
     @Override
@@ -232,26 +322,33 @@ public class NRResultTopView extends LinearLayout implements NRTitleListener, On
 
     @Override
     public void onTitleCollapsed() {
-        int feedbachHeight = 50;
 
-        if(mResult.getFetchedResult().getChanneling() != null && mResult.getFetchedResult().getChanneling().size() > 0) {
-            feedbachHeight = 100;
+        if(mResult.isUnfolded()) {
 
-            viewChannelingContainer.addView(channelView);
-            viewChannelingContainer.getLayoutParams().height = (int) Calculate.pxFromDp(getContext(), 50);
+            int feedbachHeight = 50;
+
+            if (mResult.getFetchedResult().getChanneling() != null && mResult.getFetchedResult().getChanneling().size() > 0) {
+                feedbachHeight = 100;
+
+                viewChannelingContainer.addView(channelView);
+                viewChannelingContainer.getLayoutParams().height = (int) Calculate.pxFromDp(getContext(), 50);
+            }
+
+            viewContentContainer.addView(contentView);
+            int height = NRResultTopView.this.getHeight() - viewTitleContainer.getHeight() - (int) Calculate.pxFromDp(getContext(), feedbachHeight);
+            viewContentContainer.getLayoutParams().height = height;
+
+            viewLikeContainer.addView(likeView);
+
+            viewLikeContainer.getLayoutParams().height = (int) Calculate.pxFromDp(getContext(), 50);
+
+            openViewAnimation();
+        } else { //going down
+            viewTitleContainer.getLayoutParams().height = mResult.getHeight();
+            viewTitleContainer.requestLayout();
+            setTitleYAnimation(0, y, false);
         }
 
-        viewContentContainer.addView(contentView);
-        viewContentContainer.getLayoutParams().height = NRResultTopView.this.getHeight() - viewTitleContainer.getHeight() - (int) Calculate.pxFromDp(getContext(), feedbachHeight);
-
-        viewLikeContainer.addView(likeView);
-        viewLikeContainer.getLayoutParams().height = (int) Calculate.pxFromDp(getContext(), 50);
-
-        Animation animation = AnimationUtils.loadAnimation(getContext(), R.anim.fade_in);
-        animation.setStartOffset(0);
-
-        contentView.startAnimation(animation);
-        likeView.startAnimation(animation);
     }
 
     @Override
@@ -287,4 +384,11 @@ public class NRResultTopView extends LinearLayout implements NRTitleListener, On
         this.titleView = titleView;
         this.titleView.setListener(this);
     }
+
+    public void removeTitleView () {
+
+        viewTitleContainer.removeAllViews();
+        titleView.resetView();
+    }
+
 }

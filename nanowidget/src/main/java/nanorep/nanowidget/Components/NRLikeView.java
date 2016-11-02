@@ -17,7 +17,7 @@ import nanorep.nanowidget.interfaces.OnLikeListener;
 /**
  * Created by nissimpardo on 18/06/16.
  */
-public class NRLikeView extends NRCustomLikeView implements View.OnClickListener {
+public class NRLikeView extends NRCustomLikeView  {
 
     private TextView mLikeButton;
     private TextView mDislikeButton;
@@ -69,8 +69,22 @@ public class NRLikeView extends NRCustomLikeView implements View.OnClickListener
         super.onViewAdded(child);
         mLikeButton = (TextView) child.findViewById(R.id.likeButton);
         mDislikeButton = (TextView) child.findViewById(R.id.dislikeButton);
-        mLikeButton.setOnClickListener(this);
-        mDislikeButton.setOnClickListener(this);
+        mLikeButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mLikeSelection = true;
+                updateLikeButton(mLikeSelection);
+                mListener.onLikeClicked(NRLikeView.this, null, mLikeSelection);
+            }
+        });
+        mDislikeButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mLikeSelection = false;
+                updateLikeButton(mLikeSelection);
+                mListener.onLikeClicked(NRLikeView.this, null, mLikeSelection);
+            }
+        });
     }
 
     @Override
@@ -84,10 +98,10 @@ public class NRLikeView extends NRCustomLikeView implements View.OnClickListener
 //    }
 
 
-    @Override
-    public void onClick(View v) {
-        mLikeSelection = v.getId() == R.id.likeButton;
-        updateLikeButton(mLikeSelection);
-        mListener.onLikeClicked(this, null, mLikeSelection);
-    }
+//    @Override
+//    public void onClick(View v) {
+//        mLikeSelection = v.getId() == R.id.likeButton;
+//        updateLikeButton(mLikeSelection);
+//        mListener.onLikeClicked(this, null, mLikeSelection);
+//    }
 }

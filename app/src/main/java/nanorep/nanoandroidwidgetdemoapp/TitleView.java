@@ -39,8 +39,13 @@ public class TitleView extends NRCustomTitleView {
     }
 
     @Override
-    public int getTitleHeight() {
+    public int getTitleHeight(String text) {
         return 0;
+    }
+
+    @Override
+    public void resetView() {
+
     }
 
     @Override

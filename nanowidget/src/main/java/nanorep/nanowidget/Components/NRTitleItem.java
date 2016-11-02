@@ -94,7 +94,7 @@ public class NRTitleItem extends NRResultItem implements NRTitleListener{
      */
     public int getTitleHeight() {
 
-        return titleView.getTitleHeight();
+        return titleView.getTitleHeight(mResult.getFetchedResult().getTitle());
     }
 
     @Override
