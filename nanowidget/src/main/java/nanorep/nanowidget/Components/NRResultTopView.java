@@ -40,7 +40,7 @@ import nanorep.nanowidget.interfaces.OnLikeListener;
  * Created by nanorep on 27/10/2016.
  */
 
-public class NRResultTopView extends RelativeLayout implements NRTitleListener, OnLikeListener, NRChannelItem.OnChannelSelectedListener {
+public class NRResultTopView extends RelativeLayout implements NRTitleListener, OnLikeListener, NRChannelItem.OnChannelSelectedListener, NRContentView.Listener {
 
     NRResultItemListener mListener;
     private NRResult mResult;
@@ -88,8 +88,9 @@ public class NRResultTopView extends RelativeLayout implements NRTitleListener, 
         mResult = result;
     }
 
-    public void openView(int y) {
+    public void openView(int y, NRResult result) {
 
+        mResult = result;
         this.y = y;
 
         remvoeAllViews(viewChannelingContainer);
@@ -139,6 +140,8 @@ public class NRResultTopView extends RelativeLayout implements NRTitleListener, 
         Animation fadeInChannel = new AlphaAnimation(0, 1);
         fadeInChannel.setDuration(700);
         fadeInChannel.setStartOffset(350);
+
+        answerLayout.setTranslationY(0);
 
         ObjectAnimator objectAnimator = ObjectAnimator.ofFloat(answerLayout, "TranslationY", viewTitleContainer.getHeight());
         objectAnimator.setDuration(700);
@@ -286,9 +289,9 @@ public class NRResultTopView extends RelativeLayout implements NRTitleListener, 
         varl.start();
     }
 
-    public void removeTopView() {
+    public void removeTopView(boolean isLinkedArticle) {
 
-        if(!mResult.isSingle()) {
+        if(!mResult.isSingle() && !isLinkedArticle) {
             closeViewAnimation();
         } else {
             viewChannelingContainer.removeAllViews();
@@ -306,9 +309,9 @@ public class NRResultTopView extends RelativeLayout implements NRTitleListener, 
     }
 
     @Override
-    public void onTitleCollapsed(boolean unfold) {
+    public void onTitleCollapsed() {
 
-        if(unfold) {
+        if(mResult.isUnfolded()) {
 
             int feedbachHeight = 50;
 
@@ -364,6 +367,7 @@ public class NRResultTopView extends RelativeLayout implements NRTitleListener, 
 
     public void setContentView(NRCustomContentView contentView) {
         this.contentView = contentView;
+        this.contentView.setListener(this);
     }
 
     public void setLikeView(NRCustomLikeView likeView) {
@@ -382,4 +386,13 @@ public class NRResultTopView extends RelativeLayout implements NRTitleListener, 
         titleView.resetView();
     }
 
+    @Override
+    public void onLinkedArticleClicked(String articleId) {
+        mListener.onLinkedArticleClicked(articleId);
+    }
+
+    @Override
+    public void onLinkClicked(String url) {
+        mListener.onLinkClicked(url);
+    }
 }

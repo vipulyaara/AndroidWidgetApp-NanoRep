@@ -106,8 +106,10 @@ public class NRTitleItem extends NRResultItem implements NRTitleListener{
     }
 
     @Override
-    public void onTitleCollapsed(boolean unfold) {
+    public void onTitleCollapsed() {
+
     }
+
 
     @Override
     public void onShareClicked() {

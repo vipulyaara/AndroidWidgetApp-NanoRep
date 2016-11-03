@@ -162,7 +162,7 @@ public class NRTitleView extends NRCustomTitleView{
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                mListener.onTitleCollapsed(!closed);
+                mListener.onTitleCollapsed();
             }
 
             @Override

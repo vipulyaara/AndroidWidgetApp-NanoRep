@@ -137,6 +137,9 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
             @Override
             public void onAnswerFetched(final NRQueryResult result) {
                 clearResults();
+                nrResultTopView.removeTopView(true);
+                fadeViews(nrResultTopView, 1.0f, 500, false);
+
                 mResultsRecyclerView.postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -652,7 +655,7 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
     }
 
     private void removeTopViewShowRecycleView() {
-        nrResultTopView.removeTopView();
+        nrResultTopView.removeTopView(false);
 
         if(mUnfoldedResult != null && mUnfoldedResult.isSingle()) {
             animateBGColor(300, false);
@@ -687,7 +690,7 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
             mUnfoldedResult = mQueryResults.get(unfoldItemPos);
             mUnfoldedResult.setUnfolded(true);
 
-            nrResultTopView.setResult(mUnfoldedResult);
+//            nrResultTopView.setResult(mUnfoldedResult);
 
             y = 0;
 
@@ -709,7 +712,7 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
                 fadeViews(frequentlyQuestions, 0.0f, 50, false);
             }
 
-            nrResultTopView.openView(y);
+            nrResultTopView.openView(y, mUnfoldedResult);
 
 
         }

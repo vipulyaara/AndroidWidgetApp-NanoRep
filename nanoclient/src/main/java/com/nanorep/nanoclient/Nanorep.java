@@ -34,7 +34,7 @@ public interface Nanorep {
     }
 
     interface OnFAQAnswerFetchedListener {
-        void onFAQAnswerFetched(NRFAQAnswerItem faqAnswer, NRError error);
+        void onFAQAnswerFetched(NRFAQAnswer faqAnswer, NRError error);
     }
 
     interface OnConfigurationFetchedListener {
