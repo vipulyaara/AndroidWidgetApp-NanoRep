@@ -175,7 +175,7 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
 
     @Override
     public void onLikeClicked(final NRLikeView likeView, String resultId, boolean isLike) {
-        final NRResult likedResult = mQueryResults.get(0);
+        final NRResult likedResult = mUnfoldedResult;
         if (!likedResult.getFetchedResult().getId().equals(resultId)) {
             return;
         }

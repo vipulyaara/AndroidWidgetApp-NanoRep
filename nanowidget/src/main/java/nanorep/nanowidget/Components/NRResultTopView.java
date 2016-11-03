@@ -160,20 +160,20 @@ public class NRResultTopView extends RelativeLayout implements NRTitleListener, 
         replaceAnimation.setFillAfter(true);
 
         Animation fadeOutContent = new AlphaAnimation(1, 0);
-        fadeOutContent.setDuration(700);
+        fadeOutContent.setDuration(400);
         removeViewListener(fadeOutContent, viewContentContainer);
 
         Animation fadeOutLike = new AlphaAnimation(1, 0);
-        fadeOutLike.setDuration(700);
+        fadeOutLike.setDuration(400);
         removeViewListener(fadeOutLike, viewLikeContainer);
 
         Animation fadeOutChannel = new AlphaAnimation(1, 0);
-        fadeOutChannel.setDuration(700);
+        fadeOutChannel.setDuration(400);
         removeViewListener(fadeOutChannel, viewChannelingContainer);
 
         // create translation animation
         ObjectAnimator objectAnimator = ObjectAnimator.ofFloat(answerLayout, "TranslationY", 0);
-        objectAnimator.setDuration(700);
+        objectAnimator.setDuration(400);
         objectAnimator.addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
@@ -195,7 +195,7 @@ public class NRResultTopView extends RelativeLayout implements NRTitleListener, 
 
             }
         });
-        objectAnimator.setStartDelay(350);
+        objectAnimator.setStartDelay(200);
         objectAnimator.start();
 
         viewChannelingContainer.startAnimation(fadeOutChannel);
