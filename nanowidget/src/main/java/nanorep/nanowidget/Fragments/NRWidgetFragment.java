@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -691,7 +692,12 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
     @Override
     public void unfoldItem(final NRResult result, boolean clear) {
 
+        int unfoldItemPos = mQueryResults.indexOf(result);
+        NRTitleItem titleViewHolder = (NRTitleItem)mResultsRecyclerView.findViewHolderForLayoutPosition(unfoldItemPos);
+
         if (result.isUnfolded()) { // close answer, show titles..
+
+            titleViewHolder.getTitleView().setVisibility(View.VISIBLE);
 
             removeTopViewShowRecycleView();
 
@@ -700,7 +706,6 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
 
         } else if(!result.isUnfolded()) { // title was clicked, show answer
 
-            int unfoldItemPos = mQueryResults.indexOf(result);
 
             animateBGColor(unfoldItemPos * 100, true);
 
@@ -713,7 +718,6 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
             y = 0;
 
             if(!mUnfoldedResult.isSingle()) { // get the y coordinate of the selected title
-                NRTitleItem titleViewHolder = (NRTitleItem)mResultsRecyclerView.findViewHolderForLayoutPosition(unfoldItemPos);
 
                 int marginTop = titleViewHolder.getTitle_container().getHeight() * unfoldItemPos;
 
@@ -722,6 +726,8 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
                 int divider = (int) Calculate.pxFromDp(getContext(), 5) * unfoldItemPos;
 
                 y = marginTop - offSet + frequentlyQuestions.getHeight() + divider;
+
+                titleViewHolder.getTitleView().setVisibility(View.INVISIBLE);
 
                 fadeViews(mResultsRecyclerView, 0.0f, 500, false);
                 fadeViews(frequentlyQuestions, 0.0f, 500, false);

@@ -66,7 +66,7 @@ public class NRResultsAdapter  extends RecyclerView.Adapter<NRResultsAdapter.Vie
         }
 
         @Override
-        public void onTitleCollapsed() {
+        public void onTitleCollapsed(int height) {
 
         }
 

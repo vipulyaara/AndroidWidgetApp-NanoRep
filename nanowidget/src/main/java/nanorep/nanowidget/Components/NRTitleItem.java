@@ -85,34 +85,6 @@ public class NRTitleItem extends NRResultItem implements NRTitleListener{
         animator.start();
     }
 
-    /**
-     *
-     * @return
-     */
-    public int getTitleHeight() {
-
-        return titleView.getTitleHeight(mResult.getFetchedResult().getTitle());
-    }
-
-//    @Override
-//    public void onTitleClicked() {
-//
-//        if(!mResult.isSingle()) {
-//            mListener.unfoldItem(mResult, false);
-//        }
-//    }
-//
-//    @Override
-//    public void onTitleCollapsed() {
-//
-//    }
-
-
-//    @Override
-//    public void onShareClicked() {
-//        mListener.onShareClicked(this, mResult.getFetchedResult().getTitle());
-//    }
-
     public LinearLayout getTitle_container() {
         return title_container;
     }
@@ -125,12 +97,16 @@ public class NRTitleItem extends NRResultItem implements NRTitleListener{
     }
 
     @Override
-    public void onTitleCollapsed() {
+    public void onTitleCollapsed(int height) {
 
     }
 
     @Override
     public void onShareClicked() {
         mListener.onShareClicked(this, mResult.getFetchedResult().getTitle());
+    }
+
+    public NRCustomTitleView getTitleView() {
+        return titleView;
     }
 }

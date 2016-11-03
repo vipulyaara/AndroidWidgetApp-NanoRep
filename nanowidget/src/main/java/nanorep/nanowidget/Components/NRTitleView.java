@@ -5,24 +5,31 @@ import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
+import android.util.TypedValue;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.Transformation;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import nanorep.nanowidget.Components.AbstractViews.NRCustomTitleView;
 import nanorep.nanowidget.R;
 import nanorep.nanowidget.Utilities.Calculate;
+
+import static nanorep.nanowidget.R.id.textView;
 
 /**
  * Created by nanorep on 29/09/2016.
@@ -34,11 +41,13 @@ public class NRTitleView extends NRCustomTitleView{
     private ImageButton mUnFoldButton;
     private ImageButton mShareButton;
     private LinearLayout titleLayout;
+    private Context context;
 
     private boolean closed = true;
 
     public NRTitleView(Context context) {
         super(context);
+        this.context = context;
         LayoutInflater.from(context).inflate(R.layout.title, this);
     }
 
@@ -99,6 +108,7 @@ public class NRTitleView extends NRCustomTitleView{
         setShareImage();
 
         if(!this.closed) {
+            mListener.onTitleCollapsed(getCollapsedHeight(mTitleButton.getText()));
             collapseTextView(100, 1000);
         } else {
             collapseTextView(2, 100);
@@ -162,7 +172,9 @@ public class NRTitleView extends NRCustomTitleView{
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                mListener.onTitleCollapsed();
+                if(closed) {
+                    mListener.onTitleCollapsed(mTitleButton.getHeight());
+                }
             }
 
             @Override
@@ -175,6 +187,18 @@ public class NRTitleView extends NRCustomTitleView{
 
             }
         });
+    }
+
+    public int getCollapsedHeight(CharSequence text) {
+
+        Button textView = new Button(context);
+        textView.setTypeface(Typeface.create("sans-serif-medium", Typeface.NORMAL));
+        textView.setText(text);
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
+        int heightMeasureSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
+
+        textView.measure(mTitleButton.getWidth(), heightMeasureSpec);
+        return textView.getMeasuredHeight();
     }
 
 }

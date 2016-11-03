@@ -128,7 +128,7 @@ public class NRResultTopView extends RelativeLayout implements NRTitleListener, 
     }
 
 
-    public void openViewAnimation() {
+    public void openViewAnimation(int titleHeight) {
 
         Animation fadeInContent = new AlphaAnimation(0, 1);
         fadeInContent.setDuration(700);
@@ -143,7 +143,7 @@ public class NRResultTopView extends RelativeLayout implements NRTitleListener, 
 
         answerLayout.setTranslationY(0);
 
-        ObjectAnimator objectAnimator = ObjectAnimator.ofFloat(answerLayout, "TranslationY", viewTitleContainer.getHeight());
+        ObjectAnimator objectAnimator = ObjectAnimator.ofFloat(answerLayout, "TranslationY", titleHeight);
         objectAnimator.setDuration(700);
         objectAnimator.start();
 
@@ -309,7 +309,7 @@ public class NRResultTopView extends RelativeLayout implements NRTitleListener, 
     }
 
     @Override
-    public void onTitleCollapsed() {
+    public void onTitleCollapsed(int height) {
 
         if(mResult.isUnfolded()) {
 
@@ -323,14 +323,14 @@ public class NRResultTopView extends RelativeLayout implements NRTitleListener, 
             }
 
             viewContentContainer.addView(contentView);
-            int height = NRResultTopView.this.getHeight() - viewTitleContainer.getHeight() - (int) Calculate.pxFromDp(getContext(), feedbachHeight);
-            viewContentContainer.getLayoutParams().height = height;
+            int contentHeight = NRResultTopView.this.getHeight() - viewTitleContainer.getHeight() - (int) Calculate.pxFromDp(getContext(), feedbachHeight);
+            viewContentContainer.getLayoutParams().height = contentHeight;
 
             viewLikeContainer.addView(likeView);
 
             viewLikeContainer.getLayoutParams().height = (int) Calculate.pxFromDp(getContext(), 50);
 
-            openViewAnimation();
+            openViewAnimation(height);
         } else { //going down
 
             viewTitleContainer.getLayoutParams().height = mResult.getHeight();
