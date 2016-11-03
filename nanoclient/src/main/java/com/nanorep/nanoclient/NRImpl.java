@@ -68,6 +68,9 @@ public class NRImpl implements Nanorep {
         final Uri.Builder uri = mAccountParams.getUri();
         uri.appendEncodedPath("api/faq/v1/list.json");
         uri.appendQueryParameter("account", mAccountParams.getAccount());
+        if (mAccountParams.getKnowledgeBase() != null) {
+            uri.appendQueryParameter("kb", mAccountParams.getKnowledgeBase());
+        }
         if (mAccountParams.getNanorepContext() != null) {
             uri.appendQueryParameter("context", mAccountParams.getKnowledgeBase());
         }
@@ -118,6 +121,7 @@ public class NRImpl implements Nanorep {
 
     private void hello(final NRConnection.Listener listener) {
         final Uri.Builder _uriBuilder = mAccountParams.getUri();
+        _uriBuilder.appendQueryParameter("kb", mAccountParams.getKnowledgeBase());
         _uriBuilder.appendEncodedPath("api/widget/v1/hello.js");
         _uriBuilder.appendQueryParameter("nostats", "false");
         _uriBuilder.appendQueryParameter("url", "mobile");
@@ -269,8 +273,9 @@ public class NRImpl implements Nanorep {
                 executeRequest(uriBuilder, new NRConnection.Listener() {
                     @Override
                     public void response(Object responseParam, int status, NRError error) {
-
-                        ((HashMap<String, Object>) responseParam).put("id", answerId);
+                        if (responseParam != null) {
+                            ((HashMap<String, Object>) responseParam).put("id", answerId);
+                        }
 
                         for (OnFAQAnswerFetchedListener listener : finalOnFAQAnswerFetchedListenerArr) {
                             if (error != null) {

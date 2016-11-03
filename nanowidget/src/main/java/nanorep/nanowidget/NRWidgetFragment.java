@@ -334,7 +334,7 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
         if (mQueryResults == null) {
             mQueryResults = new ArrayList<NRResult>();
         }
-        if (rows.size() == 1) {
+        if (mResultStack != null && rows.size() == 1) {
             rows.get(0).setSingle(true);
         }
         for (NRResult addedResult : rows) {
@@ -580,8 +580,10 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
         mFetchedDataManager.faqAnswer(resultID, resultHash, new OnFAQAnswerFetched() {
             @Override
             public void onAnswerFetched(NRQueryResult result) {
-                item.setBody(result.getBody());
-                item.setChanneling(result.getChanneling());
+                if (result != null) {
+                    item.setBody(result.getBody());
+                    item.setChanneling(result.getChanneling());
+                }
             }
         });
     }

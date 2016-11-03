@@ -115,7 +115,9 @@ public class NRCacheManager extends SQLiteOpenHelper {
     }
 
     public static void storeFAQAnswer(HashMap<String, Object> answerParams) {
-        storeAnswerById(mContext, (String) answerParams.get("id"), answerParams);
+        if (answerParams != null) {
+            storeAnswerById(mContext, (String) answerParams.get("id"), answerParams);
+        }
     }
 
 
