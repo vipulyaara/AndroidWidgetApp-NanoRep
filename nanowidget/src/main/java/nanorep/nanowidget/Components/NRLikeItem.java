@@ -7,7 +7,6 @@ import com.nanorep.nanoclient.Response.NRConfiguration;
 
 import nanorep.nanowidget.Components.AbstractViews.NRCustomLikeView;
 import nanorep.nanowidget.DataClasse.NRResult;
-import nanorep.nanowidget.R;
 import nanorep.nanowidget.interfaces.NRResultItemListener;
 import nanorep.nanowidget.interfaces.OnLikeListener;
 
@@ -20,7 +19,7 @@ public class NRLikeItem extends NRResultItem implements OnLikeListener{
     private NRCustomLikeView mLikeView;
 
     public NRLikeItem(View view, NRResultItemListener listener, NRConfiguration config, NRCustomLikeView likeView) {
-        super(view, listener, config);
+        super(view, listener);
 
         mLikeView = likeView;
         mLikeView.setListener(this);

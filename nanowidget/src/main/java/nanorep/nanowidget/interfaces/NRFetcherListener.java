@@ -9,7 +9,7 @@ import nanorep.nanowidget.DataClasse.NRResult;
  * Created by nissimpardo on 06/06/16.
  */
 public interface NRFetcherListener {
-    void onConfigurationReady();
+//    void onConfigurationReady();
     void reloadWithAimation();
     void reload();
     void insertRows(ArrayList<NRResult> rows);

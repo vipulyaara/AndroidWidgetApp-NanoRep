@@ -7,7 +7,6 @@ import com.nanorep.nanoclient.Response.NRConfiguration;
 
 import nanorep.nanowidget.Components.AbstractViews.NRCustomContentView;
 import nanorep.nanowidget.DataClasse.NRResult;
-import nanorep.nanowidget.R;
 import nanorep.nanowidget.Utilities.Calculate;
 import nanorep.nanowidget.interfaces.NRResultItemListener;
 
@@ -24,7 +23,7 @@ public class NRContentItem extends NRResultItem {
     }
 
     public NRContentItem(View view, NRResultItemListener listener, NRConfiguration config, NRCustomContentView contentView) {
-        super(view, listener, config);
+        super(view, listener);
 
         this.contentView = contentView;
         this.contentView.setListener(mListener);

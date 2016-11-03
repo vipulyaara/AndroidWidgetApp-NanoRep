@@ -1,4 +1,4 @@
-package nanorep.nanowidget;
+package nanorep.nanowidget.Fragments;
 
 import android.animation.Animator;
 import android.animation.ArgbEvaluator;
@@ -38,11 +38,9 @@ import nanorep.nanowidget.Components.ChannelPresenters.NRChannelStrategy;
 import nanorep.nanowidget.Components.ChannelPresenters.NRWebContentFragment;
 import nanorep.nanowidget.Components.DislikeDialog;
 import nanorep.nanowidget.Components.NRChannelItem;
-import nanorep.nanowidget.Components.NRChannelingItem;
 import nanorep.nanowidget.Components.NRChannelingView;
 import nanorep.nanowidget.Components.NRContentItem;
 import nanorep.nanowidget.Components.NRContentView;
-import nanorep.nanowidget.Components.NRLikeItem;
 import nanorep.nanowidget.Components.NRLikeView;
 import nanorep.nanowidget.Components.NRResultFragment;
 import nanorep.nanowidget.Components.NRResultItem;
@@ -54,6 +52,7 @@ import nanorep.nanowidget.Components.NRTitleView;
 import nanorep.nanowidget.Components.NRViewAdapter;
 import nanorep.nanowidget.DataClasse.NRFetchedDataManager;
 import nanorep.nanowidget.DataClasse.NRResult;
+import nanorep.nanowidget.R;
 import nanorep.nanowidget.Utilities.Calculate;
 import nanorep.nanowidget.Utilities.NRItemAnimator;
 import nanorep.nanowidget.Utilities.NRLinearLayoutManager;
@@ -67,7 +66,7 @@ import nanorep.nanowidget.interfaces.OnLikeListener;
 
 
 public class NRWidgetFragment extends Fragment implements NRSearchBarListener, NRSuggestionsListener, NRResultItemListener, OnLikeListener {
-    private Nanorep mNanoRep;
+//    private Nanorep mNanoRep;
 
     private NRFetchedDataManager mFetchedDataManager;
 
@@ -115,6 +114,10 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
         // Required empty public constructor
     }
 
+    public void setmFetchedDataManager(NRFetchedDataManager mFetchedDataManager) {
+        this.mFetchedDataManager = mFetchedDataManager;
+    }
+
     private ArrayList<String> getSearchStrings() {
         if (mSearchStrings == null) {
             mSearchStrings = new ArrayList<>();
@@ -125,7 +128,7 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
 
     @Override
     public void onChannelSelected(NRChannelItem channelItem) {
-        String url = NRChannelStrategy.presentor(getContext(), channelItem.getChanneling(), mNanoRep).getUrl();
+        String url = NRChannelStrategy.presentor(getContext(), channelItem.getChanneling(), mFetchedDataManager.getmNanoRep()).getUrl();
         if (url != null) {
             onLinkClicked(url);
         }
@@ -238,9 +241,9 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
         return fragment;
     }
 
-    public void setNanoRep(Nanorep nanoRep) {
-        mNanoRep = nanoRep;
-    }
+//    public void setNanoRep(Nanorep nanoRep) {
+//        mNanoRep = nanoRep;
+//    }
 
     private NRResultFragment getResultFragment() {
         if (mResultFragment == null) {
@@ -249,11 +252,23 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
         return mResultFragment;
     }
 
+    public void insertRows(ArrayList<NRResult> rows) {
+        mLoadingView.setVisibility(View.INVISIBLE);
+        mResultsAdapter.setShouldResetLikeView(true);
+        if (rows == null && mSearchBar.getText() != null) {
+            mNotitleViewHolder.getLayoutParams().height = ViewGroup.LayoutParams.WRAP_CONTENT;
+            mNoTitleView.setText(mFetchedDataManager.getmNanoRep().getNRConfiguration().getCustomNoAnswersTextContext(mSearchBar.getText()));
+            rows = mResultStack.get(0);
+        }
+        frequentlyQuestions.getLayoutParams().height = ViewGroup.LayoutParams.WRAP_CONTENT;
+        loadResults(rows, true);
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mFetchedDataManager = new NRFetchedDataManager(mNanoRep, getContext());
+//        mFetchedDataManager = new NRFetchedDataManager(mNanoRep, getContext());
     }
 
     @Override
@@ -266,17 +281,15 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
         final View nanoView = inflater.inflate(R.layout.fragment_nrwidget, container, false);
         mLoadingView = (RelativeLayout) nanoView.findViewById(R.id.fragment_place_holder);
 
-        mResultsAdapter = new NRResultsAdapter();
-
         mFetchedDataManager.setFetcherListener(new NRFetcherListener() {
-            @Override
-            public void onConfigurationReady() {
-                updateTitleNormalText();
-                updateSerchBarHint();
-
-                final ViewGroup _container = container;
-                showSuggestionsView(_container);
-            }
+//            @Override
+//            public void onConfigurationReady() {
+//                updateTitleNormalText();
+//                updateSerchBarHint();
+//
+//                final ViewGroup _container = container;
+//                showSuggestionsView(_container);
+//            }
 
             @Override
             public void reloadWithAimation() {
@@ -290,16 +303,7 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
 
             @Override
             public void insertRows(ArrayList<NRResult> rows) {
-                mLoadingView.setVisibility(View.INVISIBLE);
-                mResultsAdapter.setShouldResetLikeView(true);
-                if (rows == null && mSearchBar.getText() != null) {
-                    mNotitleViewHolder.getLayoutParams().height = ViewGroup.LayoutParams.WRAP_CONTENT;
-                    mNoTitleView.setText(mNanoRep.getNRConfiguration().getCustomNoAnswersTextContext(mSearchBar.getText()));
-                    rows = mResultStack.get(0);
-                }
-                frequentlyQuestions.getLayoutParams().height = ViewGroup.LayoutParams.WRAP_CONTENT;
-                loadResults(rows, true);
-
+                NRWidgetFragment.this.insertRows(rows);
             }
 
             @Override
@@ -317,6 +321,8 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
         });
         
         setViews(nanoView);
+
+        mResultsAdapter = new NRResultsAdapter();
 
         frameLayout = (FrameLayout) nanoView.findViewById(R.id.frameLayoutFragment);
 
@@ -354,6 +360,14 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
                 }
             });
         }
+        updateTitleNormalText();
+        updateSerchBarHint();
+        showSuggestionsView(container);
+
+        if(mQueryResults != null) {
+            insertRows(mQueryResults);
+        }
+
         return nanoView;
     }
 
@@ -390,7 +404,7 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
         nrResultTopView.setLikeView(likeView);
         nrResultTopView.setChannelView(channelView);
 
-        nrResultTopView.configViewObjects(mNanoRep.getNRConfiguration());
+        nrResultTopView.configViewObjects(mFetchedDataManager.getmNanoRep().getNRConfiguration());
     }
 
     private void animateBGColor(int milliseconds, boolean unfold) {
@@ -450,17 +464,17 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
     }
 
     private void showSuggestionsView(ViewGroup container) {
-        if(!mNanoRep.getNRConfiguration().getAutocompleteEnabled()) {
+        if(!mFetchedDataManager.getmNanoRep().getNRConfiguration().getAutocompleteEnabled()) {
             autocompleteEnabled = false;
         }
     }
 
     private void updateSerchBarHint() {
-        mSearchBar.setHint(mNanoRep.getNRConfiguration().getSearchBar().getInitialText());
+        mSearchBar.setHint(mFetchedDataManager.getmNanoRep().getNRConfiguration().getSearchBar().getInitialText());
     }
 
     private void updateTitleNormalText() {
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(mNanoRep.getNRConfiguration().getTitleNormalText());
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(mFetchedDataManager.getmNanoRep().getNRConfiguration().getTitleNormalText());
     }
 
     private void loadResults(ArrayList<NRResult> rows, boolean addToStack) {
@@ -471,9 +485,13 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
             rows.get(0).setSingle(true);
         }
 
-        for (NRResult addedResult : rows) {
-            mQueryResults.add(addedResult);
-            mResultsAdapter.notifyItemInserted(mQueryResults.size());
+        if(mQueryResults == null || mQueryResults.isEmpty()) {
+            for (NRResult addedResult : rows) {
+                mQueryResults.add(addedResult);
+                mResultsAdapter.notifyItemInserted(mQueryResults.size());
+            }
+        } else {
+            mResultsAdapter.notifyDataSetChanged();
         }
         if (rows.size() == 1) {
             mQueryResults.get(0).setUnfolded(false);
@@ -805,107 +823,30 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
         @Override
         public NRResultItem onCreateViewHolder(ViewGroup parent, int viewType) {
 
-            View view;
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.title_item, parent, false);
 
-            switch (viewType) {
-                case 0: // title
-                    view = LayoutInflater.from(parent.getContext()).inflate(R.layout.title_item, parent, false);
+            NRCustomTitleView titleView = viewAdapter.getTitle(getContext());
 
-                    NRCustomTitleView titleView = viewAdapter.getTitle(getContext());
-
-                    if(titleView == null){
-                        titleView = new NRTitleView(getContext());
-                    }
-
-                    LinearLayout titleContainer = (LinearLayout) view.findViewById(R.id.title_container);
-
-                    titleContainer.addView(titleView);
-
-                    return new NRTitleItem(view, NRWidgetFragment.this, mNanoRep.getNRConfiguration(), titleView);
-                case 1: // content
-                    view = LayoutInflater.from(parent.getContext()).inflate(R.layout.content_item, parent, false);
-
-                    NRCustomContentView contentView = viewAdapter.getContent(getContext());
-
-                    if(contentView == null){
-                        contentView = new NRContentView(getContext());
-                    }
-
-                    FrameLayout contentContainer = (FrameLayout) view.findViewById(R.id.content_container);
-
-                    contentContainer.addView(contentView);
-
-                    return new NRContentItem(view, NRWidgetFragment.this, mNanoRep.getNRConfiguration(), contentView);
-                case 2: // like
-                    view = LayoutInflater.from(parent.getContext()).inflate(R.layout.like_item, parent, false);
-
-                    NRCustomLikeView likeView = viewAdapter.getLikeView(getContext());
-
-                    if(likeView == null) {
-                        likeView = new NRLikeView(getContext());
-                    }
-
-                    LinearLayout likeContainer = (LinearLayout) view.findViewById(R.id.like_container);
-
-                    likeContainer.addView(likeView);
-
-                    return new NRLikeItem(view, NRWidgetFragment.this, mNanoRep.getNRConfiguration(), likeView);
-                case 3: // channeling
-                    view = LayoutInflater.from(parent.getContext()).inflate(R.layout.channeling_item, parent, false);
-
-                    NRCustomChannelView channelView = viewAdapter.getChannelView(getContext());
-
-                    if(channelView == null) {
-                        channelView = new NRChannelingView(getContext());
-                    }
-
-                    LinearLayout channelContainer = (LinearLayout) view.findViewById(R.id.channel_container);
-
-                    channelContainer.addView(channelView);
-
-                    return new NRChannelingItem(view, NRWidgetFragment.this, mNanoRep.getNRConfiguration(), channelView);
-                default:
-                    return null;
-            }
-        }
-
-        private  int getMaxHeight(int minResultHeight) {
-            NRTitleItem titleViewHolder = (NRTitleItem)mResultsRecyclerView.findViewHolderForLayoutPosition(0);
-            int titleHeight = titleViewHolder.getTitleHeight();
-
-            if(titleHeight < minResultHeight) {
-                titleHeight = minResultHeight;
-            } else {
-                titleHeight -= 60;
+            if(titleView == null){
+                titleView = new NRTitleView(getContext());
             }
 
-            int maxHeight = mResultsRecyclerView.getHeight();
+            LinearLayout titleContainer = (LinearLayout) view.findViewById(R.id.title_container);
 
-            return maxHeight - titleHeight;
+            titleContainer.addView(titleView);
+
+            return new NRTitleItem(view, titleView, NRWidgetFragment.this);
         }
 
         @Override
         public void onBindViewHolder(NRResultItem holder, int position) {
-            if(holder instanceof NRContentItem) {
-                ((NRContentItem) holder).setmMaxHeight(getMaxHeight(mQueryResults.get(position-1).getHeight()));
-            }
+
             holder.setData(mQueryResults.get(position));
         }
 
         @Override
         public int getItemViewType(int position) {
-            switch (mQueryResults.get(position).getRowType()) {
-                case TITLE:
-                    return 0;
-                case CONTENT:
-                    return 1;
-                case LIKE:
-                    return 2;
-                case CHANNELING:
-                    return 3;
-                default:
-                    return -1;
-            }
+            return 0;
         }
 
         @Override
@@ -921,4 +862,7 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
         this.viewAdapter = viewAdapter;
     }
 
+    public void setmQueryResults(ArrayList<NRResult> mQueryResults) {
+        this.mQueryResults = mQueryResults;
+    }
 }

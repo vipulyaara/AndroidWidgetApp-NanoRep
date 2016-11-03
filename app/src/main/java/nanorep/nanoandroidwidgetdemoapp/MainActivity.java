@@ -16,14 +16,9 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 
 import com.crittercism.app.Crittercism;
-import com.nanorep.nanoclient.Connection.NRError;
 import com.nanorep.nanoclient.Nanorep;
 import com.nanorep.nanoclient.NanorepBuilder;
-import com.nanorep.nanoclient.Response.NRConfiguration;
 
-
-import java.util.ArrayList;
-import java.util.HashMap;
 
 import nanorep.nanowidget.Components.AbstractViews.NRCustomChannelView;
 import nanorep.nanowidget.Components.AbstractViews.NRCustomContentView;
@@ -33,15 +28,15 @@ import nanorep.nanowidget.Components.AbstractViews.NRCustomSuggestionsView;
 import nanorep.nanowidget.Components.AbstractViews.NRCustomTitleView;
 import nanorep.nanowidget.Components.NRContentView;
 import nanorep.nanowidget.Components.NRSearchBar;
-import nanorep.nanowidget.Components.NRSuggestionsView;
-import nanorep.nanowidget.Components.NRTitleView;
-import nanorep.nanowidget.Components.NRViewAdapter;
-import nanorep.nanowidget.NRWidgetFragment;
+import nanorep.nanowidget.Fragments.NRWidgetCategoriesFragment;
+import nanorep.nanowidget.Fragments.NRWidgetFragment;
+import nanorep.nanowidget.Utilities.FragmentUtils;
 import nanorep.nanowidget.interfaces.NRCustomViewAdapter;
 
 public class MainActivity extends AppCompatActivity implements NRWidgetFragment.NRWidgetFragmentListener, NRCustomViewAdapter {
 
-    private NRWidgetFragment nanoFragment;
+//    private NRWidgetFragment nanoFragment;
+    private NRWidgetCategoriesFragment categoriesFragment;
     private CheckBox checkBox;
 
     @SuppressLint("SetJavaScriptEnabled")
@@ -54,11 +49,14 @@ public class MainActivity extends AppCompatActivity implements NRWidgetFragment.
 
         checkBox = (CheckBox) findViewById(R.id.checkbox);
 
-        nanoFragment = NRWidgetFragment.newInstance();
-        nanoFragment.setListener(this);
+        categoriesFragment = NRWidgetCategoriesFragment.newInstance();
+
+//        nanoFragment = NRWidgetFragment.newInstance();
+//        nanoFragment.setListener(this);
         Crittercism.initialize(getApplicationContext(), "d59e30ede3c34d0bbf19d0237c2f1bc800444503");
 
-        nanoFragment.setViewAdapter(this);
+        categoriesFragment.setViewAdapter(this);
+//        nanoFragment.setViewAdapter(this);
 
         Button loadButton = (Button)findViewById(R.id.button);
         if (loadButton != null) {
@@ -91,8 +89,12 @@ public class MainActivity extends AppCompatActivity implements NRWidgetFragment.
 
                     nanorep.setDebugMode(checkBox.isChecked());
 
-                    nanoFragment.setNanoRep(nanorep);
-                    getSupportFragmentManager().beginTransaction().add(R.id.root_layout, nanoFragment, "nanorep").commit();
+                    categoriesFragment.setNanoRep(nanorep);
+//                    nanoFragment.setNanoRep(nanorep);
+                    FragmentUtils.openFragment(categoriesFragment, R.id.content_main,
+                            NRWidgetCategoriesFragment.TAG, MainActivity.this, false);
+
+//                    getSupportFragmentManager().beginTransaction().add(R.id.content_main, categoriesFragment, "nanorep").commit();
 //                    nanorep.fetchConfiguration(new Nanorep.OnConfigurationFetchedListener() {
 //                        @Override
 //                        public void onConfigurationReady(NRConfiguration configuration, NRError error) {
@@ -107,7 +109,7 @@ public class MainActivity extends AppCompatActivity implements NRWidgetFragment.
     @Override
     public void onCancelWidget(NRWidgetFragment widgetFragment) {
         ((Button)findViewById(R.id.button)).setVisibility(View.VISIBLE);
-        getSupportFragmentManager().beginTransaction().remove(nanoFragment).commit();
+        getSupportFragmentManager().beginTransaction().remove(categoriesFragment).commit();
     }
 
 

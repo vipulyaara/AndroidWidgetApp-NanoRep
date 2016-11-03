@@ -12,7 +12,6 @@ import com.nanorep.nanoclient.RequestParams.NRFAQLikeParams;
 import com.nanorep.nanoclient.RequestParams.NRLikeType;
 import com.nanorep.nanoclient.RequestParams.NRSearchLikeParams;
 import com.nanorep.nanoclient.Response.NRFAQAnswer;
-import com.nanorep.nanoclient.Response.NRFAQAnswerItem;
 import com.nanorep.nanoclient.Response.NRFAQData;
 import com.nanorep.nanoclient.Response.NRSearchResponse;
 import com.nanorep.nanoclient.Response.NRSuggestions;
@@ -21,6 +20,7 @@ import java.util.ArrayList;
 
 import nanorep.nanowidget.Components.NRResultItem;
 import nanorep.nanowidget.Utilities.Calculate;
+import nanorep.nanowidget.interfaces.NRConfigFetcherListener;
 import nanorep.nanowidget.interfaces.NRFetcherListener;
 import nanorep.nanowidget.interfaces.OnFAQAnswerFetched;
 
@@ -28,9 +28,12 @@ import nanorep.nanowidget.interfaces.OnFAQAnswerFetched;
  * Created by nissimpardo on 04/06/16.
  */
 public class NRFetchedDataManager {
+
+
     private Nanorep mNanoRep;
     private NRFAQData mFaqData;
     private NRFetcherListener mFetcherListener;
+    private NRConfigFetcherListener mconfigFetcherListener;
     Context mContext;
 
     private int mRows;
@@ -46,7 +49,7 @@ public class NRFetchedDataManager {
                     if (error == null) {
                         mFaqData = mNanoRep.getNRConfiguration().getFaqData();
                         if (mNanoRep.getNRConfiguration() != null) {
-                            mFetcherListener.onConfigurationReady();
+                            mconfigFetcherListener.onConfigurationReady();
                             prepareDatasource();
                         }
                     } else if (error != null) {
@@ -59,13 +62,26 @@ public class NRFetchedDataManager {
 
     public void setFetcherListener(NRFetcherListener listener) {
         mFetcherListener = listener;
+    }
 
+    public void setConfigFetcherListener(NRConfigFetcherListener mconfigFetcherListener) {
+        this.mconfigFetcherListener = mconfigFetcherListener;
     }
 
     private void prepareDatasource() {
         if (mFaqData != null && mFaqData.getGroups() != null && mFaqData.getGroups().size() > 0) {
-            ArrayList<NRQueryResult> answers = mFaqData.getGroups().get(0).getAnswers();
-            updateResults(answers);
+            ArrayList<com.nanorep.nanoclient.Response.NRFAQGroupItem> groups = mFaqData.getGroups();//.get(0).getAnswers();
+            updateCategoriesResults(groups);
+        }
+    }
+
+    private void updateCategoriesResults(ArrayList<com.nanorep.nanoclient.Response.NRFAQGroupItem> groups) {
+        if (groups != null) {
+
+            mRows = groups.size();
+            mconfigFetcherListener.insertRows(groups);
+        } else {
+            mconfigFetcherListener.insertRows(null);
         }
     }
 
@@ -171,5 +187,10 @@ public class NRFetchedDataManager {
     private void onRequestError(NRError error) {
 
     }
+
+    public Nanorep getmNanoRep() {
+        return mNanoRep;
+    }
+
 
 }

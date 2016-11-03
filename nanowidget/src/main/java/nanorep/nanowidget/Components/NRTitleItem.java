@@ -1,11 +1,8 @@
 package nanorep.nanowidget.Components;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.graphics.Color;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.nanorep.nanoclient.Response.NRConfiguration;
@@ -13,7 +10,6 @@ import com.nanorep.nanoclient.Response.NRConfiguration;
 import nanorep.nanowidget.Components.AbstractViews.NRCustomTitleView;
 import nanorep.nanowidget.DataClasse.NRResult;
 import nanorep.nanowidget.R;
-import nanorep.nanowidget.Utilities.Calculate;
 import nanorep.nanowidget.interfaces.NRResultItemListener;
 import nanorep.nanowidget.interfaces.NRTitleListener;
 
@@ -33,10 +29,11 @@ public class NRTitleItem extends NRResultItem implements NRTitleListener{
     }
 
 
-    public NRTitleItem(View view, NRResultItemListener listener, NRConfiguration config, NRCustomTitleView titleView) {
-        super(view, listener, config);
+    public NRTitleItem(View view, NRCustomTitleView titleView, NRResultItemListener listener) {
+        super(view, listener);
 
         this.titleView = titleView;
+
         this.titleView.setListener(this);
 
         title_container = (LinearLayout) view.findViewById(R.id.title_container);
@@ -97,9 +94,31 @@ public class NRTitleItem extends NRResultItem implements NRTitleListener{
         return titleView.getTitleHeight(mResult.getFetchedResult().getTitle());
     }
 
+//    @Override
+//    public void onTitleClicked() {
+//
+//        if(!mResult.isSingle()) {
+//            mListener.unfoldItem(mResult, false);
+//        }
+//    }
+//
+//    @Override
+//    public void onTitleCollapsed() {
+//
+//    }
+
+
+//    @Override
+//    public void onShareClicked() {
+//        mListener.onShareClicked(this, mResult.getFetchedResult().getTitle());
+//    }
+
+    public LinearLayout getTitle_container() {
+        return title_container;
+    }
+
     @Override
     public void onTitleClicked() {
-
         if(!mResult.isSingle()) {
             mListener.unfoldItem(mResult, false);
         }
@@ -110,13 +129,8 @@ public class NRTitleItem extends NRResultItem implements NRTitleListener{
 
     }
 
-
     @Override
     public void onShareClicked() {
         mListener.onShareClicked(this, mResult.getFetchedResult().getTitle());
-    }
-
-    public LinearLayout getTitle_container() {
-        return title_container;
     }
 }

@@ -21,14 +21,14 @@ public abstract class NRResultItem extends RecyclerView.ViewHolder {
         TITLE, CONTENT, LIKE, CHANNELING
     }
 
-    public NRResultItem(View itemView, NRResultItemListener listener, NRConfiguration config) {
+    public NRResultItem(View itemView, NRResultItemListener listener) {
         super(itemView);
 
         bindViews(itemView);
 
         setListener(listener);
 
-        configViewObjects(config);
+//        configViewObjects(config);
     }
 
     protected abstract void configViewObjects(NRConfiguration config);

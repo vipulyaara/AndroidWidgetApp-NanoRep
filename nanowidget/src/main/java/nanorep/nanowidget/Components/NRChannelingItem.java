@@ -9,7 +9,6 @@ import java.util.ArrayList;
 
 import nanorep.nanowidget.Components.AbstractViews.NRCustomChannelView;
 import nanorep.nanowidget.DataClasse.NRResult;
-import nanorep.nanowidget.R;
 import nanorep.nanowidget.interfaces.NRResultItemListener;
 
 /**
@@ -21,7 +20,7 @@ public class NRChannelingItem extends NRResultItem implements NRChannelItem.OnCh
     private NRCustomChannelView mChannelingView;
 
     public NRChannelingItem(View view, NRResultItemListener listener, NRConfiguration config, NRCustomChannelView channelView) {
-        super(view, listener, config);
+        super(view, listener);
 
         mChannelingView = channelView;
         mChannelingView.setListener(this);
