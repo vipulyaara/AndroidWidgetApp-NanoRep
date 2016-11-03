@@ -612,6 +612,7 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
             switch (viewType) {
                 case 0:
                     item = new NRContentItem(view, mResultsRecyclerView.getHeight());
+                    ((NRContentItem)item).setDomain(mNanoRep.getAccountParams().getDomain());
                     break;
                 case 1:
                     item = new NRResultItem(view, mResultsRecyclerView.getHeight());

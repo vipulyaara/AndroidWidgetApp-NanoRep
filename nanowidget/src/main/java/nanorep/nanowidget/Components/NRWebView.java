@@ -72,8 +72,9 @@ public class NRWebView extends FrameLayout {
 
 
 
-    public void loadData(String data, String mimeType, String encoding) {
+    public void loadData(String data, String mimeType, String encoding, String domain) {
 //        data = "<iframe width=\"420\" height=\"315\" src=\"http://example.com\" frameborder=\"5\" allowfullscreen></iframe>";
+        Log.d("NRWebView", data);
         mLoadingView.setVisibility(VISIBLE);
         NRHtmlParser parser = new NRHtmlParser(data);
         String parsed = parser.getParsedHtml();
@@ -121,7 +122,7 @@ public class NRWebView extends FrameLayout {
                 "\t\t}());\n" +
                 "\t</script>";
         parsed += script;
-        mWebView.loadDataWithBaseURL("http://nanorep.invalid/", parsed, mimeType, encoding, null);
+        mWebView.loadDataWithBaseURL(domain, parsed, mimeType, encoding, domain);
     }
 
     public void loadUrl(String url) {

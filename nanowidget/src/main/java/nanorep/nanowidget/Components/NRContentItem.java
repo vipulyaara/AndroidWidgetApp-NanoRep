@@ -26,6 +26,7 @@ public class NRContentItem extends NRResultItem  {
     private NRChannelingView mChannelingView;
     private NRResultItemListener mListener;
     private NRResult mResult;
+    private String mDomain = "http://my.nanorep.com";
 
 
     public NRContentItem(View itemView, int height) {
@@ -37,6 +38,10 @@ public class NRContentItem extends NRResultItem  {
         mChannelingView = (NRChannelingView) itemView.findViewById(R.id.cv_channelingView);
     }
 
+    public void setDomain(String domain) {
+        mDomain = domain;
+    }
+
     public void setListener(NRResultItemListener listener) {
         mListener = listener;
         mWebView.setListener(listener);
@@ -46,7 +51,7 @@ public class NRContentItem extends NRResultItem  {
 
     public void setBody(String body) {
         mResult.getFetchedResult().setBody(body);
-        mWebView.loadData(body, "text/html", "UTF-8");
+        mWebView.loadData(body, "text/html", "UTF-8", mDomain);
     }
 
     public void setChanneling(ArrayList<NRChanneling> channelings) {

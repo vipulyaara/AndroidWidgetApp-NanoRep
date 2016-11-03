@@ -185,7 +185,7 @@ public class NRLinkedArticleFragment extends Fragment implements NRWebView.Liste
     private void updateArticle(NRQueryResult result) {
         mResult = result;
         mTitleView.setTitle(result.getTitle());
-        mWebView.loadData(result.getBody(), "html/text", "UTF-8");
+        mWebView.loadData(result.getBody(), "html/text", "UTF-8", mParam1);
         if (mLinkedArticles.size() > 1) {
             if (mIndex < mLinkedArticles.size() - 1 && mIndex > 0) {
                 mBrowserView.setState(NRLinkedArticlesBrowserView.State.hasNextAndPrev);
