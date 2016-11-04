@@ -323,7 +323,7 @@ public class NRResultTopView extends RelativeLayout implements NRTitleListener, 
             }
 
             viewContentContainer.addView(contentView);
-            int contentHeight = NRResultTopView.this.getHeight() - viewTitleContainer.getHeight() - (int) Calculate.pxFromDp(getContext(), feedbachHeight);
+            int contentHeight = NRResultTopView.this.getHeight() - height - (int) Calculate.pxFromDp(getContext(), feedbachHeight);
             viewContentContainer.getLayoutParams().height = contentHeight;
 
             viewLikeContainer.addView(likeView);

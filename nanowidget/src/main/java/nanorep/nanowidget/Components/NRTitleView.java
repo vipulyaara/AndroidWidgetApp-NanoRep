@@ -191,14 +191,12 @@ public class NRTitleView extends NRCustomTitleView{
 
     public int getCollapsedHeight(CharSequence text) {
 
-        Button textView = new Button(context);
-        textView.setTypeface(Typeface.create("sans-serif-medium", Typeface.NORMAL));
-        textView.setText(text);
-        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
-        int heightMeasureSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
+        int mMeasuredHeight = (new StaticLayout(text, mTitleButton.getPaint(), mTitleButton.getWidth(), Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, true)).getHeight();
 
-        textView.measure(mTitleButton.getWidth(), heightMeasureSpec);
-        return textView.getMeasuredHeight();
+        if(mMeasuredHeight < mTitleButton.getHeight()) {
+            mMeasuredHeight = mTitleButton.getHeight();
+        }
+        return mMeasuredHeight;
     }
 
 }
