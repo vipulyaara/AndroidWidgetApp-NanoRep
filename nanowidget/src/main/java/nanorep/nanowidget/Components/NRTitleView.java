@@ -139,7 +139,7 @@ public class NRTitleView extends NRCustomTitleView{
             mShareButton.setVisibility(View.GONE);
         } else
         {
-            mShareButton.setVisibility(View.VISIBLE);
+//            mShareButton.setVisibility(View.VISIBLE);
         }
     }
 

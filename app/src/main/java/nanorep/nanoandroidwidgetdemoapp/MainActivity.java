@@ -55,8 +55,8 @@ public class MainActivity extends AppCompatActivity implements NRWidgetFragment.
 //        nanoFragment.setListener(this);
         Crittercism.initialize(getApplicationContext(), "d59e30ede3c34d0bbf19d0237c2f1bc800444503");
 
+//        categoriesFragment.setViewAdapter(this);
         categoriesFragment.setViewAdapter(this);
-//        nanoFragment.setViewAdapter(this);
 
         Button loadButton = (Button)findViewById(R.id.button);
         if (loadButton != null) {
@@ -72,11 +72,11 @@ public class MainActivity extends AppCompatActivity implements NRWidgetFragment.
                     EditText server = (EditText) findViewById(R.id.serverId);
 
 
-                    String _accountName = "nanorep";//"gett";//"nanorep";
-                    String _kb = "English";//"English_IL";//"English";
+                    String _accountName = "qa2";//"gett";//"nanorep";
+                    String _kb = "en";//"English_IL";//"English";
 
 
-                    String _server = server.getText().toString();
+                    String _server = "office";//server.getText().toString();
 
                     if(!_server.isEmpty()) {
                         accountParams.setmHost(_server);
@@ -126,9 +126,11 @@ public class MainActivity extends AppCompatActivity implements NRWidgetFragment.
 
     @Override
     public NRCustomSearchBarView getSearchBar(Context context) {
-        NRCustomSearchBarView searchBar = new NRSearchBar(context);
+//        NRCustomSearchBarView searchBar = new NRSearchBar(context);
+//
+//        return searchBar;
 
-        return searchBar;
+        return null;
     }
 
     @Override

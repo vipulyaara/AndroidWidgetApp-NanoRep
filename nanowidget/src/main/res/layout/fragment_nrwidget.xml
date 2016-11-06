@@ -14,16 +14,26 @@
         android:layout_height="match_parent"
         android:id="@+id/contentId">
 
-        <android.support.v7.widget.Toolbar android:id="@+id/my_toolbar"
+
+        <LinearLayout
+            android:id="@+id/search_bar_container"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:orientation="vertical">
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/suggestion_view_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:elevation="0dp"
-            />
+            android:layout_below="@id/search_bar_container"
+            android:orientation="vertical">
+        </LinearLayout>
 
         <RelativeLayout
             android:id="@+id/noTiltleView"
             android:layout_width="match_parent"
-            android:layout_below="@+id/my_toolbar"
+            android:layout_below="@+id/suggestion_view_container"
             android:layout_height="0dp">
             <TextView
                 android:layout_width="match_parent"

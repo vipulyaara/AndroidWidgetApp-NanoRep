@@ -42,7 +42,7 @@ public class NRViewAdapter implements NRCustomViewAdapter {
 //        if(titleView == null) {
 //            titleView = new NRTitleView(context);
 //        }
-        return new NRTitleView(context);
+        return null;
     }
 
     @Override

@@ -172,6 +172,7 @@ public class NRResultsAdapter  extends RecyclerView.Adapter<NRResultsAdapter.Vie
         NRWidgetCategoriesFragment nrWidgetCategoriesFragment = (NRWidgetCategoriesFragment)fragmentManager.findFragmentByTag(NRWidgetCategoriesFragment.TAG);
 
         nrWidgetFragment.setmFetchedDataManager(nrWidgetCategoriesFragment.getmFetchedDataManager());
+        nrWidgetFragment.setViewAdapter(viewAdapter);
 
         FragmentUtils.addFragment(nrWidgetCategoriesFragment, nrWidgetFragment, ((ViewGroup)nrWidgetCategoriesFragment.getView().getParent()).getId(), context);
     }

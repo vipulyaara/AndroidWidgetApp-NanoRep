@@ -5,10 +5,12 @@ import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -21,6 +23,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -285,6 +289,7 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
 //        setHasOptionsMenu(true);
 //        assert ((AppCompatActivity)getActivity()).getSupportActionBar() != null;
 //        ((AppCompatActivity)getActivity()).getSupportActionBar().hide();
+
         final View nanoView = inflater.inflate(R.layout.fragment_nrwidget, container, false);
         mLoadingView = (RelativeLayout) nanoView.findViewById(R.id.fragment_place_holder);
 
@@ -506,45 +511,49 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
 
     private void updateTitleNormalText(View nanoView) {
         NRConfiguration.NRTitle title = mFetchedDataManager.getmNanoRep().getNRConfiguration().getTitle();
-//        ActionBar actionBar = ((AppCompatActivity)getActivity()).getSupportActionBar();
+        ActionBar actionBar = ((AppCompatActivity)getActivity()).getSupportActionBar();
 
-        Toolbar actionBar = (Toolbar)nanoView.findViewById(R.id.my_toolbar);
+        View customActionBar = getActivity().getLayoutInflater().inflate(R.layout.nr_title_bar, null);
+        ActionBar.LayoutParams layout = new ActionBar.LayoutParams(ActionBar.LayoutParams.MATCH_PARENT, ActionBar.LayoutParams.MATCH_PARENT);
 
+        actionBar.setCustomView(customActionBar, layout);
+        actionBar.setDisplayShowHomeEnabled(false);
+        actionBar.setDisplayShowTitleEnabled(false);
+        actionBar.setDisplayShowCustomEnabled(true);
+
+        Toolbar parent =(Toolbar) customActionBar.getParent();
+        parent.setPadding(0,0,0,0);//for tab otherwise give space in tab
+        parent.setContentInsetsAbsolute(0,0);
+
+        TextView tv = (TextView) actionBar.getCustomView().findViewById(R.id.titleBarTv);
+
+        // title text
         String titleText = getString(R.string.default_title);
 
         if(!isEmpty(title.getTitle())) {
             titleText = title.getTitle();
         }
 
-        actionBar.setTitle(titleText);
-
-        String titleColor = "#ffffff";
+        tv.setText(titleText);
 
         // title color
         if(!isEmpty(title.getTitleColor())) {
-            titleColor = title.getTitleColor();
+            String titleColor = title.getTitleColor();
+            tv.setTextColor(Color.parseColor(titleColor));
         }
-
-        Spannable text = new SpannableString(actionBar.getTitle());
-        text.setSpan(new ForegroundColorSpan(Color.parseColor(titleColor)), 0, text.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-        actionBar.setTitle(text);
 
         // title background color
-        String titleBGColor = "#0aa0ff";
-
-        // title color
         if(!isEmpty(title.getTitleBGColor())) {
-            titleBGColor = title.getTitleBGColor();
-
-//            setTaskBarColored(titleBGColor);
+            String titleBGColor = title.getTitleBGColor();
+            RelativeLayout relativeLayout = (RelativeLayout) actionBar.getCustomView().findViewById(R.id.nrTitleBarLayout);
+            relativeLayout.setBackgroundColor(Color.parseColor(titleBGColor));
         }
 
-        actionBar.setBackground(new ColorDrawable(Color.parseColor(titleBGColor)));
-
-        ((AppCompatActivity)getActivity()).setSupportActionBar(actionBar);
-
         // title font
-
+        if(!isEmpty(title.getTitleFont())) {
+            String titleFont = title.getTitleFont();
+            tv.setTypeface(Typeface.create(titleFont, Typeface.NORMAL));
+        }
 
     }
 
