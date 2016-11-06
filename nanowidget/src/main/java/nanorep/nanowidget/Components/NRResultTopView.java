@@ -291,7 +291,7 @@ public class NRResultTopView extends RelativeLayout implements NRTitleListener, 
 
     public void removeTopView(boolean isLinkedArticle) {
 
-        if(!mResult.isSingle() && !isLinkedArticle) {
+        if(mResult != null && !mResult.isSingle() && !isLinkedArticle) {
             closeViewAnimation();
         } else {
             viewChannelingContainer.removeAllViews();
@@ -303,7 +303,7 @@ public class NRResultTopView extends RelativeLayout implements NRTitleListener, 
 
     @Override
     public void onTitleClicked() {
-        if(!mResult.isSingle()) {
+        if(mResult != null && !mResult.isSingle()) {
             mListener.unfoldItem(mResult, false);
         }
     }

@@ -72,8 +72,8 @@ public class MainActivity extends AppCompatActivity implements NRWidgetFragment.
                     EditText server = (EditText) findViewById(R.id.serverId);
 
 
-                    String _accountName = "qa";//"gett";//"nanorep";
-                    String _kb = "qa";//"English_IL";//"English";
+                    String _accountName = "nanorep";//"gett";//"nanorep";
+                    String _kb = "English";//"English_IL";//"English";
 
 
                     String _server = server.getText().toString();

@@ -25,6 +25,8 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.nanorep.nanoclient.Response.NRConfiguration;
+
 import nanorep.nanowidget.Components.AbstractViews.NRCustomTitleView;
 import nanorep.nanowidget.R;
 import nanorep.nanowidget.Utilities.Calculate;
@@ -42,6 +44,13 @@ public class NRTitleView extends NRCustomTitleView{
     private ImageButton mShareButton;
     private LinearLayout titleLayout;
     private Context context;
+
+    private String textColorAnswer = "#0aa0ff";
+    private String textColorFaq = "#4a4a4a";
+
+    private String textFontAnswer = "sans-serif-medium";
+    private String textFontFaq = "sans-serif-light";
+
 
     private boolean closed = true;
 
@@ -116,10 +125,10 @@ public class NRTitleView extends NRCustomTitleView{
     }
 
     private void setTitleFont() {
-        String font = "sans-serif-light";
+        String font = textFontFaq;
 
         if(!closed) {
-            font = "sans-serif-medium";
+            font = textFontAnswer;
         }
 
         mTitleButton.setTypeface(Typeface.create(font, Typeface.NORMAL));
@@ -137,10 +146,10 @@ public class NRTitleView extends NRCustomTitleView{
 
     private void setTitleColor() {
 
-        String color = "#4a4a4a";
+        String color = textColorFaq;
 
         if(!closed) {
-            color = "#0aa0ff";
+            color = textColorAnswer;
         }
 
         mTitleButton.setTextColor(Color.parseColor(color));
@@ -198,5 +207,20 @@ public class NRTitleView extends NRCustomTitleView{
         }
         return mMeasuredHeight;
     }
+
+    public void configViewObjects(NRConfiguration nrConfiguration) {
+        NRConfiguration.NRContent content = nrConfiguration.getContent();
+
+        // text color
+        if(content.getAnswerTitleColor() != null && !"".equals(content.getAnswerTitleColor())) {
+            textColorAnswer = content.getAnswerTitleColor();
+        }
+
+        // title font
+        if(content.getAnswerTextFont() != null && !"".equals(content.getAnswerTextFont())) {
+            textFontAnswer = content.getAnswerTitleFont();
+        }
+    }
+
 
 }

@@ -51,11 +51,11 @@ public class NRTitleItem extends NRResultItem implements NRTitleListener{
 
     @Override
     protected void configViewObjects(NRConfiguration config) {
-        String titleBGColor = config.getTitle().getTitleBGColor();
-
-        if(titleBGColor != null && !"".equals(titleBGColor)) {
-            mItemView.setBackgroundColor(Color.parseColor(titleBGColor));
-        }
+//        String titleBGColor = config.getTitle().getTitleBGColor();
+//
+//        if(titleBGColor != null && !"".equals(titleBGColor)) {
+//            mItemView.setBackgroundColor(Color.parseColor(titleBGColor));
+//        }
     }
 
     public void setData(NRResult result) {

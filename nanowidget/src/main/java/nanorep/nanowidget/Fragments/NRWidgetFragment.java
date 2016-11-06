@@ -5,11 +5,16 @@ import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -25,6 +30,7 @@ import android.widget.TextView;
 import com.nanorep.nanoclient.Interfaces.NRQueryResult;
 import com.nanorep.nanoclient.Nanorep;
 import com.nanorep.nanoclient.RequestParams.NRLikeType;
+import com.nanorep.nanoclient.Response.NRConfiguration;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -328,7 +334,6 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
         frameLayout = (FrameLayout) nanoView.findViewById(R.id.frameLayoutFragment);
 
         nrResultTopView = (NRResultTopView) nanoView.findViewById(R.id.resultTopView);
-        setTopView();
 
         mNotitleViewHolder = (RelativeLayout) nanoView.findViewById(R.id.noTiltleView);
         mNoTitleView = (TextView) nanoView.findViewById(R.id.noTitleTextView);
@@ -361,8 +366,14 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
                 }
             });
         }
-        updateTitleNormalText();
-        updateSerchBarHint();
+        updateTitleNormalText(nanoView);
+
+        if(viewAdapter.getSearchBar(getActivity()) == null) {
+            updateSearchBarHint();
+        }
+
+        setTopView();
+
         showSuggestionsView(container);
 
         if(mQueryResults != null) {
@@ -380,6 +391,7 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
 
         if(titleView == null){
             titleView = new NRTitleView(getContext());
+            ((NRTitleView)titleView).configViewObjects(mFetchedDataManager.getmNanoRep().getNRConfiguration());
         }
 
         NRCustomContentView contentView = viewAdapter.getContent(getContext());
@@ -405,7 +417,7 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
         nrResultTopView.setLikeView(likeView);
         nrResultTopView.setChannelView(channelView);
 
-        nrResultTopView.configViewObjects(mFetchedDataManager.getmNanoRep().getNRConfiguration());
+//        nrResultTopView.configViewObjects(mFetchedDataManager.getmNanoRep().getNRConfiguration());
     }
 
     private void animateBGColor(int milliseconds, boolean unfold) {
@@ -470,12 +482,70 @@ public class NRWidgetFragment extends Fragment implements NRSearchBarListener, N
         }
     }
 
-    private void updateSerchBarHint() {
-        mSearchBar.setHint(mFetchedDataManager.getmNanoRep().getNRConfiguration().getSearchBar().getInitialText());
+    private void updateSearchBarHint() {
+        NRConfiguration.NRSearchBar searchBar = mFetchedDataManager.getmNanoRep().getNRConfiguration().getSearchBar();
+        NRConfiguration.NRTitle title = mFetchedDataManager.getmNanoRep().getNRConfiguration().getTitle();
+
+        mSearchBar.setHint(searchBar.getInitialText());
+
+        String titleBGColor = "#0aa0ff";
+
+        // title color
+        if(!isEmpty(title.getTitleBGColor())) {
+            titleBGColor = title.getTitleBGColor();
+        }
+
+        mSearchBar.setBackgroundColor(Color.parseColor(titleBGColor));
+
     }
 
-    private void updateTitleNormalText() {
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(mFetchedDataManager.getmNanoRep().getNRConfiguration().getTitleNormalText());
+    private boolean isEmpty(String str) {
+        return str == null || str.isEmpty();
+    }
+
+
+    private void updateTitleNormalText(View nanoView) {
+        NRConfiguration.NRTitle title = mFetchedDataManager.getmNanoRep().getNRConfiguration().getTitle();
+//        ActionBar actionBar = ((AppCompatActivity)getActivity()).getSupportActionBar();
+
+        Toolbar actionBar = (Toolbar)nanoView.findViewById(R.id.my_toolbar);
+
+        String titleText = getString(R.string.default_title);
+
+        if(!isEmpty(title.getTitle())) {
+            titleText = title.getTitle();
+        }
+
+        actionBar.setTitle(titleText);
+
+        String titleColor = "#ffffff";
+
+        // title color
+        if(!isEmpty(title.getTitleColor())) {
+            titleColor = title.getTitleColor();
+        }
+
+        Spannable text = new SpannableString(actionBar.getTitle());
+        text.setSpan(new ForegroundColorSpan(Color.parseColor(titleColor)), 0, text.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+        actionBar.setTitle(text);
+
+        // title background color
+        String titleBGColor = "#0aa0ff";
+
+        // title color
+        if(!isEmpty(title.getTitleBGColor())) {
+            titleBGColor = title.getTitleBGColor();
+
+//            setTaskBarColored(titleBGColor);
+        }
+
+        actionBar.setBackground(new ColorDrawable(Color.parseColor(titleBGColor)));
+
+        ((AppCompatActivity)getActivity()).setSupportActionBar(actionBar);
+
+        // title font
+
+
     }
 
     private void loadResults(ArrayList<NRResult> rows, boolean addToStack) {

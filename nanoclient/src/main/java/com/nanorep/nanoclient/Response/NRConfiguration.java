@@ -13,9 +13,14 @@ public class NRConfiguration {
     private boolean mIsContextDependent = false;
     private NRTitle title;
     private NRSearchBar searchBar;
+    private NRFaq faq;
+    private NRContent content;
+    private HashMap<String, String> customization;
+
 
     public NRConfiguration() {
         mParams = new HashMap<String, Object>();
+        customization = new HashMap<String, String>();
     }
 
 
@@ -26,6 +31,7 @@ public class NRConfiguration {
      */
     public NRConfiguration(HashMap<String, Object> params) {
         mParams = params;
+        customization = (HashMap<String, String>)params.get("customization");
         if (params != null) {
             Object faq = mParams.get("faqData");
             if (faq != null && faq instanceof String) {
@@ -43,7 +49,83 @@ public class NRConfiguration {
         public String getTitleBGColor() {
             return (String)mParams.get("titleBGColor");
         }
+
+        public void setTitle(String title) {
+            mParams.put("titleNormalText", title);
+        }
+
+        public String getTitle() {
+
+            return (String)mParams.get("titleNormalText");
+        }
+
+        public void setTitleFont(String titleFont) {
+            customization.put("titleFont", titleFont);
+        }
+
+        public String getTitleFont() {
+            return (String)customization.get("titleFont");
+        }
+
+        public void setTitleColor(String titleColor) {
+            mParams.put("titleColor", titleColor);
+        }
+
+        public String getTitleColor() {
+            return (String)mParams.get("titleColor");
+        }
+
     }
+
+    public class NRFaq {
+        // "mobile.faqTextColor"
+
+        public void setFaqTextColor(String faqTextColor) {
+            mParams.put("mobile.faqTextColor", faqTextColor);
+        }
+
+        public String getFaqTextColor() {
+            return (String)mParams.get("mobile.faqTextColor");
+        }
+
+
+        // "mobile.faqTextFont"
+
+        public void setFaqTextFont(String faqTextFont) {
+            mParams.put("mobile.faqTextFont", faqTextFont);
+        }
+
+        public String getFaqTextFont() {
+            return (String)mParams.get("mobile.faqTextFont");
+        }
+
+        // "mobile.faqBackgroundColor"
+
+        public void setFaqBackgroundColor(String faqBackgroundColor) {
+            mParams.put("mobile.faqBackgroundColor", faqBackgroundColor);
+        }
+
+        public String getFaqBackgroundColor() {
+//            return (String)mParams.get("mobile.faqBackgroundColor");
+            return "#636161";
+        }
+
+    }
+
+    public NRFaq getFaq() {
+        if(faq == null) {
+            faq = new NRFaq();
+        }
+        return faq;
+    }
+
+    public NRContent getContent() {
+        if(content == null) {
+            content = new NRContent();
+        }
+        return content;
+    }
+
 
     public NRTitle getTitle(){
         if(title == null) {
@@ -92,6 +174,64 @@ public class NRConfiguration {
     }
 
     public class NRContent {
+        // "mobile.noResultsMessage"
+        public void setNoResultsMessage(String noResultsMessage) {
+            mParams.put("mobile.noResultsMessage", noResultsMessage);
+        }
+
+        public String getNoResultsMessage() {
+            return (String)mParams.get("mobile.noResultsMessage");
+        }
+
+        // "mobile.answerTextColor"
+
+        public void setAnswerTextColor(String answerTextColor) {
+            mParams.put("mobile.answerTextColor", answerTextColor);
+        }
+
+        public String getAnswerTextColor() {
+            return (String)mParams.get("mobile.answerTextColor");
+        }
+
+        // "mobile.answerTextFont"
+
+        public void setAnswerTextFont(String answerTextFont) {
+            mParams.put("mobile.answerTextFont", answerTextFont);
+        }
+
+        public String getAnswerTextFont() {
+            return (String)mParams.get("mobile.answerTextFont");
+        }
+
+        // "mobile.answerTitleColor"
+
+        public void setAnswerTitleColor(String answerTitleColor) {
+            customization.put("answerTitleColor", answerTitleColor);
+        }
+
+        public String getAnswerTitleColor() {
+            return (String)customization.get("answerTitleColor");
+        }
+
+        // "mobile.answerTitleFont"
+
+        public void setAnswerTitleFont(String answerTitleFont) {
+            customization.put("answerTitleFont", answerTitleFont);
+        }
+
+        public String getAnswerTitleFont() {
+            return (String)customization.get("answerTitleFont");
+        }
+
+        // "mobile.widgetBackgroundColor"
+
+        public void setWidgetBackgroundColor(String widgetBackgroundColor) {
+            mParams.put("mobile.widgetBackgroundColor", widgetBackgroundColor);
+        }
+
+        public String getWidgetBackgroundColor() {
+            return (String)mParams.get("mobile.widgetBackgroundColor");
+        }
 
     }
 
@@ -168,6 +308,10 @@ public class NRConfiguration {
     public void overrideCnfData(NRConfiguration cnf) {
         for (String key: cnf.mParams.keySet()) {
             mParams.put(key, cnf.mParams.get(key));
+        }
+
+        for (String key: cnf.customization.keySet()) {
+            customization.put(key, cnf.customization.get(key));
         }
     }
 

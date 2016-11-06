@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -28,6 +29,8 @@ public class NRSearchBar extends NRCustomSearchBarView implements View.OnClickLi
     private NRSearchBarListener mListener;
     private ImageButton mSpeechButton;
     private NREditText mSearchEditText;
+    private LinearLayout searchBarLayout;
+
 
     public NRSearchBar(Context context) {
         super(context);
@@ -37,6 +40,8 @@ public class NRSearchBar extends NRCustomSearchBarView implements View.OnClickLi
     @Override
     public void onViewAdded(View child) {
         super.onViewAdded(child);
+        searchBarLayout = (LinearLayout) child.findViewById(R.id.searchBarLayout);
+
         mSearchEditText = (NREditText) child.findViewById(R.id.searchText);
         mSearchEditText.addTextChangedListener(this);
 //        mSearchEditText.setHint(getResources().getString(R.string.type_question_here));
@@ -124,4 +129,11 @@ public class NRSearchBar extends NRCustomSearchBarView implements View.OnClickLi
         }
         return false;
     }
+
+    @Override
+    public void setBackgroundColor(int color) {
+        super.setBackgroundColor(color);
+        searchBarLayout.setBackgroundColor(color);
+    }
+
 }

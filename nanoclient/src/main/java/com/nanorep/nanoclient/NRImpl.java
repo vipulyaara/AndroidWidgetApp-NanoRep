@@ -397,7 +397,8 @@ public class NRImpl implements Nanorep {
                         HashMap<String, Object> cachedResponse = NRCacheManager.getAnswerById(mContext, NRUtilities.md5(mAccountParams.getKnowledgeBase() + mAccountParams.getNanorepContext()));
                         if (onConfigurationFetchedListener != null) {
                             if (cachedResponse != null) {
-                                mCnf = new NRConfiguration(cachedResponse);
+                                NRConfiguration cnf = new NRConfiguration(cachedResponse);
+                                overrideCnfData(cnf);
                                 onConfigurationFetchedListener.onConfigurationFetched(null);
                             } else {
                                 onConfigurationFetchedListener.onConfigurationFetched(error);
