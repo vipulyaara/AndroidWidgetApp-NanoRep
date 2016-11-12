@@ -5,16 +5,12 @@ import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Color;
-import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
-import android.view.animation.AnticipateOvershootInterpolator;
-import android.view.animation.Transformation;
-import android.view.animation.TranslateAnimation;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -40,9 +36,12 @@ import nanorep.nanowidget.interfaces.OnLikeListener;
  * Created by nanorep on 27/10/2016.
  */
 
-public class NRResultTopView extends RelativeLayout implements NRTitleListener, OnLikeListener, NRChannelItem.OnChannelSelectedListener, NRContentView.Listener {
+public class NRResultTopView extends RelativeLayout implements NRTitleListener, OnLikeListener {
 
-    NRResultItemListener mListener;
+//    NRResultItemListener mListener;
+
+    private Listener topViewListener;
+
     private NRResult mResult;
     private LinearLayout viewTitleContainer;
     private FrameLayout viewContentContainer;
@@ -50,6 +49,14 @@ public class NRResultTopView extends RelativeLayout implements NRTitleListener, 
     private LinearLayout viewChannelingContainer;
 
     private LinearLayout answerLayout;
+    private RelativeLayout layoutAnimated;
+
+    //opened layout
+    private LinearLayout viewTitleContainerOpened;
+    private FrameLayout viewContentContainerOpened;
+    private LinearLayout viewLikeContainerOpened;
+    private LinearLayout viewChannelingContainerOpened;
+    private LinearLayout layoutOpened;
 
     private NRCustomChannelView channelView;
     private NRCustomContentView contentView;
@@ -58,20 +65,42 @@ public class NRResultTopView extends RelativeLayout implements NRTitleListener, 
 
     private int y;
 
+    @Override
+    public void onLikeClicked(NRLikeView likeView, String resultId, boolean isLike) {
+        topViewListener.onLikeClicked(NRResultTopView.this, likeView, resultId, isLike);
+    }
 
-    public NRResultTopView(Context context, AttributeSet attrs) {
-        super(context, attrs);
+    public interface Listener {
+        void onFoldItemFinished(boolean beforeGoingDown);
+        void fetchBodyForResult(NRCustomContentView view, String resultID, Integer resultHash);
+        void closeAnswer();
+        void onLikeClicked(NRResultTopView view, NRLikeView likeView, String resultId, boolean isLike);
+    }
+
+
+    public NRResultTopView(Context context) {
+        super(context);
 
         View view = LayoutInflater.from(context).inflate(R.layout.nrresult_top_view, this);
+
+        //animated
         viewTitleContainer = (LinearLayout) view.findViewById(R.id.title_container);
         viewContentContainer = (FrameLayout) view.findViewById(R.id.content_container);
         viewLikeContainer = (LinearLayout) view.findViewById(R.id.like_container);
         viewChannelingContainer = (LinearLayout) view.findViewById(R.id.channel_container);
         answerLayout = (LinearLayout) view.findViewById(R.id.answerLayout);
+        layoutAnimated = (RelativeLayout) view.findViewById(R.id.layoutAnimated);
+
+        // opened
+        viewTitleContainerOpened = (LinearLayout) view.findViewById(R.id.title_container_opened);
+        viewContentContainerOpened = (FrameLayout) view.findViewById(R.id.content_container_opened);
+        viewLikeContainerOpened = (LinearLayout) view.findViewById(R.id.like_container_opened);
+        viewChannelingContainerOpened = (LinearLayout) view.findViewById(R.id.channel_container_opened);
+        layoutOpened = (LinearLayout) view.findViewById(R.id.layoutOpened);
     }
 
-    public void setListener(NRResultItemListener listener) {
-        mListener = listener;
+    public void setListener(Listener listener) {
+        topViewListener = listener;
     }
 
     public void configViewObjects(NRConfiguration config) {
@@ -88,7 +117,40 @@ public class NRResultTopView extends RelativeLayout implements NRTitleListener, 
         mResult = result;
     }
 
+    public void openOpenedView(NRResult result) {
+        layoutAnimated.setVisibility(View.GONE);
+
+        mResult = result;
+
+        mResult.setSingle(true);
+
+        titleView.setTitleText(mResult.getFetchedResult().getTitle());
+        titleView.unfold(true);
+        viewTitleContainerOpened.addView(titleView);
+
+        setContent();
+
+        setLike();
+
+        if(mResult.getFetchedResult().getChanneling() != null && mResult.getFetchedResult().getChanneling().size() > 0) {
+            setChannel();
+        }
+
+
+        if (mResult.getFetchedResult().getChanneling() != null && mResult.getFetchedResult().getChanneling().size() > 0) {
+
+            viewChannelingContainerOpened.addView(channelView);
+        }
+
+        viewContentContainerOpened.addView(contentView);
+
+        viewLikeContainerOpened.addView(likeView);
+
+    }
+
     public void openView(int y, NRResult result) {
+
+        layoutOpened.setVisibility(View.GONE);
 
         mResult = result;
         this.y = y;
@@ -114,11 +176,11 @@ public class NRResultTopView extends RelativeLayout implements NRTitleListener, 
             setChannel();
         }
 
-        if(!mResult.isSingle()) {
+//        if(!mResult.isSingle()) {
             setTitleYAnimation(y, 0, mResult.isUnfolded());
-        } else {
-            titleView.unfold(true);
-        }
+//        } else {
+//            titleView.unfold(true);
+//        }
     }
 
     private void remvoeAllViews(ViewGroup view) {
@@ -244,7 +306,7 @@ public class NRResultTopView extends RelativeLayout implements NRTitleListener, 
             mResult.getFetchedResult().setBody(mResult.getFetchedResult().getBody());
             contentView.loadData(mResult.getFetchedResult().getBody(), "text/html", "UTF-8");
         } else {
-            mListener.fetchBodyForResult(contentView, mResult.getFetchedResult().getId(), mResult.getFetchedResult().getHash());
+            topViewListener.fetchBodyForResult(contentView, mResult.getFetchedResult().getId(), mResult.getFetchedResult().getHash());
         }
     }
 
@@ -268,8 +330,9 @@ public class NRResultTopView extends RelativeLayout implements NRTitleListener, 
 
             @Override
             public void onAnimationEnd(Animator animation) {
+
                 if(!isUnfolded) { // going down
-                    mListener.onFoldItemFinished(false);
+                    topViewListener.onFoldItemFinished(false);
                 } else { // going up
                     titleView.unfold(true);
                 }
@@ -298,49 +361,60 @@ public class NRResultTopView extends RelativeLayout implements NRTitleListener, 
             viewLikeContainer.removeAllViews();
             viewContentContainer.removeAllViews();
             viewTitleContainer.removeAllViews();
+
+            viewChannelingContainerOpened.removeAllViews();
+            viewLikeContainerOpened.removeAllViews();
+            viewContentContainerOpened.removeAllViews();
+            viewTitleContainerOpened.removeAllViews();
         }
     }
 
     @Override
     public void onTitleClicked() {
-        if(mResult != null && !mResult.isSingle()) {
-            mListener.unfoldItem(mResult, false);
+//        if(mResult != null && !mResult.isSingle()) {
+//            mListener.unfoldItem(mResult, false);
+//        }
+        if(layoutAnimated.getVisibility() == View.VISIBLE) {
+            topViewListener.closeAnswer();
         }
     }
 
     @Override
     public void onTitleCollapsed(int height) {
 
-        if(mResult.isUnfolded()) {
+        if(layoutAnimated.getVisibility() == View.VISIBLE) {
 
-            int feedbachHeight = 50;
+            if (mResult.isUnfolded()) {
 
-            if (mResult.getFetchedResult().getChanneling() != null && mResult.getFetchedResult().getChanneling().size() > 0) {
-                feedbachHeight = 100;
+                int feedbachHeight = 50;
 
-                viewChannelingContainer.addView(channelView);
-                viewChannelingContainer.getLayoutParams().height = (int) Calculate.pxFromDp(getContext(), 50);
+                if (mResult.getFetchedResult().getChanneling() != null && mResult.getFetchedResult().getChanneling().size() > 0) {
+                    feedbachHeight = 100;
+
+                    viewChannelingContainer.addView(channelView);
+                    viewChannelingContainer.getLayoutParams().height = (int) Calculate.pxFromDp(getContext(), 50);
+                }
+
+                viewContentContainer.addView(contentView);
+                int contentHeight = NRResultTopView.this.getHeight() - height - (int) Calculate.pxFromDp(getContext(), feedbachHeight);
+                viewContentContainer.getLayoutParams().height = contentHeight;
+
+                viewLikeContainer.addView(likeView);
+
+                viewLikeContainer.getLayoutParams().height = (int) Calculate.pxFromDp(getContext(), 50);
+
+                openViewAnimation(height);
+            } else { //going down
+
+                viewTitleContainer.getLayoutParams().height = mResult.getHeight();
+                viewTitleContainer.requestLayout();
+
+                answerLayout.setTranslationY(0);
+
+                topViewListener.onFoldItemFinished(true);
+
+                setTitleYAnimation(0, y, false);
             }
-
-            viewContentContainer.addView(contentView);
-            int contentHeight = NRResultTopView.this.getHeight() - height - (int) Calculate.pxFromDp(getContext(), feedbachHeight);
-            viewContentContainer.getLayoutParams().height = contentHeight;
-
-            viewLikeContainer.addView(likeView);
-
-            viewLikeContainer.getLayoutParams().height = (int) Calculate.pxFromDp(getContext(), 50);
-
-            openViewAnimation(height);
-        } else { //going down
-
-            viewTitleContainer.getLayoutParams().height = mResult.getHeight();
-            viewTitleContainer.requestLayout();
-
-            answerLayout.setTranslationY(0);
-
-            mListener.onFoldItemFinished(true);
-
-            setTitleYAnimation(0, y, false);
         }
     }
 
@@ -350,24 +424,24 @@ public class NRResultTopView extends RelativeLayout implements NRTitleListener, 
 
     }
 
-    @Override
-    public void onChannelSelected(NRChannelItem channelItem) {
-        mListener.onChannelSelected(channelItem);
-    }
+//    @Override
+//    public void onChannelSelected(NRChannelItem channelItem) {
+//        mListener.onChannelSelected(channelItem);
+//    }
+//
+//    @Override
+//    public void onLikeClicked(NRLikeView likeView, String resultId, boolean isLike) {
+//        mListener.onLikeClicked(likeView, mResult.getFetchedResult().getId(), isLike);
+//    }
 
-    @Override
-    public void onLikeClicked(NRLikeView likeView, String resultId, boolean isLike) {
-        mListener.onLikeClicked(likeView, mResult.getFetchedResult().getId(), isLike);
-    }
-
-    public void setChannelView(NRCustomChannelView channelView) {
+    public void setChannelView(NRCustomChannelView channelView, NRChannelItem.OnChannelSelectedListener listener) {
         this.channelView = channelView;
-        this.channelView.setListener(this);
+        this.channelView.setListener(listener);
     }
 
-    public void setContentView(NRCustomContentView contentView) {
+    public void setContentView(NRCustomContentView contentView, NRContentView.Listener listener) {
         this.contentView = contentView;
-        this.contentView.setListener(this);
+        this.contentView.setListener(listener);
     }
 
     public void setLikeView(NRCustomLikeView likeView) {
@@ -386,13 +460,22 @@ public class NRResultTopView extends RelativeLayout implements NRTitleListener, 
         titleView.resetView();
     }
 
-    @Override
-    public void onLinkedArticleClicked(String articleId) {
-        mListener.onLinkedArticleClicked(articleId);
+    public void setResultUnFoldState(boolean unFoldState) {
+        mResult.setUnfolded(unFoldState);
     }
 
-    @Override
-    public void onLinkClicked(String url) {
-        mListener.onLinkClicked(url);
+    public NRResult getmResult() {
+        return mResult;
     }
+
+//    @Override
+//    public void onLinkedArticleClicked(String articleId) {
+//        mListener.onLinkedArticleClicked(articleId);
+//    }
+//
+//    @Override
+//    public void onLinkClicked(String url) {
+//        mListener.onLinkClicked(url);
+//    }
+
 }

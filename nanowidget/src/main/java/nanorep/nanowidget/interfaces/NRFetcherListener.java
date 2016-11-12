@@ -1,7 +1,10 @@
 package nanorep.nanowidget.interfaces;
 
+import android.text.Spannable;
+
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 import nanorep.nanowidget.DataClasse.NRResult;
 
@@ -13,6 +16,6 @@ public interface NRFetcherListener {
     void reloadWithAimation();
     void reload();
     void insertRows(ArrayList<NRResult> rows);
-    void presentSuggestion(String querytext, ArrayList<String> suggestions);
+    void presentSuggestion(String querytext, ArrayList<Spannable> suggestions);
     void onConnectionFailed(HashMap<String, Object> errorParams);
 }

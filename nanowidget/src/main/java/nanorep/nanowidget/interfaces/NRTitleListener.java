@@ -5,6 +5,7 @@ package nanorep.nanowidget.interfaces;
  */
 
 public interface NRTitleListener {
+
     void onTitleClicked();
     void onTitleCollapsed(int height);
 //    void onUnfoldClicked();

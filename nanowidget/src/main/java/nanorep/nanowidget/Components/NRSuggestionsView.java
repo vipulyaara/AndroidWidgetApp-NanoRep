@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Spannable;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -13,6 +14,8 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 import nanorep.nanowidget.Components.AbstractViews.NRCustomSuggestionsView;
 import nanorep.nanowidget.R;
@@ -24,7 +27,7 @@ import nanorep.nanowidget.interfaces.NRSuggestionsListener;
  */
 public class NRSuggestionsView extends NRCustomSuggestionsView {
 
-    private ArrayList<String> mSuggestions;
+    private ArrayList<Spannable> mSuggestions;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView mRecyclerView;
 
@@ -34,7 +37,7 @@ public class NRSuggestionsView extends NRCustomSuggestionsView {
     }
 
 
-    public void setSuggestions(ArrayList<String> suggestions) {
+    public void setSuggestions(ArrayList<Spannable> suggestions) {
         if (suggestions == null) {
             setHeight(0);
         } else {

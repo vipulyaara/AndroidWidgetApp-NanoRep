@@ -1,15 +1,16 @@
 package com.nanorep.nanoclient;
 
+import android.content.Context;
 import android.net.Uri;
 
 
 import com.nanorep.nanoclient.Connection.NRError;
 import com.nanorep.nanoclient.Connection.NRUtilities;
+import com.nanorep.nanoclient.Log.NRLogger;
 import com.nanorep.nanoclient.RequestParams.NRFAQLikeParams;
 import com.nanorep.nanoclient.RequestParams.NRSearchLikeParams;
 import com.nanorep.nanoclient.Response.NRConfiguration;
 import com.nanorep.nanoclient.Response.NRFAQAnswer;
-import com.nanorep.nanoclient.Response.NRFAQAnswerItem;
 import com.nanorep.nanoclient.Response.NRSearchResponse;
 import com.nanorep.nanoclient.Response.NRSuggestions;
 
@@ -20,44 +21,71 @@ import java.util.HashMap;
  * Created by nissimpardo on 07/08/2016.
  */
 
-public interface Nanorep {
-    interface OnSearchResultsFetchedListener {
+public abstract class Nanorep {
+
+    protected AccountParams mAccountParams;
+    protected NRConfiguration mCnf;
+    protected NRLogger nrLogger;
+    protected Context mContext;
+
+    public interface OnSearchResultsFetchedListener {
         void onSearchResponse(NRSearchResponse response, NRError error);
     }
 
-    interface OnSuggestionsFetchedListener {
+    public interface OnSuggestionsFetchedListener {
         void onSuggestionsFetched(NRSuggestions suggestions, NRError error);
     }
 
-    interface OnLikeSentListener {
+    public interface OnLikeSentListener {
         void onLikeSent(String resultId, int type, boolean success);
     }
 
-    interface OnFAQAnswerFetchedListener {
+    public interface OnFAQAnswerFetchedListener {
         void onFAQAnswerFetched(NRFAQAnswer faqAnswer, NRError error);
     }
 
-    interface OnConfigurationFetchedListener {
+    public interface OnConfigurationFetchedListener {
         void onConfigurationFetched(NRError error);
     }
 
-    AccountParams getAccountParams();
+    public abstract void searchText(String text, OnSearchResultsFetchedListener onSearchResultsFetchedListener);
 
-    void searchText(String text, OnSearchResultsFetchedListener onSearchResultsFetchedListener);
+    public abstract void suggestionsForText(String text, OnSuggestionsFetchedListener onSuggestionsFetchedListener);
 
-    void suggestionsForText(String text, OnSuggestionsFetchedListener onSuggestionsFetchedListener);
+    public abstract void likeForSearchResult(NRSearchLikeParams likeParams, OnLikeSentListener onLikeSentListener);
 
-    void likeForSearchResult(NRSearchLikeParams likeParams, OnLikeSentListener onLikeSentListener);
+    public abstract void fetchFAQAnswer(String answerId, Integer answerHash, OnFAQAnswerFetchedListener onFAQAnswerFetchedListener);
 
-    void fetchFAQAnswer(String answerId, Integer answerHash, OnFAQAnswerFetchedListener onFAQAnswerFetchedListener);
+    public abstract void likeForFAQResult(NRFAQLikeParams likeParams, OnLikeSentListener onLikeSentListener);
 
-    void likeForFAQResult(NRFAQLikeParams likeParams, OnLikeSentListener onLikeSentListener);
+    public abstract void fetchConfiguration(OnConfigurationFetchedListener onConfigurationFetchedListener);
 
-    void fetchConfiguration(OnConfigurationFetchedListener onConfigurationFetchedListener);
+    public NRConfiguration getNRConfiguration() {
+        if (mCnf == null)
+            mCnf = new NRConfiguration();
 
-    NRConfiguration getNRConfiguration();
+        return mCnf;
+    }
 
-    void setDebugMode(boolean checked);
+    public AccountParams getAccountParams() {
+        return mAccountParams;
+    }
+
+    public void setDebugMode(boolean checked) {
+//        if (nrLogger == null) {
+//            nrLogger = new NRLogger();
+//        }
+
+        nrLogger.setDebug(checked);
+    }
+
+    protected Nanorep(Context context, String account, String kb) {
+        this.mContext = context;
+        this.mAccountParams = new AccountParams();
+        this.mAccountParams.setAccount(account);
+        this.mAccountParams.setKnowledgeBase(kb);
+        this.nrLogger = new NRLogger();
+    }
 
     public class AccountParams {
 
@@ -120,7 +148,7 @@ public interface Nanorep {
             Uri.Builder uri = new Uri.Builder();
             uri.scheme("https");
 
-            if(mHost != null) {
+            if (mHost != null) {
                 uri.authority(mHost + ".nanorep.com");
                 uri.appendEncodedPath("~" + getAccount());
             } else {

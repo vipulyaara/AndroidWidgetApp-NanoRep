@@ -15,17 +15,17 @@ public class NanorepBuilder {
 //        nanorep.fetchConfiguration(null);
 //    }
 
-    public static Nanorep createNanorep(Context context, String accountName, String knowledgeBase, HashMap<String, String> nanorepContext) {
-        Nanorep.AccountParams accountParams = new Nanorep.AccountParams();
-        accountParams.setAccount(accountName);
-        accountParams.setKnowledgeBase(knowledgeBase);
-        accountParams.setContext(nanorepContext);
-        return createNanorep(context, accountParams);
-    }
+//    public static Nanorep createNanorep(Context context, String accountName, String knowledgeBase, HashMap<String, String> nanorepContext) {
+//        Nanorep.AccountParams accountParams = new Nanorep.AccountParams();
+//        accountParams.setAccount(accountName);
+//        accountParams.setKnowledgeBase(knowledgeBase);
+//        accountParams.setContext(nanorepContext);
+//        return createNanorep(context, accountParams);
+//    }
 
-    public static Nanorep createNanorep(Context context, Nanorep.AccountParams accountParams) {
-        NRImpl nanorep = new NRImpl(context, accountParams);
-        return nanorep;
-    }
+//    public static Nanorep createNanorep(Context context, Nanorep.AccountParams accountParams) {
+//        NRImpl nanorep = new NRImpl(context, accountParams);
+//        return nanorep;
+//    }
 
 }

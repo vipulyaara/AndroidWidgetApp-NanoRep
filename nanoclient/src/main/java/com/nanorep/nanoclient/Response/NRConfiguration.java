@@ -32,6 +32,11 @@ public class NRConfiguration {
     public NRConfiguration(HashMap<String, Object> params) {
         mParams = params;
         customization = (HashMap<String, String>)params.get("customization");
+
+        if(customization == null) {
+            customization = new HashMap<String, String>();
+        }
+
         if (params != null) {
             Object faq = mParams.get("faqData");
             if (faq != null && faq instanceof String) {
@@ -40,7 +45,7 @@ public class NRConfiguration {
         }
     }
 
-    public class NRTitle {
+    public class NRTitle{
 
         public void setTitleBGColor(String titleBGColor) {
             mParams.put("titleBGColor", titleBGColor);
@@ -77,7 +82,7 @@ public class NRConfiguration {
 
     }
 
-    public class NRFaq {
+    public class NRFaq{
         // "mobile.faqTextColor"
 
         public void setFaqTextColor(String faqTextColor) {
@@ -134,7 +139,7 @@ public class NRConfiguration {
         return title;
     }
 
-    public class NRSearchBar {
+    public class NRSearchBar{
         //initialText
         //voiceEnabled
 

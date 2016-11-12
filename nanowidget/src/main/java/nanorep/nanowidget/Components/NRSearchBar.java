@@ -25,7 +25,7 @@ import nanorep.nanowidget.interfaces.NRSearchBarListener;
 /**
  * Created by nissimpardo on 07/06/16.
  */
-public class NRSearchBar extends NRCustomSearchBarView implements View.OnClickListener, TextWatcher, TextView.OnEditorActionListener {
+public class NRSearchBar extends NRCustomSearchBarView implements View.OnClickListener, TextWatcher, TextView.OnEditorActionListener, View.OnKeyListener {
     private NRSearchBarListener mListener;
     private ImageButton mSpeechButton;
     private NREditText mSearchEditText;
@@ -136,4 +136,13 @@ public class NRSearchBar extends NRCustomSearchBarView implements View.OnClickLi
         searchBarLayout.setBackgroundColor(color);
     }
 
+    @Override
+    public boolean onKey(View v, int keyCode, KeyEvent event) {
+        if (event.getAction() == KeyEvent.ACTION_DOWN) {
+            if (keyCode == KeyEvent.KEYCODE_BACK) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

@@ -117,8 +117,8 @@ public class NRTitleView extends NRCustomTitleView{
         setShareImage();
 
         if(!this.closed) {
-            mListener.onTitleCollapsed(getCollapsedHeight(mTitleButton.getText()));
             collapseTextView(100, 1000);
+            mListener.onTitleCollapsed(getCollapsedHeight(mTitleButton.getText()));
         } else {
             collapseTextView(2, 100);
         }

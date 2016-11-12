@@ -16,6 +16,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 
 import com.crittercism.app.Crittercism;
+import com.nanorep.nanoclient.NRImpl;
 import com.nanorep.nanoclient.Nanorep;
 import com.nanorep.nanoclient.NanorepBuilder;
 
@@ -28,7 +29,7 @@ import nanorep.nanowidget.Components.AbstractViews.NRCustomSuggestionsView;
 import nanorep.nanowidget.Components.AbstractViews.NRCustomTitleView;
 import nanorep.nanowidget.Components.NRContentView;
 import nanorep.nanowidget.Components.NRSearchBar;
-import nanorep.nanowidget.Fragments.NRWidgetCategoriesFragment;
+import nanorep.nanowidget.Fragments.NRMainFragment;
 import nanorep.nanowidget.Fragments.NRWidgetFragment;
 import nanorep.nanowidget.Utilities.FragmentUtils;
 import nanorep.nanowidget.interfaces.NRCustomViewAdapter;
@@ -36,7 +37,7 @@ import nanorep.nanowidget.interfaces.NRCustomViewAdapter;
 public class MainActivity extends AppCompatActivity implements NRWidgetFragment.NRWidgetFragmentListener, NRCustomViewAdapter {
 
 //    private NRWidgetFragment nanoFragment;
-    private NRWidgetCategoriesFragment categoriesFragment;
+    private NRMainFragment mainFragment;
     private CheckBox checkBox;
 
     @SuppressLint("SetJavaScriptEnabled")
@@ -49,14 +50,18 @@ public class MainActivity extends AppCompatActivity implements NRWidgetFragment.
 
         checkBox = (CheckBox) findViewById(R.id.checkbox);
 
-        categoriesFragment = NRWidgetCategoriesFragment.newInstance();
+//        categoriesFragment = NRWidgetCategoriesFragment.newInstance();
+
+
 
 //        nanoFragment = NRWidgetFragment.newInstance();
 //        nanoFragment.setListener(this);
         Crittercism.initialize(getApplicationContext(), "d59e30ede3c34d0bbf19d0237c2f1bc800444503");
 
 //        categoriesFragment.setViewAdapter(this);
-        categoriesFragment.setViewAdapter(this);
+//        mainFragment.setViewAdapter(this);
+
+
 
         Button loadButton = (Button)findViewById(R.id.button);
         if (loadButton != null) {
@@ -64,7 +69,7 @@ public class MainActivity extends AppCompatActivity implements NRWidgetFragment.
                 @Override
                 public void onClick(final View v) {
                     v.setVisibility(View.INVISIBLE);
-                    Nanorep.AccountParams accountParams = new Nanorep.AccountParams();
+//                    Nanorep.AccountParams accountParams = new Nanorep.AccountParams();
 //                    accountParams.setAccount("yatra");
 //                    accountParams.setKnowledgeBase("79848779");
                     EditText accountName = (EditText) findViewById(R.id.accountNameId);
@@ -72,36 +77,39 @@ public class MainActivity extends AppCompatActivity implements NRWidgetFragment.
                     EditText server = (EditText) findViewById(R.id.serverId);
 
 
-                    String _accountName = "qa2";//"gett";//"nanorep";
-                    String _kb = "en";//"English_IL";//"English";
+                    String _accountName = "qa";//"nanorep";
+                    String _kb = "qa";//"English";
 
 
-                    String _server = "office";//server.getText().toString();
+                    String _server = server.getText().toString();
 
-                    if(!_server.isEmpty()) {
-                        accountParams.setmHost(_server);
-                    }
+//                    if(!_server.isEmpty()) {
+//                        accountParams.setmHost(_server);
+//                    }
 
 //                    String _accountName = accountName.getText().toString();
 //                    String _kb = kb.getText().toString();
 
-                    accountParams.setAccount(_accountName);
-                    accountParams.setKnowledgeBase(_kb);
+//                    accountParams.setAccount(_accountName);
+//                    accountParams.setKnowledgeBase(_kb);
 //                    HashMap<String, String> channel = new HashMap();
 //                    channel.put("channel", "mobile");
 //                    accountParams.setContext(channel);
-                    Nanorep nanorep = NanorepBuilder.createNanorep(getApplicationContext(), accountParams);
+//                    Nanorep nanorep = NanorepBuilder.createNanorep(getApplicationContext(), accountParams);
 
 //                    nanorep.getNRConfiguration().getTitle().setTitleBGColor("#FF7F23");
 //                    nanorep.getNRConfiguration().setAutocompleteEnabled("false");
 //                    nanorep.getNRConfiguration().getSearchBar().setInitialText("noa noa");
 
-                    nanorep.setDebugMode(checkBox.isChecked());
+//                    nanorep.setDebugMode(checkBox.isChecked());
 
-                    categoriesFragment.setNanoRep(nanorep);
+                    NRImpl.init(getApplicationContext(), _accountName, _kb);
+
+                    mainFragment = NRMainFragment.newInstance();
+//                    mainFragment.setNanoRep(nanorep);
 //                    nanoFragment.setNanoRep(nanorep);
-                    FragmentUtils.openFragment(categoriesFragment, R.id.content_main,
-                            NRWidgetCategoriesFragment.TAG, MainActivity.this, false);
+                    FragmentUtils.openFragment(mainFragment, R.id.content_main,
+                            NRMainFragment.TAG, MainActivity.this, false);
 
 //                    getSupportFragmentManager().beginTransaction().add(R.id.content_main, categoriesFragment, "nanorep").commit();
 //                    nanoFragment.setNanoRep(nanorep);
@@ -120,7 +128,6 @@ public class MainActivity extends AppCompatActivity implements NRWidgetFragment.
     @Override
     public void onCancelWidget(NRWidgetFragment widgetFragment) {
         ((Button)findViewById(R.id.button)).setVisibility(View.VISIBLE);
-        getSupportFragmentManager().beginTransaction().remove(categoriesFragment).commit();
     }
 
 

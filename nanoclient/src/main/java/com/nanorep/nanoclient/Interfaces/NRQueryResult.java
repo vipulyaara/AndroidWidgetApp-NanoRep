@@ -1,7 +1,6 @@
 package com.nanorep.nanoclient.Interfaces;
 
 import com.nanorep.nanoclient.Channeling.NRChanneling;
-import com.nanorep.nanoclient.RequestParams.NRLikeType;
 
 import java.util.ArrayList;
 import java.util.HashMap;

@@ -1,8 +1,18 @@
 package nanorep.nanowidget.Components;
 
+import android.graphics.Typeface;
+import android.os.Build;
 import android.support.v7.widget.RecyclerView;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.style.StyleSpan;
 import android.view.View;
 import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
 
 import nanorep.nanowidget.R;
 
@@ -34,7 +44,8 @@ public class NRSuggestionItem extends RecyclerView.ViewHolder implements View.On
         mListener = listener;
     }
 
-    public void setText(String text) {
+    public void setText(Spannable text) {
+
         mTextView.setText(text);
     }
 }

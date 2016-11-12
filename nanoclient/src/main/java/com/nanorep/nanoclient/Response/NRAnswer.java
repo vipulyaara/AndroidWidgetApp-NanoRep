@@ -2,17 +2,15 @@ package com.nanorep.nanoclient.Response;
 
 import com.nanorep.nanoclient.Channeling.NRChanneling;
 import com.nanorep.nanoclient.Interfaces.NRQueryResult;
-import com.nanorep.nanoclient.RequestParams.NRLikeType;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Objects;
 
 
 /**
  * Created by nissopa on 9/12/15.
  */
-public class NRAnswer implements NRQueryResult {
+public class NRAnswer implements NRQueryResult{
     private HashMap<String, Object> mParams;
     private String mArticleId;
     private String mKeywordsetId;

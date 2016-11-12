@@ -15,5 +15,5 @@ public interface NRResultItemListener extends NRContentView.Listener, OnLikeList
     void onShareClicked(NRTitleItem item, String linkToShare);
     void fetchBodyForResult(NRContentItem item, String resultID, Integer resultHash);
     void fetchBodyForResult(NRCustomContentView view, String resultID, Integer resultHash);
-    void onFoldItemFinished(boolean beforeGoingDown);
+//    void onFoldItemFinished(boolean beforeGoingDown);
 }

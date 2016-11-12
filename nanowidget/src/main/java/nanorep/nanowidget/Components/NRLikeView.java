@@ -72,19 +72,27 @@ public class NRLikeView extends NRCustomLikeView  {
         mLikeButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                mLikeSelection = true;
-                updateLikeButton(mLikeSelection);
-                mListener.onLikeClicked(NRLikeView.this, null, mLikeSelection);
+//                mLikeSelection = true;
+//                updateLikeButton(mLikeSelection);
+//                mListener.onLikeClicked(NRLikeView.this, null, mLikeSelection);
+                sendSelection(true);
             }
         });
         mDislikeButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                mLikeSelection = false;
-                updateLikeButton(mLikeSelection);
-                mListener.onLikeClicked(NRLikeView.this, null, mLikeSelection);
+//                mLikeSelection = false;
+//                updateLikeButton(mLikeSelection);
+//                mListener.onLikeClicked(NRLikeView.this, null, mLikeSelection);
+                sendSelection(false);
             }
         });
+    }
+
+    private void sendSelection(boolean selection) {
+        mLikeSelection = selection;
+        updateLikeButton(mLikeSelection);
+        mListener.onLikeClicked(NRLikeView.this, null, mLikeSelection);
     }
 
     @Override

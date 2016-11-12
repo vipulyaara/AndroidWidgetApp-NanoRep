@@ -3,12 +3,14 @@ package nanorep.nanowidget.DataClasse;
 
 import com.nanorep.nanoclient.Interfaces.NRQueryResult;
 
+import java.io.Serializable;
+
 import nanorep.nanowidget.Components.NRResultItem;
 
 /**
  * Created by nissimpardo on 04/06/16.
  */
-public class NRResult {
+public class NRResult implements Serializable {
     private NRQueryResult mFetchedResult;
     private boolean mIsUnfolded = false;
     private NRResultItem.RowType mRowType;

@@ -1,8 +1,13 @@
 package com.nanorep.nanoclient;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Handler;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.style.StyleSpan;
 import android.util.Log;
 
 
@@ -24,27 +29,44 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 
 /**
  * Created by nissimpardo on 07/08/2016.
  */
 
-public class NRImpl implements Nanorep {
-    private AccountParams mAccountParams;
-    private Context mContext;
+public class NRImpl extends Nanorep {
+
     private String mSessionId;
     private long mDelay;
     private HashMap<String, NRSearchResponse> mCachedSearches;
     private HashMap<String, NRSuggestions> mCachedSuggestions;
     private HashMap<String, ArrayList<OnFAQAnswerFetchedListener>> faqRequestListenersMap;
     private Handler mHandler;
-    private NRConfiguration mCnf;
-    private NRLogger nrLogger;
 
-    public NRImpl(Context context, AccountParams accountParams) {
-        mContext = context;
-        mAccountParams = accountParams;
+    private static NRImpl INSTANCE;
+
+    private NRImpl(Context context, String account, String kb) {
+        super(context, account, kb);
+    }
+
+
+    public static NRImpl init(Context context, String account, String kb) {
+        if(INSTANCE == null)
+        {
+            synchronized (NRImpl.class) {
+                if (INSTANCE == null) {
+                    INSTANCE = new NRImpl(context, account, kb);
+                }
+            }
+        }
+        return INSTANCE;
+    }
+
+    public static NRImpl getInstance() {
+        return INSTANCE;
     }
 
     private HashMap<String, NRSearchResponse> getCachedSearches() {
@@ -162,11 +184,11 @@ public class NRImpl implements Nanorep {
         });
     }
 
-
-    @Override
-    public AccountParams getAccountParams() {
-        return mAccountParams;
-    }
+//
+//    @Override
+//    public AccountParams getAccountParams() {
+//        return mAccountParams;
+//    }
 
     @Override
     public void searchText(final String text, final OnSearchResultsFetchedListener onSearchResultsFetchedListener) {
@@ -214,27 +236,53 @@ public class NRImpl implements Nanorep {
                 e.printStackTrace();
             }
             Uri.Builder uriBuilder = mAccountParams.getUri();
-            uriBuilder.appendPath("api/widget/v1/suggest.js");
+            uriBuilder.appendPath("api/kb/v1/autoComplete");
             uriBuilder.appendQueryParameter("text", encodedText);
-            uriBuilder.appendQueryParameter("stemming", "false");
+            uriBuilder.appendQueryParameter("stemming", "true");
             executeRequest(uriBuilder, new NRConnection.Listener() {
                 @Override
                 public void response(Object responseParam, int status, NRError error) {
                     if (responseParam != null) {
                         ArrayList<String> answers = (ArrayList) ((HashMap)responseParam).get("a");
                         if (answers != null) {
-                            ArrayList<String> arr = new ArrayList<String>();
+                            ArrayList<Spannable> suggestions = new ArrayList<Spannable>();
                             for (String answer : answers) {
+//                                LinkedHashMap<String, Boolean> map = new LinkedHashMap<String, Boolean>();
+                                final SpannableStringBuilder str = new SpannableStringBuilder();
                                 String[] pipes = answer.split("\\|");
-                                String parsedAnswer = "";
-                                for (String comma : pipes) {
-                                    String[] firstWords = comma.split(",");
-                                    parsedAnswer += firstWords[0] + " ";
+                                for (int i = 0; i < pipes.length ; i++) {
+                                    String[] words = pipes[i].split(",");
+                                    String word = words[0];
+
+                                    StyleSpan styleSpan = null;
+
+                                    if(pipes[i].endsWith("*")) {
+                                        styleSpan = new StyleSpan(Typeface.BOLD);
+                                        word = word.replace("*","");
+
+                                    } else {
+                                        styleSpan = new StyleSpan(Typeface.NORMAL);
+                                    }
+
+                                    String wordSpace = word + " ";
+
+                                    if(i == pipes.length - 1) { // last
+                                        wordSpace = word;
+                                    }
+
+                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                                        str.append(wordSpace, styleSpan , 0);
+                                    } else {
+                                        int startIndex = str.length();
+
+                                        str.append(wordSpace);
+
+                                        str.setSpan(styleSpan, startIndex, str.length(), 0);
+                                    }
                                 }
-                                parsedAnswer = parsedAnswer.substring(0, parsedAnswer.length() - 1);
-                                arr.add(parsedAnswer);
+                                suggestions.add(str);
                             }
-                            ((HashMap)responseParam).put("a", arr);
+                            ((HashMap)responseParam).put("a", suggestions);
                             NRImpl.this.getCachedSuggestions().put(text, new NRSuggestions((HashMap)responseParam));
                             onSuggestionsFetchedListener.onSuggestionsFetched(NRImpl.this.mCachedSuggestions.get(text), null);
                         } else {
@@ -465,23 +513,23 @@ public class NRImpl implements Nanorep {
         }
         mCnf = nrConfiguration;
     }
+//
+//    @Override
+//    public NRConfiguration getNRConfiguration() {
+//        if(mCnf == null)
+//            mCnf = new NRConfiguration();
+//
+//        return mCnf;
+//    }
 
-    @Override
-    public NRConfiguration getNRConfiguration() {
-        if(mCnf == null)
-            mCnf = new NRConfiguration();
-
-        return mCnf;
-    }
-
-    @Override
-    public void setDebugMode(boolean checked) {
-        if (nrLogger == null) {
-            nrLogger = new NRLogger();
-        }
-
-        nrLogger.setDebug(checked);
-    }
+//    @Override
+//    public void setDebugMode(boolean checked) {
+//        if (nrLogger == null) {
+//            nrLogger = new NRLogger();
+//        }
+//
+//        nrLogger.setDebug(checked);
+//    }
 
     private void updateFAQContentsAndCallHello(NRConfiguration cnf)
     {
@@ -508,4 +556,5 @@ public class NRImpl implements Nanorep {
             });
         }
     }
+
 }

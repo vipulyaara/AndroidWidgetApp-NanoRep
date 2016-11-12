@@ -2,6 +2,7 @@ package com.nanorep.nanoclient.Log;
 
 import android.util.Log;
 
+
 /**
  * Created by nanorep on 27/09/2016.
  */

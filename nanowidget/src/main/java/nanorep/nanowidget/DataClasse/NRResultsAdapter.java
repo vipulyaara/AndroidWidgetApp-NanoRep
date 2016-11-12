@@ -1,68 +1,97 @@
 package nanorep.nanowidget.DataClasse;
 
+import android.animation.ValueAnimator;
 import android.content.Context;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
-import nanorep.nanowidget.Components.NRResultItem;
-import nanorep.nanowidget.Fragments.NRWidgetCategoriesFragment;
-import nanorep.nanowidget.Utilities.FragmentUtils;
-import nanorep.nanowidget.interfaces.CRUDAdapterInterface;
-
-import com.nanorep.nanoclient.Interfaces.NRQueryResult;
-import com.nanorep.nanoclient.Response.NRFAQGroupItem;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import nanorep.nanowidget.Components.AbstractViews.NRCustomTitleView;
+import nanorep.nanowidget.Components.NRResultsView;
+import nanorep.nanowidget.Components.NRTitleItem;
 import nanorep.nanowidget.Components.NRTitleView;
-import nanorep.nanowidget.Fragments.NRWidgetFragment;
 import nanorep.nanowidget.R;
 import nanorep.nanowidget.Utilities.Calculate;
+import nanorep.nanowidget.interfaces.CRUDAdapterInterface;
 import nanorep.nanowidget.interfaces.NRCustomViewAdapter;
 import nanorep.nanowidget.interfaces.NRTitleListener;
 
 /**
- * Created by noat on 03/11/2016.
+ * Created by noat on 08/11/2016.
  */
 
-public class NRResultsAdapter  extends RecyclerView.Adapter<NRResultsAdapter.ViewHolder> implements CRUDAdapterInterface<NRFAQGroupItem> {
+public class NRResultsAdapter extends RecyclerView.Adapter<NRResultsAdapter.ViewHolder> implements CRUDAdapterInterface<NRResult> {
 
-    private ArrayList<NRFAQGroupItem> mGroupResults;
+    private ArrayList<NRResult> results;
     private NRCustomViewAdapter viewAdapter;
-    private Context context;
+    private NRResultsAdapter.Listener listener;
 
-    public NRResultsAdapter(NRCustomViewAdapter viewAdapter, Context context) {
-        this.viewAdapter = viewAdapter;
-        this.context = context;
-        this.mGroupResults = new ArrayList<NRFAQGroupItem>();
+    public interface Listener {
+        void onResultItemSelected(ViewHolder titleViewHolder, int pos);
     }
 
-    private boolean mShouldResetLikeView = false;
-
-    public void setShouldResetLikeView(boolean shouldResetLikeView) {
-        mShouldResetLikeView = shouldResetLikeView;
+    public NRResultsAdapter() {
+        results = new ArrayList<NRResult>();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements NRTitleListener{
-        private NRCustomTitleView titleView;
 
-        public ViewHolder(View view, NRCustomTitleView titleView) {
+
+        private NRCustomTitleView titleView;
+        private LinearLayout title_container;
+        private View view;
+        private NRResult result;
+
+        public ViewHolder(View view, NRCustomTitleView titleView, LinearLayout titleContainer) {
             super(view);
 
             this.titleView = titleView;
+
+            this.title_container = titleContainer;
+
+            this.view = view;
+        }
+
+        private void setHeight(final int height) {
+            ValueAnimator animator = ValueAnimator.ofInt(view.getHeight(), height);
+            animator.setDuration(300);
+            animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator animation) {
+                    titleView.getLayoutParams().height = (Integer) animation.getAnimatedValue();
+                    view.getLayoutParams().height = (Integer) animation.getAnimatedValue();
+                    view.requestLayout();
+                }
+            });
+
+            animator.start();
+        }
+
+        public void setResult(NRResult result) {
+            this.result = result;
+        }
+
+        public NRResult getResult() {
+            return result;
+        }
+
+        public NRCustomTitleView getTitleView() {
+            return titleView;
+        }
+
+        public LinearLayout getTitle_container() {
+            return title_container;
         }
 
         @Override
         public void onTitleClicked() {
-            int pos = ViewHolder.this.getAdapterPosition();
-            showItem(getItem(pos), pos);
+
+            listener.onResultItemSelected(this, getAdapterPosition());
         }
 
         @Override
@@ -76,9 +105,9 @@ public class NRResultsAdapter  extends RecyclerView.Adapter<NRResultsAdapter.Vie
         }
     }
 
-
     @Override
-    public NRResultsAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        Context context = parent.getContext();
 
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.title_item, parent, false);
 
@@ -92,52 +121,46 @@ public class NRResultsAdapter  extends RecyclerView.Adapter<NRResultsAdapter.Vie
 
         titleContainer.addView(titleView);
 
-        view.getLayoutParams().height = (int) Calculate.pxFromDp(context, 45);
-
-        ViewHolder holder = new ViewHolder(view, titleView);
-
-        titleView.setListener(holder);
-
-        return holder;
+        return new ViewHolder(view, titleView, titleContainer);
     }
 
     @Override
-    public void onBindViewHolder(NRResultsAdapter.ViewHolder holder, int position) {
-        final NRFAQGroupItem groupItem = getItem(position);
-        final int pos = position;
+    public void onBindViewHolder(ViewHolder holder,final int position) {
+        final NRResult result = getItem(position);
 
-        holder.titleView.setTitleText(groupItem.getTitle());
+        holder.titleView.setTitleText(result.getFetchedResult().getTitle());
+
+        holder.setHeight(result.getHeight());
+
+        holder.setResult(result);
+
+        holder.titleView.setListener(holder);
     }
 
-    @Override
-    public int getItemViewType(int position) {
-        return 0;
-    }
 
     @Override
     public int getItemCount() {
-
-        return mGroupResults.size();
+        return results.size();
     }
 
     @Override
-    public NRFAQGroupItem getItem(int position) {
-        return mGroupResults.get(position);
+    public NRResult getItem(int position) {
+        return results.get(position);
     }
 
     @Override
-    public void addItem(NRFAQGroupItem item) {
-
-    }
-
-    @Override
-    public void removeItem(NRFAQGroupItem item) {
+    public void addItem(NRResult item) {
 
     }
 
     @Override
-    public void addItems(List<NRFAQGroupItem> items) {
-        mGroupResults.addAll(items);
+    public void removeItem(NRResult item) {
+
+    }
+
+    @Override
+    public void addItems(List<NRResult> items) {
+        results.addAll(items);
         notifyDataSetChanged();
     }
 
@@ -147,43 +170,30 @@ public class NRResultsAdapter  extends RecyclerView.Adapter<NRResultsAdapter.Vie
     }
 
     @Override
-    public void updateItem(int pos, NRFAQGroupItem item) {
+    public void updateItem(int pos, NRResult item) {
 
     }
 
     @Override
-    public void showItem(NRFAQGroupItem item, int itemPosition) {
-        NRWidgetFragment nrWidgetFragment = NRWidgetFragment.newInstance();
-        ArrayList<NRQueryResult> queryResults = item.getAnswers();
-
-        if (queryResults != null) {
-            ArrayList<NRResult> results = new ArrayList<>();
-            for (NRQueryResult result : queryResults) {
-                NRResult currentResult = new NRResult(result, NRResultItem.RowType.TITLE);
-                currentResult.setHeight((int) Calculate.pxFromDp(context, 45));
-                results.add(currentResult);
-            }
-            nrWidgetFragment.setmQueryResults(results);
-        } else {
-            nrWidgetFragment.setmQueryResults(null);
-        }
-
-        FragmentManager fragmentManager = ((FragmentActivity) context).getSupportFragmentManager();
-        NRWidgetCategoriesFragment nrWidgetCategoriesFragment = (NRWidgetCategoriesFragment)fragmentManager.findFragmentByTag(NRWidgetCategoriesFragment.TAG);
-
-        nrWidgetFragment.setmFetchedDataManager(nrWidgetCategoriesFragment.getmFetchedDataManager());
-        nrWidgetFragment.setViewAdapter(viewAdapter);
-
-        FragmentUtils.addFragment(nrWidgetCategoriesFragment, nrWidgetFragment, ((ViewGroup)nrWidgetCategoriesFragment.getView().getParent()).getId(), context);
+    public void showItem(NRResult result, int itemPosition) {
+//        listener.onResultSelected(result);
     }
 
     @Override
-    public List<NRFAQGroupItem> getItems() {
+    public List<NRResult> getItems() {
         return null;
     }
 
     @Override
     public void removeItem(int currentItemPosition) {
 
+    }
+
+    public void setViewAdapter(NRCustomViewAdapter viewAdapter) {
+        this.viewAdapter = viewAdapter;
+    }
+
+    public void setListener(NRResultsAdapter.Listener listener) {
+        this.listener = listener;
     }
 }

@@ -6,15 +6,10 @@
     <LinearLayout
         android:id="@+id/search_bar_container"
         android:layout_width="match_parent"
+        android:background="@color/nr_background_color"
         android:layout_height="55dp"
         android:orientation="vertical">
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/suggestion_view_container"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-    </LinearLayout>
 
 </LinearLayout>

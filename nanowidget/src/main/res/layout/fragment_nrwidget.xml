@@ -14,7 +14,7 @@
         android:layout_height="match_parent"
         android:id="@+id/contentId">
 
-
+<!--
         <LinearLayout
             android:id="@+id/search_bar_container"
             android:layout_width="match_parent"
@@ -28,7 +28,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/search_bar_container"
             android:orientation="vertical">
-        </LinearLayout>
+        </LinearLayout>-->
 
         <RelativeLayout
             android:id="@+id/noTiltleView"
