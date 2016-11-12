@@ -371,9 +371,7 @@ public class NRResultTopView extends RelativeLayout implements NRTitleListener, 
 
     @Override
     public void onTitleClicked() {
-//        if(mResult != null && !mResult.isSingle()) {
-//            mListener.unfoldItem(mResult, false);
-//        }
+
         if(layoutAnimated.getVisibility() == View.VISIBLE) {
             topViewListener.closeAnswer();
         }
@@ -424,15 +422,6 @@ public class NRResultTopView extends RelativeLayout implements NRTitleListener, 
 
     }
 
-//    @Override
-//    public void onChannelSelected(NRChannelItem channelItem) {
-//        mListener.onChannelSelected(channelItem);
-//    }
-//
-//    @Override
-//    public void onLikeClicked(NRLikeView likeView, String resultId, boolean isLike) {
-//        mListener.onLikeClicked(likeView, mResult.getFetchedResult().getId(), isLike);
-//    }
 
     public void setChannelView(NRCustomChannelView channelView, NRChannelItem.OnChannelSelectedListener listener) {
         this.channelView = channelView;
@@ -467,15 +456,5 @@ public class NRResultTopView extends RelativeLayout implements NRTitleListener, 
     public NRResult getmResult() {
         return mResult;
     }
-
-//    @Override
-//    public void onLinkedArticleClicked(String articleId) {
-//        mListener.onLinkedArticleClicked(articleId);
-//    }
-//
-//    @Override
-//    public void onLinkClicked(String url) {
-//        mListener.onLinkClicked(url);
-//    }
 
 }

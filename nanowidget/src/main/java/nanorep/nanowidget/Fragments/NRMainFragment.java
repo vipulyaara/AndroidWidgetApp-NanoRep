@@ -33,7 +33,6 @@ import com.nanorep.nanoclient.Response.NRFAQGroupItem;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 
 import nanorep.nanowidget.Components.AbstractViews.NRCustomChannelView;
 import nanorep.nanowidget.Components.AbstractViews.NRCustomContentView;
@@ -67,7 +66,6 @@ import nanorep.nanowidget.interfaces.NRFetcherListener;
 import nanorep.nanowidget.interfaces.NRSearchBarListener;
 import nanorep.nanowidget.interfaces.NRSuggestionsListener;
 import nanorep.nanowidget.interfaces.OnFAQAnswerFetched;
-import nanorep.nanowidget.interfaces.OnLikeListener;
 
 /**
  * Created by noat on 06/11/2016.
@@ -148,7 +146,6 @@ public class NRMainFragment extends Fragment implements NRSearchBarListener, NRS
             @Override
             public void onAnswerFetched(final NRQueryResult result) {
 
-//                getSearchStrings().add("");
                 NRResult newResult = new NRResult(result, NRResultItem.RowType.TITLE);
                 newResult.setHeight((int) Calculate.pxFromDp(getContext(), NRFetchedDataManager.ROW_HEIGHT));
 
@@ -322,9 +319,6 @@ public class NRMainFragment extends Fragment implements NRSearchBarListener, NRS
                     // hide content view
                     contentMain.setVisibility(View.INVISIBLE);
 
-                    // dismiss keyboard
-//                    searchBarView.dismissKeyboard();
-
                     searchBarView.requestFocus();
 //                    searchBarView.setOnKeyListener(onKeyListener);
                 }
@@ -494,13 +488,6 @@ public class NRMainFragment extends Fragment implements NRSearchBarListener, NRS
         searchBarContainer.addView(searchBarView, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
     }
 
-//    public Nanorep getNanoRep() {
-//        return nanoRep;
-//    }
-
-    public NRCustomViewAdapter getViewAdapter() {
-        return viewAdapter;
-    }
 
     @Override
     public void onStartRecording(ImageButton button) {
