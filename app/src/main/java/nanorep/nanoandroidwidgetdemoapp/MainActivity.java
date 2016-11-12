@@ -28,13 +28,11 @@ import nanorep.nanowidget.Components.AbstractViews.NRCustomSearchBarView;
 import nanorep.nanowidget.Components.AbstractViews.NRCustomSuggestionsView;
 import nanorep.nanowidget.Components.AbstractViews.NRCustomTitleView;
 import nanorep.nanowidget.Components.NRContentView;
-import nanorep.nanowidget.Components.NRSearchBar;
 import nanorep.nanowidget.Fragments.NRMainFragment;
-import nanorep.nanowidget.Fragments.NRWidgetFragment;
 import nanorep.nanowidget.Utilities.FragmentUtils;
 import nanorep.nanowidget.interfaces.NRCustomViewAdapter;
 
-public class MainActivity extends AppCompatActivity implements NRWidgetFragment.NRWidgetFragmentListener, NRCustomViewAdapter {
+public class MainActivity extends AppCompatActivity implements NRCustomViewAdapter {
 
 //    private NRWidgetFragment nanoFragment;
     private NRMainFragment mainFragment;
@@ -125,10 +123,10 @@ public class MainActivity extends AppCompatActivity implements NRWidgetFragment.
         }
     }
 
-    @Override
-    public void onCancelWidget(NRWidgetFragment widgetFragment) {
-        ((Button)findViewById(R.id.button)).setVisibility(View.VISIBLE);
-    }
+//    @Override
+//    public void onCancelWidget(NRWidgetFragment widgetFragment) {
+//        ((Button)findViewById(R.id.button)).setVisibility(View.VISIBLE);
+//    }
 
 
     @Override

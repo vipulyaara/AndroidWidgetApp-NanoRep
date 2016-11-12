@@ -5,8 +5,7 @@
              android:layoutDirection="ltr"
              android:id="@+id/frameLayoutFragment"
              xmlns:app="http://schemas.android.com/apk/res-auto"
-             android:background="@color/nr_background_color"
-             tools:context="nanorep.nanowidget.Fragments.NRWidgetFragment">
+             android:background="@color/nr_background_color">
 
 
     <RelativeLayout
