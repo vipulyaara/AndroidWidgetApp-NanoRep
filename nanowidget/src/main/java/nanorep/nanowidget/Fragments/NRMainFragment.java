@@ -172,6 +172,7 @@ public class NRMainFragment extends Fragment implements NRSearchBarListener, NRS
             }
         });
         getChildFragmentManager().beginTransaction().setCustomAnimations(R.anim.fade_in, R.anim.fade_out, R.anim.fade_in, R.anim.fade_out).add(R.id.fragment_place_holder, webContentFragment).addToBackStack("linked").commit();
+        getView().requestFocus();
     }
 
     @Override
@@ -293,6 +294,7 @@ public class NRMainFragment extends Fragment implements NRSearchBarListener, NRS
                     if (searchBarView.getText() != null) {
                         mNotitleViewHolder.getLayoutParams().height = (int) Calculate.pxFromDp(getContext(), NO_TITLE_HEIGHT);
                         mNoTitleView.setText(NRImpl.getInstance().getNRConfiguration().getCustomNoAnswersTextContext(searchBarView.getText()));
+                        getView().requestFocus();
                     }
                 } else if(results.size() == 1) {
                     NRResultTopView resultTopView = getTopView();
@@ -319,7 +321,7 @@ public class NRMainFragment extends Fragment implements NRSearchBarListener, NRS
                     // hide content view
                     contentMain.setVisibility(View.INVISIBLE);
 
-                    searchBarView.requestFocus();
+//                    searchBarView.requestFocus();
 //                    searchBarView.setOnKeyListener(onKeyListener);
                 }
             }
@@ -524,8 +526,13 @@ public class NRMainFragment extends Fragment implements NRSearchBarListener, NRS
         resetSuggestions = true;
         mSuggestionsView.setSuggestions(null);
 
+        while (contentMain.getChildCount() > 1) {
+            contentMain.removeViewAt(contentMain.getChildCount() - 1);
+        }
+
         // show content
         contentMain.setVisibility(View.VISIBLE);
+
     }
 
     private void hideNoTitleView() {
@@ -539,7 +546,7 @@ public class NRMainFragment extends Fragment implements NRSearchBarListener, NRS
         resetSuggestions = true;
 
         searchBarView.dismissKeyboard();
-        searchBarView.updateText(suggestion);
+        searchBarView.updateEditTextView(suggestion);
 
         resetSuggestions = true;
         mSuggestionsView.setSuggestions(null);
@@ -565,6 +572,8 @@ public class NRMainFragment extends Fragment implements NRSearchBarListener, NRS
         resultsView.setResults(results, viewAdapter);
 
         contentMain.addView(resultsView);
+
+        getView().requestFocus();
     }
 
     @Override
@@ -581,6 +590,8 @@ public class NRMainFragment extends Fragment implements NRSearchBarListener, NRS
 
         result.setUnfolded(true);
         resultTopView.openView(y, result);
+
+        getView().requestFocus();
     }
 
     @Override
@@ -594,7 +605,7 @@ public class NRMainFragment extends Fragment implements NRSearchBarListener, NRS
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if (event.getAction() == KeyEvent.ACTION_DOWN) {
                     if (keyCode == KeyEvent.KEYCODE_BACK) {
-                        searchBarView.updateText("");
+                        searchBarView.updateEditTextView("");
 
                         if(NRMainFragment.this.getChildFragmentManager().getBackStackEntryCount() > 0) {
                             // channel is opened
@@ -614,20 +625,20 @@ public class NRMainFragment extends Fragment implements NRSearchBarListener, NRS
                             // get the last view
                             View view = contentMain.getChildAt(contentMain.getChildCount() - 1);
 
-                            if(view  instanceof NRResultTopView && !((NRResultTopView)view).getmResult().isSingle()) {
+                            if(view  instanceof NRResultTopView && !((NRResultTopView)view).getmResult().isSingle()) { // opened from results lists
                                 ((NRResultTopView)view).setResultUnFoldState(false);
                                 ((NRResultTopView)view).removeTopView(false);
+
+                                updateSearchBarTextForResultTop(view);
+
                             } else {
 
                                 contentMain.removeViewAt(contentMain.getChildCount() - 1);
 
                                 View currentView = contentMain.getChildAt(contentMain.getChildCount() - 1);
-                                if(currentView instanceof NRResultTopView && ((NRResultTopView)currentView).getmResult().getFetchedResult() instanceof NRAnswer) { // search
-                                    searchBarView.updateText(((NRResultTopView)currentView).getmResult().getFetchedResult().getTitle());
-                                    resetSuggestions = true;
-                                    mSuggestionsView.setSuggestions(null);
-                                    contentMain.setVisibility(View.VISIBLE);
-                                    getView().requestFocus();
+                                if(currentView instanceof NRResultTopView){
+
+                                    updateSearchBarTextForResultTop(view);
                                 }
                             }
 
@@ -646,6 +657,16 @@ public class NRMainFragment extends Fragment implements NRSearchBarListener, NRS
         };
 
         getView().setOnKeyListener(onKeyListener);
+    }
+
+    private void updateSearchBarTextForResultTop(View view) {
+        if(((NRResultTopView)view).getmResult().getFetchedResult() instanceof NRAnswer) {
+            searchBarView.updateEditTextView(((NRResultTopView)view).getmResult().getFetchedResult().getTitle());
+            resetSuggestions = true;
+            mSuggestionsView.setSuggestions(null);
+            contentMain.setVisibility(View.VISIBLE);
+            getView().requestFocus();
+        }
     }
 
     private void fadeViews(View view, final float f, long duration, final boolean removeTopTitle) {

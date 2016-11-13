@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -25,10 +26,10 @@ import nanorep.nanowidget.interfaces.NRSearchBarListener;
 /**
  * Created by nissimpardo on 07/06/16.
  */
-public class NRSearchBar extends NRCustomSearchBarView implements View.OnClickListener, TextWatcher, TextView.OnEditorActionListener, View.OnKeyListener {
+public class NRSearchBar extends NRCustomSearchBarView implements View.OnClickListener, TextWatcher, TextView.OnEditorActionListener {
     private NRSearchBarListener mListener;
     private ImageButton mSpeechButton;
-    private NREditText mSearchEditText;
+    private EditText mSearchEditText;
     private LinearLayout searchBarLayout;
 
 
@@ -42,7 +43,7 @@ public class NRSearchBar extends NRCustomSearchBarView implements View.OnClickLi
         super.onViewAdded(child);
         searchBarLayout = (LinearLayout) child.findViewById(R.id.searchBarLayout);
 
-        mSearchEditText = (NREditText) child.findViewById(R.id.searchText);
+        mSearchEditText = (EditText) child.findViewById(R.id.searchText);
         mSearchEditText.addTextChangedListener(this);
 //        mSearchEditText.setHint(getResources().getString(R.string.type_question_here));
 //        mSearchEditText.setTextColor(Color.WHITE);
@@ -51,6 +52,19 @@ public class NRSearchBar extends NRCustomSearchBarView implements View.OnClickLi
         mSearchEditText.setOnEditorActionListener(this);
         mSpeechButton = (ImageButton) child.findViewById(R.id.speechButton);
         mSpeechButton.setOnClickListener(this);
+
+        mSearchEditText.setOnKeyListener(new OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (event.getAction() == KeyEvent.ACTION_DOWN) {
+                    if (keyCode == KeyEvent.KEYCODE_BACK) {
+                        clear();
+                        return true;
+                    }
+                }
+                return false;
+            }
+        });
     }
 
     public void setListener(NRSearchBarListener listener) {
@@ -68,8 +82,8 @@ public class NRSearchBar extends NRCustomSearchBarView implements View.OnClickLi
     }
 
     public void updateText(String text) {
-        mSearchEditText.setText(text);
         mSearchEditText.clearFocus();
+        mSearchEditText.setText(text);
     }
 
     public void setHint(String text) {
@@ -90,11 +104,15 @@ public class NRSearchBar extends NRCustomSearchBarView implements View.OnClickLi
     @Override
     public void onClick(View v) {
         if ((Boolean) v.getTag()) {
-            mSearchEditText.clearFocus();
-            dismissKeyboard();
-            mListener.onClearClicked(true);
-            mSearchEditText.setText("");
+            clear();
         }
+    }
+
+    private void clear() {
+        mSearchEditText.clearFocus();
+        dismissKeyboard();
+        mListener.onClearClicked(true);
+        updateEditTextView("");
     }
 
     @Override
@@ -109,7 +127,8 @@ public class NRSearchBar extends NRCustomSearchBarView implements View.OnClickLi
         Boolean state = Boolean.valueOf(charSequence.length() > 0);
         mSpeechButton.setTag(state);
         if (charSequence.length() == 0) {
-
+            dismissKeyboard();
+            mListener.onClearClicked(true);
         }
     }
 
@@ -136,13 +155,4 @@ public class NRSearchBar extends NRCustomSearchBarView implements View.OnClickLi
         searchBarLayout.setBackgroundColor(color);
     }
 
-    @Override
-    public boolean onKey(View v, int keyCode, KeyEvent event) {
-        if (event.getAction() == KeyEvent.ACTION_DOWN) {
-            if (keyCode == KeyEvent.KEYCODE_BACK) {
-                return true;
-            }
-        }
-        return false;
-    }
 }
