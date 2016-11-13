@@ -245,45 +245,10 @@ public class NRImpl extends Nanorep {
                     if (responseParam != null) {
                         ArrayList<String> answers = (ArrayList) ((HashMap)responseParam).get("a");
                         if (answers != null) {
-                            ArrayList<Spannable> suggestions = new ArrayList<Spannable>();
-                            for (String answer : answers) {
-//                                LinkedHashMap<String, Boolean> map = new LinkedHashMap<String, Boolean>();
-                                final SpannableStringBuilder str = new SpannableStringBuilder();
-                                String[] pipes = answer.split("\\|");
-                                for (int i = 0; i < pipes.length ; i++) {
-                                    String[] words = pipes[i].split(",");
-                                    String word = words[0];
+                            ArrayList<Spannable> suggestions = getSpannables(answers);
 
-                                    StyleSpan styleSpan = null;
-
-                                    if(pipes[i].endsWith("*")) {
-                                        styleSpan = new StyleSpan(Typeface.BOLD);
-                                        word = word.replace("*","");
-
-                                    } else {
-                                        styleSpan = new StyleSpan(Typeface.NORMAL);
-                                    }
-
-                                    String wordSpace = word + " ";
-
-                                    if(i == pipes.length - 1) { // last
-                                        wordSpace = word;
-                                    }
-
-                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                                        str.append(wordSpace, styleSpan , 0);
-                                    } else {
-                                        int startIndex = str.length();
-
-                                        str.append(wordSpace);
-
-                                        str.setSpan(styleSpan, startIndex, str.length(), 0);
-                                    }
-                                }
-                                suggestions.add(str);
-                            }
                             ((HashMap)responseParam).put("a", suggestions);
-                            NRImpl.this.getCachedSuggestions().put(text, new NRSuggestions((HashMap)responseParam));
+                            getCachedSuggestions().put(text, new NRSuggestions((HashMap)responseParam));
                             onSuggestionsFetchedListener.onSuggestionsFetched(NRImpl.this.mCachedSuggestions.get(text), null);
                         } else {
                             onSuggestionsFetchedListener.onSuggestionsFetched(null, NRError.error("nanorep", 1002, "No suggestions"));
@@ -305,6 +270,47 @@ public class NRImpl extends Nanorep {
                 }
             });
         }
+    }
+
+    private ArrayList<Spannable> getSpannables(ArrayList<String> answers) {
+        ArrayList<Spannable> suggestions = new ArrayList<>();
+        for (String answer : answers) {
+            final SpannableStringBuilder str = new SpannableStringBuilder();
+            String[] pipes = answer.split("\\|");
+            for (int i = 0; i < pipes.length ; i++) {
+                String[] words = pipes[i].split(",");
+                String word = words[0];
+
+                StyleSpan styleSpan;
+
+                if(pipes[i].endsWith("*")) {
+                    styleSpan = new StyleSpan(Typeface.BOLD);
+                    word = word.replace("*","");
+
+                } else {
+                    styleSpan = new StyleSpan(Typeface.NORMAL);
+                }
+
+                String wordSpace = word + " ";
+
+                if(i == pipes.length - 1) { // last
+                    wordSpace = word;
+                }
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    str.append(wordSpace, styleSpan , 0);
+                } else {
+                    int startIndex = str.length();
+
+                    str.append(wordSpace);
+
+                    str.setSpan(styleSpan, startIndex, str.length(), 0);
+                }
+            }
+            suggestions.add(str);
+        }
+
+        return suggestions;
     }
 
     @Override
