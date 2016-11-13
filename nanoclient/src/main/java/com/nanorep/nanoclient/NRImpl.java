@@ -427,10 +427,10 @@ public class NRImpl extends Nanorep {
     }
 
     @Override
-    public void fetchConfiguration(final OnConfigurationFetchedListener onConfigurationFetchedListener) {
+    public void fetchConfiguration(final OnConfigurationFetchedListener onConfigurationFetchedListener, boolean forceInit) {
         final HashMap<String, Object> cachedResponse = NRCacheManager.getAnswerById(mContext, NRUtilities.md5(mAccountParams.getKnowledgeBase() + mAccountParams.getNanorepContext()));
 
-        if(cachedResponse != null) {
+        if(!forceInit && cachedResponse != null) {
             if (onConfigurationFetchedListener != null) {
                 NRConfiguration cnf = new NRConfiguration(cachedResponse);
                 overrideCnfData(cnf);

@@ -58,7 +58,7 @@ public abstract class Nanorep {
 
     public abstract void likeForFAQResult(NRFAQLikeParams likeParams, OnLikeSentListener onLikeSentListener);
 
-    public abstract void fetchConfiguration(OnConfigurationFetchedListener onConfigurationFetchedListener);
+    public abstract void fetchConfiguration(OnConfigurationFetchedListener onConfigurationFetchedListener, boolean forceInit);
 
     public NRConfiguration getNRConfiguration() {
         if (mCnf == null)
@@ -86,7 +86,7 @@ public abstract class Nanorep {
         this.mAccountParams.setKnowledgeBase(kb);
         this.nrLogger = new NRLogger();
 
-        fetchConfiguration(null);
+        fetchConfiguration(null, true);
     }
 
     public class AccountParams {

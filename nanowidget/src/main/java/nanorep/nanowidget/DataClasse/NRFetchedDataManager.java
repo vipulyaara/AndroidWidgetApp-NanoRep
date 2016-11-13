@@ -57,7 +57,7 @@ public class NRFetchedDataManager {
                     onRequestError(error);
                 }
             }
-        });
+        }, false);
     }
 
     public void setFetcherListener(NRFetcherListener listener) {
