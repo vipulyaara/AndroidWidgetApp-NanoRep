@@ -240,17 +240,8 @@ public class NRMainFragment extends Fragment implements NRSearchBarListener, NRS
         }
     }
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        if(viewAdapter == null) {
-            viewAdapter  = new NRViewAdapter();
-        }
-
-        mFetchedDataManager = new NRFetchedDataManager(getContext());
-
-        mFetchedDataManager.setConfigFetcherListener(new NRConfigFetcherListener() {
+    private void initDataManager() {
+        mFetchedDataManager = new NRFetchedDataManager(getContext(), new NRConfigFetcherListener() {
             @Override
             public void onConfigurationReady() {
                 updateTitleNormalText();
@@ -271,7 +262,7 @@ public class NRMainFragment extends Fragment implements NRSearchBarListener, NRS
                     contentMain.addView(categoriesView);
                 } else if(groups.size() == 1){
                     // show results view immidiately
-                    openNRResultView(mFetchedDataManager.generateNRResultArray(groups.get(0).getAnswers()));
+                    openNRResultView(mFetchedDataManager.generateNRResultArray(groups.get(0).getAnswers(), getContext()));
                 }
             }
         });
@@ -333,6 +324,16 @@ public class NRMainFragment extends Fragment implements NRSearchBarListener, NRS
         });
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        if(viewAdapter == null) {
+            viewAdapter  = new NRViewAdapter();
+        }
+
+    }
+
     private NRResultTopView getTopView() {
 
         NRResultTopView resultTopView = new NRResultTopView(getActivity());
@@ -387,6 +388,8 @@ public class NRMainFragment extends Fragment implements NRSearchBarListener, NRS
         mNoTitleView = (TextView) view.findViewById(R.id.noTitleTextView);
 
         setViews(view);
+
+        initDataManager();
 
         return view;
     }
@@ -562,7 +565,7 @@ public class NRMainFragment extends Fragment implements NRSearchBarListener, NRS
 
     @Override
     public void onCategorySelected(NRFAQGroupItem groupItem) {
-        openNRResultView(mFetchedDataManager.generateNRResultArray(groupItem.getAnswers()));
+        openNRResultView(mFetchedDataManager.generateNRResultArray(groupItem.getAnswers(), getContext()));
     }
 
     private void openNRResultView(ArrayList<NRResult> results) {
@@ -573,7 +576,9 @@ public class NRMainFragment extends Fragment implements NRSearchBarListener, NRS
 
         contentMain.addView(resultsView);
 
-        getView().requestFocus();
+        if (getView() != null) {
+            getView().requestFocus();
+        }
     }
 
     @Override

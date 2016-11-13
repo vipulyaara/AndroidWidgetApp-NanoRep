@@ -75,8 +75,8 @@ public class MainActivity extends AppCompatActivity implements NRCustomViewAdapt
                     EditText server = (EditText) findViewById(R.id.serverId);
 
 
-//                    String _accountName = "qa";//"nanorep";
-//                    String _kb = "qa";//"English";
+                    String _accountName = "gett";//"nanorep";
+                    String _kb = "English_IL";//"English";
 
 
                     String _server = server.getText().toString();
@@ -85,8 +85,8 @@ public class MainActivity extends AppCompatActivity implements NRCustomViewAdapt
 //                        accountParams.setmHost(_server);
 //                    }
 
-                    String _accountName = accountName.getText().toString();
-                    String _kb = kb.getText().toString();
+//                    String _accountName = accountName.getText().toString();
+//                    String _kb = kb.getText().toString();
 
 //                    accountParams.setAccount(_accountName);
 //                    accountParams.setKnowledgeBase(_kb);

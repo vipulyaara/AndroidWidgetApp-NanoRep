@@ -428,6 +428,17 @@ public class NRImpl extends Nanorep {
 
     @Override
     public void fetchConfiguration(final OnConfigurationFetchedListener onConfigurationFetchedListener) {
+        final HashMap<String, Object> cachedResponse = NRCacheManager.getAnswerById(mContext, NRUtilities.md5(mAccountParams.getKnowledgeBase() + mAccountParams.getNanorepContext()));
+
+        if(cachedResponse != null) {
+            if (onConfigurationFetchedListener != null) {
+                NRConfiguration cnf = new NRConfiguration(cachedResponse);
+                overrideCnfData(cnf);
+                onConfigurationFetchedListener.onConfigurationFetched(null);
+            }
+
+            return;
+        }
 
         if (mAccountParams != null) {
             final Uri.Builder uri = mAccountParams.getUri();
@@ -448,7 +459,7 @@ public class NRImpl extends Nanorep {
                     final boolean fast = (afterCnfTs - beforeCnfTs) <= 4;
 
                     if (error != null) {
-                        HashMap<String, Object> cachedResponse = NRCacheManager.getAnswerById(mContext, NRUtilities.md5(mAccountParams.getKnowledgeBase() + mAccountParams.getNanorepContext()));
+//                        HashMap<String, Object> cachedResponse = NRCacheManager.getAnswerById(mContext, NRUtilities.md5(mAccountParams.getKnowledgeBase() + mAccountParams.getNanorepContext()));
                         if (onConfigurationFetchedListener != null) {
                             if (cachedResponse != null) {
                                 NRConfiguration cnf = new NRConfiguration(cachedResponse);
@@ -458,6 +469,7 @@ public class NRImpl extends Nanorep {
                                 onConfigurationFetchedListener.onConfigurationFetched(error);
                             }
                         }
+
                     } else {
                         final NRConfiguration cnf = new NRConfiguration((HashMap) responseParam);
                         if (cnf.getIsContextDependent()) {

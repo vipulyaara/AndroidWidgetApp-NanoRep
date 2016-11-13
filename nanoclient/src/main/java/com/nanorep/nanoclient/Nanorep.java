@@ -85,6 +85,8 @@ public abstract class Nanorep {
         this.mAccountParams.setAccount(account);
         this.mAccountParams.setKnowledgeBase(kb);
         this.nrLogger = new NRLogger();
+
+        fetchConfiguration(null);
     }
 
     public class AccountParams {

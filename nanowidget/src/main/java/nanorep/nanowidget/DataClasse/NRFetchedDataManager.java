@@ -40,8 +40,9 @@ public class NRFetchedDataManager {
     private NRConfigFetcherListener mconfigFetcherListener;
     Context mContext;
 
-    public NRFetchedDataManager(Context context) {
+    public NRFetchedDataManager(Context context, NRConfigFetcherListener configFetcherListener) {
         mContext = context;
+        mconfigFetcherListener = configFetcherListener;
 
         NRImpl.getInstance().fetchConfiguration(new Nanorep.OnConfigurationFetchedListener() {
             @Override
@@ -83,12 +84,12 @@ public class NRFetchedDataManager {
         }
     }
 
-    public ArrayList<NRResult> generateNRResultArray(ArrayList<NRQueryResult> queryResults) {
+    public static ArrayList<NRResult> generateNRResultArray(ArrayList<NRQueryResult> queryResults, Context context) {
         if (queryResults != null) {
             ArrayList<NRResult> results = new ArrayList<>();
             for (NRQueryResult result : queryResults) {
                 NRResult currentResult = new NRResult(result, NRResultItem.RowType.TITLE);
-                currentResult.setHeight((int) Calculate.pxFromDp(mContext, NRFetchedDataManager.ROW_HEIGHT));
+                currentResult.setHeight((int) Calculate.pxFromDp(context, NRFetchedDataManager.ROW_HEIGHT));
                 results.add(currentResult);
             }
             return results;
@@ -105,7 +106,7 @@ public class NRFetchedDataManager {
                 if (error != null) {
 
                 } else {
-                    ArrayList<NRResult> results = generateNRResultArray(response.getAnswerList());
+                    ArrayList<NRResult> results = generateNRResultArray(response.getAnswerList(), mContext);
 
                     mFetcherListener.insertRows(results);
                 }
