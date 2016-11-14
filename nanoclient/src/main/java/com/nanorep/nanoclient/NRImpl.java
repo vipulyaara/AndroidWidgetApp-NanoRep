@@ -92,8 +92,11 @@ public class NRImpl extends Nanorep {
 
     private void fetchFaqList(NRConnection.Listener listener) {
         final Uri.Builder uri = mAccountParams.getUri();
-        uri.appendPath("api/faq/v1/list.json");
+        uri.appendEncodedPath("api/faq/v1/list.json");
         uri.appendQueryParameter("account", mAccountParams.getAccount());
+        if (mAccountParams.getKnowledgeBase() != null) {
+            uri.appendQueryParameter("kb", mAccountParams.getKnowledgeBase());
+        }
         if (mAccountParams.getNanorepContext() != null) {
             uri.appendQueryParameter("context", mAccountParams.getKnowledgeBase());
         }
@@ -102,7 +105,7 @@ public class NRImpl extends Nanorep {
 
     private void startKeepAlive() {
         Uri.Builder uri = mAccountParams.getUri();
-        uri.appendPath("api/widget/v1/keepAlive.js");
+        uri.appendEncodedPath("api/widget/v1/keepAlive.js");
         executeRequest(uri, new NRConnection.Listener() {
             @Override
             public void response(Object responseParam, int status, NRError error) {
@@ -154,7 +157,8 @@ public class NRImpl extends Nanorep {
 
     private void hello(final NRConnection.Listener listener) {
         final Uri.Builder _uriBuilder = mAccountParams.getUri();
-        _uriBuilder.appendPath("api/widget/v1/hello.js");
+        _uriBuilder.appendQueryParameter("kb", mAccountParams.getKnowledgeBase());
+        _uriBuilder.appendEncodedPath("api/widget/v1/hello.js");
         _uriBuilder.appendQueryParameter("nostats", "false");
         _uriBuilder.appendQueryParameter("url", "mobile");
         NRConnection.getInstance().connectionWithRequest(_uriBuilder.build(), new NRConnection.Listener() {
@@ -202,8 +206,8 @@ public class NRImpl extends Nanorep {
                 e.printStackTrace();
             }
             Uri.Builder uriBuilder = mAccountParams.getUri();
-            uriBuilder.appendPath("api/widget/v1/q.js");
-            uriBuilder.appendQueryParameter("text", encodedText);
+            uriBuilder.appendEncodedPath("api/widget/v1/q.js");
+            uriBuilder.appendQueryParameter("text", text);
             executeRequest(uriBuilder, new NRConnection.Listener() {
                 @Override
                 public void response(Object responseParam, int status, NRError error) {
@@ -236,7 +240,7 @@ public class NRImpl extends Nanorep {
                 e.printStackTrace();
             }
             Uri.Builder uriBuilder = mAccountParams.getUri();
-            uriBuilder.appendPath("api/kb/v1/autoComplete");
+            uriBuilder.appendEncodedPath("api/kb/v1/autoComplete");
             uriBuilder.appendQueryParameter("text", encodedText);
             uriBuilder.appendQueryParameter("stemming", "true");
             executeRequest(uriBuilder, new NRConnection.Listener() {
@@ -316,7 +320,7 @@ public class NRImpl extends Nanorep {
     @Override
     public void likeForSearchResult(final NRSearchLikeParams likeParams, final OnLikeSentListener onLikeSentListener) {
         Uri.Builder uriBuilder = mAccountParams.getUri();
-        uriBuilder.appendPath("api/widget/v1/thumb.js");
+        uriBuilder.appendEncodedPath("api/widget/v1/thumb.js");
         for (String key: likeParams.getParams().keySet()) {
             uriBuilder.appendQueryParameter(key, likeParams.getParams().get(key));
         }
@@ -340,7 +344,7 @@ public class NRImpl extends Nanorep {
     @Override
     public void fetchFAQAnswer(final String answerId, final Integer answerHash, final OnFAQAnswerFetchedListener onFAQAnswerFetchedListener) {
         Uri.Builder uriBuilder = mAccountParams.getUri();
-        uriBuilder.appendPath("api/faq/v1/answer.js");
+        uriBuilder.appendEncodedPath("api/faq/v1/answer.js");
         uriBuilder.appendQueryParameter("id", answerId);
 
         // if exist and updated in cache, fetch from cache,
@@ -402,7 +406,8 @@ public class NRImpl extends Nanorep {
     @Override
     public void likeForFAQResult(final NRFAQLikeParams likeParams, final OnLikeSentListener onLikeSentListener) {
         Uri.Builder uriBuilder = mAccountParams.getUri();
-        uriBuilder.appendPath("api/widget/v1/thumb.js");
+        uriBuilder.appendEncodedPath("api/analytics/v1/addFeedback");
+        uriBuilder.appendQueryParameter("ignoreValidateCookie", "true");
         for (String key: likeParams.getParams().keySet()) {
             uriBuilder.appendQueryParameter(key, likeParams.getParams().get(key));
         }
@@ -414,8 +419,9 @@ public class NRImpl extends Nanorep {
             public void response(Object responseParam, int status, NRError error) {
                 if (error != null) {
                     onLikeSentListener.onLikeSent(likeParams.getAnswerId(), 0, false);
-                } else {
-                    onLikeSentListener.onLikeSent(likeParams.getAnswerId(), Integer.parseInt(likeParams.getParams().get("type")), responseParam == null);
+                } else if (responseParam instanceof HashMap){
+                    boolean result = Boolean.valueOf((String) ((HashMap)responseParam).get("result"));
+                    onLikeSentListener.onLikeSent(likeParams.getAnswerId(), Integer.parseInt(likeParams.getParams().get("type")), result);
                 }
             }
 
@@ -442,7 +448,7 @@ public class NRImpl extends Nanorep {
 
         if (mAccountParams != null) {
             final Uri.Builder uri = mAccountParams.getUri();
-            uri.appendPath("widget/scripts/cnf.json");
+            uri.appendEncodedPath("widget/scripts/cnf.json");
             if (mAccountParams.getKnowledgeBase() != null) {
                 uri.appendQueryParameter("kb", mAccountParams.getKnowledgeBase());
             }

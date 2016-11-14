@@ -13,6 +13,8 @@ import java.util.HashMap;
 public class NRFAQAnswer implements NRQueryResult {
     HashMap<String, Object> mParams;
     private ArrayList<NRChanneling> mChanneling;
+    private boolean mIsCNF = true;
+
 
     private LikeState mLikeState = LikeState.notSelected;
 
@@ -71,7 +73,7 @@ public class NRFAQAnswer implements NRQueryResult {
 
     @Override
     public boolean isCNF() {
-        return false;
+        return mIsCNF;
     }
 
     @Override
@@ -88,6 +90,21 @@ public class NRFAQAnswer implements NRQueryResult {
             }
         }
         return mChanneling;
+    }
+
+    @Override
+    public String getKeywordSetId() {
+        return null;
+    }
+
+    @Override
+    public void setIsCNF(boolean isCNF) {
+        mIsCNF = isCNF;
+    }
+
+    @Override
+    public void setChanneling(ArrayList<NRChanneling> channeling) {
+        mChanneling = channeling;
     }
 
     /**

@@ -19,6 +19,8 @@ public class NRAnswer implements NRQueryResult{
     private String mSummary;
     private LikeState mLikeState = LikeState.notSelected;
     private ArrayList<NRChanneling> mChanneling;
+    private boolean mIsCNF = false;
+
 
     /**
      * Converts JSON string to NRAnswer object
@@ -109,7 +111,7 @@ public class NRAnswer implements NRQueryResult{
 
     @Override
     public boolean isCNF() {
-        return false;
+        return mIsCNF;
     }
 
     /**
@@ -135,6 +137,21 @@ public class NRAnswer implements NRQueryResult{
             }
         }
         return mChanneling;
+    }
+
+    @Override
+    public String getKeywordSetId() {
+        return mKeywordsetId;
+    }
+
+    @Override
+    public void setIsCNF(boolean isCNF) {
+        mIsCNF = isCNF;
+    }
+
+    @Override
+    public void setChanneling(ArrayList<NRChanneling> channeling) {
+        mChanneling = channeling;
     }
 
 }

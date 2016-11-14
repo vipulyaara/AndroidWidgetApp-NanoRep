@@ -45,7 +45,7 @@ public class NRDownloader extends  AsyncTask <Uri, Integer, Object> {
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestProperty("Referer", uri.getQueryParameter("referer"));
             connection.connect();
-            InputStream inputStream = new BufferedInputStream(url.openStream());
+            InputStream inputStream = new BufferedInputStream(connection.getInputStream());
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
             int next = inputStream.read();
             while (next > -1){
@@ -76,6 +76,8 @@ public class NRDownloader extends  AsyncTask <Uri, Integer, Object> {
             mListener.downloadCompleted(this, null, (NRError)bytes);
         } else if (((byte[])bytes).length > 0) {
             mListener.downloadCompleted(this, bytes, null);
+        } else if (mStatus == 200) {
+            mListener.downloadCompleted(this, null, null);
         } else {
             mListener.downloadCompleted(this, null, NRError.error("Parsed Response", 1001, "Empty response"));
         }

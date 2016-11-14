@@ -21,6 +21,11 @@ public interface NRQueryResult {
     HashMap<String, Object> getParams();
     boolean isCNF();
     ArrayList<NRChanneling> getChanneling();
+    String getKeywordSetId();
+    void setIsCNF(boolean isCNF);
+    void setChanneling(ArrayList<NRChanneling> channeling);
+
+
 
     enum LikeState {
         notSelected,

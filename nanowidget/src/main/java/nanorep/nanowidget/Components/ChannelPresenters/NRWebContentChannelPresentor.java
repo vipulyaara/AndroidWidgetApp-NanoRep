@@ -1,6 +1,7 @@
 package nanorep.nanowidget.Components.ChannelPresenters;
 
 import android.net.Uri;
+import android.util.Log;
 
 import com.nanorep.nanoclient.Channeling.NRChanneling;
 import com.nanorep.nanoclient.Channeling.NRChannelingChatForm;
@@ -34,7 +35,7 @@ public class NRWebContentChannelPresentor implements NRChannelPresentor{
         String url = null;
         switch (mChanneling.getType()) {
             case ContactForm:
-                channelUri.appendPath("sdk/mobile/contactform.html");
+                channelUri.appendEncodedPath("sdk/mobile/contactform.html");
                 channelUri.appendQueryParameter("account", mNanoRep.getAccountParams().getAccount());
                 channelUri.appendQueryParameter("articleId", mChanneling.getQueryResult().getId());
                 channelUri.appendQueryParameter("context", "null").appendQueryParameter("host", "my.nanorep.com");
@@ -43,7 +44,7 @@ public class NRWebContentChannelPresentor implements NRChannelPresentor{
                 channelUri.appendQueryParameter("contactFormId", ((NRChannelingContactForm)mChanneling).getContactForms());
                 break;
             case ChatForm:
-                channelUri.appendPath("sdk/mobile/chat.html");
+                channelUri.appendEncodedPath("sdk/mobile/chat.html");
                 channelUri.appendQueryParameter("channel.chatProvider", ((NRChannelingChatForm) mChanneling).getChatProvider());
                 channelUri.appendQueryParameter("channelUri.appendQueryParameter", ((NRChannelingChatForm) mChanneling).getAccountNum());
                 channelUri.appendQueryParameter("channel.chatOptions.apiKey", "c774b56ff8a64cbba27743a8d4418b26");
@@ -60,11 +61,11 @@ public class NRWebContentChannelPresentor implements NRChannelPresentor{
     @Override
     public String getUrl() {
         Uri.Builder channelUri = new Uri.Builder();
-        channelUri.scheme("http").authority("dev4.nanorep.com");
+        channelUri.scheme("http").authority("my.nanorep.com");
         String url = null;
         switch (mChanneling.getType()) {
             case ContactForm:
-                channelUri.appendPath("sdk/mobile/contactform.html");
+                channelUri.appendEncodedPath("sdk/mobile/contactform.html");
                 channelUri.appendQueryParameter("account", mNanoRep.getAccountParams().getAccount());
                 channelUri.appendQueryParameter("articleId", mChanneling.getQueryResult().getId());
                 channelUri.appendQueryParameter("context", "null").appendQueryParameter("host", "my.nanorep.com");
@@ -73,7 +74,7 @@ public class NRWebContentChannelPresentor implements NRChannelPresentor{
                 channelUri.appendQueryParameter("contactFormId", ((NRChannelingContactForm)mChanneling).getContactForms());
                 break;
             case ChatForm:
-                channelUri.appendPath("sdk/mobile/chat.html");
+                channelUri.appendEncodedPath("sdk/mobile/chat.html");
                 channelUri.appendQueryParameter("channel.chatProvider", ((NRChannelingChatForm) mChanneling).getChatProvider());
                 channelUri.appendQueryParameter("channelUri.appendQueryParameter", ((NRChannelingChatForm) mChanneling).getAccountNum());
                 channelUri.appendQueryParameter("channel.chatOptions.apiKey", "c774b56ff8a64cbba27743a8d4418b26");
@@ -83,7 +84,9 @@ public class NRWebContentChannelPresentor implements NRChannelPresentor{
                 url = ((NRChannelingOpenCustomURL)mChanneling).getLinkUrl();
                 break;
         }
-        return url == null ? channelUri.toString() : url;
+        url = url == null ? channelUri.toString() : url;
+        Log.d("NRWebContentChannel", url);
+        return url;
     }
 
     @Override
