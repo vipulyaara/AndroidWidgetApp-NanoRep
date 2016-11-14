@@ -122,9 +122,10 @@ public class NRResultTopView extends RelativeLayout implements NRTitleListener, 
 
         mResult = result;
 
-        mResult.setSingle(true);
+//        mResult.setSingle(true);
 
         titleView.setTitleText(mResult.getFetchedResult().getTitle());
+        titleView.setTitleMaxLines(100);
         titleView.unfold(true);
         viewTitleContainerOpened.addView(titleView);
 
@@ -372,7 +373,8 @@ public class NRResultTopView extends RelativeLayout implements NRTitleListener, 
     @Override
     public void onTitleClicked() {
 
-        if(layoutAnimated.getVisibility() == View.VISIBLE) {
+//        if(layoutAnimated.getVisibility() == View.VISIBLE) {
+        if(!mResult.isSingle()) {
             topViewListener.closeAnswer();
         }
     }

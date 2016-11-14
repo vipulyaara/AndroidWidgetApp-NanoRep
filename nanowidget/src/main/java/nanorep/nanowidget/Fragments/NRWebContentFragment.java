@@ -1,4 +1,4 @@
-package nanorep.nanowidget.Components.ChannelPresenters;
+package nanorep.nanowidget.Fragments;
 
 
 import android.Manifest;
@@ -10,7 +10,6 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -24,7 +23,7 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import nanorep.nanowidget.R;
@@ -38,10 +37,10 @@ public class NRWebContentFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private WebView mWebView;
-    private Button mCloseButton;
     private Listener mListener;
     private ValueCallback<Uri[]> mValueCallback;
     private WebChromeClient.FileChooserParams mFileChooserParams;
+    private RelativeLayout mLoadingView;
 
     public interface Listener {
         void onDismiss();
@@ -76,7 +75,12 @@ public class NRWebContentFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_nrweb_content, container, false);
 
+        mLoadingView = (RelativeLayout) view.findViewById(R.id.webLoadingView);
+
         mWebView = (WebView) view.findViewById(R.id.webContentView);
+
+//        mWebView.loadUrl("about:blank");
+
         mWebView.loadUrl(getArguments().getString(ARG_PARAM1));
         mWebView.getSettings().setJavaScriptEnabled(true);
         mWebView.getSettings().setAllowFileAccess(true);
@@ -106,14 +110,37 @@ public class NRWebContentFragment extends Fragment {
                 return true;
             }
         });
-        mWebView.setWebViewClient(new NRPresentorWebClient());
-        mCloseButton = (Button) view.findViewById(R.id.closeChannelButton);
-        mCloseButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mListener.onDismiss();
+        mWebView.setWebViewClient(new NRPresentorWebClient() {
+
+            public void onPageFinished(WebView view, String url) {
+                // do your stuff here
+                mLoadingView.setVisibility(View.GONE);
             }
         });
+
+
+        mWebView.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (event.getAction() == KeyEvent.ACTION_DOWN) {
+                    if (keyCode == KeyEvent.KEYCODE_BACK) {
+
+                        if(mWebView.canGoBack()) {
+
+                            mWebView.goBack();
+                        } else {
+                            mListener.onDismiss();
+                        }
+
+                        return true;
+                    }
+                }
+
+                return false;
+            }
+        });
+
+
         return view;
     }
 
@@ -128,7 +155,9 @@ public class NRWebContentFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
+
         mWebView.stopLoading();
+        mWebView.loadUrl("about:blank");
     }
 
     public class NRPresentorWebClient extends WebViewClient {

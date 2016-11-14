@@ -14,7 +14,7 @@ import com.nanorep.nanoclient.Interfaces.NRQueryResult;
 
 import java.util.ArrayList;
 
-import nanorep.nanowidget.Components.ChannelPresenters.NRWebContentFragment;
+import nanorep.nanowidget.Fragments.NRWebContentFragment;
 import nanorep.nanowidget.DataClasse.NRResult;
 import nanorep.nanowidget.R;
 import nanorep.nanowidget.Utilities.Calculate;

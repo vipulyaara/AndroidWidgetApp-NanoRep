@@ -70,7 +70,7 @@ public class NRResultsView extends LinearLayout implements NRResultsAdapter.List
 
         int y = marginTop - offSet + (int) Calculate.pxFromDp(getContext(), 16) + divider;
 
-        titleViewHolder.getTitleView().setVisibility(View.INVISIBLE);
+//        titleViewHolder.getTitleView().setVisibility(View.INVISIBLE);
 
         listener.onResultSelected(y, titleViewHolder);
     }

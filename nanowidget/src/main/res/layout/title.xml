@@ -32,11 +32,12 @@
         android:visibility="gone"
         android:src="@drawable/share"
         android:background="#00ffffff"/>
+
     <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:id="@+id/unFoldButton"
-        android:rotation="0"
+        android:rotation="-90"
         android:layout_marginLeft="21dp"
         android:src="@drawable/answer_arrowdown_icon"
         android:background="#00ffffff"/>

@@ -37,6 +37,8 @@ public abstract class NRCustomTitleView extends LinearLayout{
 
     public abstract void resetView();
 
+    public abstract void setTitleMaxLines(int lines);
+
 //    abstract public ImageButton getUnFoldButton();
 
 //    abstract public Button getTitleButton();

@@ -1,29 +1,33 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
              xmlns:tools="http://schemas.android.com/tools"
              android:layout_width="match_parent"
              android:layout_height="match_parent"
               android:orientation="vertical"
-             tools:context="nanorep.nanowidget.Components.ChannelPresenters.NRWebContentFragment"
+             tools:context="nanorep.nanowidget.Fragments.NRWebContentFragment"
               android:background="#ffffffff">
 
     <!-- TODO: Update blank fragment layout -->
-<RelativeLayout
-    android:layout_width="match_parent"
-    android:layout_height="50dp"
-    android:id="@+id/channelTopBar">
-    <Button
-        android:layout_width="100dp"
-        android:layout_height="50dp"
-        android:id="@+id/closeChannelButton"
-        android:layout_alignParentStart="true"
-        android:layout_centerVertical="true"
-        android:text="Dismiss"
-        android:drawableLeft="@drawable/left_arrow"/>
-</RelativeLayout>
+
     <WebView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/webContentView">
-
     </WebView>
-</LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/webLoadingView"
+        android:background="@android:color/transparent">
+
+        <ProgressBar
+            style="?android:attr/progressBarStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/webProgressBar"/>
+    </RelativeLayout>
+
+
+</RelativeLayout>

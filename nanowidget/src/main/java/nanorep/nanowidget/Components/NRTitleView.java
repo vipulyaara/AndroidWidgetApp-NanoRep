@@ -94,8 +94,8 @@ public class NRTitleView extends NRCustomTitleView{
 
     private void setUnfoldButtonImage() {
         if(mUnFoldButton != null) {
-            if (mUnFoldButton.getRotation() == -180 && closed || mUnFoldButton.getRotation() == 0 && !closed)  {
-                ObjectAnimator.ofFloat(mUnFoldButton, "rotation", 0, !closed ? -180 : 0).start();
+            if (mUnFoldButton.getRotation() == -270 && closed || mUnFoldButton.getRotation() == -90 && !closed)  {
+                ObjectAnimator.ofFloat(mUnFoldButton, "rotation", 0, !closed ? -270 : -90).start();
             }
         }
     }
@@ -222,5 +222,8 @@ public class NRTitleView extends NRCustomTitleView{
         }
     }
 
-
+    @Override
+    public void setTitleMaxLines(int lines) {
+        mTitleButton.setMaxLines(lines);
+    }
 }

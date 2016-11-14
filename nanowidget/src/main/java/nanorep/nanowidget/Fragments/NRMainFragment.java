@@ -17,6 +17,9 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -41,8 +44,8 @@ import nanorep.nanowidget.Components.AbstractViews.NRCustomSearchBarView;
 import nanorep.nanowidget.Components.AbstractViews.NRCustomSuggestionsView;
 import nanorep.nanowidget.Components.AbstractViews.NRCustomTitleView;
 import nanorep.nanowidget.Components.ChannelPresenters.NRChannelStrategy;
-import nanorep.nanowidget.Components.ChannelPresenters.NRWebContentFragment;
 import nanorep.nanowidget.Components.DislikeDialog;
+import nanorep.nanowidget.Components.MyWebView;
 import nanorep.nanowidget.Components.NRCategoriesView;
 import nanorep.nanowidget.Components.NRChannelItem;
 import nanorep.nanowidget.Components.NRChannelingView;
@@ -60,6 +63,7 @@ import nanorep.nanowidget.DataClasse.NRResult;
 import nanorep.nanowidget.DataClasse.NRResultsAdapter;
 import nanorep.nanowidget.R;
 import nanorep.nanowidget.Utilities.Calculate;
+import nanorep.nanowidget.Utilities.NRWebClient;
 import nanorep.nanowidget.interfaces.NRConfigFetcherListener;
 import nanorep.nanowidget.interfaces.NRCustomViewAdapter;
 import nanorep.nanowidget.interfaces.NRFetcherListener;
@@ -126,17 +130,33 @@ public class NRMainFragment extends Fragment implements NRSearchBarListener, NRS
         // get the last view
         View view = contentMain.getChildAt(contentMain.getChildCount() - 1);
 
-        if(view  instanceof NRResultTopView && !((NRResultTopView)view).getmResult().isSingle()) {
-            ((NRResultTopView)view).setResultUnFoldState(false);
-            ((NRResultTopView)view).removeTopView(false);
-        }
+//        if(view  instanceof NRResultTopView && !((NRResultTopView)view).getmResult().isSingle()) {
+//            ((NRResultTopView)view).setResultUnFoldState(false);
+//            ((NRResultTopView)view).removeTopView(false);
+//        }
+
+        view.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.slide_out_left));
+
+        contentMain.removeView(view);
     }
 
     @Override
     public void onChannelSelected(NRChannelItem channelItem) {
         String url = NRChannelStrategy.presentor(getContext(), channelItem.getChanneling(), NRImpl.getInstance()).getUrl();
         if (url != null) {
-            onLinkClicked(url);
+            final RelativeLayout holder = (RelativeLayout) getView().findViewById(R.id.fragment_place_holder);
+            holder.setVisibility(View.VISIBLE);
+            NRWebContentFragment webContentFragment = NRWebContentFragment.newInstance(url, null);
+            webContentFragment.setListener(new NRWebContentFragment.Listener() {
+                @Override
+                public void onDismiss() {
+                    getChildFragmentManager().popBackStack();
+                    holder.setVisibility(View.INVISIBLE);
+                    getView().requestFocus();
+                }
+            });
+            getChildFragmentManager().beginTransaction().setCustomAnimations(R.anim.fade_in, R.anim.fade_out, R.anim.fade_in, R.anim.fade_out).add(R.id.fragment_place_holder, webContentFragment).addToBackStack("linked").commit();
+            getView().requestFocus();
         }
     }
 
@@ -151,6 +171,9 @@ public class NRMainFragment extends Fragment implements NRSearchBarListener, NRS
 
                 NRResultTopView resultTopView = getTopView();
                 contentMain.addView(resultTopView);
+
+                resultTopView.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.slide_in_left));
+
                 resultTopView.openOpenedView(newResult);
 
                 getView().requestFocus();
@@ -160,19 +183,15 @@ public class NRMainFragment extends Fragment implements NRSearchBarListener, NRS
 
     @Override
     public void onLinkClicked(String url) {
-        final RelativeLayout holder = (RelativeLayout) getView().findViewById(R.id.fragment_place_holder);
-        holder.setVisibility(View.VISIBLE);
-        NRWebContentFragment webContentFragment = NRWebContentFragment.newInstance(url, null);
-        webContentFragment.setListener(new NRWebContentFragment.Listener() {
+        MyWebView webView = new MyWebView(getContext(), url, new MyWebView.Listener() {
             @Override
             public void onDismiss() {
-                getChildFragmentManager().popBackStack();
-                holder.setVisibility(View.INVISIBLE);
+                contentMain.removeViewAt(contentMain.getChildCount() - 1);
                 getView().requestFocus();
             }
         });
-        getChildFragmentManager().beginTransaction().setCustomAnimations(R.anim.fade_in, R.anim.fade_out, R.anim.fade_in, R.anim.fade_out).add(R.id.fragment_place_holder, webContentFragment).addToBackStack("linked").commit();
-        getView().requestFocus();
+
+        contentMain.addView(webView);
     }
 
     @Override
@@ -292,6 +311,36 @@ public class NRMainFragment extends Fragment implements NRSearchBarListener, NRS
 
                     contentMain.setVisibility(View.VISIBLE);
                     contentMain.addView(resultTopView);
+
+                    Animation animation = AnimationUtils.loadAnimation(getContext(), R.anim.slide_in_left);
+                    animation.setAnimationListener(new Animation.AnimationListener() {
+                                @Override
+                                public void onAnimationStart(Animation animation) {
+                                    for(int i = 0; i <= contentMain.getChildCount() - 2; i++) {
+                                        View view = contentMain.getChildAt(i);
+                                        view.setVisibility(View.INVISIBLE);
+                                    }
+//                                    contentMain.getChildAt(contentMain.getChildCount() -2).setVisibility(View.INVISIBLE);
+                                    contentMain.getChildAt(contentMain.getChildCount() -1).setVisibility(View.VISIBLE);
+                                }
+
+                                @Override
+                                public void onAnimationEnd(Animation animation) {
+                                    for(int i = 0; i <= contentMain.getChildCount() - 2; i++) {
+                                        View view = contentMain.getChildAt(i);
+                                        view.setVisibility(View.VISIBLE);
+                                    }
+                                }
+
+                                @Override
+                                public void onAnimationRepeat(Animation animation) {
+
+                                }
+                            });
+
+                    resultTopView.setAnimation(animation);
+
+                    resultTopView.startAnimation(animation);
 
                     resultTopView.openOpenedView(results.get(0));
 
@@ -589,12 +638,16 @@ public class NRMainFragment extends Fragment implements NRSearchBarListener, NRS
 
         contentMain.addView(resultTopView);
 
+        resultTopView.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.slide_in_left));
+
         animateBGColor(500, resultTopView, true, titleViewHolder);
 
         NRResult result = titleViewHolder.getResult();
 
         result.setUnfolded(true);
-        resultTopView.openView(y, result);
+//        resultTopView.openView(y, result);
+
+        resultTopView.openOpenedView(result);
 
         getView().requestFocus();
     }
@@ -630,22 +683,29 @@ public class NRMainFragment extends Fragment implements NRSearchBarListener, NRS
                             // get the last view
                             View view = contentMain.getChildAt(contentMain.getChildCount() - 1);
 
-                            if(view  instanceof NRResultTopView && !((NRResultTopView)view).getmResult().isSingle()) { // opened from results lists
-                                ((NRResultTopView)view).setResultUnFoldState(false);
-                                ((NRResultTopView)view).removeTopView(false);
+                            if(view  instanceof NRResultTopView) {// && !((NRResultTopView)view).getmResult().isSingle()) { // opened from results lists
+//                                ((NRResultTopView)view).setResultUnFoldState(false);
+//                                ((NRResultTopView)view).removeTopView(false);
 
-                                updateSearchBarTextForResultTop(view);
+                                view.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.slide_out_left));
 
-                            } else {
+                                //contentMain.removeViewAt(contentMain.getChildCount() - 1);
+
+                                //updateSearchBarTextForResultTop(view);
+
+                            } //else {
 
                                 contentMain.removeViewAt(contentMain.getChildCount() - 1);
 
                                 View currentView = contentMain.getChildAt(contentMain.getChildCount() - 1);
                                 if(currentView instanceof NRResultTopView){
 
-                                    updateSearchBarTextForResultTop(view);
+                                    updateSearchBarTextForResultTop(currentView);
+                                } else {
+                                    searchBarView.updateEditTextView("");
+                                    getView().requestFocus();
                                 }
-                            }
+                            //}
 
                             return true;
                         } else {

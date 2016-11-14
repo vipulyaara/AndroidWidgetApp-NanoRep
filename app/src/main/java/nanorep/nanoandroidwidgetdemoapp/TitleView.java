@@ -49,6 +49,11 @@ public class TitleView extends NRCustomTitleView {
     }
 
     @Override
+    public void setTitleMaxLines(int lines) {
+
+    }
+
+    @Override
     public void onViewAdded(View child) {
         super.onViewAdded(child);
 

@@ -75,8 +75,11 @@ public class MainActivity extends AppCompatActivity implements NRCustomViewAdapt
                     EditText server = (EditText) findViewById(R.id.serverId);
 
 
-                    String _accountName = "gett";//"nanorep";
-                    String _kb = "English_IL";//"English";
+                    String _accountName = "qa";//"nanorep";
+                    String _kb = "qa";//"English";
+
+//                    String _accountName = "gett";//"nanorep";
+//                    String _kb = "English_IL";//"English";
 
 
                     String _server = server.getText().toString();
@@ -101,7 +104,7 @@ public class MainActivity extends AppCompatActivity implements NRCustomViewAdapt
 
 //                    nanorep.setDebugMode(checkBox.isChecked());
 
-                    NRImpl.init(getApplicationContext(), _accountName, _kb);
+//                    NRImpl.init(getApplicationContext(), _accountName, _kb);
 
                     mainFragment = NRMainFragment.newInstance();
 //                    mainFragment.setNanoRep(nanorep);
