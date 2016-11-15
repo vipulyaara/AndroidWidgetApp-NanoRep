@@ -16,8 +16,8 @@ public class NanoApp extends Application{
     public void onCreate() {
         super.onCreate();
 
-        String _accountName = "qa";//"nanorep";
-        String _kb = "qa";//"English";
+        String _accountName = "gett";//"nanorep";
+        String _kb = "English_IL";//"English";
 
         NRImpl.init(getApplicationContext(), _accountName, _kb);
 //        Nanorep.
