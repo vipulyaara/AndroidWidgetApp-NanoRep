@@ -228,6 +228,11 @@ public class NRLinkedArticleFragment extends Fragment implements NRContentView.L
     }
 
     @Override
+    public void onDismiss() {
+
+    }
+
+    @Override
     public void onChannelSelected(NRChannelItem channelItem) {
 
     }

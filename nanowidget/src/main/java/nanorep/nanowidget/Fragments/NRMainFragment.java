@@ -231,6 +231,17 @@ public class NRMainFragment extends Fragment implements NRSearchBarListener, NRS
     }
 
     @Override
+    public void onDismiss() { //for NRContent
+        View view = contentMain.getChildAt(contentMain.getChildCount() - 1);
+
+        if(view  instanceof NRResultTopView) {
+            view.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.slide_out_left));
+        }
+
+        removeTopView();
+    }
+
+    @Override
     public void onLikeClicked(final NRResultTopView view,final NRLikeView likeView, String resultId, boolean isLike) {
         final NRResult result = view.getmResult();
 

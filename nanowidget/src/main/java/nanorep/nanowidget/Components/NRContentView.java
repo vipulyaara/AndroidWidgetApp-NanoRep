@@ -5,6 +5,7 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.Build;
 import android.util.AttributeSet;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -25,7 +26,7 @@ import nanorep.nanowidget.R;
  * Created by nissimpardo on 21/08/2016.
  */
 
-public class NRContentView extends NRCustomContentView {
+public class NRContentView extends NRCustomContentView implements View.OnKeyListener{
 
 //    private NRContentView.Listener mListener;
     private WebView mWebView;
@@ -34,6 +35,7 @@ public class NRContentView extends NRCustomContentView {
     public interface Listener {
         void onLinkedArticleClicked(String articleId);
         void onLinkClicked(String url);
+        void onDismiss();
     }
 
     public NRContentView(Context context) {
@@ -47,15 +49,7 @@ public class NRContentView extends NRCustomContentView {
         super.onViewAdded(child);
         mWebView = (WebView) child.findViewById(R.id.nrWebview);
 
-        mWebView.setOnTouchListener(new View.OnTouchListener() {
-
-            public boolean onTouch(View v, MotionEvent event)
-            {
-                //  Disallow the touch request for parent scroll on touch of child view
-                v.getParent().requestDisallowInterceptTouchEvent(true);
-                return false;
-            }
-        });
+        mWebView.setOnKeyListener(this);
 
         mWebView.getSettings().setJavaScriptEnabled(true);
 //        mWebView.getSettings().setLoadWithOverviewMode(true);
@@ -70,6 +64,12 @@ public class NRContentView extends NRCustomContentView {
             }
         });
         mLoadingView = (RelativeLayout) child.findViewById(R.id.webLoadingView);
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        mWebView.requestDisallowInterceptTouchEvent(true);
+        return super.onTouchEvent(event);
     }
 
     public void setListener(NRContentView.Listener listener) {
@@ -168,4 +168,17 @@ public class NRContentView extends NRCustomContentView {
             return false;
         }
     }
+
+    @Override
+    public boolean onKey(View v, int keyCode, KeyEvent event) {
+        if (event.getAction() == KeyEvent.ACTION_DOWN) {
+            if (keyCode == KeyEvent.KEYCODE_BACK) {
+                mListener.onDismiss();
+                return true;
+            }
+        }
+
+        return false;
+    }
+
 }

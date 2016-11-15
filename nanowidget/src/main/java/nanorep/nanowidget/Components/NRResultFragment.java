@@ -60,6 +60,11 @@ public class NRResultFragment extends Fragment implements View.OnClickListener, 
     }
 
     @Override
+    public void onDismiss() {
+
+    }
+
+    @Override
     public void onAnswerFetched(NRQueryResult result) {
         getView().findViewById(R.id.linkedArtHolder).setVisibility(View.VISIBLE);
         NRLinkedArticleFragment linkedArticleFragment = new NRLinkedArticleFragment();
