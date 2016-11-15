@@ -36,7 +36,7 @@ import nanorep.nanowidget.interfaces.OnLikeListener;
  * Created by nanorep on 27/10/2016.
  */
 
-public class NRResultTopView extends RelativeLayout implements NRTitleListener, OnLikeListener {
+public class NRResultTopView extends RelativeLayout implements NRTitleListener, OnLikeListener, View.OnClickListener {
 
 //    NRResultItemListener mListener;
 
@@ -70,6 +70,11 @@ public class NRResultTopView extends RelativeLayout implements NRTitleListener, 
         topViewListener.onLikeClicked(NRResultTopView.this, likeView, resultId, isLike);
     }
 
+    @Override
+    public void onClick(View v) {
+        int i=0;
+    }
+
     public interface Listener {
         void onFoldItemFinished(boolean beforeGoingDown);
         void fetchBodyForResult(NRCustomContentView view, String resultID, Integer resultHash);
@@ -90,6 +95,7 @@ public class NRResultTopView extends RelativeLayout implements NRTitleListener, 
         viewChannelingContainer = (LinearLayout) view.findViewById(R.id.channel_container);
         answerLayout = (LinearLayout) view.findViewById(R.id.answerLayout);
         layoutAnimated = (RelativeLayout) view.findViewById(R.id.layoutAnimated);
+        layoutAnimated.setOnClickListener(this);
 
         // opened
         viewTitleContainerOpened = (LinearLayout) view.findViewById(R.id.title_container_opened);
@@ -97,6 +103,7 @@ public class NRResultTopView extends RelativeLayout implements NRTitleListener, 
         viewLikeContainerOpened = (LinearLayout) view.findViewById(R.id.like_container_opened);
         viewChannelingContainerOpened = (LinearLayout) view.findViewById(R.id.channel_container_opened);
         layoutOpened = (LinearLayout) view.findViewById(R.id.layoutOpened);
+        layoutOpened.setOnClickListener(this);
     }
 
     public void setListener(Listener listener) {
