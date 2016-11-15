@@ -27,6 +27,19 @@ public class NRResultsView extends LinearLayout implements NRResultsAdapter.List
     private RecyclerView mResultsRecyclerView;
     private NRResultsAdapter adapter;
     private Listener listener;
+    private boolean isAnimated;
+
+    public void setIsAnimated(boolean isAnimated) {
+        this.isAnimated = isAnimated;
+    }
+
+    public boolean isAnimated() {
+        return isAnimated;
+    }
+
+    public void setAnimated(boolean isAnimated) {
+        this.isAnimated = isAnimated;
+    }
 
 
     public interface Listener{
@@ -70,7 +83,9 @@ public class NRResultsView extends LinearLayout implements NRResultsAdapter.List
 
         int y = marginTop - offSet + (int) Calculate.pxFromDp(getContext(), 16) + divider;
 
-//        titleViewHolder.getTitleView().setVisibility(View.INVISIBLE);
+        if(isAnimated) {
+            titleViewHolder.getTitleView().setVisibility(View.INVISIBLE);
+        }
 
         listener.onResultSelected(y, titleViewHolder);
     }

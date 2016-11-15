@@ -14,23 +14,6 @@ public class NRResult implements Serializable {
     private NRQueryResult mFetchedResult;
     private boolean mIsUnfolded = false;
     private NRResultItem.RowType mRowType;
-
-    public int getHeight() {
-        return mHeight;
-    }
-
-    public void setHeight(int height) {
-        mHeight = height;
-    }
-
-    public boolean isSingle() {
-        return mIsSingle;
-    }
-
-    public void setSingle(boolean single) {
-        mIsSingle = single;
-    }
-
     private int mHeight;
     private boolean mIsSingle;
 
@@ -58,4 +41,21 @@ public class NRResult implements Serializable {
     public void setRowType(NRResultItem.RowType rowType) {
         mRowType = rowType;
     }
+
+    public int getHeight() {
+        return mHeight;
+    }
+
+    public void setHeight(int height) {
+        mHeight = height;
+    }
+
+    public boolean isSingle() {
+        return mIsSingle;
+    }
+
+    public void setSingle(boolean single) {
+        mIsSingle = single;
+    }
+
 }

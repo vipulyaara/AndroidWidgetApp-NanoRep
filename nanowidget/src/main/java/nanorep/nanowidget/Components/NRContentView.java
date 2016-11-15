@@ -6,6 +6,7 @@ import android.content.Context;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceRequest;
@@ -27,7 +28,7 @@ import nanorep.nanowidget.R;
 public class NRContentView extends NRCustomContentView {
 
 //    private NRContentView.Listener mListener;
-    private MyWebView mWebView;
+    private WebView mWebView;
     private RelativeLayout mLoadingView;
 
     public interface Listener {
@@ -44,7 +45,18 @@ public class NRContentView extends NRCustomContentView {
     @Override
     public void onViewAdded(View child) {
         super.onViewAdded(child);
-        mWebView = (MyWebView) child.findViewById(R.id.nrWebview);
+        mWebView = (WebView) child.findViewById(R.id.nrWebview);
+
+        mWebView.setOnTouchListener(new View.OnTouchListener() {
+
+            public boolean onTouch(View v, MotionEvent event)
+            {
+                //  Disallow the touch request for parent scroll on touch of child view
+                v.getParent().requestDisallowInterceptTouchEvent(true);
+                return false;
+            }
+        });
+
         mWebView.getSettings().setJavaScriptEnabled(true);
 //        mWebView.getSettings().setLoadWithOverviewMode(true);
 //        mWebView.getSettings().setUseWideViewPort(true);

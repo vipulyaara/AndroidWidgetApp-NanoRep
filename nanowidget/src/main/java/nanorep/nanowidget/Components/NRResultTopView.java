@@ -353,9 +353,9 @@ public class NRResultTopView extends RelativeLayout implements NRTitleListener, 
         varl.start();
     }
 
-    public void removeTopView(boolean isLinkedArticle) {
+    public void removeTopView() {
 
-        if(mResult != null && !mResult.isSingle() && !isLinkedArticle) {
+        if(mResult != null && !mResult.isSingle()) {
             closeViewAnimation();
         } else {
             viewChannelingContainer.removeAllViews();

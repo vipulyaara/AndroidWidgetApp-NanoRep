@@ -4,8 +4,10 @@ import android.animation.Animator;
 import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -25,7 +27,9 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.nanorep.nanoclient.Channeling.NRChanneling;
 import com.nanorep.nanoclient.Interfaces.NRQueryResult;
 import com.nanorep.nanoclient.NRImpl;
 import com.nanorep.nanoclient.Nanorep;
@@ -114,6 +118,9 @@ public class NRMainFragment extends Fragment implements NRSearchBarListener, NRS
     private TextView mNoTitleView;
     private RelativeLayout mNotitleViewHolder;
 
+    private String mailTo;
+    private boolean animation = false;
+
 
     @Override
     public void fetchBodyForResult(final NRCustomContentView view, String resultID, Integer resultHash) {
@@ -130,33 +137,60 @@ public class NRMainFragment extends Fragment implements NRSearchBarListener, NRS
         // get the last view
         View view = contentMain.getChildAt(contentMain.getChildCount() - 1);
 
-//        if(view  instanceof NRResultTopView && !((NRResultTopView)view).getmResult().isSingle()) {
-//            ((NRResultTopView)view).setResultUnFoldState(false);
-//            ((NRResultTopView)view).removeTopView(false);
-//        }
-
-        view.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.slide_out_left));
+        if(!animation) {
+            view.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.slide_out_left));
+        } else {
+            if(view  instanceof NRResultTopView && !((NRResultTopView)view).getmResult().isSingle()) {
+                ((NRResultTopView)view).setResultUnFoldState(false);
+                ((NRResultTopView)view).removeTopView();
+            }
+        }
 
         contentMain.removeView(view);
     }
 
     @Override
     public void onChannelSelected(NRChannelItem channelItem) {
-        String url = NRChannelStrategy.presentor(getContext(), channelItem.getChanneling(), NRImpl.getInstance()).getUrl();
-        if (url != null) {
-            final RelativeLayout holder = (RelativeLayout) getView().findViewById(R.id.fragment_place_holder);
-            holder.setVisibility(View.VISIBLE);
-            NRWebContentFragment webContentFragment = NRWebContentFragment.newInstance(url, null);
-            webContentFragment.setListener(new NRWebContentFragment.Listener() {
-                @Override
-                public void onDismiss() {
-                    getChildFragmentManager().popBackStack();
-                    holder.setVisibility(View.INVISIBLE);
-                    getView().requestFocus();
-                }
-            });
-            getChildFragmentManager().beginTransaction().setCustomAnimations(R.anim.fade_in, R.anim.fade_out, R.anim.fade_in, R.anim.fade_out).add(R.id.fragment_place_holder, webContentFragment).addToBackStack("linked").commit();
-            getView().requestFocus();
+        if(channelItem.getChanneling().getType() == NRChanneling.NRChannelingType.ContactForm && mailTo != null) {
+            openSendAction();
+        } else {
+
+            String url = NRChannelStrategy.presentor(getContext(), channelItem.getChanneling(), NRImpl.getInstance()).getUrl();
+            if (url != null) {
+                final RelativeLayout holder = (RelativeLayout) getView().findViewById(R.id.fragment_place_holder);
+                holder.setVisibility(View.VISIBLE);
+                NRWebContentFragment webContentFragment = NRWebContentFragment.newInstance(url, null);
+                webContentFragment.setListener(new NRWebContentFragment.Listener() {
+                    @Override
+                    public void onDismiss() {
+                        getChildFragmentManager().popBackStack();
+                        holder.setVisibility(View.INVISIBLE);
+                        getView().requestFocus();
+                    }
+                });
+                getChildFragmentManager().beginTransaction().setCustomAnimations(R.anim.fade_in, R.anim.fade_out, R.anim.fade_in, R.anim.fade_out).add(R.id.fragment_place_holder, webContentFragment).addToBackStack("linked").commit();
+                getView().requestFocus();
+            }
+        }
+    }
+
+    private NRQueryResult getCurrentResult() {
+        View view = contentMain.getChildAt(contentMain.getChildCount() - 1);
+        if(view instanceof NRResultTopView){
+            return ((NRResultTopView)view).getmResult().getFetchedResult();
+        }
+        return null;
+    }
+
+    private void openSendAction() {
+        Intent i = new Intent(Intent.ACTION_SEND);
+        i.setType("message/rfc822");
+        i.putExtra(Intent.EXTRA_EMAIL  , new String[]{mailTo});
+        i.putExtra(Intent.EXTRA_SUBJECT, getCurrentResult().getTitle());
+        try {
+            startActivity(Intent.createChooser(i, "Send mail..."));
+        } catch (android.content.ActivityNotFoundException ex) {
+            Toast.makeText(getActivity(), "There are no email clients installed.", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -168,6 +202,7 @@ public class NRMainFragment extends Fragment implements NRSearchBarListener, NRS
 
                 NRResult newResult = new NRResult(result, NRResultItem.RowType.TITLE);
                 newResult.setHeight((int) Calculate.pxFromDp(getContext(), NRFetchedDataManager.ROW_HEIGHT));
+                newResult.setSingle(true);
 
                 NRResultTopView resultTopView = getTopView();
                 contentMain.addView(resultTopView);
@@ -192,6 +227,7 @@ public class NRMainFragment extends Fragment implements NRSearchBarListener, NRS
         });
 
         contentMain.addView(webView);
+        getView().requestFocus();
     }
 
     @Override
@@ -241,9 +277,11 @@ public class NRMainFragment extends Fragment implements NRSearchBarListener, NRS
         dislikeAlert.setDislikeOptions(reasons);
     }
 
-    public static NRMainFragment newInstance() {
+    public static NRMainFragment newInstance(String mailTo) {
 
         Bundle args = new Bundle();
+
+        args.putString("mailTo",mailTo);
 
         NRMainFragment fragment = new NRMainFragment();
         fragment.setArguments(args);
@@ -342,7 +380,11 @@ public class NRMainFragment extends Fragment implements NRSearchBarListener, NRS
 
                     resultTopView.startAnimation(animation);
 
-                    resultTopView.openOpenedView(results.get(0));
+                    NRResult result = results.get(0);
+
+                    result.setSingle(true);
+
+                    resultTopView.openOpenedView(result);
 
                     getView().requestFocus();
                 } else if(results.size() > 1){
@@ -426,6 +468,7 @@ public class NRMainFragment extends Fragment implements NRSearchBarListener, NRS
 
         View view = inflater.inflate(R.layout.fragment_main, container, false);
 
+        mailTo = getArguments().getString("mailTo");
 
         mLoadingView = (RelativeLayout) view.findViewById(R.id.fragment_place_holder);
 
@@ -622,6 +665,7 @@ public class NRMainFragment extends Fragment implements NRSearchBarListener, NRS
         NRResultsView resultsView = new NRResultsView(getActivity());
         resultsView.setListener(NRMainFragment.this);
         resultsView.setResults(results, viewAdapter);
+        resultsView.setIsAnimated(animation);
 
         contentMain.addView(resultsView);
 
@@ -638,16 +682,18 @@ public class NRMainFragment extends Fragment implements NRSearchBarListener, NRS
 
         contentMain.addView(resultTopView);
 
-        resultTopView.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.slide_in_left));
-
         animateBGColor(500, resultTopView, true, titleViewHolder);
 
         NRResult result = titleViewHolder.getResult();
 
         result.setUnfolded(true);
-//        resultTopView.openView(y, result);
 
-        resultTopView.openOpenedView(result);
+        if(animation) {
+            resultTopView.openView(y, result);
+        } else {
+            resultTopView.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.slide_in_left));
+            resultTopView.openOpenedView(result);
+        }
 
         getView().requestFocus();
     }
@@ -683,29 +729,31 @@ public class NRMainFragment extends Fragment implements NRSearchBarListener, NRS
                             // get the last view
                             View view = contentMain.getChildAt(contentMain.getChildCount() - 1);
 
-                            if(view  instanceof NRResultTopView) {// && !((NRResultTopView)view).getmResult().isSingle()) { // opened from results lists
-//                                ((NRResultTopView)view).setResultUnFoldState(false);
-//                                ((NRResultTopView)view).removeTopView(false);
-
-                                view.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.slide_out_left));
-
-                                //contentMain.removeViewAt(contentMain.getChildCount() - 1);
-
-                                //updateSearchBarTextForResultTop(view);
-
-                            } //else {
-
-                                contentMain.removeViewAt(contentMain.getChildCount() - 1);
-
-                                View currentView = contentMain.getChildAt(contentMain.getChildCount() - 1);
-                                if(currentView instanceof NRResultTopView){
-
-                                    updateSearchBarTextForResultTop(currentView);
-                                } else {
-                                    searchBarView.updateEditTextView("");
-                                    getView().requestFocus();
+                            if(!animation) {
+                                if(view  instanceof NRResultTopView) {
+                                    view.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.slide_out_left));
                                 }
-                            //}
+
+                                removeTopView();
+
+                            } else { // if answer is opened from list, it should be animated
+                                if(view  instanceof NRResultTopView){// &&
+                                    if(!((NRResultTopView)view).getmResult().isSingle()) { // opened from results lists)
+                                        ((NRResultTopView) view).setResultUnFoldState(false);
+                                        ((NRResultTopView) view).removeTopView();
+
+                                        updateSearchBarTextForResultTop(view);
+                                    } else {
+                                        view.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.slide_out_left));
+
+                                        removeTopView();
+                                    }
+
+                                } else {
+
+                                    removeTopView();
+                                }
+                            }
 
                             return true;
                         } else {
@@ -722,6 +770,19 @@ public class NRMainFragment extends Fragment implements NRSearchBarListener, NRS
         };
 
         getView().setOnKeyListener(onKeyListener);
+    }
+
+    private void removeTopView() {
+        contentMain.removeViewAt(contentMain.getChildCount() - 1);
+
+        View currentView = contentMain.getChildAt(contentMain.getChildCount() - 1);
+        if(currentView instanceof NRResultTopView){
+
+            updateSearchBarTextForResultTop(currentView);
+        } else {
+            searchBarView.updateEditTextView("");
+            getView().requestFocus();
+        }
     }
 
     private void updateSearchBarTextForResultTop(View view) {
