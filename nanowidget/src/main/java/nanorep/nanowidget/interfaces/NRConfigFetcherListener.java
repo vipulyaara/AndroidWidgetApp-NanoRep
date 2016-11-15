@@ -14,4 +14,5 @@ import nanorep.nanowidget.DataClasse.NRResult;
 public interface NRConfigFetcherListener {
     void onConfigurationReady();
     void insertRows(ArrayList<NRFAQGroupItem> groups);
+    void onError();
 }

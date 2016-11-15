@@ -21,6 +21,8 @@ public class NRDownloader extends  AsyncTask <Uri, Integer, Object> {
     private NRDownloaderListener mListener;
     private int mStatus;
 
+    public static final int TIMEOUT = 2000;
+
     public interface NRDownloaderListener {
         void downloadCompleted(NRDownloader downloader, Object data, NRError error);
     }
@@ -40,15 +42,16 @@ public class NRDownloader extends  AsyncTask <Uri, Integer, Object> {
         Uri uri = uris[0];
         URL url = null;
         byte[] data = null;
-        try{
+        try {
             url = new URL(uri.toString());
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setConnectTimeout(5000); // set timeout to 5 seconds
             connection.setRequestProperty("Referer", uri.getQueryParameter("referer"));
             connection.connect();
             InputStream inputStream = new BufferedInputStream(connection.getInputStream());
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
             int next = inputStream.read();
-            while (next > -1){
+            while (next > -1) {
                 bos.write(next);
                 next = inputStream.read();
             }
@@ -57,6 +60,14 @@ public class NRDownloader extends  AsyncTask <Uri, Integer, Object> {
             bos.flush();
             bos.close();
             mStatus = connection.getResponseCode();
+        }catch (java.net.SocketTimeoutException e) {
+            e.printStackTrace();
+            return NRError.error("Connection", TIMEOUT, e.getMessage());
+
+        }catch (java.net.UnknownHostException e) {
+            e.printStackTrace();
+            return NRError.error("Connection", TIMEOUT, e.getMessage());
+
         }catch (Exception e){
 
             e.printStackTrace();

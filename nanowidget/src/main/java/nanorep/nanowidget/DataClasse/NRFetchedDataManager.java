@@ -5,6 +5,7 @@ import android.util.Log;
 
 
 import com.nanorep.nanoclient.Connection.NRError;
+import com.nanorep.nanoclient.Handlers.NRErrorHandler;
 import com.nanorep.nanoclient.Interfaces.NRQueryResult;
 import com.nanorep.nanoclient.Interfaces.NRSpeechRecognizerCompletion;
 import com.nanorep.nanoclient.NRImpl;
@@ -44,6 +45,10 @@ public class NRFetchedDataManager {
         mContext = context;
         mconfigFetcherListener = configFetcherListener;
 
+        fetchConfiguration();
+    }
+
+    public void fetchConfiguration() {
         NRImpl.getInstance().fetchConfiguration(new Nanorep.OnConfigurationFetchedListener() {
             @Override
             public void onConfigurationFetched(NRError error) {
@@ -54,7 +59,7 @@ public class NRFetchedDataManager {
                         prepareDatasource();
                     }
                 } else if (error != null) {
-                    onRequestError(error);
+                    mconfigFetcherListener.onError();
                 }
             }
         }, false);

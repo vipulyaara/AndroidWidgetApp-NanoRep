@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -21,7 +20,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -30,6 +28,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nanorep.nanoclient.Channeling.NRChanneling;
+import com.nanorep.nanoclient.Handlers.NRErrorHandler;
 import com.nanorep.nanoclient.Interfaces.NRQueryResult;
 import com.nanorep.nanoclient.NRImpl;
 import com.nanorep.nanoclient.Nanorep;
@@ -40,6 +39,7 @@ import com.nanorep.nanoclient.Response.NRFAQGroupItem;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 import nanorep.nanowidget.Components.AbstractViews.NRCustomChannelView;
 import nanorep.nanowidget.Components.AbstractViews.NRCustomContentView;
@@ -54,6 +54,7 @@ import nanorep.nanowidget.Components.NRCategoriesView;
 import nanorep.nanowidget.Components.NRChannelItem;
 import nanorep.nanowidget.Components.NRChannelingView;
 import nanorep.nanowidget.Components.NRContentView;
+import nanorep.nanowidget.Components.NRErrorView;
 import nanorep.nanowidget.Components.NRLikeView;
 import nanorep.nanowidget.Components.NRResultItem;
 import nanorep.nanowidget.Components.NRResultTopView;
@@ -67,7 +68,6 @@ import nanorep.nanowidget.DataClasse.NRResult;
 import nanorep.nanowidget.DataClasse.NRResultsAdapter;
 import nanorep.nanowidget.R;
 import nanorep.nanowidget.Utilities.Calculate;
-import nanorep.nanowidget.Utilities.NRWebClient;
 import nanorep.nanowidget.interfaces.NRConfigFetcherListener;
 import nanorep.nanowidget.interfaces.NRCustomViewAdapter;
 import nanorep.nanowidget.interfaces.NRFetcherListener;
@@ -83,10 +83,12 @@ public class NRMainFragment extends Fragment implements NRSearchBarListener, NRS
                                                         NRCategoriesView.Listener, NRResultsView.Listener,
                                                         NRContentView.Listener,
                                                         NRChannelItem.OnChannelSelectedListener,
-                                                        NRResultTopView.Listener{
+                                                        NRResultTopView.Listener,
+                                                        NRErrorHandler.Listener{
 
     public static final String TAG = NRMainFragment.class.getName();
     private static final int NO_TITLE_HEIGHT = 100;
+    private static final int NO_CONNECTION_HEIGHT = 24;
 
     private NRFetchedDataManager mFetchedDataManager;
 
@@ -117,6 +119,9 @@ public class NRMainFragment extends Fragment implements NRSearchBarListener, NRS
     // no answer
     private TextView mNoTitleView;
     private RelativeLayout mNotitleViewHolder;
+
+    // no connection
+    private LinearLayout noConnecttionView;
 
     private String mailTo;
     private boolean animation = false;
@@ -312,6 +317,12 @@ public class NRMainFragment extends Fragment implements NRSearchBarListener, NRS
         mFetchedDataManager = new NRFetchedDataManager(getContext(), new NRConfigFetcherListener() {
             @Override
             public void onConfigurationReady() {
+
+                View view = contentMain.getChildAt(contentMain.getChildCount() - 1);
+                if(view instanceof NRErrorView) {
+                    contentMain.removeView(view);
+                }
+
                 updateTitleNormalText();
                 updateSearchBar();
                 showSuggestionsView();
@@ -332,6 +343,24 @@ public class NRMainFragment extends Fragment implements NRSearchBarListener, NRS
                     // show results view immidiately
                     openNRResultView(mFetchedDataManager.generateNRResultArray(groups.get(0).getAnswers(), getContext()));
                 }
+            }
+
+            @Override
+            public void onError() {
+                mLoadingView.setVisibility(View.GONE);
+
+                noConnecttionView.getLayoutParams().height = 0;
+                noConnecttionView.requestLayout();
+
+                NRErrorView errorView = new NRErrorView(getContext());
+                errorView.setListener(new NRErrorView.Listener() {
+                    @Override
+                    public void tryAgain() {
+                        mFetchedDataManager.fetchConfiguration();
+                        mLoadingView.setVisibility(View.VISIBLE);
+                    }
+                });
+                contentMain.addView(errorView);
             }
         });
 
@@ -434,6 +463,8 @@ public class NRMainFragment extends Fragment implements NRSearchBarListener, NRS
             viewAdapter  = new NRViewAdapter();
         }
 
+
+        NRErrorHandler.getInstance().setListener(this);
     }
 
     private NRResultTopView getTopView() {
@@ -489,6 +520,10 @@ public class NRMainFragment extends Fragment implements NRSearchBarListener, NRS
 
         mNotitleViewHolder = (RelativeLayout) view.findViewById(R.id.noTiltleView);
         mNoTitleView = (TextView) view.findViewById(R.id.noTitleTextView);
+
+        noConnecttionView = (LinearLayout) view.findViewById(R.id.noConnecttionView);
+
+//        noConnecttionView.getLayoutParams().height = (int) Calculate.pxFromDp(getContext(), NO_CONNECTION_HEIGHT);
 
         setViews(view);
 
@@ -896,4 +931,23 @@ public class NRMainFragment extends Fragment implements NRSearchBarListener, NRS
         colorAnimation.start();
     }
 
+    @Override
+    public void show(NRErrorHandler.ErrorType errorType) { // error handler
+        switch (errorType) {
+            case TIMEOUT_UPPER_LINE:
+                View view = contentMain.getChildAt(contentMain.getChildCount() - 1);
+                if(!(view instanceof NRErrorView)) {
+                    noConnecttionView.getLayoutParams().height = (int) Calculate.pxFromDp(getContext(), NO_CONNECTION_HEIGHT);
+                    searchBarView.dismissKeyboard();
+                }
+                break;
+        }
+
+    }
+
+    @Override
+    public void dismiss() {
+        noConnecttionView.getLayoutParams().height = 0;
+        noConnecttionView.requestLayout();
+    }
 }

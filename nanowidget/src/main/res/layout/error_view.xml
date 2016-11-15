@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="#eaeaea"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/imageCloud"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="82dp"
+        android:src="@drawable/cloud"
+        />
+
+    <TextView
+        android:id="@+id/textCloud"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:text="Whoops!\nNo internet connection found"
+        android:gravity="center"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/imageCloud"
+        android:layout_marginTop="16dp"
+        android:textColor="#4a4a4a"
+        android:textSize="16sp"
+        android:fontFamily="sans-serif-light"
+        />
+
+    <Button
+        android:id="@+id/buttonCloud"
+        android:layout_height="35dp"
+        android:layout_width="210dp"
+        android:background="#f9c844"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/textCloud"
+        android:layout_marginTop="35dp"
+        android:text="Try Again"
+        android:textColor="@android:color/white"
+        />
+
+</RelativeLayout>
