@@ -19,8 +19,8 @@ public class NanoApp extends Application{
     public void onCreate() {
         super.onCreate();
 
-        String _accountName = "gett";//"gett";//"nanorep";
-        String _kb = "English_IL";//"English_IL";//"English";
+        String _accountName = "qa";//"gett";//"nanorep";
+        String _kb = "qa";//"English_IL";//"English";
 
         NRImpl.init(getApplicationContext(), _accountName, _kb);
         Fabric.with(this, new Crashlytics());

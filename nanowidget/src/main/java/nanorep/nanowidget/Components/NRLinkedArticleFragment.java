@@ -55,7 +55,7 @@ public class NRLinkedArticleFragment extends Fragment implements NRContentView.L
     private NRQueryResult mResult;
 
     @Override
-    public void onLikeSent(String resultId, int type, boolean success) {
+    public void onLikeSent(boolean success) {
 
     }
 
@@ -243,8 +243,10 @@ public class NRLinkedArticleFragment extends Fragment implements NRContentView.L
             mLinkedArticles.get(mIndex).setLikeState(NRQueryResult.LikeState.positive);
             mListener.onLikeSelected(this, NRLikeType.POSITIVE, mLinkedArticles.get(mIndex));
         } else {
-            String reasons[] = new String[] {"Incorrect answer", "Missing or incorrect information", "Didn't find what I was looking for"};
-            DislikeDialog dislikeAlert = new DislikeDialog(getContext());
+            String reasons[] = new String[] {getString(R.string.Incorrect_answer), getString(R.string.missing_information), getString(R.string.didnt_find)};
+
+            View dislikeView = getActivity().getLayoutInflater().inflate(R.layout.dislike_dialog, null);
+            DislikeDialog dislikeAlert = new DislikeDialog(getContext(), dislikeView);
             dislikeAlert.setTitle("What's wrong with this answer");
             dislikeAlert.setListener(new DislikeDialog.Listener() {
                 @Override

@@ -328,9 +328,9 @@ public class NRImpl extends Nanorep {
             @Override
             public void response(Object responseParam, int status, NRError error) {
                 if (error != null) {
-                    onLikeSentListener.onLikeSent(likeParams.getArticleId(), 0, false);
+                    onLikeSentListener.onLikeSent(false);
                 } else if (responseParam != null) {
-                    onLikeSentListener.onLikeSent(likeParams.getArticleId(), (Integer) ((HashMap) responseParam).get("type"), ((HashMap) responseParam).get("result").equals("True"));
+                    onLikeSentListener.onLikeSent(true);
                 }
             }
 
@@ -418,10 +418,9 @@ public class NRImpl extends Nanorep {
             @Override
             public void response(Object responseParam, int status, NRError error) {
                 if (error != null) {
-                    onLikeSentListener.onLikeSent(likeParams.getAnswerId(), 0, false);
+                    onLikeSentListener.onLikeSent(false);
                 } else if (responseParam instanceof HashMap){
-                    boolean result = Boolean.valueOf((String) ((HashMap)responseParam).get("result"));
-                    onLikeSentListener.onLikeSent(likeParams.getAnswerId(), Integer.parseInt(likeParams.getParams().get("type")), result);
+                    onLikeSentListener.onLikeSent(true);
                 }
             }
 

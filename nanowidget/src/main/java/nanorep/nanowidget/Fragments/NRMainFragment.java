@@ -248,7 +248,7 @@ public class NRMainFragment extends Fragment implements NRSearchBarListener, NRS
             result.getFetchedResult().setLikeState(NRQueryResult.LikeState.positive);
             mFetchedDataManager.sendLike(NRLikeType.POSITIVE, result.getFetchedResult(), new Nanorep.OnLikeSentListener() {
                 @Override
-                public void onLikeSent(String resultId, int type, boolean success) {
+                public void onLikeSent(boolean success) {
                     if(!success) {
                         view.getmResult().getFetchedResult().setLikeState(NRQueryResult.LikeState.notSelected);
                         likeView.resetLikeView();
@@ -261,9 +261,11 @@ public class NRMainFragment extends Fragment implements NRSearchBarListener, NRS
     }
 
     private void openDislikeDialog(final NRResult result, final NRResultTopView view, final NRLikeView likeView) {
-        String reasons[] = new String[] {"Incorrect answer", "Missing or incorrect information", "Didn't find what I was looking for"};
-        DislikeDialog dislikeAlert = new DislikeDialog(getContext());
-        dislikeAlert.setTitle("What's wrong with this answer");
+        String reasons[] = new String[] {getString(R.string.Incorrect_answer), getString(R.string.missing_information), getString(R.string.didnt_find)};
+        View dislikeView = getActivity().getLayoutInflater().inflate(R.layout.dislike_dialog, null);
+
+        final DislikeDialog dislikeAlert = new DislikeDialog(getContext(), dislikeView);
+//        dislikeAlert.setTitle(getString(R.string.wrong));
         dislikeAlert.setListener(new DislikeDialog.Listener() {
             @Override
             public void onCancel() {
@@ -275,7 +277,7 @@ public class NRMainFragment extends Fragment implements NRSearchBarListener, NRS
                 result.getFetchedResult().setLikeState(NRQueryResult.LikeState.negative);
                 mFetchedDataManager.sendLike(type, result.getFetchedResult(), new Nanorep.OnLikeSentListener() {
                     @Override
-                    public void onLikeSent(String resultId, int type, boolean success) {
+                    public void onLikeSent(boolean success) {
                         if(!success) {
                             view.getmResult().getFetchedResult().setLikeState(NRQueryResult.LikeState.notSelected);
                             likeView.resetLikeView();

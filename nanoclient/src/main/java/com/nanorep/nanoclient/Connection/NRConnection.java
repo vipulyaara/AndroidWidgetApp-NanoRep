@@ -14,6 +14,7 @@ import com.nanorep.nanoclient.Log.NRLogger;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by nissopa on 9/12/15.
@@ -58,16 +59,21 @@ public class NRConnection {
                     if (error != null) {
                         listener.response(null, -1, error);
                         NRErrorHandler.getInstance().handleError(error.getCode());
-                    } else if (data != null) {
+                    } else {//if (data != null) {
 
                         NRErrorHandler.getInstance().reset();
 
-                        String jsonString = new String((byte[])data);
+                        String jsonString = "";
+                        Object retMap = new HashMap<>();
+
+                        if (data != null) {
+                            jsonString = new String((byte[]) data);
+                            retMap = NRUtilities.jsonStringToPropertyList(jsonString);
+                        }
 
                         //log
                         listener.log(TAG_RESPONSE, jsonString);
 
-                        Object retMap = NRUtilities.jsonStringToPropertyList(jsonString);
                         listener.response(retMap, downloader.getResponseStatus(), null);
                     }
                 }

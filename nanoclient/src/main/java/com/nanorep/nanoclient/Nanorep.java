@@ -37,7 +37,7 @@ public abstract class Nanorep {
     }
 
     public interface OnLikeSentListener {
-        void onLikeSent(String resultId, int type, boolean success);
+        void onLikeSent(boolean success);
     }
 
     public interface OnFAQAnswerFetchedListener {
