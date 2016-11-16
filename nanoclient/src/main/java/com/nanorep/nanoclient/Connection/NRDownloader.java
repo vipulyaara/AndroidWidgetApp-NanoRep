@@ -67,7 +67,9 @@ public class NRDownloader extends  AsyncTask <Uri, Integer, Object> {
         }catch (java.net.UnknownHostException e) {
             e.printStackTrace();
             return NRError.error("Connection", TIMEOUT, e.getMessage());
-
+        }catch (java.net.ConnectException e) {
+            e.printStackTrace();
+            return NRError.error("Connection", TIMEOUT, e.getMessage());
         }catch (Exception e){
 
             e.printStackTrace();
@@ -85,9 +87,9 @@ public class NRDownloader extends  AsyncTask <Uri, Integer, Object> {
     protected void onPostExecute(Object bytes){
         if (bytes instanceof NRError) {
             mListener.downloadCompleted(this, null, (NRError)bytes);
-        } else if (((byte[])bytes).length > 0) {
+        } else if (mStatus == 200 && ((byte[])bytes).length > 0) {
             mListener.downloadCompleted(this, bytes, null);
-        } else if (mStatus == 200) {
+        } else if (mStatus == 200 && ((byte[])bytes).length == 0) {
             mListener.downloadCompleted(this, null, null);
         } else {
             mListener.downloadCompleted(this, null, NRError.error("Parsed Response", 1001, "Empty response"));

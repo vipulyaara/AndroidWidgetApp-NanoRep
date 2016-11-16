@@ -50,18 +50,18 @@ public class NRConnection {
 
     public void connectionWithRequest(Uri uri, final Listener listener) {
 
-        NRErrorHandler.getInstance().reset();
-
         NRDownloader downloader = new NRDownloader(new NRDownloader.NRDownloaderListener() {
             @Override
             public void downloadCompleted(NRDownloader downloader, Object data, NRError error) {
-
 
                 if (listener != null) {
                     if (error != null) {
                         listener.response(null, -1, error);
                         NRErrorHandler.getInstance().handleError(error.getCode());
                     } else if (data != null) {
+
+                        NRErrorHandler.getInstance().reset();
+
                         String jsonString = new String((byte[])data);
 
                         //log
