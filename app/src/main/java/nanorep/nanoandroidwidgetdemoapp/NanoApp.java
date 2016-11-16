@@ -2,10 +2,13 @@ package nanorep.nanoandroidwidgetdemoapp;
 
 import android.app.Application;
 
+import com.crashlytics.android.Crashlytics;
 import com.nanorep.nanoclient.NRImpl;
 import com.nanorep.nanoclient.Nanorep;
 
 import java.io.Serializable;
+
+import io.fabric.sdk.android.Fabric;
 
 
 /**
@@ -20,6 +23,9 @@ public class NanoApp extends Application{
         String _kb = "qa";//"English_IL";//"English";
 
         NRImpl.init(getApplicationContext(), _accountName, _kb);
+        Fabric.with(this, new Crashlytics());
+
+
 //        Nanorep.
     }
 }

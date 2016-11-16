@@ -1,4 +1,10 @@
 apply plugin: 'com.android.application'
+apply plugin: 'io.fabric'
+
+
+repositories {
+    maven { url 'https://maven.fabric.io/public' }
+}
 
 android {
     compileSdkVersion 24
@@ -23,5 +29,8 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
     compile project(':nanowidget')
-    compile 'com.crittercism:crittercism-android-agent:+'
+    compile('com.crashlytics.sdk.android:crashlytics:2.6.5@aar') {
+        transitive = true;
+    }
+    //compile 'com.crittercism:crittercism-android-agent:+'
 }

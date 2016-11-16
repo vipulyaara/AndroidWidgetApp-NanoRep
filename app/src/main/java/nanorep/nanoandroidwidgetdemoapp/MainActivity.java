@@ -15,12 +15,14 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 
-import com.crittercism.app.Crittercism;
+//import com.crittercism.app.Crittercism;
+import com.crashlytics.android.Crashlytics;
 import com.nanorep.nanoclient.NRImpl;
 import com.nanorep.nanoclient.Nanorep;
 import com.nanorep.nanoclient.NanorepBuilder;
 
 
+import io.fabric.sdk.android.Fabric;
 import nanorep.nanowidget.Components.AbstractViews.NRCustomChannelView;
 import nanorep.nanowidget.Components.AbstractViews.NRCustomContentView;
 import nanorep.nanowidget.Components.AbstractViews.NRCustomLikeView;
@@ -51,10 +53,9 @@ public class MainActivity extends AppCompatActivity implements NRCustomViewAdapt
 //        categoriesFragment = NRWidgetCategoriesFragment.newInstance();
 
 
-
 //        nanoFragment = NRWidgetFragment.newInstance();
 //        nanoFragment.setListener(this);
-        Crittercism.initialize(getApplicationContext(), "d59e30ede3c34d0bbf19d0237c2f1bc800444503");
+//        Crittercism.initialize(getApplicationContext(), "d59e30ede3c34d0bbf19d0237c2f1bc800444503");
 
 //        categoriesFragment.setViewAdapter(this);
 //        mainFragment.setViewAdapter(this);
@@ -111,7 +112,6 @@ public class MainActivity extends AppCompatActivity implements NRCustomViewAdapt
 //                    nanoFragment.setNanoRep(nanorep);
                     FragmentUtils.openFragment(mainFragment, R.id.content_main,
                             NRMainFragment.TAG, MainActivity.this, false);
-
 //                    getSupportFragmentManager().beginTransaction().add(R.id.content_main, categoriesFragment, "nanorep").commit();
 //                    nanoFragment.setNanoRep(nanorep);
 //                    getSupportFragmentManager().beginTransaction().replace(R.id.root_layout, nanoFragment, "nanorep").commit();
@@ -125,6 +125,8 @@ public class MainActivity extends AppCompatActivity implements NRCustomViewAdapt
             });
         }
     }
+
+
 
 //    @Override
 //    public void onCancelWidget(NRWidgetFragment widgetFragment) {
