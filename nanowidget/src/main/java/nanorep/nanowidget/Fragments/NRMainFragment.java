@@ -47,7 +47,9 @@ import nanorep.nanowidget.Components.AbstractViews.NRCustomLikeView;
 import nanorep.nanowidget.Components.AbstractViews.NRCustomSearchBarView;
 import nanorep.nanowidget.Components.AbstractViews.NRCustomSuggestionsView;
 import nanorep.nanowidget.Components.AbstractViews.NRCustomTitleView;
+import nanorep.nanowidget.Components.ChannelPresenters.NRChannelPresentor;
 import nanorep.nanowidget.Components.ChannelPresenters.NRChannelStrategy;
+import nanorep.nanowidget.Components.ChannelPresenters.NRCustomScriptChannelPresentor;
 import nanorep.nanowidget.Components.DislikeDialog;
 import nanorep.nanowidget.Components.MyWebView;
 import nanorep.nanowidget.Components.NRCategoriesView;
@@ -123,7 +125,6 @@ public class NRMainFragment extends Fragment implements NRSearchBarListener, NRS
     // no connection
     private LinearLayout noConnecttionView;
 
-    private String mailTo;
     private boolean animation = false;
 
 
@@ -156,11 +157,16 @@ public class NRMainFragment extends Fragment implements NRSearchBarListener, NRS
 
     @Override
     public void onChannelSelected(NRChannelItem channelItem) {
-        if(channelItem.getChanneling().getType() == NRChanneling.NRChannelingType.ContactForm && mailTo != null) {
-            openSendAction();
+
+        NRChannelPresentor presentor = NRChannelStrategy.presentor(getContext(), channelItem.getChanneling(), NRImpl.getInstance());
+
+        if(presentor instanceof NRCustomScriptChannelPresentor) {
+
+            presentor.present();
+
         } else {
 
-            String url = NRChannelStrategy.presentor(getContext(), channelItem.getChanneling(), NRImpl.getInstance()).getUrl();
+            String url = presentor.getUrl();
             if (url != null) {
                 final RelativeLayout holder = (RelativeLayout) getView().findViewById(R.id.fragment_place_holder);
                 holder.setVisibility(View.VISIBLE);
@@ -185,18 +191,6 @@ public class NRMainFragment extends Fragment implements NRSearchBarListener, NRS
             return ((NRResultTopView)view).getmResult().getFetchedResult();
         }
         return null;
-    }
-
-    private void openSendAction() {
-        Intent i = new Intent(Intent.ACTION_SEND);
-        i.setType("message/rfc822");
-        i.putExtra(Intent.EXTRA_EMAIL  , new String[]{mailTo});
-        i.putExtra(Intent.EXTRA_SUBJECT, getCurrentResult().getTitle());
-        try {
-            startActivity(Intent.createChooser(i, "Send mail..."));
-        } catch (android.content.ActivityNotFoundException ex) {
-            Toast.makeText(getActivity(), "There are no email clients installed.", Toast.LENGTH_SHORT).show();
-        }
     }
 
     @Override
@@ -293,11 +287,9 @@ public class NRMainFragment extends Fragment implements NRSearchBarListener, NRS
         dislikeAlert.setDislikeOptions(reasons);
     }
 
-    public static NRMainFragment newInstance(String mailTo) {
+    public static NRMainFragment newInstance() {
 
         Bundle args = new Bundle();
-
-        args.putString("mailTo",mailTo);
 
         NRMainFragment fragment = new NRMainFragment();
         fragment.setArguments(args);
@@ -509,8 +501,6 @@ public class NRMainFragment extends Fragment implements NRSearchBarListener, NRS
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_main, container, false);
-
-        mailTo = getArguments().getString("mailTo");
 
         mLoadingView = (RelativeLayout) view.findViewById(R.id.fragment_place_holder);
 

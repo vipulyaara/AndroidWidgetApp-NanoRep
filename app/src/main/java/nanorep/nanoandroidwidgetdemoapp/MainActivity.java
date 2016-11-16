@@ -107,7 +107,7 @@ public class MainActivity extends AppCompatActivity implements NRCustomViewAdapt
 
 //                    NRImpl.init(getApplicationContext(), _accountName, _kb);
 
-                    mainFragment = NRMainFragment.newInstance(null);
+                    mainFragment = NRMainFragment.newInstance();
 //                    mainFragment.setNanoRep(nanorep);
 //                    nanoFragment.setNanoRep(nanorep);
                     FragmentUtils.openFragment(mainFragment, R.id.content_main,
