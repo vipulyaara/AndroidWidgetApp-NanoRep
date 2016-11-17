@@ -27,7 +27,7 @@ public class NRSuggestionItem extends RecyclerView.ViewHolder implements View.On
 
     @Override
     public void onClick(View v) {
-        mListener.onSuggestionSelected(((TextView)v).getText().toString());
+        mListener.onSuggestionSelected(mTextView.getText().toString());
     }
 
     interface OnSuggestionSelectedListener {
@@ -37,7 +37,7 @@ public class NRSuggestionItem extends RecyclerView.ViewHolder implements View.On
     public NRSuggestionItem(View itemView) {
         super(itemView);
         mTextView = (TextView) itemView.findViewById(R.id.suggestion);
-        mTextView.setOnClickListener(this);
+        itemView.setOnClickListener(this);
     }
 
     public void setListener(OnSuggestionSelectedListener listener) {
