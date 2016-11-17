@@ -753,6 +753,7 @@ public class NRMainFragment extends Fragment implements NRSearchBarListener, NRS
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if (event.getAction() == KeyEvent.ACTION_DOWN) {
                     if (keyCode == KeyEvent.KEYCODE_BACK) {
+                        hideNoTitleView();
                         searchBarView.updateEditTextView("");
 
                         if(NRMainFragment.this.getChildFragmentManager().getBackStackEntryCount() > 0) {
