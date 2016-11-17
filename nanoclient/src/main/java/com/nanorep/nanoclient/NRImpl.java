@@ -22,6 +22,7 @@ import com.nanorep.nanoclient.RequestParams.NRSearchLikeParams;
 import com.nanorep.nanoclient.Response.NRConfiguration;
 import com.nanorep.nanoclient.Response.NRFAQAnswer;
 import com.nanorep.nanoclient.Response.NRFAQAnswerItem;
+import com.nanorep.nanoclient.Response.NRFAQGroupItem;
 import com.nanorep.nanoclient.Response.NRSearchResponse;
 import com.nanorep.nanoclient.Response.NRSuggestions;
 
@@ -569,14 +570,17 @@ public class NRImpl extends Nanorep {
         });
 
         // get contents for all Answers
-        for (NRQueryResult queryResult : cnf.getFaqData().getGroups().get(0).getAnswers()) {
-            fetchFAQAnswer(queryResult.getId(), queryResult.getHash(), new OnFAQAnswerFetchedListener() {
-                @Override
-                public void onFAQAnswerFetched(NRFAQAnswer faqAnswer, NRError error) {
-                    // update cache with this Answer (has body now..)
-                    NRCacheManager.storeFAQAnswer(faqAnswer.getParams());
-                }
-            });
+//        for (NRQueryResult queryResult : cnf.getFaqData().getGroups().get(0).getAnswers()) {
+        for (NRFAQGroupItem groupItem : cnf.getFaqData().getGroups()) {
+            for (NRQueryResult queryResult : groupItem.getAnswers()) {
+                fetchFAQAnswer(queryResult.getId(), queryResult.getHash(), new OnFAQAnswerFetchedListener() {
+                    @Override
+                    public void onFAQAnswerFetched(NRFAQAnswer faqAnswer, NRError error) {
+                        // update cache with this Answer (has body now..)
+                        NRCacheManager.storeFAQAnswer(faqAnswer.getParams());
+                    }
+                });
+            }
         }
     }
 
