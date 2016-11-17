@@ -376,6 +376,12 @@ public class NRMainFragment extends Fragment implements NRSearchBarListener, NRS
                     if (searchBarView.getText() != null) {
                         mNotitleViewHolder.getLayoutParams().height = (int) Calculate.pxFromDp(getContext(), NO_TITLE_HEIGHT);
                         mNoTitleView.setText(NRImpl.getInstance().getNRConfiguration().getCustomNoAnswersTextContext(searchBarView.getText()));
+
+                        while (contentMain.getChildCount() > 2) {
+                            contentMain.removeViewAt(contentMain.getChildCount() - 1);
+                        }
+
+                        contentMain.setVisibility(View.VISIBLE);
                         getView().requestFocus();
                     }
                 } else if(results.size() == 1) {
@@ -649,9 +655,9 @@ public class NRMainFragment extends Fragment implements NRSearchBarListener, NRS
     public void onClearClicked(boolean byUser) {
 
         if (mNotitleViewHolder.getLayoutParams().height > 0) {
-            if(!(contentMain.getChildAt(contentMain.getChildCount()-1) instanceof NRResultsView)) {
-                contentMain.removeViewAt(contentMain.getChildCount() - 1);
-            }
+//            if(!(contentMain.getChildAt(contentMain.getChildCount()-1) instanceof NRResultsView)) {
+//                contentMain.removeViewAt(contentMain.getChildCount() - 1);
+//            }
 
             mNotitleViewHolder.getLayoutParams().height = 0;
         }
