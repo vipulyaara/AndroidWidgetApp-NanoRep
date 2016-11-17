@@ -3,6 +3,7 @@ package nanorep.nanowidget.Components;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.view.KeyEvent;
@@ -11,6 +12,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceRequest;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
@@ -31,6 +33,8 @@ public class NRContentView extends NRCustomContentView implements View.OnKeyList
 //    private NRContentView.Listener mListener;
     private WebView mWebView;
     private RelativeLayout mLoadingView;
+    boolean loadingFinished = true;
+    boolean redirect = false;
 
     public interface Listener {
         void onLinkedArticleClicked(String articleId);
@@ -54,15 +58,41 @@ public class NRContentView extends NRCustomContentView implements View.OnKeyList
         mWebView.getSettings().setJavaScriptEnabled(true);
 //        mWebView.getSettings().setLoadWithOverviewMode(true);
 //        mWebView.getSettings().setUseWideViewPort(true);
-        mWebView.setWebViewClient(new NRWebClient());
-        mWebView.setWebChromeClient(new WebChromeClient() {
+        mWebView.setWebViewClient(new NRWebClient() {
+
             @Override
-            public void onProgressChanged(WebView view, int newProgress) {
-                if (newProgress == 100 && mLoadingView.getVisibility() == VISIBLE) {
-                    mLoadingView.setVisibility(INVISIBLE);
-                }
+            public void onPageStarted(WebView view, String url, Bitmap facIcon) {
+                loadingFinished = false;
+                //SHOW LOADING IF IT ISNT ALREADY VISIBLE
+                mLoadingView.setVisibility(VISIBLE);
             }
+
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                if(!redirect){
+                    loadingFinished = true;
+                }
+
+                if(loadingFinished && !redirect){
+                    //HIDE LOADING IT HAS FINISHED
+                    mLoadingView.setVisibility(INVISIBLE);
+                    view.clearCache(true);
+                } else{
+                    redirect = false;
+                }
+
+            }
+
         });
+        mWebView.setWebChromeClient(new WebChromeClient() {
+//            @Override
+//            public void onProgressChanged(WebView view, int newProgress) {
+//                if (newProgress == 100 && mLoadingView.getVisibility() == VISIBLE) {
+//                    mLoadingView.setVisibility(INVISIBLE);
+//                }
+//            }
+        });
+
         mLoadingView = (RelativeLayout) child.findViewById(R.id.webLoadingView);
     }
 
@@ -79,7 +109,7 @@ public class NRContentView extends NRCustomContentView implements View.OnKeyList
 
     @Override
     public void loadData(String data, String mimeType, String encoding) {
-        mLoadingView.setVisibility(VISIBLE);
+//        mLoadingView.setVisibility(VISIBLE);
         NRHtmlParser parser = new NRHtmlParser(data);
         String parsed = parser.getParsedHtml();
 //        String parsed = "<div style=\"width=300px\" >" + parser.getParsedHtml() + "</div>";

@@ -571,6 +571,9 @@ public class NRImpl extends Nanorep {
 
         // get contents for all Answers
 //        for (NRQueryResult queryResult : cnf.getFaqData().getGroups().get(0).getAnswers()) {
+        if(cnf.getFaqData().getGroups() == null) {
+            return;
+        }
         for (NRFAQGroupItem groupItem : cnf.getFaqData().getGroups()) {
             for (NRQueryResult queryResult : groupItem.getAnswers()) {
                 fetchFAQAnswer(queryResult.getId(), queryResult.getHash(), new OnFAQAnswerFetchedListener() {
