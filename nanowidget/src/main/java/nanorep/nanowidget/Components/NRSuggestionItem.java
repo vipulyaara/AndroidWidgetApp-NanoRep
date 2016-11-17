@@ -24,6 +24,7 @@ import nanorep.nanowidget.R;
 public class NRSuggestionItem extends RecyclerView.ViewHolder implements View.OnClickListener {
     private TextView mTextView;
     private OnSuggestionSelectedListener mListener;
+    private View itemView;
 
     @Override
     public void onClick(View v) {
@@ -36,8 +37,9 @@ public class NRSuggestionItem extends RecyclerView.ViewHolder implements View.On
 
     public NRSuggestionItem(View itemView) {
         super(itemView);
+        this.itemView = itemView;
         mTextView = (TextView) itemView.findViewById(R.id.suggestion);
-        itemView.setOnClickListener(this);
+        this.itemView.setOnClickListener(this);
     }
 
     public void setListener(OnSuggestionSelectedListener listener) {

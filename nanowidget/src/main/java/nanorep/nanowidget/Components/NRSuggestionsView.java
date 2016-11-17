@@ -67,7 +67,7 @@ public class NRSuggestionsView extends NRCustomSuggestionsView {
 
         @Override
         public NRSuggestionItem onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.suggestion_item, null);
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.suggestion_item, parent, false);
             NRSuggestionItem item = new NRSuggestionItem(view);
             item.setListener(this);
             return item;
