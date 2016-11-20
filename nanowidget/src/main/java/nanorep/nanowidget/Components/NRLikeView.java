@@ -8,55 +8,56 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
+import nanorep.nanowidget.Components.AbstractViews.NRCustomLikeView;
 import nanorep.nanowidget.R;
 import nanorep.nanowidget.interfaces.OnLikeListener;
 
 /**
  * Created by nissimpardo on 18/06/16.
  */
-public class NRLikeView extends LinearLayout implements View.OnClickListener {
-    private OnLikeListener mListener;
-    private ImageButton mLikeButton;
-    private ImageButton mDislikeButton;
+public class NRLikeView extends NRCustomLikeView  {
+
+    private TextView mLikeButton;
+    private TextView mDislikeButton;
     private boolean mLikeSelection;
-    private String mResultId;
 
 
-    public NRLikeView(Context context, AttributeSet attrs) {
-        super(context, attrs);
+    public NRLikeView(Context context) {
+        super(context);
         LayoutInflater.from(context).inflate(R.layout.like_view, this);
     }
 
-    public void setListener(OnLikeListener listener) {
-        mListener = listener;
-    }
+//    public void setResultId(String resultId) {
+//        mResultId = resultId;
+//    }
 
-    public void setResultId(String resultId) {
-        mResultId = resultId;
-    }
-
+    @Override
     public void updateLikeButton(boolean isLike) {
         resetLikeView();
         if (isLike) {
-            mLikeButton.getBackground().setColorFilter(0xff35d691, PorterDuff.Mode.MULTIPLY);
-            mLikeButton.setImageResource(resId("white_like_icon"));
+            mLikeButton.setTextColor(getResources().getColor(R.color.nr_like_color));
+            mDislikeButton.setTextColor(getResources().getColor(R.color.nr_text_color));
         } else {
-            mDislikeButton.getBackground().setColorFilter(0xfff46f64, PorterDuff.Mode.MULTIPLY);
-            mDislikeButton.setImageResource(resId("white_dislike_icon"));
+            mLikeButton.setTextColor(getResources().getColor(R.color.nr_text_color));
+            mDislikeButton.setTextColor(getResources().getColor(R.color.nr_dislike_color));
         }
         mLikeButton.setEnabled(false);
         mDislikeButton.setEnabled(false);
         mLikeSelection = isLike;
     }
 
+    @Override
     public void resetLikeView() {
         mLikeButton.setEnabled(true);
         mDislikeButton.setEnabled(true);
-        mLikeButton.setImageResource(resId("grey_like_icon"));
-        mDislikeButton.setImageResource(resId("grey_dislike_icon"));
-        mLikeButton.getBackground().setColorFilter(Color.LTGRAY, PorterDuff.Mode.MULTIPLY);
-        mDislikeButton.getBackground().setColorFilter(Color.LTGRAY, PorterDuff.Mode.MULTIPLY);
+//        mLikeButton.setImageResource(resId("grey_like_icon"));
+//        mDislikeButton.setImageResource(resId("grey_dislike_icon"));
+//        mLikeButton.getBackground().setColorFilter(Color.LTGRAY, PorterDuff.Mode.MULTIPLY);
+//        mDislikeButton.getBackground().setColorFilter(Color.LTGRAY, PorterDuff.Mode.MULTIPLY);
+        mLikeButton.setTextColor(getResources().getColor(R.color.nr_text_color));
+        mDislikeButton.setTextColor(getResources().getColor(R.color.nr_text_color));
     }
 
     private int resId(String resName) {
@@ -66,26 +67,49 @@ public class NRLikeView extends LinearLayout implements View.OnClickListener {
     @Override
     public void onViewAdded(View child) {
         super.onViewAdded(child);
-        mLikeButton = (ImageButton) child.findViewById(R.id.likeButton);
-        mDislikeButton = (ImageButton) child.findViewById(R.id.dislikeButton);
-        mLikeButton.setOnClickListener(this);
-        mDislikeButton.setOnClickListener(this);
+        mLikeButton = (TextView) child.findViewById(R.id.likeButton);
+        mDislikeButton = (TextView) child.findViewById(R.id.dislikeButton);
+        mLikeButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                mLikeSelection = true;
+//                updateLikeButton(mLikeSelection);
+//                mListener.onLikeClicked(NRLikeView.this, null, mLikeSelection);
+                sendSelection(true);
+            }
+        });
+        mDislikeButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                mLikeSelection = false;
+//                updateLikeButton(mLikeSelection);
+//                mListener.onLikeClicked(NRLikeView.this, null, mLikeSelection);
+                sendSelection(false);
+            }
+        });
     }
 
+    private void sendSelection(boolean selection) {
+        mLikeSelection = selection;
+        updateLikeButton(mLikeSelection);
+        mListener.onLikeClicked(NRLikeView.this, null, mLikeSelection);
+    }
+
+    @Override
     public boolean getLikeSelection() {
         return mLikeSelection;
     }
 
-    public void cancelLike() {
-        mLikeButton.setEnabled(true);
-        mDislikeButton.setEnabled(true);
-    }
+//    public void cancelLike() {
+//        mLikeButton.setEnabled(true);
+//        mDislikeButton.setEnabled(true);
+//    }
 
 
-    @Override
-    public void onClick(View v) {
-        mLikeSelection = v.getId() == R.id.likeButton;
-        updateLikeButton(mLikeSelection);
-        mListener.onLikeClicked(this, mResultId, mLikeSelection);
-    }
+//    @Override
+//    public void onClick(View v) {
+//        mLikeSelection = v.getId() == R.id.likeButton;
+//        updateLikeButton(mLikeSelection);
+//        mListener.onLikeClicked(this, null, mLikeSelection);
+//    }
 }

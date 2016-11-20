@@ -31,7 +31,7 @@
                 android:id="@+id/shareButton"
                 android:layout_centerVertical="true"
                 android:layout_toLeftOf="@+id/unFoldButton"
-                android:src="@drawable/share_icon"
+                android:src="@drawable/share"
                 android:background="#00ffffff"
                 android:visibility="gone"/>
             <ImageButton

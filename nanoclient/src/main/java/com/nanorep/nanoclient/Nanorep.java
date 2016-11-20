@@ -1,10 +1,12 @@
 package com.nanorep.nanoclient;
 
+import android.content.Context;
 import android.net.Uri;
 
 
 import com.nanorep.nanoclient.Connection.NRError;
 import com.nanorep.nanoclient.Connection.NRUtilities;
+import com.nanorep.nanoclient.Log.NRLogger;
 import com.nanorep.nanoclient.RequestParams.NRFAQLikeParams;
 import com.nanorep.nanoclient.RequestParams.NRSearchLikeParams;
 import com.nanorep.nanoclient.Response.NRConfiguration;
@@ -19,43 +21,78 @@ import java.util.HashMap;
  * Created by nissimpardo on 07/08/2016.
  */
 
-public interface Nanorep {
-    interface OnSearchResultsFetchedListener {
+public abstract class Nanorep {
+
+    protected AccountParams mAccountParams;
+    protected NRConfiguration mCnf;
+    protected NRLogger nrLogger;
+    protected Context mContext;
+
+    public interface OnSearchResultsFetchedListener {
         void onSearchResponse(NRSearchResponse response, NRError error);
     }
 
-    interface OnSuggestionsFetchedListener {
+    public interface OnSuggestionsFetchedListener {
         void onSuggestionsFetched(NRSuggestions suggestions, NRError error);
     }
 
-    interface OnLikeSentListener {
-        void onLikeSent(String resultId, int type, boolean success);
+    public interface OnLikeSentListener {
+        void onLikeSent(boolean success);
     }
 
-    interface OnFAQAnswerFetchedListener {
+    public interface OnFAQAnswerFetchedListener {
         void onFAQAnswerFetched(NRFAQAnswer faqAnswer, NRError error);
     }
 
-    interface OnConfigurationFetchedListener {
-        void onConfigurationFetched(NRConfiguration configuration, NRError error);
+    public interface OnConfigurationFetchedListener {
+        void onConfigurationFetched(NRError error);
     }
 
-    AccountParams getAccountParams();
+    public abstract void searchText(String text, OnSearchResultsFetchedListener onSearchResultsFetchedListener);
 
-    void searchText(String text, OnSearchResultsFetchedListener onSearchResultsFetchedListener);
+    public abstract void suggestionsForText(String text, OnSuggestionsFetchedListener onSuggestionsFetchedListener);
 
-    void suggestionsForText(String text, OnSuggestionsFetchedListener onSuggestionsFetchedListener);
+    public abstract void likeForSearchResult(NRSearchLikeParams likeParams, OnLikeSentListener onLikeSentListener);
 
-    void likeForSearchResult(NRSearchLikeParams likeParams, OnLikeSentListener onLikeSentListener);
+    public abstract void fetchFAQAnswer(String answerId, Integer answerHash, OnFAQAnswerFetchedListener onFAQAnswerFetchedListener);
 
-    void fetchFAQAnswer(String answerId, Integer answerHash, OnFAQAnswerFetchedListener onFAQAnswerFetchedListener);
+    public abstract void likeForFAQResult(NRFAQLikeParams likeParams, OnLikeSentListener onLikeSentListener);
 
-    void likeForFAQResult(NRFAQLikeParams likeParams, OnLikeSentListener onLikeSentListener);
+    public abstract void fetchConfiguration(OnConfigurationFetchedListener onConfigurationFetchedListener, boolean forceInit);
 
-    void fetchConfiguration(OnConfigurationFetchedListener onConfigurationFetchedListener);
+    public NRConfiguration getNRConfiguration() {
+        if (mCnf == null)
+            mCnf = new NRConfiguration();
 
+        return mCnf;
+    }
+
+    public AccountParams getAccountParams() {
+        return mAccountParams;
+    }
+
+    public void setDebugMode(boolean checked) {
+//        if (nrLogger == null) {
+//            nrLogger = new NRLogger();
+//        }
+
+        nrLogger.setDebug(checked);
+    }
+
+    protected Nanorep(Context context, String account, String kb) {
+        this.mContext = context;
+        this.mAccountParams = new AccountParams();
+        this.mAccountParams.setAccount(account);
+        this.mAccountParams.setKnowledgeBase(kb);
+//        this.mAccountParams.setmHost("server4");
+        this.nrLogger = new NRLogger();
+
+        fetchConfiguration(null, true);
+    }
 
     public class AccountParams {
+
+        private String mHost;
         private String mAccount;
         private String mKnowledgeBase;
         private HashMap<String, String> mContext;
@@ -67,6 +104,14 @@ public interface Nanorep {
 
         public void setAccount(String account) {
             mAccount = account;
+        }
+
+        public String getmHost() {
+            return mHost;
+        }
+
+        public void setmHost(String mHost) {
+            this.mHost = mHost;
         }
 
         public String getKnowledgeBase() {
@@ -104,10 +149,14 @@ public interface Nanorep {
 
         public Uri.Builder getUri() {
             Uri.Builder uri = new Uri.Builder();
-            uri.scheme("http");
-            uri.authority(getAccount() + ".nanorep.co");
-//            uri.authority("dev-michal.nanorep.com");
-//            uri.appendPath("~" + getAccount());
+            uri.scheme("https");
+
+            if (mHost != null) {
+                uri.authority(mHost + ".nanorep.com");
+                uri.appendEncodedPath("~" + getAccount());
+            } else {
+                uri.authority(getAccount() + ".nanorep.co");
+            }
             uri.appendQueryParameter("referer", NRUtilities.buildReferer(getReferrer()));
             return uri;
         }

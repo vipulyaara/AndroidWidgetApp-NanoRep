@@ -1,32 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="horizontal"
+              android:id="@+id/searchBarLayout"
+              android:paddingRight="15dp"
+              android:paddingLeft="15dp"
+              android:layoutDirection="ltr"
+              android:background="@color/nr_main_color"
+              android:gravity="center_vertical"
               android:layout_width="match_parent"
               android:layout_height="match_parent">
 
-    <ImageButton
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:id="@+id/speechButton"
-        android:layout_gravity="right"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="false"
-        android:src="@drawable/searchbar_mic_icon"
-        android:visibility="invisible"
-        android:background="@android:color/transparent"/>
-
     <nanorep.nanowidget.Components.NREditText
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
         android:id="@+id/searchText"
-        android:layout_alignParentStart="true"
-        android:layout_toStartOf="@+id/speechButton"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:textColor="#ffffff"
+        android:textColorHint="#ffffff"
         android:inputType="text"
-        android:layout_marginLeft="10dp"
+        android:textSize="16sp"
+        android:layout_marginRight="5dp"
+        android:background="@android:color/transparent"
         android:textCursorDrawable="@null"
         android:imeOptions="actionSearch"
         android:longClickable="false"/>
-</RelativeLayout>
+
+    <ImageButton
+        android:id="@+id/speechButton"
+        android:visibility="gone"
+        android:layout_width="15dp"
+        android:layout_height="22dp"
+        android:src="@drawable/microphone"
+        android:background="@android:color/transparent"/>
+
+
+</LinearLayout>

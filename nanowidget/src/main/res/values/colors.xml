@@ -3,4 +3,9 @@
     <color name="blue_background">#FF2f74c3</color>
     <color name="white">#ffffff</color>
     <color name="red">#ff0000</color>
+    <color name="nr_main_color">#0aa0ff</color>
+    <color name="nr_background_color">#eaeaea</color>
+    <color name="nr_text_color">#4a4a4a</color>
+    <color name="nr_like_color">#7ed321</color>
+    <color name="nr_dislike_color">#f35018</color>
 </resources>

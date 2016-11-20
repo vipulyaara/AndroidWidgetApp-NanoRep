@@ -1,5 +1,7 @@
 package com.nanorep.nanoclient.Response;
 
+import android.text.Spannable;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -11,7 +13,7 @@ public class NRSuggestions {
     private String mRequestId;
     private String mLanguageCode;
     private String mQueryAnalysis;
-    private ArrayList<String> mSuggestions;
+    private ArrayList<Spannable> mSuggestions;
 
     /**
      * Converts JSON string into NRSuggestions
@@ -23,7 +25,7 @@ public class NRSuggestions {
         mRequestId = (String)params.get("rid");
         mLanguageCode = (String)params.get("lc");
         mQueryAnalysis = (String)params.get("q");
-        mSuggestions = (ArrayList<String>)params.get("a");
+        mSuggestions = (ArrayList<Spannable>)params.get("a");
     }
 
     /**
@@ -62,7 +64,7 @@ public class NRSuggestions {
      *
      * @return value of answers
      */
-    public ArrayList<String> getSuggestions() {
+    public ArrayList<Spannable> getSuggestions() {
         return mSuggestions;
     }
 }

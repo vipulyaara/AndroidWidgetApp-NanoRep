@@ -2,7 +2,9 @@ package nanorep.nanowidget.Components;
 
 import android.content.Context;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Spannable;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -12,31 +14,30 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 
+import nanorep.nanowidget.Components.AbstractViews.NRCustomSuggestionsView;
 import nanorep.nanowidget.R;
+import nanorep.nanowidget.interfaces.NRCustomViewAdapter;
 import nanorep.nanowidget.interfaces.NRSuggestionsListener;
 
 /**
  * Created by nissimpardo on 07/06/16.
  */
-public class NRSuggestionsView extends LinearLayout{
-    private NRSuggestionsListener mListener;
-    private ArrayList<String> mSuggestions;
-    private RecyclerView.Adapter mAdapter;
+public class NRSuggestionsView extends NRCustomSuggestionsView {
 
+    private ArrayList<Spannable> mSuggestions;
+    private RecyclerView.Adapter mAdapter;
     private RecyclerView mRecyclerView;
 
-    public NRSuggestionsView(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        mAdapter = new SuggestionsAdapter();
-
+    public NRSuggestionsView(Context context) {
+        super(context);
+        LayoutInflater.from(context).inflate(R.layout.suggestion_view, this);
     }
 
-    public void setListener(NRSuggestionsListener listener) {
-        mListener = listener;
-    }
 
-    public void setSuggestions(ArrayList<String> suggestions) {
+    public void setSuggestions(ArrayList<Spannable> suggestions) {
         if (suggestions == null) {
             setHeight(0);
         } else {
@@ -49,15 +50,15 @@ public class NRSuggestionsView extends LinearLayout{
     @Override
     public void onViewAdded(View child) {
         super.onViewAdded(child);
-        if (child.getId() == R.id.recyclerSuggestions) {
-            mRecyclerView = (RecyclerView) child;
-            mRecyclerView.setLayoutManager(new GridLayoutManager(this.getContext(), 1));
-            mRecyclerView.setAdapter(mAdapter);
-        }
+
+        mRecyclerView = (RecyclerView) child.findViewById(R.id.recyclerSuggestions);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
+        mAdapter = new SuggestionsAdapter();
+        mRecyclerView.setAdapter(mAdapter);
     }
 
     public void setHeight(int height) {
-        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) getLayoutParams();
+        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) getLayoutParams();
         params.height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, height, getResources().getDisplayMetrics());
         setLayoutParams(params);
     }
@@ -66,7 +67,7 @@ public class NRSuggestionsView extends LinearLayout{
 
         @Override
         public NRSuggestionItem onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.suggestion_item, null);
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.suggestion_item, parent, false);
             NRSuggestionItem item = new NRSuggestionItem(view);
             item.setListener(this);
             return item;

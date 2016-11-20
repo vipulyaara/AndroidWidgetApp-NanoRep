@@ -38,7 +38,6 @@ public class NRWebContentFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private WebView mWebView;
-    private Button mCloseButton;
     private Listener mListener;
     private ValueCallback<Uri[]> mValueCallback;
     private WebChromeClient.FileChooserParams mFileChooserParams;
@@ -107,13 +106,6 @@ public class NRWebContentFragment extends Fragment {
             }
         });
         mWebView.setWebViewClient(new NRPresentorWebClient());
-        mCloseButton = (Button) view.findViewById(R.id.closeChannelButton);
-        mCloseButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mListener.onDismiss();
-            }
-        });
         return view;
     }
 

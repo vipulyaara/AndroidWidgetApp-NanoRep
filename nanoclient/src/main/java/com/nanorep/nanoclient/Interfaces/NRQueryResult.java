@@ -1,7 +1,6 @@
 package com.nanorep.nanoclient.Interfaces;
 
 import com.nanorep.nanoclient.Channeling.NRChanneling;
-import com.nanorep.nanoclient.RequestParams.NRLikeType;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,11 +19,13 @@ public interface NRQueryResult {
     String getBody();
     Integer getHash();
     HashMap<String, Object> getParams();
-    String getKeywordSetId();
     boolean isCNF();
-    void setIsCNF(boolean isCNF);
     ArrayList<NRChanneling> getChanneling();
+    String getKeywordSetId();
+    void setIsCNF(boolean isCNF);
     void setChanneling(ArrayList<NRChanneling> channeling);
+
+
 
     enum LikeState {
         notSelected,

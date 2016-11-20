@@ -1,49 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+                                    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                                    card_view:cardElevation="0dp"
+                                    card_view:cardCornerRadius="0dp"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginTop="5dp"
-                                    android:layout_marginRight="5dp"
-                                    android:layout_marginLeft="5dp"
                                     android:id="@+id/content_cardView">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentTop="true"
-        android:id="@+id/contentView">
-        <nanorep.nanowidget.Components.NRWebView
+<!--
+        <nanorep.nanowidget.Components.NRContentView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/cv_webview"
-            android:layout_above="@+id/cv_feedbackView"/>
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:layout_marginBottom="5dp"
-            android:id="@+id/cv_feedbackView"
-            android:background="@color/white"
-            android:layout_alignParentBottom="true"
-            >
-            <nanorep.nanowidget.Components.NRLikeView
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:id="@+id/cv_likeView"/>
+            android:layout_alignParentTop="true"/>
+    -->
 
-
-            <nanorep.nanowidget.Components.NRChannelingView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/cv_channelingView"
-                android:layout_alignParentBottom="true"
-                android:layout_below="@+id/cv_likeView">
-            </nanorep.nanowidget.Components.NRChannelingView>
-
-        </RelativeLayout>
-
-    </RelativeLayout>
-
-
+    <FrameLayout
+        android:id="@+id/content_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </FrameLayout>
 
 
 </android.support.v7.widget.CardView>

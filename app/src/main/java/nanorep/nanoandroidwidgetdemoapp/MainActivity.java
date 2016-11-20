@@ -1,6 +1,9 @@
 package nanorep.nanoandroidwidgetdemoapp;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -9,22 +12,33 @@ import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 
-import com.crittercism.app.Crittercism;
-import com.nanorep.nanoclient.Connection.NRError;
+//import com.crittercism.app.Crittercism;
+import com.crashlytics.android.Crashlytics;
+import com.nanorep.nanoclient.NRImpl;
 import com.nanorep.nanoclient.Nanorep;
 import com.nanorep.nanoclient.NanorepBuilder;
-import com.nanorep.nanoclient.Response.NRConfiguration;
 
 
-import java.util.HashMap;
+import io.fabric.sdk.android.Fabric;
+import nanorep.nanowidget.Components.AbstractViews.NRCustomChannelView;
+import nanorep.nanowidget.Components.AbstractViews.NRCustomContentView;
+import nanorep.nanowidget.Components.AbstractViews.NRCustomLikeView;
+import nanorep.nanowidget.Components.AbstractViews.NRCustomSearchBarView;
+import nanorep.nanowidget.Components.AbstractViews.NRCustomSuggestionsView;
+import nanorep.nanowidget.Components.AbstractViews.NRCustomTitleView;
+import nanorep.nanowidget.Components.NRContentView;
+import nanorep.nanowidget.Fragments.NRMainFragment;
+import nanorep.nanowidget.Utilities.FragmentUtils;
+import nanorep.nanowidget.interfaces.NRCustomViewAdapter;
 
-import nanorep.nanowidget.NRWidgetFragment;
+public class MainActivity extends AppCompatActivity implements NRCustomViewAdapter {
 
-public class MainActivity extends AppCompatActivity implements NRWidgetFragment.NRWidgetFragmentListener {
-
-    private NRWidgetFragment nanoFragment;
+//    private NRWidgetFragment nanoFragment;
+    private NRMainFragment mainFragment;
+    private CheckBox checkBox;
 
     @SuppressLint("SetJavaScriptEnabled")
     @Override
@@ -32,31 +46,78 @@ public class MainActivity extends AppCompatActivity implements NRWidgetFragment.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         getSupportActionBar().setElevation(0);
-        nanoFragment = NRWidgetFragment.newInstance(null, null);
-        nanoFragment.setListener(this);
-        Crittercism.initialize(getApplicationContext(), "d59e30ede3c34d0bbf19d0237c2f1bc800444503");
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#0aa0ff")));
+
+        checkBox = (CheckBox) findViewById(R.id.checkbox);
+
+//        categoriesFragment = NRWidgetCategoriesFragment.newInstance();
+
+
+//        nanoFragment = NRWidgetFragment.newInstance();
+//        nanoFragment.setListener(this);
+//        Crittercism.initialize(getApplicationContext(), "d59e30ede3c34d0bbf19d0237c2f1bc800444503");
+
+//        categoriesFragment.setViewAdapter(this);
+//        mainFragment.setViewAdapter(this);
+
+
+
         Button loadButton = (Button)findViewById(R.id.button);
         if (loadButton != null) {
             loadButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(final View v) {
                     v.setVisibility(View.INVISIBLE);
-                    Nanorep.AccountParams accountParams = new Nanorep.AccountParams();
+//                    Nanorep.AccountParams accountParams = new Nanorep.AccountParams();
 //                    accountParams.setAccount("yatra");
 //                    accountParams.setKnowledgeBase("79848779");
                     EditText accountName = (EditText) findViewById(R.id.accountNameId);
                     EditText kb = (EditText) findViewById(R.id.kbId);
-                    accountParams.setAccount(accountName.getText().toString());
-                    accountParams.setKnowledgeBase(kb.getText().toString());
+                    EditText server = (EditText) findViewById(R.id.serverId);
+
+
+                    String _accountName = "qa";//"nanorep";
+                    String _kb = "qa";//"English";
+
+//                    String _accountName = "gett";//"nanorep";
+//                    String _kb = "English_IL";//"English";
+
+
+                    String _server = server.getText().toString();
+
+//                    if(!_server.isEmpty()) {
+//                        accountParams.setmHost(_server);
+//                    }
+
+//                    String _accountName = accountName.getText().toString();
+//                    String _kb = kb.getText().toString();
+
+//                    accountParams.setAccount(_accountName);
+//                    accountParams.setKnowledgeBase(_kb);
 //                    HashMap<String, String> channel = new HashMap();
 //                    channel.put("channel", "mobile");
 //                    accountParams.setContext(channel);
-                    Nanorep test = NanorepBuilder.createNanorep(getApplicationContext(), accountParams);
-                    nanoFragment.setNanoRep(test);
-                    getSupportFragmentManager().beginTransaction().add(R.id.root_layout, nanoFragment, "test").commit();
-//                    test.fetchConfiguration(new Nanorep.OnConfigurationFetchedListener() {
+//                    Nanorep nanorep = NanorepBuilder.createNanorep(getApplicationContext(), accountParams);
+
+//                    nanorep.getNRConfiguration().getTitle().setTitleBGColor("#FF7F23");
+//                    nanorep.getNRConfiguration().setAutocompleteEnabled("false");
+//                    nanorep.getNRConfiguration().getSearchBar().setInitialText("noa noa");
+
+//                    nanorep.setDebugMode(checkBox.isChecked());
+
+//                    NRImpl.init(getApplicationContext(), _accountName, _kb);
+
+                    mainFragment = NRMainFragment.newInstance();
+//                    mainFragment.setNanoRep(nanorep);
+//                    nanoFragment.setNanoRep(nanorep);
+                    FragmentUtils.openFragment(mainFragment, R.id.content_main,
+                            NRMainFragment.TAG, MainActivity.this, false);
+//                    getSupportFragmentManager().beginTransaction().add(R.id.content_main, categoriesFragment, "nanorep").commit();
+//                    nanoFragment.setNanoRep(nanorep);
+//                    getSupportFragmentManager().beginTransaction().replace(R.id.root_layout, nanoFragment, "nanorep").commit();
+//                    nanorep.fetchConfiguration(new Nanorep.OnConfigurationFetchedListener() {
 //                        @Override
-//                        public void onConfigurationFetched(NRConfiguration configuration, NRError error) {
+//                        public void onConfigurationReady(NRConfiguration configuration, NRError error) {
 //
 //                        }
 //                    });
@@ -65,10 +126,57 @@ public class MainActivity extends AppCompatActivity implements NRWidgetFragment.
         }
     }
 
+
+
+//    @Override
+//    public void onCancelWidget(NRWidgetFragment widgetFragment) {
+//        ((Button)findViewById(R.id.button)).setVisibility(View.VISIBLE);
+//    }
+
+
     @Override
-    public void onCancelWidget(NRWidgetFragment widgetFragment) {
-        ((Button)findViewById(R.id.button)).setVisibility(View.VISIBLE);
-        getSupportFragmentManager().beginTransaction().remove(nanoFragment).commit();
+    public NRCustomSearchBarView getSearchBar(Context context) {
+//        NRCustomSearchBarView searchBar = new NRSearchBar(context);
+//
+//        return searchBar;
+
+        return null;
+    }
+
+    @Override
+    public NRCustomSuggestionsView getSuggestionsView(Context context) {
+//        NRSuggestionsView suggestionsView = new NRSuggestionsView(context);
+//
+//        return suggestionsView;
+
+        return  null;
+    }
+
+    @Override
+    public NRCustomTitleView getTitle(Context context) {
+//        NRTitleView titleView = new NRTitleView(context);
+//        TitleView titleView = new TitleView(context);
+
+//        return titleView;
+
+        return null;
+    }
+
+    @Override
+    public NRCustomContentView getContent(Context context) {
+        NRContentView contentView = new NRContentView(context);
+
+        return contentView;
+    }
+
+    @Override
+    public NRCustomLikeView getLikeView(Context context) {
+        return null;
+    }
+
+    @Override
+    public NRCustomChannelView getChannelView(Context context) {
+        return null;
     }
 
     private class AppWebviewClient extends WebViewClient {

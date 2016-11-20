@@ -3,7 +3,6 @@ package nanorep.nanowidget.Components;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +17,7 @@ import com.nanorep.nanoclient.RequestParams.NRLikeType;
 
 import java.util.ArrayList;
 
-import nanorep.nanowidget.Components.ChannelPresenters.NRWebContentFragment;
+import nanorep.nanowidget.Fragments.NRWebContentFragment;
 import nanorep.nanowidget.R;
 import nanorep.nanowidget.Utilities.Calculate;
 import nanorep.nanowidget.interfaces.NRResultView;
@@ -33,7 +32,7 @@ import nanorep.nanowidget.interfaces.OnLinkedArticle;
  * Use the {@link NRLinkedArticleFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class NRLinkedArticleFragment extends Fragment implements NRWebView.Listener, OnFAQAnswerFetched, NRChannelItem.OnChannelSelectedListener, Nanorep.OnLikeSentListener, NRResultView, OnLikeListener {
+public class NRLinkedArticleFragment extends Fragment implements NRContentView.Listener, OnFAQAnswerFetched, NRChannelItem.OnChannelSelectedListener, Nanorep.OnLikeSentListener, NRResultView, OnLikeListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -44,7 +43,7 @@ public class NRLinkedArticleFragment extends Fragment implements NRWebView.Liste
     private String mParam2;
     private OnLinkedArticle mListener;
     private NRResultTitleView mTitleView;
-    private NRWebView mWebView;
+    private NRContentView mWebView;
     private NRLinkedArticlesBrowserView mBrowserView;
     private ArrayList<NRQueryResult> mLinkedArticles = new ArrayList<>();
     private int mIndex;
@@ -56,7 +55,7 @@ public class NRLinkedArticleFragment extends Fragment implements NRWebView.Liste
     private NRQueryResult mResult;
 
     @Override
-    public void onLikeSent(String resultId, int type, boolean success) {
+    public void onLikeSent(boolean success) {
 
     }
 
@@ -121,7 +120,7 @@ public class NRLinkedArticleFragment extends Fragment implements NRWebView.Liste
                 mDismissListener.onBackClicked();
             }
         });
-        mWebView = (NRWebView) view.findViewById(R.id.linkedArtWebView);
+        mWebView = (NRContentView) view.findViewById(R.id.linkedArtWebView);
         mWebView.setListener(this);
         mFeedbackView = (LinearLayout) view.findViewById(R.id.linkedArtFeedback);
         mLikeView = (NRLikeView) view.findViewById(R.id.linkedArtLikeView);
@@ -229,6 +228,11 @@ public class NRLinkedArticleFragment extends Fragment implements NRWebView.Liste
     }
 
     @Override
+    public void onDismiss() {
+
+    }
+
+    @Override
     public void onChannelSelected(NRChannelItem channelItem) {
 
     }
@@ -239,8 +243,10 @@ public class NRLinkedArticleFragment extends Fragment implements NRWebView.Liste
             mLinkedArticles.get(mIndex).setLikeState(NRQueryResult.LikeState.positive);
             mListener.onLikeSelected(this, NRLikeType.POSITIVE, mLinkedArticles.get(mIndex));
         } else {
-            String reasons[] = new String[] {"Incorrect answer", "Missing or incorrect information", "Didn't find what I was looking for"};
-            DislikeDialog dislikeAlert = new DislikeDialog(getContext());
+            String reasons[] = new String[] {getString(R.string.Incorrect_answer), getString(R.string.missing_information), getString(R.string.didnt_find)};
+
+            View dislikeView = getActivity().getLayoutInflater().inflate(R.layout.dislike_dialog, null);
+            DislikeDialog dislikeAlert = new DislikeDialog(getContext(), dislikeView);
             dislikeAlert.setTitle("What's wrong with this answer");
             dislikeAlert.setListener(new DislikeDialog.Listener() {
                 @Override

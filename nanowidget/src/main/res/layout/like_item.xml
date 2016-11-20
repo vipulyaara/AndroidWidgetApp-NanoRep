@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    card_view:cardElevation="0dp"
+    card_view:cardCornerRadius="0dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/like_cardView">
+<!--
+    <nanorep.nanowidget.Components.NRLikeView
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:id="@+id/cv_likeView"/>
+-->
+    <LinearLayout
+        android:id="@+id/like_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="vertical">
+    </LinearLayout>
+
+</android.support.v7.widget.CardView>

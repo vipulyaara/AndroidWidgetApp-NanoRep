@@ -11,11 +11,10 @@ import android.widget.RelativeLayout;
 
 import com.nanorep.nanoclient.Channeling.NRChanneling;
 import com.nanorep.nanoclient.Interfaces.NRQueryResult;
-import com.nanorep.nanoclient.RequestParams.NRLikeType;
 
 import java.util.ArrayList;
 
-import nanorep.nanowidget.Components.ChannelPresenters.NRWebContentFragment;
+import nanorep.nanowidget.Fragments.NRWebContentFragment;
 import nanorep.nanowidget.DataClasse.NRResult;
 import nanorep.nanowidget.R;
 import nanorep.nanowidget.Utilities.Calculate;
@@ -25,11 +24,11 @@ import nanorep.nanowidget.interfaces.OnLikeListener;
 import nanorep.nanowidget.interfaces.OnLinkedArticle;
 
 
-public class NRResultFragment extends Fragment implements View.OnClickListener, OnLikeListener, NRChannelItem.OnChannelSelectedListener, NRWebView.Listener, OnFAQAnswerFetched, NRResultView {
+public class NRResultFragment extends Fragment implements View.OnClickListener, OnLikeListener, NRChannelItem.OnChannelSelectedListener, NRContentView.Listener, OnFAQAnswerFetched, NRResultView {
 
     private NRResult mResult;
 
-    private NRWebView mWebView;
+    private NRContentView mWebView;
     private RelativeLayout mFeedbackView;
     private NRResultTitleView mTitle;
     private ImageButton mShareButton;
@@ -58,6 +57,11 @@ public class NRResultFragment extends Fragment implements View.OnClickListener, 
         });
         getView().findViewById(R.id.linkedArtHolder).setVisibility(View.VISIBLE);
         getChildFragmentManager().beginTransaction().setCustomAnimations(R.anim.fade_in, R.anim.fade_out, R.anim.fade_in, R.anim.fade_out).add(R.id.linkedArtHolder, webContentFragment).addToBackStack("linked").commit();
+    }
+
+    @Override
+    public void onDismiss() {
+
     }
 
     @Override
@@ -147,7 +151,7 @@ public class NRResultFragment extends Fragment implements View.OnClickListener, 
                 mShareButton.setOnClickListener(NRResultFragment.this);
             }
 
-            mWebView = (NRWebView) view.findViewById(R.id.resultWebView);
+            mWebView = (NRContentView) view.findViewById(R.id.resultWebView);
             if (mWebView != null) {
                 mWebView.setListener(NRResultFragment.this);
                 if (mResult.getFetchedResult().getBody() != null) {
@@ -200,7 +204,7 @@ public class NRResultFragment extends Fragment implements View.OnClickListener, 
 //        } else {
 //            String reasons[] = new String[] {"Incorrect answer", "Missing or incorrect information", "Didn't find what I was looking for"};
 //            DislikeDialog dislikeAlert = new DislikeDialog(getContext());
-//            dislikeAlert.setTitle("What's wrong with this answer");
+//            dislikeAlert.openView("What's wrong with this answer");
 //            dislikeAlert.setListener(new DislikeDialog.Listener() {
 //                @Override
 //                public void onCancel() {

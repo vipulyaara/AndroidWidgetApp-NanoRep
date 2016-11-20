@@ -11,10 +11,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import nanorep.nanowidget.Components.AbstractViews.NRCustomSearchBarView;
 import nanorep.nanowidget.R;
 import nanorep.nanowidget.interfaces.NRSearchBarListener;
 
@@ -23,28 +26,45 @@ import nanorep.nanowidget.interfaces.NRSearchBarListener;
 /**
  * Created by nissimpardo on 07/06/16.
  */
-public class NRSearchBar extends RelativeLayout implements View.OnClickListener, TextWatcher, TextView.OnEditorActionListener {
+public class NRSearchBar extends NRCustomSearchBarView implements View.OnClickListener, TextWatcher, TextView.OnEditorActionListener {
     private NRSearchBarListener mListener;
     private ImageButton mSpeechButton;
-    private NREditText mSearchEditText;
+    private EditText mSearchEditText;
+    private LinearLayout searchBarLayout;
 
-    public NRSearchBar(Context context, AttributeSet attrs) {
-        super(context, attrs);
+
+    public NRSearchBar(Context context) {
+        super(context);
         LayoutInflater.from(context).inflate(R.layout.search_bar, this);
     }
 
     @Override
     public void onViewAdded(View child) {
         super.onViewAdded(child);
-        mSearchEditText = (NREditText) child.findViewById(R.id.searchText);
+        searchBarLayout = (LinearLayout) child.findViewById(R.id.searchBarLayout);
+
+        mSearchEditText = (EditText) child.findViewById(R.id.searchText);
         mSearchEditText.addTextChangedListener(this);
-        mSearchEditText.setHint("Type Your Question Here");
-        mSearchEditText.setTextColor(Color.WHITE);
-        mSearchEditText.setHintTextColor(Color.LTGRAY);
-        mSearchEditText.getBackground().setColorFilter(Color.TRANSPARENT, PorterDuff.Mode.SRC_IN);
+//        mSearchEditText.setHint(getResources().getString(R.string.type_question_here));
+//        mSearchEditText.setTextColor(Color.WHITE);
+//        mSearchEditText.setHintTextColor(Color.WHITE);
+//        mSearchEditText.getBackground().setColorFilter(Color.TRANSPARENT, PorterDuff.Mode.SRC_IN);
         mSearchEditText.setOnEditorActionListener(this);
         mSpeechButton = (ImageButton) child.findViewById(R.id.speechButton);
         mSpeechButton.setOnClickListener(this);
+
+        mSearchEditText.setOnKeyListener(new OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (event.getAction() == KeyEvent.ACTION_DOWN) {
+                    if (keyCode == KeyEvent.KEYCODE_BACK) {
+                        clear();
+                        return true;
+                    }
+                }
+                return false;
+            }
+        });
     }
 
     public void setListener(NRSearchBarListener listener) {
@@ -62,11 +82,15 @@ public class NRSearchBar extends RelativeLayout implements View.OnClickListener,
     }
 
     public void updateText(String text) {
-        mSearchEditText.setText(text);
         mSearchEditText.clearFocus();
+        mSearchEditText.setText(text);
     }
 
-    public void updateText(String text, boolean withListener) {
+    public void setHint(String text) {
+        mSearchEditText.setHint(text);
+    }
+
+    public void updateEditTextView(String text) {
         mSearchEditText.removeTextChangedListener(this);
         mSpeechButton.setVisibility(text.length() > 0 ? VISIBLE : INVISIBLE);
         updateText(text);
@@ -80,11 +104,15 @@ public class NRSearchBar extends RelativeLayout implements View.OnClickListener,
     @Override
     public void onClick(View v) {
         if ((Boolean) v.getTag()) {
-            mSearchEditText.clearFocus();
-            dismissKeyboard();
-            mListener.onClearClicked(true);
-            mSearchEditText.setText("");
+            clear();
         }
+    }
+
+    private void clear() {
+        mSearchEditText.clearFocus();
+        dismissKeyboard();
+        mListener.onClearClicked(true);
+        updateEditTextView("");
     }
 
     @Override
@@ -99,7 +127,8 @@ public class NRSearchBar extends RelativeLayout implements View.OnClickListener,
         Boolean state = Boolean.valueOf(charSequence.length() > 0);
         mSpeechButton.setTag(state);
         if (charSequence.length() == 0) {
-
+            dismissKeyboard();
+            mListener.onClearClicked(true);
         }
     }
 
@@ -121,4 +150,11 @@ public class NRSearchBar extends RelativeLayout implements View.OnClickListener,
         }
         return false;
     }
+
+    @Override
+    public void setBackgroundColor(int color) {
+        super.setBackgroundColor(color);
+        searchBarLayout.setBackgroundColor(color);
+    }
+
 }

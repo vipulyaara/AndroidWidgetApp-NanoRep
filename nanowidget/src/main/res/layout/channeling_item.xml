@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    card_view:cardElevation="0dp"
+    card_view:cardCornerRadius="0dp"
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:id="@+id/channeling_cardView">
+
+    <!--
+    <nanorep.nanowidget.Components.NRChannelingView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/cv_channelingView">
+    </nanorep.nanowidget.Components.NRChannelingView>
+-->
+
+    <LinearLayout
+        android:id="@+id/channel_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="vertical">
+    </LinearLayout>
+</android.support.v7.widget.CardView>

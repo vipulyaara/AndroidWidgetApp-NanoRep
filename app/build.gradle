@@ -1,4 +1,10 @@
 apply plugin: 'com.android.application'
+apply plugin: 'io.fabric'
+
+
+repositories {
+    maven { url 'https://maven.fabric.io/public' }
+}
 
 android {
     compileSdkVersion 24
@@ -6,10 +12,10 @@ android {
 
     defaultConfig {
         applicationId "nanorep.nanoandroidwidgetdemoapp"
-        minSdkVersion 19
+        minSdkVersion 21
         targetSdkVersion 24
         versionCode 1
-        versionName "1.1.4"
+        versionName "1.2.0"
     }
     buildTypes {
         release {
@@ -23,5 +29,8 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
     compile project(':nanowidget')
-    compile 'com.crittercism:crittercism-android-agent:+'
+    compile('com.crashlytics.sdk.android:crashlytics:2.6.5@aar') {
+        transitive = true;
+    }
+    //compile 'com.crittercism:crittercism-android-agent:+'
 }

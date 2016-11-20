@@ -24,6 +24,9 @@ public class NRChannelStrategy {
             case PhoneNumber:
                 presentor = new NRPhoneChannelPresentor(context);
                 break;
+            case CustomScript:
+                presentor = new NRCustomScriptChannelPresentor(context);
+                break;
         }
         presentor.setChannel(channeling);
         return presentor;

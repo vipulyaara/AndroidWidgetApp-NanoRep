@@ -8,15 +8,21 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.util.Log;
 
+import com.nanorep.nanoclient.Handlers.NRErrorHandler;
+import com.nanorep.nanoclient.Log.NRLogger;
+
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by nissopa on 9/12/15.
  */
 public class NRConnection {
-    public static String NRStatusKey = "status";
+    private static String NRStatusKey = "status";
+    private static String TAG_REQUEST = "nanoRepDebugRequest";
+    private static String TAG_RESPONSE = "nanoRepDebugResponse";
 
     private ArrayList<NRDownloader> mConnections;
 
@@ -24,6 +30,7 @@ public class NRConnection {
 
     public interface Listener {
         void response(Object responseParam, int status, NRError error);
+        void log(String tag, String msg);
     }
 
     private NRConnection() {
@@ -43,15 +50,30 @@ public class NRConnection {
     }
 
     public void connectionWithRequest(Uri uri, final Listener listener) {
+
         NRDownloader downloader = new NRDownloader(new NRDownloader.NRDownloaderListener() {
             @Override
             public void downloadCompleted(NRDownloader downloader, Object data, NRError error) {
+
                 if (listener != null) {
                     if (error != null) {
                         listener.response(null, -1, error);
-                    } else if (data != null) {
-                        String jsonString = new String((byte[])data);
-                        Object retMap = NRUtilities.jsonStringToPropertyList(jsonString);
+                        NRErrorHandler.getInstance().handleError(error.getCode());
+                    } else {//if (data != null) {
+
+                        NRErrorHandler.getInstance().reset();
+
+                        String jsonString = "";
+                        Object retMap = new HashMap<>();
+
+                        if (data != null) {
+                            jsonString = new String((byte[]) data);
+                            retMap = NRUtilities.jsonStringToPropertyList(jsonString);
+                        }
+
+                        //log
+                        listener.log(TAG_RESPONSE, jsonString);
+
                         listener.response(retMap, downloader.getResponseStatus(), null);
                     }
                 }
@@ -60,6 +82,10 @@ public class NRConnection {
                 }
             }
         });
+
+        //log
+        listener.log(TAG_REQUEST, uri.toString());
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             downloader.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, uri);
         } else {

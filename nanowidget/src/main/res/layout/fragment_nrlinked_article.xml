@@ -33,7 +33,7 @@
             android:id="@+id/backButton"/>
     </RelativeLayout>
 
-    <nanorep.nanowidget.Components.NRWebView
+    <nanorep.nanowidget.Components.NRContentView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/linkedArtWebView"

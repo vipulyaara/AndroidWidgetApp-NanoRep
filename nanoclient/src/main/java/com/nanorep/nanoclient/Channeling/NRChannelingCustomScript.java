@@ -7,6 +7,7 @@ import java.util.HashMap;
  */
 public class NRChannelingCustomScript extends NRChanneling {
     private String scriptContent;
+    private NRChanneling mChanneling;
 
     public NRChannelingCustomScript(HashMap<String, Object> params) {
         super(params);

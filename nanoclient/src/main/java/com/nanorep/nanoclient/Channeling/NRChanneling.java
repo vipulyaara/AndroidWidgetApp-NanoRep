@@ -44,7 +44,7 @@ public class NRChanneling {
     }
 
     public String getButtonText() {
-        return buttonText;
+        return buttonText.toUpperCase();
     }
 
     public String getChannelDescription() {
