@@ -41,6 +41,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="23dp"
         android:id="@+id/serverId"
+        android:visibility="gone"
         android:layout_below="@+id/kbId"
         android:textAlignment="center"
         android:inputType="text"
@@ -56,6 +57,14 @@
         android:text="debug"
         android:layout_below="@+id/serverId"/>
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Prepare Nanorep"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/checkbox"
+        android:id="@+id/prepareButton"
+        android:layout_marginTop="20dp"/>
 
 
     <Button
@@ -63,7 +72,8 @@
         android:layout_height="wrap_content"
         android:text="Load Nanorep"
         android:layout_centerHorizontal="true"
-        android:layout_below="@+id/checkbox"
+        android:layout_below="@+id/prepareButton"
+        android:visibility="gone"
         android:id="@+id/button"
         android:layout_marginTop="20dp"/>
 

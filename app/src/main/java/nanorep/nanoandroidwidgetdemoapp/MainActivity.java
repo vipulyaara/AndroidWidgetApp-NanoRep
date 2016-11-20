@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -60,9 +61,40 @@ public class MainActivity extends AppCompatActivity implements NRCustomViewAdapt
 //        categoriesFragment.setViewAdapter(this);
 //        mainFragment.setViewAdapter(this);
 
+        final EditText accountName = (EditText) findViewById(R.id.accountNameId);
+        final EditText kb = (EditText) findViewById(R.id.kbId);
+        EditText server = (EditText) findViewById(R.id.serverId);
 
 
-        Button loadButton = (Button)findViewById(R.id.button);
+        final String _server = server.getText().toString();
+        final Button loadButton = (Button)findViewById(R.id.button);
+
+
+        Button prepareButton = (Button)findViewById(R.id.prepareButton);
+        prepareButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                v.setVisibility(View.INVISIBLE);
+
+                final String _accountName = accountName.getText().toString();
+                final String _kb = kb.getText().toString();
+
+                if(!isEmpty(_accountName) && !isEmpty(_kb)) {
+                    NRImpl.getInstance().init(getApplicationContext(), _accountName, _kb);
+                }
+
+                final Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        loadButton.setVisibility(View.VISIBLE);
+                    }
+                }, 4000);
+
+            }
+        });
+
+
         if (loadButton != null) {
             loadButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -71,19 +103,18 @@ public class MainActivity extends AppCompatActivity implements NRCustomViewAdapt
 //                    Nanorep.AccountParams accountParams = new Nanorep.AccountParams();
 //                    accountParams.setAccount("yatra");
 //                    accountParams.setKnowledgeBase("79848779");
-                    EditText accountName = (EditText) findViewById(R.id.accountNameId);
-                    EditText kb = (EditText) findViewById(R.id.kbId);
-                    EditText server = (EditText) findViewById(R.id.serverId);
 
 
-                    String _accountName = "qa";//"nanorep";
-                    String _kb = "qa";//"English";
+
+
+//                    String _accountName = "qa";//"nanorep";
+//                    String _kb = "qa";//"English";
 
 //                    String _accountName = "gett";//"nanorep";
 //                    String _kb = "English_IL";//"English";
 
 
-                    String _server = server.getText().toString();
+//                    String _server = server.getText().toString();
 
 //                    if(!_server.isEmpty()) {
 //                        accountParams.setmHost(_server);
@@ -126,6 +157,9 @@ public class MainActivity extends AppCompatActivity implements NRCustomViewAdapt
         }
     }
 
+    private boolean isEmpty(String str) {
+        return str == null && "".equals(str);
+    }
 
 
 //    @Override
