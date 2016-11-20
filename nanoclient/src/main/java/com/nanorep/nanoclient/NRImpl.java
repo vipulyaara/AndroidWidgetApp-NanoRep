@@ -374,8 +374,9 @@ public class NRImpl extends Nanorep {
                 executeRequest(uriBuilder, new NRConnection.Listener() {
                     @Override
                     public void response(Object responseParam, int status, NRError error) {
-
-                        ((HashMap<String, Object>) responseParam).put("id", answerId);
+                        if (responseParam != null) {
+                            ((HashMap<String, Object>) responseParam).put("id", answerId);
+                        }
 
                         for (OnFAQAnswerFetchedListener listener : finalOnFAQAnswerFetchedListenerArr) {
                             if (error != null) {

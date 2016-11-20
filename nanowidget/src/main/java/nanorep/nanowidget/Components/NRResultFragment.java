@@ -114,7 +114,7 @@ public class NRResultFragment extends Fragment implements View.OnClickListener, 
 
     public void setBody(String htmlString) {
         mResult.getFetchedResult().setBody(htmlString);
-        mWebView.loadData(htmlString, "text/html", "UTF-8");
+//        mWebView.loadData(htmlString, "text/html", "UTF-8");
     }
 
     @Override

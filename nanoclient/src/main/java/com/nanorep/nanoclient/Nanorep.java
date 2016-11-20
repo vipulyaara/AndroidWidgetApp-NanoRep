@@ -97,6 +97,7 @@ public abstract class Nanorep {
         private String mKnowledgeBase;
         private HashMap<String, String> mContext;
         private String mReferrer;
+        private String mDomain;
 
         public String getAccount() {
             return mAccount;
@@ -159,6 +160,14 @@ public abstract class Nanorep {
             }
             uri.appendQueryParameter("referer", NRUtilities.buildReferer(getReferrer()));
             return uri;
+        }
+
+        public String getDomain() {
+            return mDomain;
+        }
+
+        public void setDomain(String domain) {
+            mDomain = domain;
         }
     }
 }
