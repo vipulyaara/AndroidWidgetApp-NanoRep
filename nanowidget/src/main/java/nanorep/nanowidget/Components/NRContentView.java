@@ -76,7 +76,7 @@ public class NRContentView extends NRCustomContentView implements View.OnKeyList
                 if(loadingFinished && !redirect){
                     //HIDE LOADING IT HAS FINISHED
                     mLoadingView.setVisibility(INVISIBLE);
-                    view.clearCache(true);
+//                    view.clearCache(true);
                 } else{
                     redirect = false;
                 }

@@ -152,6 +152,10 @@ public class NRTitleView extends NRCustomTitleView{
             color = textColorAnswer;
         }
 
+        if(!color.startsWith("#")) {
+            color = "#" + color;
+        }
+
         mTitleButton.setTextColor(Color.parseColor(color));
     }
 
