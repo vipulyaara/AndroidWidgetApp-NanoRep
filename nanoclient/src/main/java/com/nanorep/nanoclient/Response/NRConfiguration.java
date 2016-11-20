@@ -40,6 +40,10 @@ public class NRConfiguration {
         if (params != null) {
             Object faq = mParams.get("faqData");
             if (faq != null && faq instanceof String) {
+                if("contextDependent".toLowerCase().equals(((String) faq).toLowerCase())) {
+                    mIsContextDependent = true;
+                }
+            } else if(faq == null) {
                 mIsContextDependent = true;
             }
         }
@@ -318,6 +322,8 @@ public class NRConfiguration {
         for (String key: cnf.customization.keySet()) {
             customization.put(key, cnf.customization.get(key));
         }
+
+        mIsContextDependent = cnf.mIsContextDependent;
     }
 
     public boolean getIsContextDependent() {

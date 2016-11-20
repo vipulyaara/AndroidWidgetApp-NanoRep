@@ -22,7 +22,7 @@ public class NanoApp extends Application{
         String _accountName = "qa";//"gett";//"nanorep";
         String _kb = "qa";//"English_IL";//"English";
 
-        NRImpl.init(getApplicationContext(), _accountName, _kb);
+        NRImpl.getInstance().init(getApplicationContext(), _accountName, _kb);
         Fabric.with(this, new Crashlytics());
 
 
