@@ -484,8 +484,8 @@ public class NRImpl extends Nanorep {
                                 public void response(Object responseParam, int status, NRError error) {
                                     if (responseParam != null) {
                                         cnf.setFaqData((ArrayList) responseParam);
-                                        NRCacheManager.storeAnswerById(mContext, NRUtilities.md5(mAccountParams.getKnowledgeBase() + mAccountParams.getNanorepContext()), cnf.getmParams());
                                         overrideCnfData(cnf);
+                                        NRCacheManager.storeAnswerById(mContext, NRUtilities.md5(mAccountParams.getKnowledgeBase() + mAccountParams.getNanorepContext()), cnf.getmParams());
                                         if(!fast) {
                                             updateFAQContentsAndCallHello(cnf);
                                         }
