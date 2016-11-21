@@ -51,28 +51,12 @@ public class MainActivity extends AppCompatActivity implements NRCustomViewAdapt
         getSupportActionBar().setElevation(0);
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#0aa0ff")));
 
-//        final Handler handler = new Handler();
-//        handler.postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//
-//                openMainFragment();
-//            }
-//        }, 5000);
+
 
 //        openMainFragment();
 
         checkBox = (CheckBox) findViewById(R.id.checkbox);
 
-//        categoriesFragment = NRWidgetCategoriesFragment.newInstance();
-
-
-//        nanoFragment = NRWidgetFragment.newInstance();
-//        nanoFragment.setListener(this);
-//        Crittercism.initialize(getApplicationContext(), "d59e30ede3c34d0bbf19d0237c2f1bc800444503");
-
-//        categoriesFragment.setViewAdapter(this);
-//        mainFragment.setViewAdapter(this);
 
         final EditText accountName = (EditText) findViewById(R.id.accountNameId);
         final EditText kb = (EditText) findViewById(R.id.kbId);
@@ -105,9 +89,6 @@ public class MainActivity extends AppCompatActivity implements NRCustomViewAdapt
                     return;
                 }
 
-//                if(NRImpl.getInstance() != null) {
-//                    NRImpl.getInstance().reset();
-//                }
                 NRImpl.getInstance().init(getApplicationContext(), _accountName, _kb);
                 pb.setVisibility(View.VISIBLE);
 
@@ -137,58 +118,9 @@ public class MainActivity extends AppCompatActivity implements NRCustomViewAdapt
                 @Override
                 public void onClick(final View v) {
                     v.setVisibility(View.INVISIBLE);
-//                    Nanorep.AccountParams accountParams = new Nanorep.AccountParams();
-//                    accountParams.setAccount("yatra");
-//                    accountParams.setKnowledgeBase("79848779");
-
-
-
-
-//                    String _accountName = "qa";//"nanorep";
-//                    String _kb = "qa";//"English";
-
-//                    String _accountName = "gett";//"nanorep";
-//                    String _kb = "English_IL";//"English";
-
-
-//                    String _server = server.getText().toString();
-
-//                    if(!_server.isEmpty()) {
-//                        accountParams.setmHost(_server);
-//                    }
-
-//                    String _accountName = accountName.getText().toString();
-//                    String _kb = kb.getText().toString();
-
-//                    accountParams.setAccount(_accountName);
-//                    accountParams.setKnowledgeBase(_kb);
-//                    HashMap<String, String> channel = new HashMap();
-//                    channel.put("channel", "mobile");
-//                    accountParams.setContext(channel);
-//                    Nanorep nanorep = NanorepBuilder.createNanorep(getApplicationContext(), accountParams);
-
-//                    nanorep.getNRConfiguration().getTitle().setTitleBGColor("#FF7F23");
-//                    nanorep.getNRConfiguration().setAutocompleteEnabled("false");
-//                    nanorep.getNRConfiguration().getSearchBar().setInitialText("noa noa");
-
-//                    nanorep.setDebugMode(checkBox.isChecked());
-
-//                    NRImpl.init(getApplicationContext(), _accountName, _kb);
-
                     mainFragment = NRMainFragment.newInstance();
-//                    mainFragment.setNanoRep(nanorep);
-//                    nanoFragment.setNanoRep(nanorep);
                     FragmentUtils.openFragment(mainFragment, R.id.content_main,
                             NRMainFragment.TAG, MainActivity.this, false);
-//                    getSupportFragmentManager().beginTransaction().add(R.id.content_main, categoriesFragment, "nanorep").commit();
-//                    nanoFragment.setNanoRep(nanorep);
-//                    getSupportFragmentManager().beginTransaction().replace(R.id.root_layout, nanoFragment, "nanorep").commit();
-//                    nanorep.fetchConfiguration(new Nanorep.OnConfigurationFetchedListener() {
-//                        @Override
-//                        public void onConfigurationReady(NRConfiguration configuration, NRError error) {
-//
-//                        }
-//                    });
                 }
             });
         }
