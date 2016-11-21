@@ -65,6 +65,7 @@
         android:text="Prepare Nanorep"
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/checkbox"
+        android:visibility="gone"
         android:id="@+id/prepareButton"
         android:layout_marginTop="20dp"/>
 

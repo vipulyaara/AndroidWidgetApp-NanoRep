@@ -79,13 +79,14 @@ public abstract class Nanorep {
         nrLogger.setDebug(checked);
     }
 
-    protected Nanorep(Context context, String account, String kb) {
+    public void init(Context context, String account, String kb) {
         this.mContext = context;
         this.mAccountParams = new AccountParams();
         this.mAccountParams.setAccount(account);
         this.mAccountParams.setKnowledgeBase(kb);
 //        this.mAccountParams.setmHost("server4");
         this.nrLogger = new NRLogger();
+        this.mCnf = null;
 
         fetchConfiguration(null, true);
     }

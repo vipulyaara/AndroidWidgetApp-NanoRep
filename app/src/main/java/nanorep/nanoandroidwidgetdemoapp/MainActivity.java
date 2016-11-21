@@ -51,6 +51,17 @@ public class MainActivity extends AppCompatActivity implements NRCustomViewAdapt
         getSupportActionBar().setElevation(0);
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#0aa0ff")));
 
+//        final Handler handler = new Handler();
+//        handler.postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//
+//                openMainFragment();
+//            }
+//        }, 5000);
+
+//        openMainFragment();
+
         checkBox = (CheckBox) findViewById(R.id.checkbox);
 
 //        categoriesFragment = NRWidgetCategoriesFragment.newInstance();
@@ -73,6 +84,7 @@ public class MainActivity extends AppCompatActivity implements NRCustomViewAdapt
 
 
         final Button prepareButton = (Button)findViewById(R.id.prepareButton);
+        prepareButton.setVisibility(View.VISIBLE);
         prepareButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
@@ -93,9 +105,9 @@ public class MainActivity extends AppCompatActivity implements NRCustomViewAdapt
                     return;
                 }
 
-                if(NRImpl.getInstance() != null) {
-                    NRImpl.getInstance().reset();
-                }
+//                if(NRImpl.getInstance() != null) {
+//                    NRImpl.getInstance().reset();
+//                }
                 NRImpl.getInstance().init(getApplicationContext(), _accountName, _kb);
                 pb.setVisibility(View.VISIBLE);
 
@@ -105,7 +117,7 @@ public class MainActivity extends AppCompatActivity implements NRCustomViewAdapt
                     public void run() {
 
                         if(NRImpl.getInstance().getNRConfiguration().getmParams() == null || (NRImpl.getInstance().getNRConfiguration().getmParams() != null && NRImpl.getInstance().getNRConfiguration().getmParams().size() == 0)) {
-                            NRImpl.getInstance().reset();
+//                            NRImpl.getInstance().reset();
                             Toast.makeText(MainActivity.this, "Wrong account or kb", Toast.LENGTH_LONG).show();
                             prepareButton.setVisibility(View.VISIBLE);
                             pb.setVisibility(View.GONE);
@@ -180,6 +192,12 @@ public class MainActivity extends AppCompatActivity implements NRCustomViewAdapt
                 }
             });
         }
+    }
+
+    private void openMainFragment() {
+        mainFragment = NRMainFragment.newInstance();
+        FragmentUtils.openFragment(mainFragment, R.id.content_main,
+                NRMainFragment.TAG, MainActivity.this, false);
     }
 
     private boolean isEmpty(String str) {

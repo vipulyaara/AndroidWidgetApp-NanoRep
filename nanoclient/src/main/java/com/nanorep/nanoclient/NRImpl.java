@@ -49,25 +49,13 @@ public class NRImpl extends Nanorep {
 
     private static NRImpl INSTANCE;
 
-    private NRImpl(Context context, String account, String kb) {
-        super(context, account, kb);
-    }
-
-
-    public static NRImpl init(Context context, String account, String kb) {
-        if(INSTANCE == null)
-        {
-            synchronized (NRImpl.class) {
-                if (INSTANCE == null) {
-                    INSTANCE = new NRImpl(context, account, kb);
-                }
-            }
-        }
-        return INSTANCE;
+    @Override
+    public void init(Context context, String account, String kb) {
+        super.init(context, account, kb);
     }
 
     public void reset() {
-        INSTANCE = null;
+//        mCnf = null;
         mSessionId = null;
         if(mHandler != null) {
             mHandler.removeCallbacksAndMessages(null);
@@ -75,6 +63,14 @@ public class NRImpl extends Nanorep {
     }
 
     public static NRImpl getInstance() {
+        if(INSTANCE == null)
+        {
+            synchronized (NRImpl.class) {
+                if (INSTANCE == null) {
+                    INSTANCE = new NRImpl();
+                }
+            }
+        }
         return INSTANCE;
     }
 
@@ -446,7 +442,7 @@ public class NRImpl extends Nanorep {
 
     @Override
     public void fetchConfiguration(final OnConfigurationFetchedListener onConfigurationFetchedListener, boolean forceInit) {
-        final HashMap<String, Object> cachedResponse = NRCacheManager.getAnswerById(mContext, NRUtilities.md5(mAccountParams.getKnowledgeBase() + mAccountParams.getNanorepContext()));
+        final HashMap<String, Object> cachedResponse = NRCacheManager.getAnswerById(mContext, NRUtilities.md5(mAccountParams.getKnowledgeBase() + mAccountParams.getAccount() + mAccountParams.getNanorepContext()));
 
         if(!forceInit && cachedResponse != null) {
             if (onConfigurationFetchedListener != null) {
@@ -497,7 +493,7 @@ public class NRImpl extends Nanorep {
                                     if (responseParam != null) {
                                         cnf.setFaqData((ArrayList) responseParam);
                                         overrideCnfData(cnf);
-                                        NRCacheManager.storeAnswerById(mContext, NRUtilities.md5(mAccountParams.getKnowledgeBase() + mAccountParams.getNanorepContext()), cnf.getmParams());
+                                        NRCacheManager.storeAnswerById(mContext, NRUtilities.md5(mAccountParams.getKnowledgeBase() + mAccountParams.getAccount() + mAccountParams.getNanorepContext()), cnf.getmParams());
                                         if(!fast) {
                                             updateFAQContentsAndCallHello(cnf);
                                         }
@@ -526,7 +522,7 @@ public class NRImpl extends Nanorep {
                             if (onConfigurationFetchedListener != null) {
                                 onConfigurationFetchedListener.onConfigurationFetched(null);
                             }
-                            NRCacheManager.storeAnswerById(mContext, NRUtilities.md5(mAccountParams.getKnowledgeBase() + mAccountParams.getNanorepContext()), cnf.getmParams());
+                            NRCacheManager.storeAnswerById(mContext, NRUtilities.md5(mAccountParams.getKnowledgeBase() + mAccountParams.getAccount() + mAccountParams.getNanorepContext()), cnf.getmParams());
 
                             if(!fast) {
                                 updateFAQContentsAndCallHello(cnf);
