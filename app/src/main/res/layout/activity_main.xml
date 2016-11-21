@@ -19,6 +19,7 @@
         android:layout_marginTop="56dp"
         android:id="@+id/accountNameId"
         android:layout_centerHorizontal="true"
+        android:text="nanorep"
         android:textAlignment="center"
         android:hint="account name"/>
 
@@ -32,6 +33,7 @@
         android:layout_below="@+id/accountNameId"
         android:textAlignment="center"
         android:inputType="text"
+        android:text="English"
         android:hint="knowledge base"/>
 
     <EditText
@@ -66,13 +68,23 @@
         android:id="@+id/prepareButton"
         android:layout_marginTop="20dp"/>
 
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/checkbox"
+        android:visibility="gone"
+        android:id="@+id/pb"
+        android:layout_marginTop="20dp"
+        />
+
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Load Nanorep"
         android:layout_centerHorizontal="true"
-        android:layout_below="@+id/prepareButton"
+        android:layout_below="@+id/checkbox"
         android:visibility="gone"
         android:id="@+id/button"
         android:layout_marginTop="20dp"/>

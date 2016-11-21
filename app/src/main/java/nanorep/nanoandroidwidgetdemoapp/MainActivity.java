@@ -15,6 +15,8 @@ import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ProgressBar;
+import android.widget.Toast;
 
 //import com.crittercism.app.Crittercism;
 import com.crashlytics.android.Crashlytics;
@@ -64,32 +66,55 @@ public class MainActivity extends AppCompatActivity implements NRCustomViewAdapt
         final EditText accountName = (EditText) findViewById(R.id.accountNameId);
         final EditText kb = (EditText) findViewById(R.id.kbId);
         EditText server = (EditText) findViewById(R.id.serverId);
-
+        final ProgressBar pb = (ProgressBar) findViewById(R.id.pb);
 
         final String _server = server.getText().toString();
         final Button loadButton = (Button)findViewById(R.id.button);
 
 
-        Button prepareButton = (Button)findViewById(R.id.prepareButton);
+        final Button prepareButton = (Button)findViewById(R.id.prepareButton);
         prepareButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
                 v.setVisibility(View.INVISIBLE);
 
-                final String _accountName = accountName.getText().toString();
-                final String _kb = kb.getText().toString();
+                String _accountName = accountName.getText().toString();
+                String _kb = kb.getText().toString();
 
-                if(!isEmpty(_accountName) && !isEmpty(_kb)) {
-                    NRImpl.getInstance().init(getApplicationContext(), _accountName, _kb);
+                if(isEmpty(_accountName)) {
+                    Toast.makeText(MainActivity.this, "Please fill in your account", Toast.LENGTH_LONG).show();
+                    v.setVisibility(View.VISIBLE);
+                    return;
                 }
+
+                if(isEmpty(_kb)) {
+                    Toast.makeText(MainActivity.this, "Please fill in your kb", Toast.LENGTH_LONG).show();
+                    v.setVisibility(View.VISIBLE);
+                    return;
+                }
+
+                if(NRImpl.getInstance() != null) {
+                    NRImpl.getInstance().reset();
+                }
+                NRImpl.getInstance().init(getApplicationContext(), _accountName, _kb);
+                pb.setVisibility(View.VISIBLE);
 
                 final Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        loadButton.setVisibility(View.VISIBLE);
+
+                        if(NRImpl.getInstance().getNRConfiguration().getmParams() == null || (NRImpl.getInstance().getNRConfiguration().getmParams() != null && NRImpl.getInstance().getNRConfiguration().getmParams().size() == 0)) {
+                            NRImpl.getInstance().reset();
+                            Toast.makeText(MainActivity.this, "Wrong account or kb", Toast.LENGTH_LONG).show();
+                            prepareButton.setVisibility(View.VISIBLE);
+                            pb.setVisibility(View.GONE);
+                        } else {
+                            loadButton.setVisibility(View.VISIBLE);
+                            pb.setVisibility(View.GONE);
+                        }
                     }
-                }, 4000);
+                }, 5000);
 
             }
         });
@@ -158,7 +183,7 @@ public class MainActivity extends AppCompatActivity implements NRCustomViewAdapt
     }
 
     private boolean isEmpty(String str) {
-        return str == null && "".equals(str);
+        return str == null || (str != null && "".equals(str));
     }
 
 

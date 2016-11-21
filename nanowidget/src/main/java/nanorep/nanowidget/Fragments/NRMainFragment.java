@@ -133,7 +133,9 @@ public class NRMainFragment extends Fragment implements NRSearchBarListener, NRS
         mFetchedDataManager.faqAnswer(resultID, resultHash, new OnFAQAnswerFetched() {
             @Override
             public void onAnswerFetched(NRQueryResult result) {
-                view.loadData(result.getBody(), "text/html", "UTF-8");
+                if(result != null) {
+                    view.loadData(result.getBody(), "text/html", "UTF-8");
+                }
             }
         });
     }
@@ -465,6 +467,19 @@ public class NRMainFragment extends Fragment implements NRSearchBarListener, NRS
 
 
         NRErrorHandler.getInstance().setListener(this);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
+        NRImpl.getInstance().reset();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        NRErrorHandler.getInstance().setListener(null);
     }
 
     private NRResultTopView getTopView() {

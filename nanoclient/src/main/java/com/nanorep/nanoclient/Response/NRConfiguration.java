@@ -33,16 +33,20 @@ public class NRConfiguration {
      */
     public NRConfiguration(HashMap<String, Object> params) {
         mParams = params;
-        customization = (HashMap<String, String>)params.get("customization");
-
-        if(customization == null) {
-            customization = new HashMap<String, String>();
-        }
 
         if (params != null) {
+
+            if(params.get("customization") != null) {
+                customization = (HashMap<String, String>) params.get("customization");
+            }
+
+            if(customization == null) {
+                customization = new HashMap<String, String>();
+            }
+
             Object faq = mParams.get("faqData");
             if (faq != null && faq instanceof String) {
-                if("contextDependent".toLowerCase().equals(((String) faq).toLowerCase())) {
+                if("context-dependent".toLowerCase().equals(((String) faq).toLowerCase())) {
                     mIsContextDependent = true;
                 }
             } else if(faq == null) {

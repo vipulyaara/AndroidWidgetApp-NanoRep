@@ -3,6 +3,7 @@ package nanorep.nanowidget.Components;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,11 +38,11 @@ public class NRLikeView extends NRCustomLikeView  {
     public void updateLikeButton(boolean isLike) {
         resetLikeView();
         if (isLike) {
-            mLikeButton.setTextColor(getResources().getColor(R.color.nr_like_color));
-            mDislikeButton.setTextColor(getResources().getColor(R.color.nr_text_color));
+            mLikeButton.setTextColor(ContextCompat.getColor(getContext(), R.color.nr_like_color));
+            mDislikeButton.setTextColor(ContextCompat.getColor(getContext(), R.color.nr_text_color));
         } else {
-            mLikeButton.setTextColor(getResources().getColor(R.color.nr_text_color));
-            mDislikeButton.setTextColor(getResources().getColor(R.color.nr_dislike_color));
+            mLikeButton.setTextColor(ContextCompat.getColor(getContext(), R.color.nr_text_color));
+            mDislikeButton.setTextColor(ContextCompat.getColor(getContext(), R.color.nr_dislike_color));
         }
         mLikeButton.setEnabled(false);
         mDislikeButton.setEnabled(false);

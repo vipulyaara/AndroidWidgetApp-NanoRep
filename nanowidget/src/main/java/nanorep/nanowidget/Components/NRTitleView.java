@@ -94,9 +94,15 @@ public class NRTitleView extends NRCustomTitleView{
 
     private void setUnfoldButtonImage() {
         if(mUnFoldButton != null) {
-            if (mUnFoldButton.getRotation() == -270 && closed || mUnFoldButton.getRotation() == -90 && !closed)  {
-                ObjectAnimator.ofFloat(mUnFoldButton, "rotation", 0, !closed ? -270 : -90).start();
+//            if (mUnFoldButton.getRotation() == -270 && closed || mUnFoldButton.getRotation() == -90 && !closed)  {
+//                ObjectAnimator.ofFloat(mUnFoldButton, "rotation", 0, !closed ? -270 : -90).start();
+//            }
+            if(!closed) {
+                mUnFoldButton.setVisibility(View.INVISIBLE);
+            } else {
+                mUnFoldButton.setVisibility(View.VISIBLE);
             }
+
         }
     }
 

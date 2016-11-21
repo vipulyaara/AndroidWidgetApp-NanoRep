@@ -66,6 +66,14 @@ public class NRImpl extends Nanorep {
         return INSTANCE;
     }
 
+    public void reset() {
+        INSTANCE = null;
+        mSessionId = null;
+        if(mHandler != null) {
+            mHandler.removeCallbacksAndMessages(null);
+        }
+    }
+
     public static NRImpl getInstance() {
         return INSTANCE;
     }
@@ -115,7 +123,7 @@ public class NRImpl extends Nanorep {
                     Log.d("Keep Alive Error", error.getDescription());
                 } else  if (status != 200) {
                     mSessionId = null;
-                    mHandler.removeMessages(0);
+                    mHandler.removeCallbacksAndMessages(null);
                 } else if (responseParam != null) {
                     keepAlive(mDelay);
                 }
@@ -130,6 +138,7 @@ public class NRImpl extends Nanorep {
 
     private void keepAlive(long interval) {
         mHandler = new Handler();
+
         mHandler.postDelayed(new Runnable() {
             public void run() {
                 NRImpl.this.startKeepAlive();
@@ -347,6 +356,8 @@ public class NRImpl extends Nanorep {
         Uri.Builder uriBuilder = mAccountParams.getUri();
         uriBuilder.appendEncodedPath("api/faq/v1/answer.js");
         uriBuilder.appendQueryParameter("id", answerId);
+        uriBuilder.appendQueryParameter("referer", getAccountParams().getReferrer());
+        uriBuilder.appendQueryParameter("kb", getAccountParams().getKnowledgeBase());
 
         // if exist and updated in cache, fetch from cache,
         // else call to server
