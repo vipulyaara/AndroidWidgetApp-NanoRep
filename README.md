@@ -1,5 +1,5 @@
 <snippet>
-  <content><![CDATA[
+  <content>
 # Nanorep widget
 Welcome to Nanorep Android SDK. This demo app demonstrates how to use the Nanorep Mobile SDK to build native support into your mobile application.
 ## Installation
@@ -15,6 +15,6 @@ Init Nanorep SDK with your account name and knowledge base in Application class:
 NRImpl.getInstance().init(getApplicationContext(), _accountName, _kb);
 ```
 
-]]></content>
+</content>
   <tabTrigger>readme</tabTrigger>
 </snippet>
