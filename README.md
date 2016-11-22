@@ -10,11 +10,10 @@ dependencies {
 }
 ```
 ## Usage
-TODO: Write usage instructions
-
---
-
---
+Init Nanorep SDK with your account name and knowledge base in Application class:
+```java
+NRImpl.getInstance().init(getApplicationContext(), _accountName, _kb);
+```
 
 ]]></content>
   <tabTrigger>readme</tabTrigger>
