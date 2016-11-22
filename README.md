@@ -16,5 +16,4 @@ NRImpl.getInstance().init(getApplicationContext(), _accountName, _kb);
 ```
 
 </content>
-  <tabTrigger>readme</tabTrigger>
 </snippet>
