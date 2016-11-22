@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity implements NRCustomViewAdapt
 
 
 
-        openMainFragment();
+//        openMainFragment();
 
         checkBox = (CheckBox) findViewById(R.id.checkbox);
 
@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity implements NRCustomViewAdapt
 
 
         final Button prepareButton = (Button)findViewById(R.id.prepareButton);
-//        prepareButton.setVisibility(View.VISIBLE);
+        prepareButton.setVisibility(View.VISIBLE);
         prepareButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {

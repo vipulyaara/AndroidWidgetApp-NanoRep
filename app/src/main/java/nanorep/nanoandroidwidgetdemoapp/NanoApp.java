@@ -28,7 +28,7 @@ public class NanoApp extends Application{
 //        if(NRImpl.getInstance() != null) {
 //            NRImpl.getInstance().reset();
 //        }
-        NRImpl.getInstance().init(getApplicationContext(), _accountName, _kb);
+//        NRImpl.getInstance().init(getApplicationContext(), _accountName, _kb);
         Fabric.with(this, new Crashlytics());
 
 
