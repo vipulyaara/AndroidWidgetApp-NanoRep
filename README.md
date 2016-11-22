@@ -1,45 +1,23 @@
-# Nanorep Widget
---
-
-Nanorep native widget
-
-
-## Download
-
-Gradle:
-
-```
-compile 'com.nanorep:nanowidget:1.1.2'
-```
-
-Add to your Project's build.gradle :
-
-```
-allprojects {
-    repositories {
-        maven {
-            url 'https://dl.bintray.com/nissop/maven/'
-        }
-        jcenter()
-    }
-}
-```
-
-## Using Nanorep's widget
-
-```
-// Create Accont 
-Nanorep.AccountParams accountParams = new Nanorep.AccountParams();
-accountParams.setAccount("nanorep");
-accountParams.setKnowledgeBase("english");
-
-// Create Nanorep object
-Nanorep nanorep = NanorepBuilder.createNanorep(getApplicationContext(), accountParams);
-
-// Create NRWidgetFragment
-NRWidgetFragment nanoFragment = NRWidgetFragment.newInstance(null, null);
-nanoFragment.setNanoRep(nanorep);
-
-// Present NRWidget
-getSupportFragmentManager().beginTransaction().add(R.id.root_layout, nanoFragment, "nanorep").commit();
-```
+<snippet>
+  <content><![CDATA[
+# ${1:Nanorep widget}
+TODO: Write a project description
+## Installation
+TODO: Describe the installation process
+## Usage
+TODO: Write usage instructions
+## Contributing
+1. Fork it!
+2. Create your feature branch: `git checkout -b my-new-feature`
+3. Commit your changes: `git commit -am 'Add some feature'`
+4. Push to the branch: `git push origin my-new-feature`
+5. Submit a pull request :D
+## History
+TODO: Write history
+## Credits
+TODO: Write credits
+## License
+TODO: Write license
+]]></content>
+  <tabTrigger>readme</tabTrigger>
+</snippet>
