@@ -3,10 +3,23 @@
 # Nanorep widget
 Welcome to Nanorep Android SDK. This demo app demonstrates how to use the Nanorep Mobile SDK to build native support into your mobile application.
 ## Installation
+
+Add to your Project's build.gradle :
+```
+allprojects {
+    repositories {
+        maven {
+            url 'https://dl.bintray.com/nissop/maven/'
+        }
+        jcenter()
+    }
+}
+```
+
 Add the library as a dependency in your build.gradle file.
 ```java
 dependencies {
-    compile 'com.nanorep:nanowidget:1.3.0'
+    compile 'com.nanorep:nanowidget:1.3.1'
 }
 ```
 ## Usage
