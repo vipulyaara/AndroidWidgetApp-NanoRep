@@ -7,12 +7,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 
 import java.util.ArrayList;
 
 import nanorep.nanowidget.DataClasse.NRResult;
 import nanorep.nanowidget.DataClasse.NRResultsAdapter;
+import nanorep.nanowidget.Fragments.NRMainFragment;
 import nanorep.nanowidget.R;
 import nanorep.nanowidget.Utilities.Calculate;
 import nanorep.nanowidget.interfaces.NRCustomViewAdapter;
@@ -28,6 +30,9 @@ public class NRResultsView extends LinearLayout implements NRResultsAdapter.List
     private NRResultsAdapter adapter;
     private Listener listener;
     private boolean isAnimated;
+
+    private RelativeLayout frequentlyQuestions;
+    private TextView frequentlyQuestionsTv;
 
     public void setIsAnimated(boolean isAnimated) {
         this.isAnimated = isAnimated;
@@ -55,6 +60,9 @@ public class NRResultsView extends LinearLayout implements NRResultsAdapter.List
     public void onViewAdded(View child) {
         super.onViewAdded(child);
 
+        frequentlyQuestions = (RelativeLayout) child.findViewById(R.id.frequentlyQuestions);
+        frequentlyQuestionsTv = (TextView) child.findViewById(R.id.frequentlyQuestionsTv);
+
         adapter = new NRResultsAdapter();
 
         mResultsRecyclerView = (RecyclerView) child.findViewById(R.id.resultsView);
@@ -67,7 +75,13 @@ public class NRResultsView extends LinearLayout implements NRResultsAdapter.List
         this.listener = listener;
     }
 
-    public void setResults(ArrayList<NRResult> results, NRCustomViewAdapter viewAdapter)  {
+    public void setResults(ArrayList<NRResult> results, String title, NRCustomViewAdapter viewAdapter)  {
+
+        if(!NRMainFragment.isEmpty(title)) {
+            frequentlyQuestions.setVisibility(View.VISIBLE);
+            frequentlyQuestionsTv.setText(title);
+        }
+
         adapter.setListener(this);
         adapter.setViewAdapter(viewAdapter);
         adapter.addItems(results);

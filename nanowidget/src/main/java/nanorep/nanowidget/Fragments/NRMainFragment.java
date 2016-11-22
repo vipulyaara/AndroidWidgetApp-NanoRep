@@ -337,7 +337,7 @@ public class NRMainFragment extends Fragment implements NRSearchBarListener, NRS
                     contentMain.addView(categoriesView);
                 } else if(groups.size() == 1){
                     // show results view immidiately
-                    openNRResultView(mFetchedDataManager.generateNRResultArray(groups.get(0).getAnswers(), getContext()));
+                    openNRResultView(mFetchedDataManager.generateNRResultArray(groups.get(0).getAnswers(), getContext()), groups.get(0).getTitle());
                 }
             }
 
@@ -433,7 +433,7 @@ public class NRMainFragment extends Fragment implements NRSearchBarListener, NRS
                     // show results View
                     contentMain.setVisibility(View.VISIBLE);
 
-                    openNRResultView(results);
+                    openNRResultView(results, null);
                 }
             }
 
@@ -609,7 +609,7 @@ public class NRMainFragment extends Fragment implements NRSearchBarListener, NRS
 
     }
 
-    private boolean isEmpty(String str) {
+    public static boolean isEmpty(String str) {
         return str == null || str.isEmpty();
     }
 
@@ -721,14 +721,14 @@ public class NRMainFragment extends Fragment implements NRSearchBarListener, NRS
 
     @Override
     public void onCategorySelected(NRFAQGroupItem groupItem) {
-        openNRResultView(mFetchedDataManager.generateNRResultArray(groupItem.getAnswers(), getContext()));
+        openNRResultView(mFetchedDataManager.generateNRResultArray(groupItem.getAnswers(), getContext()), groupItem.getTitle());
     }
 
-    private void openNRResultView(ArrayList<NRResult> results) {
+    private void openNRResultView(ArrayList<NRResult> results, String title) {
 
         NRResultsView resultsView = new NRResultsView(getActivity());
         resultsView.setListener(NRMainFragment.this);
-        resultsView.setResults(results, viewAdapter);
+        resultsView.setResults(results, title, viewAdapter);
         resultsView.setIsAnimated(animation);
 
         contentMain.addView(resultsView);
