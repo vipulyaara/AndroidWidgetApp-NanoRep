@@ -18,14 +18,8 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-//import com.crittercism.app.Crittercism;
-import com.crashlytics.android.Crashlytics;
-import com.nanorep.nanoclient.NRImpl;
 import com.nanorep.nanoclient.Nanorep;
-import com.nanorep.nanoclient.NanorepBuilder;
 
-
-import io.fabric.sdk.android.Fabric;
 import nanorep.nanowidget.Components.AbstractViews.NRCustomChannelView;
 import nanorep.nanowidget.Components.AbstractViews.NRCustomContentView;
 import nanorep.nanowidget.Components.AbstractViews.NRCustomLikeView;
@@ -89,7 +83,7 @@ public class MainActivity extends AppCompatActivity implements NRCustomViewAdapt
                     return;
                 }
 
-                NRImpl.getInstance().init(getApplicationContext(), _accountName, _kb);
+                Nanorep.getInstance().init(getApplicationContext(), _accountName, _kb);
                 pb.setVisibility(View.VISIBLE);
 
                 final Handler handler = new Handler();
@@ -97,7 +91,8 @@ public class MainActivity extends AppCompatActivity implements NRCustomViewAdapt
                     @Override
                     public void run() {
 
-                        if(NRImpl.getInstance().getNRConfiguration().getmParams() == null || (NRImpl.getInstance().getNRConfiguration().getmParams() != null && NRImpl.getInstance().getNRConfiguration().getmParams().size() == 0)) {
+                        if(Nanorep.getInstance().getNRConfiguration().getmParams() == null ||
+                                (Nanorep.getInstance().getNRConfiguration().getmParams() != null && Nanorep.getInstance().getNRConfiguration().getmParams().size() == 0)) {
 //                            NRImpl.getInstance().reset();
                             Toast.makeText(MainActivity.this, "Wrong account or kb", Toast.LENGTH_LONG).show();
                             prepareButton.setVisibility(View.VISIBLE);

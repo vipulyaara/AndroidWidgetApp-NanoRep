@@ -3,7 +3,6 @@ package nanorep.nanoandroidwidgetdemoapp;
 import android.app.Application;
 
 import com.crashlytics.android.Crashlytics;
-import com.nanorep.nanoclient.NRImpl;
 import com.nanorep.nanoclient.Nanorep;
 
 import java.io.Serializable;

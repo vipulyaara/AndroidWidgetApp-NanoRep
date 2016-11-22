@@ -30,7 +30,6 @@ import android.widget.Toast;
 import com.nanorep.nanoclient.Channeling.NRChanneling;
 import com.nanorep.nanoclient.Handlers.NRErrorHandler;
 import com.nanorep.nanoclient.Interfaces.NRQueryResult;
-import com.nanorep.nanoclient.NRImpl;
 import com.nanorep.nanoclient.Nanorep;
 import com.nanorep.nanoclient.RequestParams.NRLikeType;
 import com.nanorep.nanoclient.Response.NRAnswer;
@@ -160,7 +159,7 @@ public class NRMainFragment extends Fragment implements NRSearchBarListener, NRS
     @Override
     public void onChannelSelected(NRChannelItem channelItem) {
 
-        NRChannelPresentor presentor = NRChannelStrategy.presentor(getContext(), channelItem.getChanneling(), NRImpl.getInstance());
+        NRChannelPresentor presentor = NRChannelStrategy.presentor(getContext(), channelItem.getChanneling(), Nanorep.getInstance());
 
         if(presentor instanceof NRCustomScriptChannelPresentor) {
 
@@ -377,7 +376,7 @@ public class NRMainFragment extends Fragment implements NRSearchBarListener, NRS
                 if(results == null || (results != null && results.size() == 0)){
                     if (searchBarView.getText() != null) {
                         mNotitleViewHolder.getLayoutParams().height = (int) Calculate.pxFromDp(getContext(), NO_TITLE_HEIGHT);
-                        mNoTitleView.setText(NRImpl.getInstance().getNRConfiguration().getCustomNoAnswersTextContext(searchBarView.getText()));
+                        mNoTitleView.setText(Nanorep.getInstance().getNRConfiguration().getCustomNoAnswersTextContext(searchBarView.getText()));
 
                         while (contentMain.getChildCount() > 2) {
                             contentMain.removeViewAt(contentMain.getChildCount() - 1);
@@ -473,7 +472,7 @@ public class NRMainFragment extends Fragment implements NRSearchBarListener, NRS
     public void onDestroyView() {
         super.onDestroyView();
 
-        NRImpl.getInstance().reset();
+        Nanorep.getInstance().reset();
     }
 
     @Override
@@ -492,7 +491,7 @@ public class NRMainFragment extends Fragment implements NRSearchBarListener, NRS
 
         if(titleView == null){
             titleView = new NRTitleView(getContext());
-            ((NRTitleView)titleView).configViewObjects(NRImpl.getInstance().getNRConfiguration());
+            ((NRTitleView)titleView).configViewObjects(Nanorep.getInstance().getNRConfiguration());
         }
 
         NRCustomContentView contentView = viewAdapter.getContent(getContext());
@@ -546,8 +545,8 @@ public class NRMainFragment extends Fragment implements NRSearchBarListener, NRS
     }
 
     private void updateSearchBar() {
-        NRConfiguration.NRTitle titleConfig = NRImpl.getInstance().getNRConfiguration().getTitle();
-        NRConfiguration.NRSearchBar searchBarConfig = NRImpl.getInstance().getNRConfiguration().getSearchBar();
+        NRConfiguration.NRTitle titleConfig = Nanorep.getInstance().getNRConfiguration().getTitle();
+        NRConfiguration.NRSearchBar searchBarConfig = Nanorep.getInstance().getNRConfiguration().getSearchBar();
 
         searchBarView.setHint(searchBarConfig.getInitialText());
 
@@ -562,7 +561,7 @@ public class NRMainFragment extends Fragment implements NRSearchBarListener, NRS
     }
 
     private void updateTitleNormalText() {
-        NRConfiguration.NRTitle title = NRImpl.getInstance().getNRConfiguration().getTitle();
+        NRConfiguration.NRTitle title = Nanorep.getInstance().getNRConfiguration().getTitle();
         ActionBar actionBar = ((AppCompatActivity)getActivity()).getSupportActionBar();
 
         View customActionBar = getActivity().getLayoutInflater().inflate(R.layout.nr_title_bar, null);
@@ -714,7 +713,7 @@ public class NRMainFragment extends Fragment implements NRSearchBarListener, NRS
     }
 
     private void showSuggestionsView() {
-        if(!NRImpl.getInstance().getNRConfiguration().getAutocompleteEnabled()) {
+        if(!Nanorep.getInstance().getNRConfiguration().getAutocompleteEnabled()) {
             autocompleteEnabled = false;
         }
     }

@@ -8,7 +8,6 @@ import com.nanorep.nanoclient.Connection.NRError;
 import com.nanorep.nanoclient.Handlers.NRErrorHandler;
 import com.nanorep.nanoclient.Interfaces.NRQueryResult;
 import com.nanorep.nanoclient.Interfaces.NRSpeechRecognizerCompletion;
-import com.nanorep.nanoclient.NRImpl;
 import com.nanorep.nanoclient.Nanorep;
 import com.nanorep.nanoclient.RequestParams.NRFAQLikeParams;
 import com.nanorep.nanoclient.RequestParams.NRLikeType;
@@ -49,12 +48,12 @@ public class NRFetchedDataManager {
     }
 
     public void fetchConfiguration() {
-        NRImpl.getInstance().fetchConfiguration(new Nanorep.OnConfigurationFetchedListener() {
+        Nanorep.getInstance().fetchConfiguration(new Nanorep.OnConfigurationFetchedListener() {
             @Override
             public void onConfigurationFetched(NRError error) {
                 if (error == null) {
-                    mFaqData = NRImpl.getInstance().getNRConfiguration().getFaqData();
-                    if (NRImpl.getInstance().getNRConfiguration() != null) {
+                    mFaqData = Nanorep.getInstance().getNRConfiguration().getFaqData();
+                    if (Nanorep.getInstance().getNRConfiguration() != null) {
                         mconfigFetcherListener.onConfigurationReady();
                         prepareDatasource();
                     }
@@ -105,7 +104,7 @@ public class NRFetchedDataManager {
     public void searchText(final String text) {
 
 
-        NRImpl.getInstance().searchText(text, new Nanorep.OnSearchResultsFetchedListener() {
+        Nanorep.getInstance().searchText(text, new Nanorep.OnSearchResultsFetchedListener() {
             @Override
             public void onSearchResponse(NRSearchResponse response, NRError error) {
                 if (error != null) {
@@ -120,7 +119,7 @@ public class NRFetchedDataManager {
     }
 
     public void searchSuggestion(final String suggestion) {
-        NRImpl.getInstance().suggestionsForText(suggestion, new Nanorep.OnSuggestionsFetchedListener() {
+        Nanorep.getInstance().suggestionsForText(suggestion, new Nanorep.OnSuggestionsFetchedListener() {
             @Override
             public void onSuggestionsFetched(NRSuggestions suggestions, NRError error) {
                 if (error != null) {
@@ -141,11 +140,11 @@ public class NRFetchedDataManager {
             NRFAQLikeParams likeParams = new NRFAQLikeParams(result);
             likeParams.setLikeType(likeType);
             likeParams.setAnswerId(result.getId());
-            NRImpl.getInstance().likeForFAQResult(likeParams, completion);
+            Nanorep.getInstance().likeForFAQResult(likeParams, completion);
         } else {
             NRSearchLikeParams likeParams = new NRSearchLikeParams(result);
             likeParams.setFeedbackType(likeType);
-            NRImpl.getInstance().likeForSearchResult(likeParams, completion);
+            Nanorep.getInstance().likeForSearchResult(likeParams, completion);
         }
     }
 
@@ -158,7 +157,7 @@ public class NRFetchedDataManager {
     }
 
     public void faqAnswer(final String answerId, Integer answerHash, final OnFAQAnswerFetched answerFetcher) {
-        NRImpl.getInstance().fetchFAQAnswer(answerId, answerHash, new Nanorep.OnFAQAnswerFetchedListener() {
+        Nanorep.getInstance().fetchFAQAnswer(answerId, answerHash, new Nanorep.OnFAQAnswerFetchedListener() {
             @Override
             public void onFAQAnswerFetched(NRFAQAnswer faqAnswer, NRError error) {
                 if (error == null) {
