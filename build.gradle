@@ -21,6 +21,9 @@ subprojects {
 
 allprojects {
     repositories {
+        maven {
+            url 'https://dl.bintray.com/nissop/maven/'
+        }
         jcenter()
     }
 }
