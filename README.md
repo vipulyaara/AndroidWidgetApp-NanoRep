@@ -6,7 +6,7 @@ Welcome to Nanorep Android SDK. This demo app demonstrates how to use the Nanore
 Add the library as a dependency in your build.gradle file.
 ```java
 dependencies {
-    compile 'com.nanorep:nanowidget:1.3.0'
+    compile 'com.nanorep:nanowidget:1.3.1'
 }
 ```
 ## Usage
