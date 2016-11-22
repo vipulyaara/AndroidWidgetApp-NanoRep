@@ -1,45 +1,46 @@
-# Nanorep Widget
---
-
-Nanorep native widget
-
-
-## Download
-
-Gradle:
-
-```
-compile 'com.nanorep:nanowidget:1.1.2'
-```
-
-Add to your Project's build.gradle :
-
-```
-allprojects {
-    repositories {
-        maven {
-            url 'https://dl.bintray.com/nissop/maven/'
-        }
-        jcenter()
-    }
+<snippet>
+  <content>
+# Nanorep widget
+Welcome to Nanorep Android SDK. This demo app demonstrates how to use the Nanorep Mobile SDK to build native support into your mobile application.
+## Installation
+Add the library as a dependency in your build.gradle file.
+```java
+dependencies {
+    compile 'com.nanorep:nanowidget:1.3.0'
 }
 ```
-
-## Using Nanorep's widget
-
+## Usage
+Init Nanorep SDK with your account name and knowledge base in Application class:
 ```
-// Create Accont 
-Nanorep.AccountParams accountParams = new Nanorep.AccountParams();
-accountParams.setAccount("nanorep");
-accountParams.setKnowledgeBase("english");
-
-// Create Nanorep object
-Nanorep nanorep = NanorepBuilder.createNanorep(getApplicationContext(), accountParams);
-
-// Create NRWidgetFragment
-NRWidgetFragment nanoFragment = NRWidgetFragment.newInstance(null, null);
-nanoFragment.setNanoRep(nanorep);
-
-// Present NRWidget
-getSupportFragmentManager().beginTransaction().add(R.id.root_layout, nanoFragment, "nanorep").commit();
+NRImpl.getInstance().init(getApplicationContext(), _accountName, _kb);
 ```
+
+Create a new instance of NRMainFragment and open it:
+```
+NRMainFragment mainFragment = NRMainFragment.newInstance();
+```
+## UI Customization
+You can customize the UI of the following fragment's parts:
+
+ - for Search Bar extend NRCustomSearchBarView abstract class.
+ - for Suggestions View extend NRCustomSuggestionsView abstract class.
+ - for Article's title extend NRCustomTitleView abstract class.
+ - for Article's content extend NRCustomContentView abstract class.
+ - for Like view extend NRCustomLikeView abstract class.
+ - for Channel view extend NRCustomChannelView abstract class.
+ 
+Implement NRCustomViewAdapter interface in your activity:
+ 
+```
+  @Override
+    public NRCustomTitleView getTitle(Context context) {
+      TitleView titleView = new TitleView(context);
+      return titleView;
+    }
+```
+You can also customize the UI widget using nanorep's console.
+
+
+
+</content>
+</snippet>
