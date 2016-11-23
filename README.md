@@ -32,26 +32,6 @@ Create a new instance of NRMainFragment and open it:
 ```
 NRMainFragment mainFragment = NRMainFragment.newInstance();
 ```
-## UI Customization
-You can customize the UI of the following fragment's parts:
-
- - for Search Bar extend NRCustomSearchBarView abstract class.
- - for Suggestions View extend NRCustomSuggestionsView abstract class.
- - for Article's title extend NRCustomTitleView abstract class.
- - for Article's content extend NRCustomContentView abstract class.
- - for Like view extend NRCustomLikeView abstract class.
- - for Channel view extend NRCustomChannelView abstract class.
- 
-Implement NRCustomViewAdapter interface in your activity:
- 
-```
-  @Override
-    public NRCustomTitleView getTitle(Context context) {
-      TitleView titleView = new TitleView(context);
-      return titleView;
-    }
-```
-You can also customize the UI widget using nanorep's console.
 
 
 
