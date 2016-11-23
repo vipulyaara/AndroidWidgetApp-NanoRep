@@ -66,7 +66,7 @@ public class NRResultTopView extends RelativeLayout implements NRTitleListener, 
     private int y;
 
     @Override
-    public void onLikeClicked(NRLikeView likeView, String resultId, boolean isLike) {
+    public void onLikeClicked(NRCustomLikeView likeView, String resultId, boolean isLike) {
         topViewListener.onLikeClicked(NRResultTopView.this, likeView, resultId, isLike);
     }
 
@@ -79,7 +79,7 @@ public class NRResultTopView extends RelativeLayout implements NRTitleListener, 
         void onFoldItemFinished(boolean beforeGoingDown);
         void fetchBodyForResult(NRCustomContentView view, String resultID, Integer resultHash);
         void closeAnswer();
-        void onLikeClicked(NRResultTopView view, NRLikeView likeView, String resultId, boolean isLike);
+        void onLikeClicked(NRResultTopView view, NRCustomLikeView likeView, String resultId, boolean isLike);
     }
 
 

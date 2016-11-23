@@ -15,7 +15,7 @@ import io.fabric.sdk.android.Fabric;
  */
 public class NanoApp extends Application{
     @Override
-    public void onCreate() {
+    public void onCreate() {    
         super.onCreate();
 
         String _accountName = "sales";//"nanorep";//"nanorep";
@@ -27,7 +27,7 @@ public class NanoApp extends Application{
 //        if(NRImpl.getInstance() != null) {
 //            NRImpl.getInstance().reset();
 //        }
-//        NRImpl.getInstance().init(getApplicationContext(), _accountName, _kb);
+        Nanorep.getInstance().init(getApplicationContext(), _accountName, _kb);
         Fabric.with(this, new Crashlytics());
 
 

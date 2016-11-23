@@ -17,6 +17,7 @@ import com.nanorep.nanoclient.RequestParams.NRLikeType;
 
 import java.util.ArrayList;
 
+import nanorep.nanowidget.Components.AbstractViews.NRCustomLikeView;
 import nanorep.nanowidget.Fragments.NRWebContentFragment;
 import nanorep.nanowidget.R;
 import nanorep.nanowidget.Utilities.Calculate;
@@ -238,7 +239,7 @@ public class NRLinkedArticleFragment extends Fragment implements NRContentView.L
     }
 
     @Override
-    public void onLikeClicked(NRLikeView likeView, String resultId, boolean isLike) {
+    public void onLikeClicked(NRCustomLikeView likeView, String resultId, boolean isLike) {
         if (mLikeView.getLikeSelection()) {
             mLinkedArticles.get(mIndex).setLikeState(NRQueryResult.LikeState.positive);
             mListener.onLikeSelected(this, NRLikeType.POSITIVE, mLinkedArticles.get(mIndex));

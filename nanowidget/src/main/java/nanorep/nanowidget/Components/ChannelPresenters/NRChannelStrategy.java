@@ -6,8 +6,6 @@ import android.content.Context;
 import com.nanorep.nanoclient.Channeling.NRChanneling;
 import com.nanorep.nanoclient.Nanorep;
 
-import nanorep.nanowidget.Components.NRResultFragment;
-
 
 /**
  * Created by nissimpardo on 26/06/16.

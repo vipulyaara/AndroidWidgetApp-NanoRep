@@ -242,7 +242,7 @@ public class NRMainFragment extends Fragment implements NRSearchBarListener, NRS
     }
 
     @Override
-    public void onLikeClicked(final NRResultTopView view,final NRLikeView likeView, String resultId, boolean isLike) {
+    public void onLikeClicked(final NRResultTopView view,final NRCustomLikeView likeView, String resultId, boolean isLike) {
         final NRResult result = view.getmResult();
 
         if (isLike) {
@@ -261,7 +261,7 @@ public class NRMainFragment extends Fragment implements NRSearchBarListener, NRS
         }
     }
 
-    private void openDislikeDialog(final NRResult result, final NRResultTopView view, final NRLikeView likeView) {
+    private void openDislikeDialog(final NRResult result, final NRResultTopView view, final NRCustomLikeView likeView) {
         String reasons[] = new String[] {getString(R.string.Incorrect_answer), getString(R.string.missing_information), getString(R.string.didnt_find)};
         View dislikeView = getActivity().getLayoutInflater().inflate(R.layout.dislike_dialog, null);
 

@@ -1,6 +1,7 @@
 package nanorep.nanowidget.interfaces;
 
 
+import nanorep.nanowidget.Components.AbstractViews.NRCustomLikeView;
 import nanorep.nanowidget.Components.NRLikeView;
 
 /**
@@ -8,5 +9,5 @@ import nanorep.nanowidget.Components.NRLikeView;
  */
 
 public interface OnLikeListener {
-    void onLikeClicked(NRLikeView likeView, String resultId, boolean isLike);
+    void onLikeClicked(NRCustomLikeView likeView, String resultId, boolean isLike);
 }

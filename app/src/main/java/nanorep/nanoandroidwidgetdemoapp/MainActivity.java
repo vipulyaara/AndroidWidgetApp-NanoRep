@@ -45,8 +45,6 @@ public class MainActivity extends AppCompatActivity implements NRCustomViewAdapt
         getSupportActionBar().setElevation(0);
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#0aa0ff")));
 
-
-
 //        openMainFragment();
 
         checkBox = (CheckBox) findViewById(R.id.checkbox);
