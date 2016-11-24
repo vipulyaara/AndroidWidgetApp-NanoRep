@@ -160,6 +160,9 @@ public class NRResultsAdapter extends RecyclerView.Adapter<NRResultsAdapter.View
 
     @Override
     public void addItems(List<NRResult> items) {
+        if(items == null) {
+            return;
+        }
         results.addAll(items);
         notifyDataSetChanged();
     }

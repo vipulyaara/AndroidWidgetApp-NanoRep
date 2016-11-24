@@ -613,6 +613,9 @@ public class Nanorep {
             return;
         }
         for (NRFAQGroupItem groupItem : cnf.getFaqData().getGroups()) {
+            if(groupItem.getAnswers() == null) {
+                continue;
+            }
             for (NRQueryResult queryResult : groupItem.getAnswers()) {
                 fetchFAQAnswer(queryResult.getId(), queryResult.getHash(), new OnFAQAnswerFetchedListener() {
                     @Override
