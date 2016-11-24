@@ -19,8 +19,8 @@ public class NanoApp extends Application{
     public void onCreate() {    
         super.onCreate();
 
-        String _accountName = "sales";//"nanorep";//"nanorep";
-        String _kb = "en";//"English";//"English";
+        String _accountName = "nanorep";//"nanorep";//"nanorep";
+        String _kb = "English";//"English";//"English";
 
 //        String _accountName = "nanorep";//"nanorep";
 //        String _kb = "English";//"English";

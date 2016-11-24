@@ -129,7 +129,13 @@ public class NRContentView extends NRCustomContentView implements View.OnKeyList
 //            domain = matcher.group();
 //        }
 
-        String domain = isFrameExist(data);
+        String iframe = isFrameExist(data);
+        String domain = null;
+
+        if(iframe != null) {
+            domain = getDomain(iframe);
+        }
+
         if (domain == null) {
             domain = "file://";
             loadRedirectedUrl(domain, data, mimeType, encoding);
@@ -163,10 +169,8 @@ public class NRContentView extends NRCustomContentView implements View.OnKeyList
 
     private String isFrameExist(String data) {
         String iframe = null;
-        String domain = null;
 
         int start = data.indexOf("<iframe");
-
 
         if(start != -1) { // exist
             iframe = data.substring(start);
@@ -178,12 +182,19 @@ public class NRContentView extends NRCustomContentView implements View.OnKeyList
 
             if(end != -1) {
                 iframe = iframe.substring(0, end);
-                Matcher matcher = mPattern.matcher(iframe);
-
-                while (matcher.find()) {
-                    domain = matcher.group();
-                }
             }
+        }
+
+        return iframe;
+    }
+
+    private String getDomain(String iframe) {
+        String domain = null;
+
+        Matcher matcher = mPattern.matcher(iframe);
+
+        while (matcher.find()) {
+            domain = matcher.group();
         }
 
         return domain;
