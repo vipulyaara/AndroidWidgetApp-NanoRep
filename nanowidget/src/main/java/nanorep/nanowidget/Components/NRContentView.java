@@ -5,20 +5,26 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Build;
-import android.util.AttributeSet;
+import android.os.Handler;
+import android.os.HandlerThread;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceRequest;
-import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
 import com.nanorep.nanoclient.Response.NRHtmlParser;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import nanorep.nanowidget.Components.AbstractViews.NRCustomContentView;
 import nanorep.nanowidget.R;
@@ -35,6 +41,7 @@ public class NRContentView extends NRCustomContentView implements View.OnKeyList
     private RelativeLayout mLoadingView;
     boolean loadingFinished = true;
     boolean redirect = false;
+    private Pattern mPattern;
 
     public interface Listener {
         void onLinkedArticleClicked(String articleId);
@@ -42,9 +49,15 @@ public class NRContentView extends NRCustomContentView implements View.OnKeyList
         void onDismiss();
     }
 
+//    public NRContentView(Context context) {
+//        super(context);
+//        LayoutInflater.from(context).inflate(R.layout.content, this);
+//    }
+
     public NRContentView(Context context) {
         super(context);
         LayoutInflater.from(context).inflate(R.layout.content, this);
+        mPattern = Pattern.compile("(?<=src=\")[^\"]*(?<!\")");
     }
 
     @SuppressLint("SetJavaScriptEnabled")
@@ -108,11 +121,48 @@ public class NRContentView extends NRCustomContentView implements View.OnKeyList
 
 
     @Override
-    public void loadData(String data, String mimeType, String encoding) {
+    public void loadData(final String data, final String mimeType, final String encoding) {
 //        mLoadingView.setVisibility(VISIBLE);
+        Matcher matcher = mPattern.matcher(data);
+        String domain = null;
+        while (matcher.find()) {
+            domain = matcher.group();
+        }
+        if (domain == null) {
+            domain = "file://";
+            loadRedirectedUrl(domain, data, mimeType, encoding);
+        } else {
+            HandlerThread fetchRedirect = new HandlerThread("fetchRedirect");
+            fetchRedirect.start();
+            Handler handler = new Handler(fetchRedirect.getLooper());
+            final String finalDomain = domain;
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        final URLConnection con = new URL(finalDomain).openConnection();
+                        con.connect();
+                        InputStream is = con.getInputStream();
+                        is.close();
+                        post(new Runnable() {
+                            @Override
+                            public void run() {
+                                loadRedirectedUrl(con.getURL().toString(), data, mimeType, encoding);
+                            }
+                        });
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+        }
+
+    }
+
+    private void loadRedirectedUrl(String url, String data, String mimeType, String encoding) {
         NRHtmlParser parser = new NRHtmlParser(data);
         String parsed = parser.getParsedHtml();
-//        String parsed = "<div style=\"width=300px\" >" + parser.getParsedHtml() + "</div>";
+
         String script = "\n" +
                 "<style>\n" +
                 "        img {\n" +
@@ -161,8 +211,10 @@ public class NRContentView extends NRCustomContentView implements View.OnKeyList
                 "\t\t}());\n" +
                 "\t</script>";
         parsed += script;
-        mWebView.loadDataWithBaseURL("file://", parsed, mimeType, encoding, "file://");
+        mWebView.loadDataWithBaseURL(url, parsed, mimeType, encoding, "file://");
     }
+
+
 
     @Override
     public void loadUrl(String url) {
