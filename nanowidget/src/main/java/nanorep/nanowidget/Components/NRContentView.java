@@ -123,11 +123,13 @@ public class NRContentView extends NRCustomContentView implements View.OnKeyList
     @Override
     public void loadData(final String data, final String mimeType, final String encoding) {
 //        mLoadingView.setVisibility(VISIBLE);
-        Matcher matcher = mPattern.matcher(data);
-        String domain = null;
-        while (matcher.find()) {
-            domain = matcher.group();
-        }
+//        Matcher matcher = mPattern.matcher(data);
+//        String domain = null;
+//        while (matcher.find()) {
+//            domain = matcher.group();
+//        }
+
+        String domain = isFrameExist(data);
         if (domain == null) {
             domain = "file://";
             loadRedirectedUrl(domain, data, mimeType, encoding);
@@ -157,6 +159,34 @@ public class NRContentView extends NRCustomContentView implements View.OnKeyList
             });
         }
 
+    }
+
+    private String isFrameExist(String data) {
+        String iframe = null;
+        String domain = null;
+
+        int start = data.indexOf("<iframe");
+
+
+        if(start != -1) { // exist
+            iframe = data.substring(start);
+            int end = iframe.indexOf("</iframe>");
+
+            if(end == -1){
+                end = iframe.indexOf("/>");
+            }
+
+            if(end != -1) {
+                iframe = iframe.substring(0, end);
+                Matcher matcher = mPattern.matcher(iframe);
+
+                while (matcher.find()) {
+                    domain = matcher.group();
+                }
+            }
+        }
+
+        return domain;
     }
 
     private void loadRedirectedUrl(String url, String data, String mimeType, String encoding) {
