@@ -18,6 +18,7 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.nanorep.nanoclient.AccountParams;
 import com.nanorep.nanoclient.Nanorep;
 
 import nanorep.nanowidget.Components.AbstractViews.NRCustomChannelView;
@@ -81,7 +82,7 @@ public class MainActivity extends AppCompatActivity implements NRCustomViewAdapt
                     return;
                 }
 
-                Nanorep.getInstance().init(getApplicationContext(), _accountName, _kb);
+                Nanorep.getInstance().init(getApplicationContext(), new AccountParams(_accountName, _kb));
                 pb.setVisibility(View.VISIBLE);
 
                 final Handler handler = new Handler();

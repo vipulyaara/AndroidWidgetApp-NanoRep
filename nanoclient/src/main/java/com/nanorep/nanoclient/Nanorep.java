@@ -74,13 +74,13 @@ public class Nanorep {
         void onConfigurationFetched(NRError error);
     }
 
+    public void setmAccountParams(AccountParams accountParams) {
+        this.mAccountParams = accountParams;
+    }
 
-    public void init(Context context, String account, String kb) {
+    public void init(Context context, AccountParams accountParams) {
         this.mContext = context;
-        this.mAccountParams = new AccountParams();
-        this.mAccountParams.setAccount(account);
-        this.mAccountParams.setKnowledgeBase(kb);
-//        this.mAccountParams.setmHost("server4");
+        setmAccountParams(accountParams);
         this.nrLogger = new NRLogger();
         this.mCnf = null;
 
@@ -628,85 +628,5 @@ public class Nanorep {
         }
     }
 
-    public class AccountParams {
-
-        private String mHost;
-        private String mAccount;
-        private String mKnowledgeBase;
-        private HashMap<String, String> mContext;
-        private String mReferrer;
-        private String mDomain;
-
-        public String getAccount() {
-            return mAccount;
-        }
-
-        public void setAccount(String account) {
-            mAccount = account;
-        }
-
-        public String getmHost() {
-            return mHost;
-        }
-
-        public void setmHost(String mHost) {
-            this.mHost = mHost;
-        }
-
-        public String getKnowledgeBase() {
-            if (mKnowledgeBase == null) {
-                return "";
-            }
-            return mKnowledgeBase;
-        }
-
-        public void setKnowledgeBase(String knowledgeBase) {
-            mKnowledgeBase = knowledgeBase;
-        }
-
-        public void setContext(HashMap<String, String> context) {
-            mContext = context;
-        }
-
-        public String getNanorepContext() {
-            if (mContext != null) {
-                return NRUtilities.wrappedContextBase64(mContext);
-            }
-            return null;
-        }
-
-        public String getReferrer() {
-            if (mReferrer == null) {
-                mReferrer = "mobile";
-            }
-            return mReferrer;
-        }
-
-        public void setReferrer(String referrer) {
-            mReferrer = referrer;
-        }
-
-        public Uri.Builder getUri() {
-            Uri.Builder uri = new Uri.Builder();
-            uri.scheme("https");
-
-            if (mHost != null) {
-                uri.authority(mHost + ".nanorep.com");
-                uri.appendEncodedPath("~" + getAccount());
-            } else {
-                uri.authority(getAccount() + ".nanorep.co");
-            }
-            uri.appendQueryParameter("referer", NRUtilities.buildReferer(getReferrer()));
-            return uri;
-        }
-
-        public String getDomain() {
-            return mDomain;
-        }
-
-        public void setDomain(String domain) {
-            mDomain = domain;
-        }
-    }
 
 }

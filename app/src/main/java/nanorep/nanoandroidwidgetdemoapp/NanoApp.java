@@ -3,6 +3,7 @@ package nanorep.nanoandroidwidgetdemoapp;
 import android.app.Application;
 
 import com.crashlytics.android.Crashlytics;
+import com.nanorep.nanoclient.AccountParams;
 import com.nanorep.nanoclient.Nanorep;
 
 import java.io.Serializable;
@@ -27,7 +28,8 @@ public class NanoApp extends Application{
 //        if(NRImpl.getInstance() != null) {
 //            NRImpl.getInstance().reset();
 //        }
-        Nanorep.getInstance().init(getApplicationContext(), _accountName, _kb);
+
+        Nanorep.getInstance().init(getApplicationContext(), new AccountParams(_accountName, _kb));
         Fabric.with(this, new Crashlytics());
 
 
