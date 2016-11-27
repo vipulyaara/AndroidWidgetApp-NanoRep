@@ -25,7 +25,7 @@ dependencies {
 ## Usage
 Init Nanorep SDK with your account name and knowledge base in Application class:
 ```
-Nanorep.getInstance().init(getApplicationContext(), _accountName, _kb);
+Nanorep.getInstance().init(getApplicationContext(),new AccountParams(_accountName, _kb));
 ```
 
 Create a new instance of NRMainFragment and open it:
