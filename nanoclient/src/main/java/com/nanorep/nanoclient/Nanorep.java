@@ -517,13 +517,15 @@ public class Nanorep {
                             fetchFaqList(new NRConnection.Listener() {
                                 @Override
                                 public void response(Object responseParam, int status, NRError error) {
-                                    if (responseParam != null) {
+                                    if (responseParam != null && responseParam instanceof ArrayList) {
                                         cnf.setFaqData((ArrayList) responseParam);
                                         overrideCnfData(cnf);
                                         NRCacheManager.storeAnswerById(mContext, NRUtilities.md5(mAccountParams.getKnowledgeBase() + mAccountParams.getAccount() + mAccountParams.getNanorepContext()), cnf.getmParams());
                                         if(!fast) {
                                             updateFAQContentsAndCallHello(cnf);
                                         }
+                                    } else {
+                                        overrideCnfData(cnf);
                                     }
                                     if (onConfigurationFetchedListener != null) {
                                         if (error != null) {
