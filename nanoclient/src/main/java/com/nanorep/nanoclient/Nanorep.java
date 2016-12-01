@@ -284,6 +284,10 @@ public class Nanorep {
             uriBuilder.appendEncodedPath("api/kb/v1/autoComplete");
             uriBuilder.appendQueryParameter("text", encodedText);
             uriBuilder.appendQueryParameter("stemming", "true");
+            String context = mAccountParams.getContext();
+            if(context != null) {
+                uriBuilder.appendQueryParameter("context", context);
+            }
             executeRequest(uriBuilder, new NRConnection.Listener() {
                 @Override
                 public void response(Object responseParam, int status, NRError error) {

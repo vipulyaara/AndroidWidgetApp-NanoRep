@@ -195,6 +195,8 @@ public class MainActivity extends AppCompatActivity implements NRCustomViewAdapt
 
     @Override
     public boolean onLinkClicked(String url) {
+        MyFragment myFragment = MyFragment.newInstance();
+        FragmentUtils.addFragment(mainFragment,myFragment, R.id.content_main,MainActivity.this);
         return true;
     }
 
