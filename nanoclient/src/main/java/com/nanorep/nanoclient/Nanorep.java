@@ -8,6 +8,7 @@ import android.os.Handler;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.style.StyleSpan;
+import android.util.Base64;
 import android.util.Log;
 
 
@@ -135,8 +136,13 @@ public class Nanorep {
         if (mAccountParams.getKnowledgeBase() != null) {
             uri.appendQueryParameter("kb", mAccountParams.getKnowledgeBase());
         }
-        if (mAccountParams.getNanorepContext() != null) {
-            uri.appendQueryParameter("context", mAccountParams.getKnowledgeBase());
+        String context = mAccountParams.getContext();
+        if(context != null) {
+            try {
+                uri.appendQueryParameter("context", Base64.encodeToString(context.getBytes("UTF-8"), Base64.DEFAULT));
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
         }
         NRConnection.getInstance().connectionWithRequest(uri.build(), listener);
     }
