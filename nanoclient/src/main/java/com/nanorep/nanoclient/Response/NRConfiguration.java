@@ -29,7 +29,6 @@ public class NRConfiguration {
     /**
      * Converts the response JSON into NRConfiguration object
      *
-     * @param HashMap contains all of the params from the JSON
      */
     public NRConfiguration(HashMap<String, Object> params) {
         mParams = params;
@@ -56,6 +55,24 @@ public class NRConfiguration {
     }
 
     public class NRTitle{
+
+        private String titleRowHeight = "45";
+
+        public NRTitle(NRTitle title) {
+            this.titleRowHeight = title.getTitleRowHeight();
+        }
+
+        public NRTitle() {
+
+        }
+
+        public String getTitleRowHeight() {
+            return titleRowHeight;
+        }
+
+        public void setTitleRowHeight(String titleRowHeight) {
+            this.titleRowHeight = titleRowHeight;
+        }
 
         public void setTitleBGColor(String titleBGColor) {
             mParams.put("titleBGColor", titleBGColor);
@@ -189,6 +206,23 @@ public class NRConfiguration {
     }
 
     public class NRContent {
+
+        String marginTop;
+        String marginRight;
+        String marginLeft;
+        String marginBottom;
+
+        public NRContent(NRContent content) {
+            this.marginTop = content.getContentMarginTop();
+            this.marginRight = content.getContentMarginRight();
+            this.marginLeft = content.getContentMarginLeft();
+            this.marginBottom = content.getContentMarginBottom();
+        }
+
+        public NRContent() {
+
+        }
+
         // "mobile.noResultsMessage"
         public void setNoResultsMessage(String noResultsMessage) {
             mParams.put("mobile.noResultsMessage", noResultsMessage);
@@ -248,6 +282,31 @@ public class NRConfiguration {
             return (String)mParams.get("mobile.widgetBackgroundColor");
         }
 
+        public void setContentMarginTop(String marginTop) {
+            this.marginTop = marginTop;
+        }
+        public void setContentMarginBottom(String marginBottom) {
+            this.marginBottom = marginBottom;
+        }
+        public void setContentMarginRight(String marginRight) {
+            this.marginRight = marginRight;
+        }
+        public void setContentMarginLeft(String marginLeft) {
+            this.marginLeft = marginLeft;
+        }
+
+        public String getContentMarginTop() {
+            return marginTop;
+        }
+        public String getContentMarginBottom() {
+            return marginBottom;
+        }
+        public String getContentMarginRight() {
+            return marginRight;
+        }
+        public String getContentMarginLeft() {
+            return marginLeft;
+        }
     }
 
     public class NRLike {
@@ -330,6 +389,9 @@ public class NRConfiguration {
         }
 
         mIsContextDependent = cnf.mIsContextDependent;
+
+        this.content = new NRContent(cnf.getContent());
+        this.title = new NRTitle(cnf.getTitle());
     }
 
     public boolean getIsContextDependent() {

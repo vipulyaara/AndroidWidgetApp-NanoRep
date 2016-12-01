@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/titleLayout"
+    android:orientation="vertical"
+    android:gravity="center_vertical|center_horizontal"
+    android:layout_gravity="center_vertical"
+    android:layoutDirection="ltr"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/titleButton"
+        android:background="#00ffffff"
+        android:textColor="#1f96f8"
+        android:gravity="center_vertical|start"
+        android:fontFamily="sans-serif"
+        android:text="title"
+        android:textSize="18sp"
+        android:ellipsize="end"
+        android:textAllCaps="false"/>
+
+
+    <LinearLayout
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:orientation="horizontal"
+        android:background="#dddddd">
+    </LinearLayout>
+
+
+</LinearLayout>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:paddingLeft="15dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/magnifier"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginRight="14dp"
+        android:layout_gravity="center_vertical"
+        android:src="@drawable/searchbar_search_icon"/>
+
+    <nanorep.nanowidget.Components.NREditText
+        android:id="@+id/searchText"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="match_parent"
+        android:textColor="#ffffff"
+        android:textColorHint="#ffffff"
+        android:inputType="text"
+        android:textSize="16sp"
+        android:layout_gravity="center_vertical"
+        android:background="@android:color/transparent"
+        android:imeOptions="actionSearch"
+        android:longClickable="false"/>
+
+    <ImageButton
+        android:id="@+id/speechButton"
+        android:visibility="gone"
+        android:layout_width="18dp"
+        android:layout_height="18dp"
+        android:layout_marginRight="20dp"
+        android:layout_gravity="center_vertical"
+        android:src="@drawable/searchbar_x_icon"
+        android:background="@android:color/transparent"/>
+
+
+
+</LinearLayout>

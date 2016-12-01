@@ -21,6 +21,10 @@ public abstract class NRCustomLikeView extends LinearLayout {
         super(context);
     }
 
+    /**
+     * Update the button UI after clicking it
+     * @param isLike
+     */
     public abstract void updateLikeButton(boolean isLike);
 
     public abstract void resetLikeView();

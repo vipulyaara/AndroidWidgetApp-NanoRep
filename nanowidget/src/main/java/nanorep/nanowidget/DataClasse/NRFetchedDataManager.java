@@ -33,8 +33,6 @@ import nanorep.nanowidget.interfaces.OnFAQAnswerFetched;
  */
 public class NRFetchedDataManager {
 
-    public static final int ROW_HEIGHT = 45;
-
     private NRFAQData mFaqData;
     private NRFetcherListener mFetcherListener;
     private NRConfigFetcherListener mconfigFetcherListener;
@@ -90,10 +88,11 @@ public class NRFetchedDataManager {
 
     public static ArrayList<NRResult> generateNRResultArray(ArrayList<NRQueryResult> queryResults, Context context) {
         if (queryResults != null) {
+            int height = Integer.valueOf(Nanorep.getInstance().getNRConfiguration().getTitle().getTitleRowHeight());
             ArrayList<NRResult> results = new ArrayList<>();
             for (NRQueryResult result : queryResults) {
                 NRResult currentResult = new NRResult(result, NRResultItem.RowType.TITLE);
-                currentResult.setHeight((int) Calculate.pxFromDp(context, NRFetchedDataManager.ROW_HEIGHT));
+                currentResult.setHeight((int) Calculate.pxFromDp(context, height));
                 results.add(currentResult);
             }
             return results;

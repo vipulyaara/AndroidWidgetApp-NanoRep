@@ -10,8 +10,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 
+import com.nanorep.nanoclient.Nanorep;
+
 import java.util.ArrayList;
 
+import nanorep.nanowidget.DataClasse.NRFetchedDataManager;
 import nanorep.nanowidget.DataClasse.NRResult;
 import nanorep.nanowidget.DataClasse.NRResultsAdapter;
 import nanorep.nanowidget.Fragments.NRMainFragment;
@@ -30,6 +33,7 @@ public class NRResultsView extends LinearLayout implements NRResultsAdapter.List
     private NRResultsAdapter adapter;
     private Listener listener;
     private boolean isAnimated;
+    private String title;
 
     private RelativeLayout frequentlyQuestions;
     private TextView frequentlyQuestionsTv;
@@ -66,6 +70,15 @@ public class NRResultsView extends LinearLayout implements NRResultsAdapter.List
         adapter = new NRResultsAdapter();
 
         mResultsRecyclerView = (RecyclerView) child.findViewById(R.id.resultsView);
+
+        String margin = Nanorep.getInstance().getNRConfiguration().getContent().getContentMarginTop();
+
+        if(margin != null) {
+            LayoutParams params = (LayoutParams) mResultsRecyclerView.getLayoutParams();
+            params.setMargins(0, (int) Calculate.pxFromDp(getContext(), Float.valueOf(margin)), 0, 0);
+            mResultsRecyclerView.setLayoutParams(params);
+        }
+
         mResultsRecyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
 
         mResultsRecyclerView.setAdapter(adapter);
@@ -77,14 +90,20 @@ public class NRResultsView extends LinearLayout implements NRResultsAdapter.List
 
     public void setResults(ArrayList<NRResult> results, String title, NRCustomViewAdapter viewAdapter)  {
 
-        if(!NRMainFragment.isEmpty(title)) {
-            frequentlyQuestions.setVisibility(View.VISIBLE);
-            frequentlyQuestionsTv.setText(title);
-        }
+//        if(!NRMainFragment.isEmpty(title)) {
+//            frequentlyQuestions.setVisibility(View.VISIBLE);
+//            frequentlyQuestionsTv.setText(title);
+//        }
+
+        this.title = title;
 
         adapter.setListener(this);
         adapter.setViewAdapter(viewAdapter);
         adapter.addItems(results);
+    }
+
+    public String getTitle() {
+        return title;
     }
 
     @Override

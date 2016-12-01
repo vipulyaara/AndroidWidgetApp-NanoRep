@@ -19,15 +19,13 @@ import nanorep.nanowidget.R;
 /**
  * Created by nissimpardo on 18/06/16.
  */
-public class NRChannelingView extends NRCustomChannelView implements NRChannelItem.OnChannelSelectedListener {
-    private ArrayList<NRChanneling> mChannelings;
-    private RecyclerView mChannelingsRecycleView;
-    private ChannelingAdapter mAdapter;
+public class NRChannelingView extends NRCustomChannelView {
 
+    private RecyclerView mChannelingsRecycleView;
 
     public NRChannelingView(Context context) {
         super(context);
-        mAdapter = new ChannelingAdapter();
+
         LayoutInflater.from(context).inflate(R.layout.channeling_view, this);
     }
 
@@ -37,7 +35,6 @@ public class NRChannelingView extends NRCustomChannelView implements NRChannelIt
         mChannelingsRecycleView.setLayoutManager(new GridLayoutManager(this.getContext(), mChannelings.size()));
         mAdapter.notifyDataSetChanged();
     }
-
 
     @Override
     public void onViewAdded(View child) {
@@ -51,27 +48,4 @@ public class NRChannelingView extends NRCustomChannelView implements NRChannelIt
         mListener.onChannelSelected(channelItem);
     }
 
-    private class ChannelingAdapter extends RecyclerView.Adapter<NRChannelItem> {
-
-        @Override
-        public NRChannelItem onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.channel_item, null);
-            NRChannelItem item = new NRChannelItem(view);
-            item.setListener(NRChannelingView.this);
-            return item;
-        }
-
-        @Override
-        public void onBindViewHolder(NRChannelItem holder, int position) {
-            holder.setChanneling(mChannelings.get(position));
-        }
-
-        @Override
-        public int getItemCount() {
-            if (mChannelings != null) {
-                return mChannelings.size();
-            }
-            return 0;
-        }
-    }
 }

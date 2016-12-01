@@ -23,6 +23,7 @@ import com.nanorep.nanoclient.Nanorep;
 
 import nanorep.nanowidget.Components.AbstractViews.NRCustomChannelView;
 import nanorep.nanowidget.Components.AbstractViews.NRCustomContentView;
+import nanorep.nanowidget.Components.AbstractViews.NRCustomFeedbackView;
 import nanorep.nanowidget.Components.AbstractViews.NRCustomLikeView;
 import nanorep.nanowidget.Components.AbstractViews.NRCustomSearchBarView;
 import nanorep.nanowidget.Components.AbstractViews.NRCustomSuggestionsView;
@@ -50,7 +51,6 @@ public class MainActivity extends AppCompatActivity implements NRCustomViewAdapt
 
         checkBox = (CheckBox) findViewById(R.id.checkbox);
 
-
         final EditText accountName = (EditText) findViewById(R.id.accountNameId);
         final EditText kb = (EditText) findViewById(R.id.kbId);
         EditText server = (EditText) findViewById(R.id.serverId);
@@ -62,6 +62,7 @@ public class MainActivity extends AppCompatActivity implements NRCustomViewAdapt
 
         final Button prepareButton = (Button)findViewById(R.id.prepareButton);
         prepareButton.setVisibility(View.VISIBLE);
+
         prepareButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
@@ -112,6 +113,15 @@ public class MainActivity extends AppCompatActivity implements NRCustomViewAdapt
                 @Override
                 public void onClick(final View v) {
                     v.setVisibility(View.INVISIBLE);
+
+                    Nanorep.getInstance().getNRConfiguration().getContent().setContentMarginTop("0");
+                    Nanorep.getInstance().getNRConfiguration().getContent().setContentMarginRight("15");
+                    Nanorep.getInstance().getNRConfiguration().getContent().setContentMarginLeft("15");
+
+                    Nanorep.getInstance().getNRConfiguration().getTitle().setTitleColor("#ffffff");
+                    Nanorep.getInstance().getNRConfiguration().getTitle().setTitleBGColor("#212121");
+                    Nanorep.getInstance().getNRConfiguration().getTitle().setTitleRowHeight("76");
+
                     mainFragment = NRMainFragment.newInstance();
                     FragmentUtils.openFragment(mainFragment, R.id.content_main,
                             NRMainFragment.TAG, MainActivity.this, false);
@@ -139,17 +149,14 @@ public class MainActivity extends AppCompatActivity implements NRCustomViewAdapt
 
     @Override
     public NRCustomSearchBarView getSearchBar(Context context) {
-//        NRCustomSearchBarView searchBar = new NRSearchBar(context);
-//
-//        return searchBar;
-
-        return null;
+        GettSearchBar searchBar = new GettSearchBar(context);
+        return searchBar;
+//        return null;
     }
 
     @Override
     public NRCustomSuggestionsView getSuggestionsView(Context context) {
 //        NRSuggestionsView suggestionsView = new NRSuggestionsView(context);
-//
 //        return suggestionsView;
 
         return  null;
@@ -157,29 +164,35 @@ public class MainActivity extends AppCompatActivity implements NRCustomViewAdapt
 
     @Override
     public NRCustomTitleView getTitle(Context context) {
-//        NRTitleView titleView = new NRTitleView(context);
-//        TitleView titleView = new TitleView(context);
-
-//        return titleView;
-
-        return null;
+        GettTitleView titleView = new GettTitleView(context);
+        return titleView;
+//        return null;
     }
 
     @Override
     public NRCustomContentView getContent(Context context) {
-        NRContentView contentView = new NRContentView(context);
-
-        return contentView;
+//        NRContentView contentView = new NRContentView(context);
+//        return contentView;
+        return null;
     }
 
     @Override
     public NRCustomLikeView getLikeView(Context context) {
-        return null;
+        return new GettLikeView(context);
+//        return null;
     }
 
     @Override
     public NRCustomChannelView getChannelView(Context context) {
         return null;
+    }
+
+    @Override
+    public NRCustomFeedbackView getFeedbackView(Context context) {
+//        return null;
+
+        GettFeedbackView feedbackView = new GettFeedbackView(new GettLikeView(context), new GettChannelingView(context), context);
+        return feedbackView;
     }
 
     private class AppWebviewClient extends WebViewClient {

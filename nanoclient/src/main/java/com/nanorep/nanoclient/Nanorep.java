@@ -82,7 +82,7 @@ public class Nanorep {
         this.mContext = context;
         setmAccountParams(accountParams);
         this.nrLogger = new NRLogger();
-        this.mCnf = null;
+//        this.mCnf = null;
 
         fetchConfiguration(null, true);
     }
@@ -270,15 +270,15 @@ public class Nanorep {
         if (mCachedSuggestions != null && mCachedSuggestions.get(text) != null) {
             onSuggestionsFetchedListener.onSuggestionsFetched(mCachedSuggestions.get(text), null);
         } else if (text != null && text.length() > 0) {
-            String encodedText = null;
-            try {
-                encodedText = URLEncoder.encode(text, "UTF-8");
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            }
+//            String encodedText = null;
+//            try {
+//                encodedText = URLEncoder.encode(text, "UTF-8");
+//            } catch (UnsupportedEncodingException e) {
+//                e.printStackTrace();
+//            }
             Uri.Builder uriBuilder = mAccountParams.getUri();
             uriBuilder.appendEncodedPath("api/kb/v1/autoComplete");
-            uriBuilder.appendQueryParameter("text", encodedText);
+            uriBuilder.appendQueryParameter("text", text);
             uriBuilder.appendQueryParameter("stemming", "true");
             executeRequest(uriBuilder, new NRConnection.Listener() {
                 @Override

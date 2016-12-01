@@ -61,9 +61,9 @@ public class NRLikeView extends NRCustomLikeView  {
         mDislikeButton.setTextColor(getResources().getColor(R.color.nr_text_color));
     }
 
-    private int resId(String resName) {
-        return getResources().getIdentifier(resName, "drawable", getContext().getPackageName());
-    }
+//    private int resId(String resName) {
+//        return getResources().getIdentifier(resName, "drawable", getContext().getPackageName());
+//    }
 
     @Override
     public void onViewAdded(View child) {

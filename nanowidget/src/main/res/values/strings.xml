@@ -3,7 +3,7 @@
 
     <string name="type_question_here">Type Your Question Here</string>
     <string name="frequently_asked_questions">Frequently Asked Questions</string>
-    <string name="was_this_article_helpful">Was this article helpful?</string>
+    <string name="was_this_helpful">Was this helpful?</string>
     <string name="yes">YES</string>
     <string name="no">NO</string>
     <string name="ok">Ok</string>
@@ -12,6 +12,7 @@
     <string name="missing_information">Missing or incorrect information</string>
     <string name="didnt_find">Didn\'t find what I was looking for</string>
     <string name="wrong">What\'s wrong with this answer?</string>
+    <string name="was_this_article_helpful">Was this article helpful?</string>
 
 
 </resources>

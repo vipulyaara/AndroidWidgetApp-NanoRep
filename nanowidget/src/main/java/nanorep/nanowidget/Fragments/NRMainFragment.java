@@ -42,6 +42,7 @@ import java.util.LinkedHashMap;
 
 import nanorep.nanowidget.Components.AbstractViews.NRCustomChannelView;
 import nanorep.nanowidget.Components.AbstractViews.NRCustomContentView;
+import nanorep.nanowidget.Components.AbstractViews.NRCustomFeedbackView;
 import nanorep.nanowidget.Components.AbstractViews.NRCustomLikeView;
 import nanorep.nanowidget.Components.AbstractViews.NRCustomSearchBarView;
 import nanorep.nanowidget.Components.AbstractViews.NRCustomSuggestionsView;
@@ -201,7 +202,8 @@ public class NRMainFragment extends Fragment implements NRSearchBarListener, NRS
             public void onAnswerFetched(final NRQueryResult result) {
 
                 NRResult newResult = new NRResult(result, NRResultItem.RowType.TITLE);
-                newResult.setHeight((int) Calculate.pxFromDp(getContext(), NRFetchedDataManager.ROW_HEIGHT));
+                int height = Integer.valueOf(Nanorep.getInstance().getNRConfiguration().getTitle().getTitleRowHeight());
+                newResult.setHeight((int) Calculate.pxFromDp(getContext(), height));
                 newResult.setSingle(true);
 
                 NRResultTopView resultTopView = getTopView();
@@ -328,12 +330,7 @@ public class NRMainFragment extends Fragment implements NRSearchBarListener, NRS
             public void insertRows(ArrayList<NRFAQGroupItem> groups) {
 
                 if(groups.size() > 1) {
-
-                    categoriesView = new NRCategoriesView(getActivity());
-                    categoriesView.setListener(NRMainFragment.this);
-                    categoriesView.setCategories(groups, viewAdapter);
-
-                    contentMain.addView(categoriesView);
+                    openCategoriesView(groups);
                 } else if(groups.size() == 1){
                     // show results view immidiately
                     openNRResultView(mFetchedDataManager.generateNRResultArray(groups.get(0).getAnswers(), getContext()), groups.get(0).getTitle());
@@ -481,6 +478,14 @@ public class NRMainFragment extends Fragment implements NRSearchBarListener, NRS
         NRErrorHandler.getInstance().setListener(null);
     }
 
+    private void openCategoriesView(ArrayList<NRFAQGroupItem> groups) {
+        categoriesView = new NRCategoriesView(getActivity());
+        categoriesView.setListener(NRMainFragment.this);
+        categoriesView.setCategories(groups, viewAdapter);
+
+        contentMain.addView(categoriesView);
+    }
+
     private NRResultTopView getTopView() {
 
         NRResultTopView resultTopView = new NRResultTopView(getActivity());
@@ -512,10 +517,16 @@ public class NRMainFragment extends Fragment implements NRSearchBarListener, NRS
             channelView = new NRChannelingView(getContext());
         }
 
+        NRCustomFeedbackView feedbackView = viewAdapter.getFeedbackView(getContext());
+
         resultTopView.setTitleView(titleView);
         resultTopView.setContentView(contentView, this);
         resultTopView.setLikeView(likeView);
         resultTopView.setChannelView(channelView, this);
+
+        if(feedbackView != null) {
+            resultTopView.setFeedbackView(feedbackView);
+        }
 
         return resultTopView;
     }
@@ -606,6 +617,12 @@ public class NRMainFragment extends Fragment implements NRSearchBarListener, NRS
             tv.setTypeface(Typeface.create(titleFont, Typeface.NORMAL));
         }
 
+    }
+
+    private void setTitleText(String title) {
+        ActionBar actionBar = ((AppCompatActivity)getActivity()).getSupportActionBar();
+        TextView tv = (TextView) actionBar.getCustomView().findViewById(R.id.titleBarTv);
+        tv.setText(title);
     }
 
     public static boolean isEmpty(String str) {
@@ -730,6 +747,10 @@ public class NRMainFragment extends Fragment implements NRSearchBarListener, NRS
         resultsView.setResults(results, title, viewAdapter);
         resultsView.setIsAnimated(animation);
 
+        if(!isEmpty(title)) {
+            setTitleText(title);
+        }
+
         contentMain.addView(resultsView);
 
         if (getView() != null) {
@@ -846,6 +867,12 @@ public class NRMainFragment extends Fragment implements NRSearchBarListener, NRS
         } else {
             searchBarView.updateEditTextView("");
             getView().requestFocus();
+
+            if(currentView instanceof NRResultsView) {
+                setTitleText(((NRResultsView)currentView).getTitle());
+            } else {
+                setTitleText(Nanorep.getInstance().getNRConfiguration().getTitle().getTitle());
+            }
         }
     }
 
