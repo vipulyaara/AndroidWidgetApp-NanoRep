@@ -75,7 +75,7 @@ public class NRResultTopView extends RelativeLayout implements NRTitleListener, 
     public void onLikeClicked(NRCustomLikeView likeView, String resultId, boolean isLike) {
         topViewListener.onLikeClicked(NRResultTopView.this, likeView, resultId, isLike);
         if(feedbackView != null) {
-            feedbackView.addChannelView();
+            feedbackView.onLikeClicked(null, null, isLike);
         }
     }
 
@@ -85,7 +85,7 @@ public class NRResultTopView extends RelativeLayout implements NRTitleListener, 
     }
 
     @Override
-    public void onChannelSelected(NRChannelItem channelItem) {
+    public void onChannelSelected(NRChanneling channeling) {
 
     }
 

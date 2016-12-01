@@ -30,4 +30,6 @@ public abstract class NRCustomLikeView extends LinearLayout {
     public abstract void resetLikeView();
 
     public abstract boolean getLikeSelection();
+
+    public abstract boolean shouldOpenDialog();
 }

@@ -22,6 +22,7 @@ public class GettLikeView extends NRCustomLikeView {
     private TextView mLikeButton;
     private TextView mDislikeButton;
     private boolean mLikeSelection;
+    private TextView feedbackReply;
 
     private final String green = "#60c300";
     private final String red = "#ff5252";
@@ -51,8 +52,8 @@ public class GettLikeView extends NRCustomLikeView {
     public void resetLikeView() {
         mLikeButton.setEnabled(true);
         mDislikeButton.setEnabled(true);
-        mLikeButton.setTextColor(getResources().getColor(nanorep.nanowidget.R.color.nr_text_color));
-        mDislikeButton.setTextColor(getResources().getColor(nanorep.nanowidget.R.color.nr_text_color));
+        mLikeButton.setTextColor(Color.parseColor(gray));
+        mDislikeButton.setTextColor(Color.parseColor(gray));
         mLikeButton.setBackground(getResources().getDrawable(R.drawable.back));
         mDislikeButton.setBackground(getResources().getDrawable(R.drawable.back));
     }
@@ -61,18 +62,23 @@ public class GettLikeView extends NRCustomLikeView {
     @Override
     public void onViewAdded(View child) {
         super.onViewAdded(child);
-        mLikeButton = (TextView) child.findViewById(nanorep.nanowidget.R.id.likeButton);
-        mDislikeButton = (TextView) child.findViewById(nanorep.nanowidget.R.id.dislikeButton);
+        feedbackReply = (TextView) child.findViewById(R.id.feedbackReply);
+        mLikeButton = (TextView) child.findViewById(R.id.likeButton);
+        mDislikeButton = (TextView) child.findViewById(R.id.dislikeButton);
         mLikeButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 sendSelection(true);
+                feedbackReply.setText(getResources().getString(R.string.thanks));
+                feedbackReply.setVisibility(View.VISIBLE);
             }
         });
         mDislikeButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 sendSelection(false);
+                feedbackReply.setText(getResources().getString(R.string.sorry));
+                feedbackReply.setVisibility(View.VISIBLE);
             }
         });
     }
@@ -86,6 +92,11 @@ public class GettLikeView extends NRCustomLikeView {
     @Override
     public boolean getLikeSelection() {
         return mLikeSelection;
+    }
+
+    @Override
+    public boolean shouldOpenDialog() {
+        return false;
     }
 
 }

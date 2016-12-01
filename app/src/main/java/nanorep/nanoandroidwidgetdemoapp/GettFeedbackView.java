@@ -5,6 +5,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import com.nanorep.nanoclient.Channeling.NRChanneling;
+
 import nanorep.nanowidget.Components.AbstractViews.NRCustomChannelView;
 import nanorep.nanowidget.Components.AbstractViews.NRCustomFeedbackView;
 import nanorep.nanowidget.Components.AbstractViews.NRCustomLikeView;
@@ -18,8 +20,8 @@ public class GettFeedbackView extends NRCustomFeedbackView {
 
     LinearLayout feedbackLayout;
 
-    public GettFeedbackView(NRCustomLikeView customLikeView, NRCustomChannelView customChannelView, Context context) {
-        super(customLikeView, customChannelView, context);
+    public GettFeedbackView(Context context) {
+        super(context);
         LayoutInflater.from(context).inflate(R.layout.feedback_gett, this);
     }
 
@@ -39,19 +41,24 @@ public class GettFeedbackView extends NRCustomFeedbackView {
         super.onViewAdded(child);
 
         feedbackLayout = (LinearLayout) child.findViewById(R.id.feedback_layout);
+
+    }
+
+    @Override
+    public void setCustomLikeView(NRCustomLikeView customLikeView) {
+        super.setCustomLikeView(customLikeView);
         addLikeView();
     }
 
     @Override
-    public void onChannelSelected(NRChannelItem channelItem) {
-
-    }
-
-    @Override
     public void onLikeClicked(NRCustomLikeView likeView, String resultId, boolean isLike) {
-        if(customChannelView != null) {
+        if(customChannelView != null && customChannelView instanceof GettChannelingView && !((GettChannelingView)customChannelView).isChannelingEmpty() && !isLike) {
             addChannelView();
         }
     }
 
+    @Override
+    public void onChannelSelected(NRChanneling channeling) {
+
+    }
 }

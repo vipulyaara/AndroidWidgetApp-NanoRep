@@ -101,6 +101,11 @@ public class NRLikeView extends NRCustomLikeView  {
         return mLikeSelection;
     }
 
+    @Override
+    public boolean shouldOpenDialog() {
+        return true;
+    }
+
 //    public void cancelLike() {
 //        mLikeButton.setEnabled(true);
 //        mDislikeButton.setEnabled(true);

@@ -158,9 +158,9 @@ public class NRMainFragment extends Fragment implements NRSearchBarListener, NRS
     }
 
     @Override
-    public void onChannelSelected(NRChannelItem channelItem) {
+    public void onChannelSelected(NRChanneling channeling) {
 
-        NRChannelPresentor presentor = NRChannelStrategy.presentor(getContext(), channelItem.getChanneling(), Nanorep.getInstance());
+        NRChannelPresentor presentor = NRChannelStrategy.presentor(getContext(), channeling, Nanorep.getInstance());
 
         if(presentor instanceof NRCustomScriptChannelPresentor) {
 
@@ -258,9 +258,26 @@ public class NRMainFragment extends Fragment implements NRSearchBarListener, NRS
                     }
                 }
             });
-        } else {
-            openDislikeDialog(result, view, likeView);
+        } else if(!isLike) {
+            if(likeView.shouldOpenDialog()) {
+                openDislikeDialog(result, view, likeView);
+            } else {
+                onDislike(result, view, likeView, NRLikeType.INCORRECT_ANSWER);
+            }
         }
+    }
+
+    private void onDislike(NRResult result, final NRResultTopView view, final NRCustomLikeView likeView, NRLikeType type)  {
+        result.getFetchedResult().setLikeState(NRQueryResult.LikeState.negative);
+        mFetchedDataManager.sendLike(type, result.getFetchedResult(), new Nanorep.OnLikeSentListener() {
+            @Override
+            public void onLikeSent(boolean success) {
+                if(!success) {
+                    view.getmResult().getFetchedResult().setLikeState(NRQueryResult.LikeState.notSelected);
+                    likeView.resetLikeView();
+                }
+            }
+        });
     }
 
     private void openDislikeDialog(final NRResult result, final NRResultTopView view, final NRCustomLikeView likeView) {
@@ -277,16 +294,7 @@ public class NRMainFragment extends Fragment implements NRSearchBarListener, NRS
 
             @Override
             public void onDislike(NRLikeType type) {
-                result.getFetchedResult().setLikeState(NRQueryResult.LikeState.negative);
-                mFetchedDataManager.sendLike(type, result.getFetchedResult(), new Nanorep.OnLikeSentListener() {
-                    @Override
-                    public void onLikeSent(boolean success) {
-                        if(!success) {
-                            view.getmResult().getFetchedResult().setLikeState(NRQueryResult.LikeState.notSelected);
-                            likeView.resetLikeView();
-                        }
-                    }
-                });
+                NRMainFragment.this.onDislike(result, view, likeView, type);
             }
         });
         dislikeAlert.setDislikeOptions(reasons);
@@ -524,6 +532,8 @@ public class NRMainFragment extends Fragment implements NRSearchBarListener, NRS
 
 
         if(feedbackView != null) {
+            feedbackView.setCustomChannelView(channelView);
+            feedbackView.setCustomLikeView(likeView);
             resultTopView.setLikeView(feedbackView.getCustomLikeView());
             resultTopView.setChannelView(feedbackView.getCustomChannelView(), this);
             resultTopView.setFeedbackView(feedbackView);

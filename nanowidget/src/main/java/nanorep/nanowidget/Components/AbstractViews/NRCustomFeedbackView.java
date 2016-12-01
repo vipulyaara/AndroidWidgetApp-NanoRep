@@ -17,6 +17,15 @@ public abstract class NRCustomFeedbackView extends LinearLayout implements OnFee
     protected NRCustomLikeView customLikeView;
     protected NRCustomChannelView customChannelView;
 
+
+    public void setCustomLikeView(NRCustomLikeView customLikeView) {
+        this.customLikeView = customLikeView;
+    }
+
+    public void setCustomChannelView(NRCustomChannelView customChannelView) {
+        this.customChannelView = customChannelView;
+    }
+
     public NRCustomChannelView getCustomChannelView() {
         return customChannelView;
     }
@@ -25,10 +34,8 @@ public abstract class NRCustomFeedbackView extends LinearLayout implements OnFee
         return customLikeView;
     }
 
-    public NRCustomFeedbackView(NRCustomLikeView customLikeView, NRCustomChannelView customChannelView, Context context) {
+    public NRCustomFeedbackView(Context context) {
         super(context);
-        this.customLikeView = customLikeView;
-        this.customChannelView = customChannelView;
     }
 
     public void setListener(OnFeedBackListener listener) {

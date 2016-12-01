@@ -44,8 +44,8 @@ public class NRChannelingView extends NRCustomChannelView {
     }
 
     @Override
-    public void onChannelSelected(NRChannelItem channelItem) {
-        mListener.onChannelSelected(channelItem);
+    public void onChannelSelected(NRChanneling channeling) {
+        mListener.onChannelSelected(channeling);
     }
 
 }

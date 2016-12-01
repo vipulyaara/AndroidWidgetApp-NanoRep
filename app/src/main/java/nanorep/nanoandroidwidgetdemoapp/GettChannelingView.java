@@ -32,17 +32,25 @@ public class GettChannelingView extends NRCustomChannelView  {
     public void onViewAdded(View child) {
         super.onViewAdded(child);
         tv = (TextView) child.findViewById(R.id.feedbackReply);
+        tv.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mListener.onChannelSelected(mChannelings.get(0));
+            }
+        });
     }
 
     @Override
     public void setChannelings(ArrayList<NRChanneling> channelings) {
-        for (NRChanneling channeling:channelings) {
-            tv.setText(channeling.getButtonText());
-        }
+       mChannelings = channelings;
     }
 
     @Override
-    public void onChannelSelected(NRChannelItem channelItem) {
-        mListener.onChannelSelected(channelItem);
+    public void onChannelSelected(NRChanneling channeling) {
+
+    }
+
+    public boolean isChannelingEmpty() {
+        return mChannelings == null || mChannelings.size() == 0;
     }
 }

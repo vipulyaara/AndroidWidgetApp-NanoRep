@@ -40,6 +40,7 @@ public class MainActivity extends AppCompatActivity implements NRCustomViewAdapt
     private NRMainFragment mainFragment;
     private CheckBox checkBox;
 
+
     @SuppressLint("SetJavaScriptEnabled")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +50,7 @@ public class MainActivity extends AppCompatActivity implements NRCustomViewAdapt
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#0aa0ff")));
 
 //        openMainFragment();
+
 
         checkBox = (CheckBox) findViewById(R.id.checkbox);
 
@@ -185,14 +187,14 @@ public class MainActivity extends AppCompatActivity implements NRCustomViewAdapt
 
     @Override
     public NRCustomChannelView getChannelView(Context context) {
-        return null;
+        return new GettChannelingView(context);
     }
 
     @Override
     public NRCustomFeedbackView getFeedbackView(Context context) {
 //        return null;
 
-        GettFeedbackView feedbackView = new GettFeedbackView(new GettLikeView(context), new GettChannelingView(context), context);
+        GettFeedbackView feedbackView = new GettFeedbackView(context);
         return feedbackView;
     }
 
