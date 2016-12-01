@@ -118,12 +118,15 @@ public class NRContentView extends NRCustomContentView implements View.OnKeyList
 
     private void configWebView() {
         String marginRight = Nanorep.getInstance().getNRConfiguration().getContent().getContentMarginRight();
-        int margitR =  getMarginPx(marginRight);
         String marginLeft = Nanorep.getInstance().getNRConfiguration().getContent().getContentMarginLeft();
-        int margitL =  getMarginPx(marginLeft);
 
-        FrameLayout.LayoutParams params = (FrameLayout.LayoutParams)mWebView.getLayoutParams();
-        params.setMargins(margitL, 0, margitR, 0);
+        if(marginRight != null && marginLeft != null) {
+            int margitR = getMarginPx(marginRight);
+            int margitL =  getMarginPx(marginLeft);
+
+            FrameLayout.LayoutParams params = (FrameLayout.LayoutParams)mWebView.getLayoutParams();
+            params.setMargins(margitL, 0, margitR, 0);
+        }
     }
 
     private int getMarginPx(String margin) {

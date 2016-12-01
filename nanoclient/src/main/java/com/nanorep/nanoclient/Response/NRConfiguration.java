@@ -345,6 +345,9 @@ public class NRConfiguration {
         }
 
         public String getContentMarginTop() {
+            if(marginTop == null){
+                return "15";
+            }
             return marginTop;
         }
         public String getContentMarginBottom() {

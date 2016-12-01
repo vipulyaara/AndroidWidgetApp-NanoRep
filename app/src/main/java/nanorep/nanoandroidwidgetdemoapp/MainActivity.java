@@ -192,6 +192,7 @@ public class MainActivity extends AppCompatActivity implements NRCustomViewAdapt
     @Override
     public NRCustomChannelView getChannelView(Context context) {
         return new GettChannelingView(context);
+//        return null;
     }
 
     @Override

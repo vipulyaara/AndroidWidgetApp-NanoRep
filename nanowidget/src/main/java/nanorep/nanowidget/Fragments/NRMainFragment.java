@@ -882,11 +882,15 @@ public class NRMainFragment extends Fragment implements NRSearchBarListener, NRS
             searchBarView.updateEditTextView("");
             getView().requestFocus();
 
+            String title = Nanorep.getInstance().getNRConfiguration().getTitle().getTitle();
+
             if(currentView instanceof NRResultsView) {
-                setTitleText(((NRResultsView)currentView).getTitle());
-            } else {
-                setTitleText(Nanorep.getInstance().getNRConfiguration().getTitle().getTitle());
+                if(!isEmpty(((NRResultsView)currentView).getTitle())) {
+                    title = ((NRResultsView)currentView).getTitle();
+                }
             }
+
+            setTitleText(title);
         }
     }
 
