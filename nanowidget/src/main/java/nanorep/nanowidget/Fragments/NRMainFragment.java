@@ -521,11 +521,15 @@ public class NRMainFragment extends Fragment implements NRSearchBarListener, NRS
 
         resultTopView.setTitleView(titleView);
         resultTopView.setContentView(contentView, this);
-        resultTopView.setLikeView(likeView);
-        resultTopView.setChannelView(channelView, this);
+
 
         if(feedbackView != null) {
+            resultTopView.setLikeView(feedbackView.getCustomLikeView());
+            resultTopView.setChannelView(feedbackView.getCustomChannelView(), this);
             resultTopView.setFeedbackView(feedbackView);
+        } else {
+            resultTopView.setLikeView(likeView);
+            resultTopView.setChannelView(channelView, this);
         }
 
         return resultTopView;

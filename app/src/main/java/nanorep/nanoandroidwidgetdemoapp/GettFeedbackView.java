@@ -23,13 +23,23 @@ public class GettFeedbackView extends NRCustomFeedbackView {
         LayoutInflater.from(context).inflate(R.layout.feedback_gett, this);
     }
 
+    @Override
+    public void addLikeView() {
+        feedbackLayout.addView(customLikeView);
+    }
+
+    @Override
+    public void addChannelView() {
+        feedbackLayout.addView(customChannelView);
+    }
+
 
     @Override
     public void onViewAdded(View child) {
         super.onViewAdded(child);
 
         feedbackLayout = (LinearLayout) child.findViewById(R.id.feedback_layout);
-        addLikeChannelViews();
+        addLikeView();
     }
 
     @Override
@@ -40,12 +50,8 @@ public class GettFeedbackView extends NRCustomFeedbackView {
     @Override
     public void onLikeClicked(NRCustomLikeView likeView, String resultId, boolean isLike) {
         if(customChannelView != null) {
-            feedbackLayout.addView(customChannelView);
+            addChannelView();
         }
     }
 
-    @Override
-    public void addLikeChannelViews() {
-        feedbackLayout.addView(customLikeView);
-    }
 }

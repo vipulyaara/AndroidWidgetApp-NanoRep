@@ -1,8 +1,11 @@
 package nanorep.nanoandroidwidgetdemoapp;
 
 import android.content.Context;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.TextView;
 
 import com.nanorep.nanoclient.Channeling.NRChanneling;
 
@@ -18,19 +21,24 @@ import nanorep.nanowidget.Components.NRChannelingView;
 
 public class GettChannelingView extends NRCustomChannelView  {
     private ArrayList<NRChanneling> mChannelings;
-    private RecyclerView mChannelingsRecycleView;
-    private NRChannelingView.ChannelingAdapter mAdapter;
-
+    private TextView tv;
 
     public GettChannelingView(Context context) {
         super(context);
-        mAdapter = new NRChannelingView.ChannelingAdapter();
-        LayoutInflater.from(context).inflate(nanorep.nanowidget.R.layout.channeling_view, this);
+        LayoutInflater.from(context).inflate(R.layout.channeling_gett, this);
+    }
+
+    @Override
+    public void onViewAdded(View child) {
+        super.onViewAdded(child);
+        tv = (TextView) child.findViewById(R.id.feedbackReply);
     }
 
     @Override
     public void setChannelings(ArrayList<NRChanneling> channelings) {
-
+        for (NRChanneling channeling:channelings) {
+            tv.setText(channeling.getButtonText());
+        }
     }
 
     @Override

@@ -14,10 +14,16 @@ import nanorep.nanowidget.interfaces.OnLikeListener;
 public abstract class NRCustomFeedbackView extends LinearLayout implements OnFeedBackListener{
 
     protected OnFeedBackListener mListener;
-
     protected NRCustomLikeView customLikeView;
     protected NRCustomChannelView customChannelView;
 
+    public NRCustomChannelView getCustomChannelView() {
+        return customChannelView;
+    }
+
+    public NRCustomLikeView getCustomLikeView() {
+        return customLikeView;
+    }
 
     public NRCustomFeedbackView(NRCustomLikeView customLikeView, NRCustomChannelView customChannelView, Context context) {
         super(context);
@@ -29,5 +35,7 @@ public abstract class NRCustomFeedbackView extends LinearLayout implements OnFee
         mListener = listener;
     }
 
-    public abstract void addLikeChannelViews();
+    public abstract void addLikeView();
+
+    public abstract void addChannelView();
 }

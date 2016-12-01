@@ -39,7 +39,7 @@ import nanorep.nanowidget.interfaces.OnLikeListener;
  * Created by nanorep on 27/10/2016.
  */
 
-public class NRResultTopView extends RelativeLayout implements NRTitleListener, OnLikeListener, View.OnClickListener, OnFeedBackListener {
+public class NRResultTopView extends RelativeLayout implements NRTitleListener, View.OnClickListener, OnFeedBackListener {
 
 //    NRResultItemListener mListener;
 
@@ -74,6 +74,9 @@ public class NRResultTopView extends RelativeLayout implements NRTitleListener, 
     @Override
     public void onLikeClicked(NRCustomLikeView likeView, String resultId, boolean isLike) {
         topViewListener.onLikeClicked(NRResultTopView.this, likeView, resultId, isLike);
+        if(feedbackView != null) {
+            feedbackView.addChannelView();
+        }
     }
 
     @Override

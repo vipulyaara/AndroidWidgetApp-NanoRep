@@ -28,6 +28,7 @@ import nanorep.nanowidget.Components.AbstractViews.NRCustomLikeView;
 import nanorep.nanowidget.Components.AbstractViews.NRCustomSearchBarView;
 import nanorep.nanowidget.Components.AbstractViews.NRCustomSuggestionsView;
 import nanorep.nanowidget.Components.AbstractViews.NRCustomTitleView;
+import nanorep.nanowidget.Components.NRChannelingView;
 import nanorep.nanowidget.Components.NRContentView;
 import nanorep.nanowidget.Fragments.NRMainFragment;
 import nanorep.nanowidget.Utilities.FragmentUtils;
