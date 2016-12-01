@@ -2,6 +2,7 @@ package nanorep.nanowidget.Components;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Build;
@@ -27,7 +28,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import nanorep.nanowidget.Components.AbstractViews.NRCustomContentView;
+import nanorep.nanowidget.Fragments.NRMainFragment;
 import nanorep.nanowidget.R;
+import nanorep.nanowidget.interfaces.NRApplicationContentListener;
 
 
 /**
@@ -285,8 +288,13 @@ public class NRContentView extends NRCustomContentView implements View.OnKeyList
                 }
                 return true;
             } else if (link.startsWith("http")) {
-                mListener.onLinkClicked(link);
-                return true;
+                if(applicationContentListener != null && applicationContentListener.onLinkClicked(link)) {
+                    // if true - shouldnt open it
+                    return true;
+                } else {
+                    mListener.onLinkClicked(link);
+                    return true;
+                }
             }
             return false;
         }

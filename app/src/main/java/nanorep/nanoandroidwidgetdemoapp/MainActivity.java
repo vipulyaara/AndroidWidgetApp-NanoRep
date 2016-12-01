@@ -30,9 +30,10 @@ import nanorep.nanowidget.Components.AbstractViews.NRCustomTitleView;
 import nanorep.nanowidget.Components.NRContentView;
 import nanorep.nanowidget.Fragments.NRMainFragment;
 import nanorep.nanowidget.Utilities.FragmentUtils;
+import nanorep.nanowidget.interfaces.NRApplicationContentListener;
 import nanorep.nanowidget.interfaces.NRCustomViewAdapter;
 
-public class MainActivity extends AppCompatActivity implements NRCustomViewAdapter {
+public class MainActivity extends AppCompatActivity implements NRCustomViewAdapter, NRApplicationContentListener {
 
 //    private NRWidgetFragment nanoFragment;
     private NRMainFragment mainFragment;
@@ -113,6 +114,7 @@ public class MainActivity extends AppCompatActivity implements NRCustomViewAdapt
                 public void onClick(final View v) {
                     v.setVisibility(View.INVISIBLE);
                     mainFragment = NRMainFragment.newInstance();
+                    mainFragment.setApplicationContentListener(MainActivity.this);
                     FragmentUtils.openFragment(mainFragment, R.id.content_main,
                             NRMainFragment.TAG, MainActivity.this, false);
                 }
@@ -122,6 +124,7 @@ public class MainActivity extends AppCompatActivity implements NRCustomViewAdapt
 
     private void openMainFragment() {
         mainFragment = NRMainFragment.newInstance();
+        mainFragment.setApplicationContentListener(this);
         FragmentUtils.openFragment(mainFragment, R.id.content_main,
                 NRMainFragment.TAG, MainActivity.this, false);
     }
@@ -180,6 +183,11 @@ public class MainActivity extends AppCompatActivity implements NRCustomViewAdapt
     @Override
     public NRCustomChannelView getChannelView(Context context) {
         return null;
+    }
+
+    @Override
+    public boolean onLinkClicked(String url) {
+        return true;
     }
 
     private class AppWebviewClient extends WebViewClient {

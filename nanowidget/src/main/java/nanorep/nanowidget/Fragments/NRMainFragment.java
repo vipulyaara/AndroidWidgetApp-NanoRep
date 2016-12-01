@@ -4,7 +4,6 @@ import android.animation.Animator;
 import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -25,9 +24,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.nanorep.nanoclient.Channeling.NRChanneling;
 import com.nanorep.nanoclient.Handlers.NRErrorHandler;
 import com.nanorep.nanoclient.Interfaces.NRQueryResult;
 import com.nanorep.nanoclient.Nanorep;
@@ -38,7 +35,6 @@ import com.nanorep.nanoclient.Response.NRFAQGroupItem;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 
 import nanorep.nanowidget.Components.AbstractViews.NRCustomChannelView;
 import nanorep.nanowidget.Components.AbstractViews.NRCustomContentView;
@@ -69,6 +65,7 @@ import nanorep.nanowidget.DataClasse.NRResult;
 import nanorep.nanowidget.DataClasse.NRResultsAdapter;
 import nanorep.nanowidget.R;
 import nanorep.nanowidget.Utilities.Calculate;
+import nanorep.nanowidget.interfaces.NRApplicationContentListener;
 import nanorep.nanowidget.interfaces.NRConfigFetcherListener;
 import nanorep.nanowidget.interfaces.NRCustomViewAdapter;
 import nanorep.nanowidget.interfaces.NRFetcherListener;
@@ -125,6 +122,8 @@ public class NRMainFragment extends Fragment implements NRSearchBarListener, NRS
     private LinearLayout noConnecttionView;
 
     private boolean animation = false;
+
+    private NRApplicationContentListener applicationContentListener;
 
 
     @Override
@@ -498,6 +497,10 @@ public class NRMainFragment extends Fragment implements NRSearchBarListener, NRS
 
         if(contentView == null){
             contentView = new NRContentView(getContext());
+        }
+
+        if(applicationContentListener != null) {
+            contentView.setApplicationContentListener(applicationContentListener);
         }
 
         NRCustomLikeView likeView = viewAdapter.getLikeView(getContext());
@@ -967,5 +970,13 @@ public class NRMainFragment extends Fragment implements NRSearchBarListener, NRS
     public void dismiss() {
         noConnecttionView.getLayoutParams().height = 0;
         noConnecttionView.requestLayout();
+    }
+
+    public void setApplicationContentListener(NRApplicationContentListener applicationContentListener) {
+        this.applicationContentListener = applicationContentListener;
+    }
+
+    public NRApplicationContentListener getApplicationContentListener() {
+        return applicationContentListener;
     }
 }
