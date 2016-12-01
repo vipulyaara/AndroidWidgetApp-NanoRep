@@ -21,6 +21,8 @@ import android.widget.Toast;
 import com.nanorep.nanoclient.AccountParams;
 import com.nanorep.nanoclient.Nanorep;
 
+import java.util.HashMap;
+
 import nanorep.nanowidget.Components.AbstractViews.NRCustomChannelView;
 import nanorep.nanowidget.Components.AbstractViews.NRCustomContentView;
 import nanorep.nanowidget.Components.AbstractViews.NRCustomLikeView;
@@ -83,7 +85,13 @@ public class MainActivity extends AppCompatActivity implements NRCustomViewAdapt
                     return;
                 }
 
-                Nanorep.getInstance().init(getApplicationContext(), new AccountParams(_accountName, _kb));
+                AccountParams accountParams = new AccountParams(_accountName, _kb);
+
+                HashMap<String, String> map = new HashMap<String, String>();
+                map.put("Brand","android");
+                accountParams.setContext(map);
+
+                Nanorep.getInstance().init(getApplicationContext(), accountParams);
                 pb.setVisibility(View.VISIBLE);
 
                 final Handler handler = new Handler();

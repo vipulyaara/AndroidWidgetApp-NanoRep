@@ -200,6 +200,10 @@ public class Nanorep {
         _uriBuilder.appendEncodedPath("api/widget/v1/hello.js");
         _uriBuilder.appendQueryParameter("nostats", "false");
         _uriBuilder.appendQueryParameter("url", "mobile");
+        String context = mAccountParams.getContext();
+        if(context != null) {
+            _uriBuilder.appendQueryParameter("context", context);
+        }
         NRConnection.getInstance().connectionWithRequest(_uriBuilder.build(), new NRConnection.Listener() {
             @Override
             public void response(Object responseParam, int status, NRError error) {
