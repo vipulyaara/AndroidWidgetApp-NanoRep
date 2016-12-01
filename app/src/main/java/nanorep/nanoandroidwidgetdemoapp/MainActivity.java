@@ -118,8 +118,8 @@ public class MainActivity extends AppCompatActivity implements NRCustomViewAdapt
                     v.setVisibility(View.INVISIBLE);
 
                     Nanorep.getInstance().getNRConfiguration().getContent().setContentMarginTop("0");
-                    Nanorep.getInstance().getNRConfiguration().getContent().setContentMarginRight("15");
-                    Nanorep.getInstance().getNRConfiguration().getContent().setContentMarginLeft("15");
+                    Nanorep.getInstance().getNRConfiguration().getContent().setContentMarginRight("10");
+                    Nanorep.getInstance().getNRConfiguration().getContent().setContentMarginLeft("10");
 
                     Nanorep.getInstance().getNRConfiguration().getTitle().setTitleColor("#ffffff");
                     Nanorep.getInstance().getNRConfiguration().getTitle().setTitleBGColor("#212121");

@@ -15,8 +15,12 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
+import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 
+import com.nanorep.nanoclient.Nanorep;
 import com.nanorep.nanoclient.Response.NRHtmlParser;
 
 import java.io.IOException;
@@ -28,6 +32,7 @@ import java.util.regex.Pattern;
 
 import nanorep.nanowidget.Components.AbstractViews.NRCustomContentView;
 import nanorep.nanowidget.R;
+import nanorep.nanowidget.Utilities.Calculate;
 
 
 /**
@@ -65,6 +70,8 @@ public class NRContentView extends NRCustomContentView implements View.OnKeyList
     public void onViewAdded(View child) {
         super.onViewAdded(child);
         mWebView = (WebView) child.findViewById(R.id.nrWebview);
+        
+        configWebView();
 
         mWebView.setOnKeyListener(this);
 
@@ -107,6 +114,20 @@ public class NRContentView extends NRCustomContentView implements View.OnKeyList
         });
 
         mLoadingView = (RelativeLayout) child.findViewById(R.id.webLoadingView);
+    }
+
+    private void configWebView() {
+        String marginRight = Nanorep.getInstance().getNRConfiguration().getContent().getContentMarginRight();
+        int margitR =  getMarginPx(marginRight);
+        String marginLeft = Nanorep.getInstance().getNRConfiguration().getContent().getContentMarginLeft();
+        int margitL =  getMarginPx(marginLeft);
+
+        FrameLayout.LayoutParams params = (FrameLayout.LayoutParams)mWebView.getLayoutParams();
+        params.setMargins(margitL, 0, margitR, 0);
+    }
+
+    private int getMarginPx(String margin) {
+        return (int) Calculate.pxFromDp(getContext(), Float.valueOf(margin));
     }
 
     @Override
