@@ -14,6 +14,7 @@ public class NRConfiguration {
     private HashMap<String, Object> mParams;
     private boolean mIsContextDependent = false;
     private NRTitle title;
+    private NRAutoComplete autoComplete;
     private NRSearchBar searchBar;
     private NRFaq faq;
     private NRContent content;
@@ -166,6 +167,13 @@ public class NRConfiguration {
         return title;
     }
 
+    public NRAutoComplete getAutoComplete(){
+        if(autoComplete == null) {
+            autoComplete = new NRAutoComplete();
+        }
+        return autoComplete;
+    }
+
     public class NRSearchBar{
         //initialText
         //voiceEnabled
@@ -196,12 +204,53 @@ public class NRConfiguration {
 
     public class NRAutoComplete {
 
+        private Integer suggestionRowHeight;
+        private boolean dividerVisible;
+        private Integer maxLines;
+
+        public NRAutoComplete(NRAutoComplete autoComplete) {
+            this.suggestionRowHeight = autoComplete.getSuggestionRowHeight();
+            this.dividerVisible = autoComplete.isDividerVisible();
+            this.maxLines = autoComplete.getMaxLines();
+        }
+
+        public NRAutoComplete() {
+
+        }
+
+        public boolean isDividerVisible() {
+            return dividerVisible;
+        }
+
+        public void setDividerVisible(boolean dividerVisible) {
+            this.dividerVisible = dividerVisible;
+        }
+
+        public Integer getMaxLines() {
+            return maxLines;
+        }
+
+        public void setMaxLines(Integer maxLines) {
+            this.maxLines = maxLines;
+        }
+
         public void setChatConfiguration(String chatConfiguration) {
             mParams.put("chatConfiguration", chatConfiguration);
         }
 
         public String getChatConfiguration() {
             return (String)mParams.get("chatConfiguration");
+        }
+
+        public Integer getSuggestionRowHeight() {
+            if(suggestionRowHeight == null){
+                return 40;
+            }
+            return suggestionRowHeight;
+        }
+
+        public void setSuggestionRowHeight(Integer suggestionRowHeight) {
+            this.suggestionRowHeight = suggestionRowHeight;
         }
     }
 
@@ -392,6 +441,7 @@ public class NRConfiguration {
 
         this.content = new NRContent(cnf.getContent());
         this.title = new NRTitle(cnf.getTitle());
+        this.autoComplete = new NRAutoComplete(cnf.getAutoComplete());
     }
 
     public boolean getIsContextDependent() {

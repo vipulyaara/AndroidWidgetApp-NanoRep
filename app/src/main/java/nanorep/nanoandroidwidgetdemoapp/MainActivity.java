@@ -125,6 +125,10 @@ public class MainActivity extends AppCompatActivity implements NRCustomViewAdapt
                     Nanorep.getInstance().getNRConfiguration().getTitle().setTitleBGColor("#212121");
                     Nanorep.getInstance().getNRConfiguration().getTitle().setTitleRowHeight("76");
 
+                    Nanorep.getInstance().getNRConfiguration().getAutoComplete().setSuggestionRowHeight(60);
+                    Nanorep.getInstance().getNRConfiguration().getAutoComplete().setMaxLines(2);
+                    Nanorep.getInstance().getNRConfiguration().getAutoComplete().setDividerVisible(true);
+
                     mainFragment = NRMainFragment.newInstance();
                     FragmentUtils.openFragment(mainFragment, R.id.content_main,
                             NRMainFragment.TAG, MainActivity.this, false);
