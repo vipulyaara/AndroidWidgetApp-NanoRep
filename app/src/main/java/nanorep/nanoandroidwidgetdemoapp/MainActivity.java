@@ -86,11 +86,7 @@ public class MainActivity extends AppCompatActivity implements NRCustomViewAdapt
                 }
 
                 AccountParams accountParams = new AccountParams(_accountName, _kb);
-
-//                HashMap<String, String> map = new HashMap<String, String>();
-//                map.put("Brand","android");
-//                accountParams.setContext(map);
-
+    
                 Nanorep.getInstance().init(getApplicationContext(), accountParams);
                 pb.setVisibility(View.VISIBLE);
 
@@ -195,9 +191,10 @@ public class MainActivity extends AppCompatActivity implements NRCustomViewAdapt
 
     @Override
     public boolean onLinkClicked(String url) {
-        MyFragment myFragment = MyFragment.newInstance();
-        FragmentUtils.addFragment(mainFragment,myFragment, R.id.content_main,MainActivity.this);
-        return true;
+//        MyFragment myFragment = MyFragment.newInstance();
+//        FragmentUtils.addFragment(mainFragment,myFragment, R.id.content_main,MainActivity.this);
+//        return true;
+        return false;
     }
 
     private class AppWebviewClient extends WebViewClient {
