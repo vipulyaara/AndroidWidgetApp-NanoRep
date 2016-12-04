@@ -81,20 +81,27 @@
             android:layout_height="0dp">
         </FrameLayout>
 
-        <LinearLayout
-            android:id="@+id/like_container_opened"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:gravity="center_vertical"
-            android:orientation="vertical">
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/channel_container_opened"
+        <LinearLayout android:id="@+id/feedback_container_opened"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical"
             android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/like_container_opened"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="vertical">
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/channel_container_opened"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="vertical">
+            </LinearLayout>
+
         </LinearLayout>
 
     </LinearLayout>

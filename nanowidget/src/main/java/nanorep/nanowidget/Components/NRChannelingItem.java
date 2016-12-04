@@ -58,7 +58,7 @@ public class NRChannelingItem extends NRResultItem implements NRChannelItem.OnCh
     }
 
     @Override
-    public void onChannelSelected(NRChannelItem channelItem) {
-        mListener.onChannelSelected(channelItem);
+    public void onChannelSelected(NRChanneling channeling) {
+        mListener.onChannelSelected(channeling);
     }
 }

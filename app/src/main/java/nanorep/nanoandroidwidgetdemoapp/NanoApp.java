@@ -19,8 +19,8 @@ public class NanoApp extends Application{
     public void onCreate() {    
         super.onCreate();
 
-        String _accountName = "nanorep";//"nanorep";//"nanorep";
-        String _kb = "English";//"English";//"English";
+        String _accountName = "gett";//"nanorep";//"nanorep";
+        String _kb = "English_IL";//"English";//"English";
 
 //        String _accountName = "nanorep";//"nanorep";
 //        String _kb = "English";//"English";
@@ -29,7 +29,12 @@ public class NanoApp extends Application{
 //            NRImpl.getInstance().reset();
 //        }
 
+//        Nanorep.getInstance().getNRConfiguration().getContent().setContentMarginTop("16");
+
 //        Nanorep.getInstance().init(getApplicationContext(), new AccountParams(_accountName, _kb));
+
+
+
         Fabric.with(this, new Crashlytics());
 
 

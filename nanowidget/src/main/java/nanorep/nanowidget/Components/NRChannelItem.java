@@ -20,7 +20,7 @@ public class NRChannelItem extends RecyclerView.ViewHolder implements View.OnCli
     private TextView mTextView;
 
     public interface OnChannelSelectedListener {
-        void onChannelSelected(NRChannelItem channelItem);
+        void onChannelSelected(NRChanneling channeling);
     }
     public NRChannelItem(View itemView) {
         super(itemView);
@@ -62,6 +62,6 @@ public class NRChannelItem extends RecyclerView.ViewHolder implements View.OnCli
 
     @Override
     public void onClick(View v) {
-        mListener.onChannelSelected(this);
+        mListener.onChannelSelected(this.getChanneling());
     }
 }

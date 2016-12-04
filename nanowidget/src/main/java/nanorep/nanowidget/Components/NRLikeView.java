@@ -61,9 +61,9 @@ public class NRLikeView extends NRCustomLikeView  {
         mDislikeButton.setTextColor(getResources().getColor(R.color.nr_text_color));
     }
 
-    private int resId(String resName) {
-        return getResources().getIdentifier(resName, "drawable", getContext().getPackageName());
-    }
+//    private int resId(String resName) {
+//        return getResources().getIdentifier(resName, "drawable", getContext().getPackageName());
+//    }
 
     @Override
     public void onViewAdded(View child) {
@@ -99,6 +99,11 @@ public class NRLikeView extends NRCustomLikeView  {
     @Override
     public boolean getLikeSelection() {
         return mLikeSelection;
+    }
+
+    @Override
+    public boolean shouldOpenDialog() {
+        return true;
     }
 
 //    public void cancelLike() {

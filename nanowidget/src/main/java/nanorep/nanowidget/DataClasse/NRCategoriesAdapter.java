@@ -79,7 +79,7 @@ public class NRCategoriesAdapter extends RecyclerView.Adapter<NRCategoriesAdapte
 
         titleContainer.addView(titleView);
 
-        view.getLayoutParams().height = (int) Calculate.pxFromDp(context, NRFetchedDataManager.ROW_HEIGHT);
+//        view.getLayoutParams().height = (int) Calculate.pxFromDp(context, NRFetchedDataManager.ROW_HEIGHT);
 
         ViewHolder holder = new ViewHolder(view, titleView);
 

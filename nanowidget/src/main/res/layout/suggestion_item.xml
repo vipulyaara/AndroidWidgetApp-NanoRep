@@ -2,15 +2,16 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
               android:background="@color/white"
+              android:gravity="center_vertical"
               android:layout_width="match_parent"
-              android:paddingRight="20dp"
-              android:paddingLeft="20dp"
-              android:layout_height="40dp">
+              android:layout_height="wrap_content">
 
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="match_parent"
         android:textSize="16sp"
+        android:paddingRight="20dp"
+        android:paddingLeft="20dp"
         android:id="@+id/suggestion"
         android:layout_gravity="center_vertical"
         android:fontFamily="sans-serif-light"
@@ -18,4 +19,12 @@
         android:gravity="center_vertical|left"
         android:maxLines="1"
         android:ellipsize="end"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:orientation="horizontal"
+        android:background="#d8d8d8"
+        android:id="@+id/divider"
+        />
 </LinearLayout>

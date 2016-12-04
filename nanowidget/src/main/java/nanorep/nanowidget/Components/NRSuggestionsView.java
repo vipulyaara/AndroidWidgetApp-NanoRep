@@ -13,6 +13,8 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
+import com.nanorep.nanoclient.Nanorep;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -27,10 +29,6 @@ import nanorep.nanowidget.interfaces.NRSuggestionsListener;
  */
 public class NRSuggestionsView extends NRCustomSuggestionsView {
 
-    private ArrayList<Spannable> mSuggestions;
-    private RecyclerView.Adapter mAdapter;
-    private RecyclerView mRecyclerView;
-
     public NRSuggestionsView(Context context) {
         super(context);
         LayoutInflater.from(context).inflate(R.layout.suggestion_view, this);
@@ -38,11 +36,6 @@ public class NRSuggestionsView extends NRCustomSuggestionsView {
 
 
     public void setSuggestions(ArrayList<Spannable> suggestions) {
-        if (suggestions == null) {
-            setHeight(0);
-        } else {
-            setHeight(suggestions.size() * 40);
-        }
         mSuggestions = suggestions;
         mAdapter.notifyDataSetChanged();
     }
@@ -57,38 +50,6 @@ public class NRSuggestionsView extends NRCustomSuggestionsView {
         mRecyclerView.setAdapter(mAdapter);
     }
 
-    public void setHeight(int height) {
-        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) getLayoutParams();
-        params.height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, height, getResources().getDisplayMetrics());
-        setLayoutParams(params);
-    }
 
-    public class SuggestionsAdapter extends RecyclerView.Adapter<NRSuggestionItem> implements NRSuggestionItem.OnSuggestionSelectedListener {
 
-        @Override
-        public NRSuggestionItem onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.suggestion_item, parent, false);
-            NRSuggestionItem item = new NRSuggestionItem(view);
-            item.setListener(this);
-            return item;
-        }
-
-        @Override
-        public void onBindViewHolder(NRSuggestionItem holder, int position) {
-            holder.setText(mSuggestions.get(position));
-        }
-
-        @Override
-        public int getItemCount() {
-            if (mSuggestions != null) {
-                return mSuggestions.size();
-            }
-            return 0;
-        }
-
-        @Override
-        public void onSuggestionSelected(String text) {
-            mListener.onSelectSuggestion(text);
-        }
-    }
 }

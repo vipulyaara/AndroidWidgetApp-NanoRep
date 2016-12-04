@@ -17,12 +17,14 @@ import android.widget.RelativeLayout;
 
 import com.nanorep.nanoclient.Channeling.NRChanneling;
 import com.nanorep.nanoclient.Interfaces.NRQueryResult;
+import com.nanorep.nanoclient.Nanorep;
 import com.nanorep.nanoclient.Response.NRConfiguration;
 
 import java.util.ArrayList;
 
 import nanorep.nanowidget.Components.AbstractViews.NRCustomChannelView;
 import nanorep.nanowidget.Components.AbstractViews.NRCustomContentView;
+import nanorep.nanowidget.Components.AbstractViews.NRCustomFeedbackView;
 import nanorep.nanowidget.Components.AbstractViews.NRCustomLikeView;
 import nanorep.nanowidget.Components.AbstractViews.NRCustomTitleView;
 import nanorep.nanowidget.DataClasse.NRResult;
@@ -30,13 +32,14 @@ import nanorep.nanowidget.R;
 import nanorep.nanowidget.Utilities.Calculate;
 import nanorep.nanowidget.interfaces.NRResultItemListener;
 import nanorep.nanowidget.interfaces.NRTitleListener;
+import nanorep.nanowidget.interfaces.OnFeedBackListener;
 import nanorep.nanowidget.interfaces.OnLikeListener;
 
 /**
  * Created by nanorep on 27/10/2016.
  */
 
-public class NRResultTopView extends RelativeLayout implements NRTitleListener, OnLikeListener, View.OnClickListener {
+public class NRResultTopView extends RelativeLayout implements NRTitleListener, View.OnClickListener, OnFeedBackListener {
 
 //    NRResultItemListener mListener;
 
@@ -54,6 +57,7 @@ public class NRResultTopView extends RelativeLayout implements NRTitleListener, 
     //opened layout
     private LinearLayout viewTitleContainerOpened;
     private FrameLayout viewContentContainerOpened;
+    private LinearLayout viewFeedbackContainerOpened;
     private LinearLayout viewLikeContainerOpened;
     private LinearLayout viewChannelingContainerOpened;
     private LinearLayout layoutOpened;
@@ -62,17 +66,27 @@ public class NRResultTopView extends RelativeLayout implements NRTitleListener, 
     private NRCustomContentView contentView;
     private NRCustomLikeView likeView;
     private NRCustomTitleView titleView;
+    private NRCustomFeedbackView feedbackView;
 
     private int y;
+
 
     @Override
     public void onLikeClicked(NRCustomLikeView likeView, String resultId, boolean isLike) {
         topViewListener.onLikeClicked(NRResultTopView.this, likeView, resultId, isLike);
+        if(feedbackView != null) {
+            feedbackView.onLikeClicked(null, null, isLike);
+        }
     }
 
     @Override
     public void onClick(View v) {
         int i=0;
+    }
+
+    @Override
+    public void onChannelSelected(NRChanneling channeling) {
+
     }
 
     public interface Listener {
@@ -100,6 +114,7 @@ public class NRResultTopView extends RelativeLayout implements NRTitleListener, 
         // opened
         viewTitleContainerOpened = (LinearLayout) view.findViewById(R.id.title_container_opened);
         viewContentContainerOpened = (FrameLayout) view.findViewById(R.id.content_container_opened);
+        viewFeedbackContainerOpened = (LinearLayout) view.findViewById(R.id.feedback_container_opened);
         viewLikeContainerOpened = (LinearLayout) view.findViewById(R.id.like_container_opened);
         viewChannelingContainerOpened = (LinearLayout) view.findViewById(R.id.channel_container_opened);
         layoutOpened = (LinearLayout) view.findViewById(R.id.layoutOpened);
@@ -144,16 +159,20 @@ public class NRResultTopView extends RelativeLayout implements NRTitleListener, 
             setChannel();
         }
 
-
-        if (mResult.getFetchedResult().getChanneling() != null && mResult.getFetchedResult().getChanneling().size() > 0) {
-
-            viewChannelingContainerOpened.addView(channelView);
-        }
-
         viewContentContainerOpened.addView(contentView);
 
-        viewLikeContainerOpened.addView(likeView);
+        if(feedbackView == null) {
 
+            viewLikeContainerOpened.addView(likeView);
+
+            if (mResult.getFetchedResult().getChanneling() != null && mResult.getFetchedResult().getChanneling().size() > 0) {
+
+                viewChannelingContainerOpened.addView(channelView);
+            }
+        } else {
+
+            viewFeedbackContainerOpened.addView(feedbackView);
+        }
     }
 
     public void openView(int y, NRResult result) {
@@ -450,6 +469,11 @@ public class NRResultTopView extends RelativeLayout implements NRTitleListener, 
     public void setTitleView(NRCustomTitleView titleView) {
         this.titleView = titleView;
         this.titleView.setListener(this);
+    }
+
+    public void setFeedbackView(NRCustomFeedbackView feedbackView) {
+        this.feedbackView = feedbackView;
+        this.feedbackView.setListener(this);
     }
 
     public void removeTitleView () {

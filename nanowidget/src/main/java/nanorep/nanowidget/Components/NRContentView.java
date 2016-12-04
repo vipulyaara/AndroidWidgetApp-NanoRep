@@ -2,7 +2,6 @@ package nanorep.nanowidget.Components;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Build;
@@ -16,8 +15,12 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
+import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 
+import com.nanorep.nanoclient.Nanorep;
 import com.nanorep.nanoclient.Response.NRHtmlParser;
 
 import java.io.IOException;
@@ -28,9 +31,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import nanorep.nanowidget.Components.AbstractViews.NRCustomContentView;
-import nanorep.nanowidget.Fragments.NRMainFragment;
 import nanorep.nanowidget.R;
-import nanorep.nanowidget.interfaces.NRApplicationContentListener;
+import nanorep.nanowidget.Utilities.Calculate;
 
 
 /**
@@ -68,6 +70,8 @@ public class NRContentView extends NRCustomContentView implements View.OnKeyList
     public void onViewAdded(View child) {
         super.onViewAdded(child);
         mWebView = (WebView) child.findViewById(R.id.nrWebview);
+        
+        configWebView();
 
         mWebView.setOnKeyListener(this);
 
@@ -110,6 +114,23 @@ public class NRContentView extends NRCustomContentView implements View.OnKeyList
         });
 
         mLoadingView = (RelativeLayout) child.findViewById(R.id.webLoadingView);
+    }
+
+    private void configWebView() {
+        String marginRight = Nanorep.getInstance().getNRConfiguration().getContent().getContentMarginRight();
+        String marginLeft = Nanorep.getInstance().getNRConfiguration().getContent().getContentMarginLeft();
+
+        if(marginRight != null && marginLeft != null) {
+            int margitR = getMarginPx(marginRight);
+            int margitL =  getMarginPx(marginLeft);
+
+            FrameLayout.LayoutParams params = (FrameLayout.LayoutParams)mWebView.getLayoutParams();
+            params.setMargins(margitL, 0, margitR, 0);
+        }
+    }
+
+    private int getMarginPx(String margin) {
+        return (int) Calculate.pxFromDp(getContext(), Float.valueOf(margin));
     }
 
     @Override
@@ -288,13 +309,8 @@ public class NRContentView extends NRCustomContentView implements View.OnKeyList
                 }
                 return true;
             } else if (link.startsWith("http")) {
-                if(applicationContentListener != null && applicationContentListener.onLinkClicked(link)) {
-                    // if true - shouldnt open it
-                    return true;
-                } else {
-                    mListener.onLinkClicked(link);
-                    return true;
-                }
+                mListener.onLinkClicked(link);
+                return true;
             }
             return false;
         }
