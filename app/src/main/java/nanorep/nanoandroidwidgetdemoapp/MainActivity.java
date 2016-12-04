@@ -97,7 +97,6 @@ public class MainActivity extends AppCompatActivity implements NRCustomViewAdapt
 
                         if(Nanorep.getInstance().getNRConfiguration().getmParams() == null ||
                                 (Nanorep.getInstance().getNRConfiguration().getmParams() != null && Nanorep.getInstance().getNRConfiguration().getmParams().size() == 0)) {
-//                            NRImpl.getInstance().reset();
                             Toast.makeText(MainActivity.this, "Wrong account or kb", Toast.LENGTH_LONG).show();
                             prepareButton.setVisibility(View.VISIBLE);
                             pb.setVisibility(View.GONE);
@@ -117,6 +116,7 @@ public class MainActivity extends AppCompatActivity implements NRCustomViewAdapt
                 @Override
                 public void onClick(final View v) {
                     v.setVisibility(View.INVISIBLE);
+
                     mainFragment = NRMainFragment.newInstance();
                     mainFragment.setApplicationContentListener(MainActivity.this);
                     FragmentUtils.openFragment(mainFragment, R.id.content_main,
