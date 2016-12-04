@@ -309,8 +309,13 @@ public class NRContentView extends NRCustomContentView implements View.OnKeyList
                 }
                 return true;
             } else if (link.startsWith("http")) {
-                mListener.onLinkClicked(link);
-                return true;
+                if(applicationContentListener != null && applicationContentListener.onLinkClicked(link)) {
+                    // if true - shouldnt open it
+                    return true;
+                } else {
+                    mListener.onLinkClicked(link);
+                    return true;
+                }
             }
             return false;
         }
