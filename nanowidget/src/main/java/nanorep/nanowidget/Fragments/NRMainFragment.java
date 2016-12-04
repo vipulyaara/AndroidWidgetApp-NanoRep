@@ -25,6 +25,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.nanorep.nanoclient.Channeling.NRChanneling;
 import com.nanorep.nanoclient.Handlers.NRErrorHandler;
 import com.nanorep.nanoclient.Interfaces.NRQueryResult;
 import com.nanorep.nanoclient.Nanorep;

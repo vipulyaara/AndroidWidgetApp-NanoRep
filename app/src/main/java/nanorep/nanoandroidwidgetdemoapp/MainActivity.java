@@ -121,19 +121,6 @@ public class MainActivity extends AppCompatActivity implements NRCustomViewAdapt
                 @Override
                 public void onClick(final View v) {
                     v.setVisibility(View.INVISIBLE);
-
-                    Nanorep.getInstance().getNRConfiguration().getContent().setContentMarginTop("0");
-                    Nanorep.getInstance().getNRConfiguration().getContent().setContentMarginRight("10");
-                    Nanorep.getInstance().getNRConfiguration().getContent().setContentMarginLeft("10");
-
-                    Nanorep.getInstance().getNRConfiguration().getTitle().setTitleColor("#ffffff");
-                    Nanorep.getInstance().getNRConfiguration().getTitle().setTitleBGColor("#212121");
-                    Nanorep.getInstance().getNRConfiguration().getTitle().setTitleRowHeight("76");
-
-                    Nanorep.getInstance().getNRConfiguration().getAutoComplete().setSuggestionRowHeight(60);
-                    Nanorep.getInstance().getNRConfiguration().getAutoComplete().setMaxLines(2);
-                    Nanorep.getInstance().getNRConfiguration().getAutoComplete().setDividerVisible(true);
-
                     mainFragment = NRMainFragment.newInstance();
                     mainFragment.setApplicationContentListener(MainActivity.this);
                     FragmentUtils.openFragment(mainFragment, R.id.content_main,
@@ -163,51 +150,37 @@ public class MainActivity extends AppCompatActivity implements NRCustomViewAdapt
 
     @Override
     public NRCustomSearchBarView getSearchBar(Context context) {
-        GettSearchBar searchBar = new GettSearchBar(context);
-        return searchBar;
-//        return null;
+        return null;
     }
 
     @Override
     public NRCustomSuggestionsView getSuggestionsView(Context context) {
-//        NRSuggestionsView suggestionsView = new NRSuggestionsView(context);
-//        return suggestionsView;
-
         return  null;
     }
 
     @Override
     public NRCustomTitleView getTitle(Context context) {
-        GettTitleView titleView = new GettTitleView(context);
-        return titleView;
-//        return null;
+        return null;
     }
 
     @Override
     public NRCustomContentView getContent(Context context) {
-//        NRContentView contentView = new NRContentView(context);
-//        return contentView;
         return null;
     }
 
     @Override
     public NRCustomLikeView getLikeView(Context context) {
-        return new GettLikeView(context);
-//        return null;
+        return null;
     }
 
     @Override
     public NRCustomChannelView getChannelView(Context context) {
-        return new GettChannelingView(context);
-//        return null;
+        return null;
     }
 
     @Override
     public NRCustomFeedbackView getFeedbackView(Context context) {
-//        return null;
-
-        GettFeedbackView feedbackView = new GettFeedbackView(context);
-        return feedbackView;
+        return null;
     }
 
     @Override
