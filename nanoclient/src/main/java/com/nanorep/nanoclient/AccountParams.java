@@ -62,6 +62,22 @@ public class AccountParams {
         return null;
     }
 
+    public String getContext() {
+        String context = null;
+
+        if(mContext != null) {
+            context = "";
+            for (String key: mContext.keySet()) {
+                context = context + key + ":" + mContext.get(key) + ",";
+            }
+            if (context.length() > 0 ) {
+                context = context.substring(0, context.length()-1);
+            }
+        }
+
+        return context;
+    }
+
     public String getReferrer() {
         if (mReferrer == null) {
             mReferrer = "mobile";

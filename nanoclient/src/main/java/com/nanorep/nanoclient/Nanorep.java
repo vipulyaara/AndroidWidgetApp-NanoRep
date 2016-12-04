@@ -8,6 +8,7 @@ import android.os.Handler;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.style.StyleSpan;
+import android.util.Base64;
 import android.util.Log;
 
 
@@ -135,8 +136,13 @@ public class Nanorep {
         if (mAccountParams.getKnowledgeBase() != null) {
             uri.appendQueryParameter("kb", mAccountParams.getKnowledgeBase());
         }
-        if (mAccountParams.getNanorepContext() != null) {
-            uri.appendQueryParameter("context", mAccountParams.getKnowledgeBase());
+        String context = mAccountParams.getContext();
+        if(context != null) {
+            try {
+                uri.appendQueryParameter("context", Base64.encodeToString(context.getBytes("UTF-8"), Base64.DEFAULT));
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
         }
         NRConnection.getInstance().connectionWithRequest(uri.build(), listener);
     }
@@ -200,6 +206,10 @@ public class Nanorep {
         _uriBuilder.appendEncodedPath("api/widget/v1/hello.js");
         _uriBuilder.appendQueryParameter("nostats", "false");
         _uriBuilder.appendQueryParameter("url", "mobile");
+        String context = mAccountParams.getContext();
+        if(context != null) {
+            _uriBuilder.appendQueryParameter("context", context);
+        }
         NRConnection.getInstance().connectionWithRequest(_uriBuilder.build(), new NRConnection.Listener() {
             @Override
             public void response(Object responseParam, int status, NRError error) {
@@ -280,6 +290,10 @@ public class Nanorep {
             uriBuilder.appendEncodedPath("api/kb/v1/autoComplete");
             uriBuilder.appendQueryParameter("text", encodedText);
             uriBuilder.appendQueryParameter("stemming", "true");
+            String context = mAccountParams.getContext();
+            if(context != null) {
+                uriBuilder.appendQueryParameter("context", context);
+            }
             executeRequest(uriBuilder, new NRConnection.Listener() {
                 @Override
                 public void response(Object responseParam, int status, NRError error) {

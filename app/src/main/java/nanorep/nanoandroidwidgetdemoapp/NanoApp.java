@@ -29,7 +29,7 @@ public class NanoApp extends Application{
 //            NRImpl.getInstance().reset();
 //        }
 
-        Nanorep.getInstance().init(getApplicationContext(), new AccountParams(_accountName, _kb));
+//        Nanorep.getInstance().init(getApplicationContext(), new AccountParams(_accountName, _kb));
         Fabric.with(this, new Crashlytics());
 
 

@@ -21,6 +21,8 @@ import android.widget.Toast;
 import com.nanorep.nanoclient.AccountParams;
 import com.nanorep.nanoclient.Nanorep;
 
+import java.util.HashMap;
+
 import nanorep.nanowidget.Components.AbstractViews.NRCustomChannelView;
 import nanorep.nanowidget.Components.AbstractViews.NRCustomContentView;
 import nanorep.nanowidget.Components.AbstractViews.NRCustomLikeView;
@@ -30,9 +32,10 @@ import nanorep.nanowidget.Components.AbstractViews.NRCustomTitleView;
 import nanorep.nanowidget.Components.NRContentView;
 import nanorep.nanowidget.Fragments.NRMainFragment;
 import nanorep.nanowidget.Utilities.FragmentUtils;
+import nanorep.nanowidget.interfaces.NRApplicationContentListener;
 import nanorep.nanowidget.interfaces.NRCustomViewAdapter;
 
-public class MainActivity extends AppCompatActivity implements NRCustomViewAdapter {
+public class MainActivity extends AppCompatActivity implements NRCustomViewAdapter, NRApplicationContentListener {
 
 //    private NRWidgetFragment nanoFragment;
     private NRMainFragment mainFragment;
@@ -82,7 +85,9 @@ public class MainActivity extends AppCompatActivity implements NRCustomViewAdapt
                     return;
                 }
 
-                Nanorep.getInstance().init(getApplicationContext(), new AccountParams(_accountName, _kb));
+                AccountParams accountParams = new AccountParams(_accountName, _kb);
+    
+                Nanorep.getInstance().init(getApplicationContext(), accountParams);
                 pb.setVisibility(View.VISIBLE);
 
                 final Handler handler = new Handler();
@@ -113,6 +118,7 @@ public class MainActivity extends AppCompatActivity implements NRCustomViewAdapt
                 public void onClick(final View v) {
                     v.setVisibility(View.INVISIBLE);
                     mainFragment = NRMainFragment.newInstance();
+                    mainFragment.setApplicationContentListener(MainActivity.this);
                     FragmentUtils.openFragment(mainFragment, R.id.content_main,
                             NRMainFragment.TAG, MainActivity.this, false);
                 }
@@ -122,6 +128,7 @@ public class MainActivity extends AppCompatActivity implements NRCustomViewAdapt
 
     private void openMainFragment() {
         mainFragment = NRMainFragment.newInstance();
+        mainFragment.setApplicationContentListener(this);
         FragmentUtils.openFragment(mainFragment, R.id.content_main,
                 NRMainFragment.TAG, MainActivity.this, false);
     }
@@ -180,6 +187,14 @@ public class MainActivity extends AppCompatActivity implements NRCustomViewAdapt
     @Override
     public NRCustomChannelView getChannelView(Context context) {
         return null;
+    }
+
+    @Override
+    public boolean onLinkClicked(String url) {
+//        MyFragment myFragment = MyFragment.newInstance();
+//        FragmentUtils.addFragment(mainFragment,myFragment, R.id.content_main,MainActivity.this);
+//        return true;
+        return false;
     }
 
     private class AppWebviewClient extends WebViewClient {
