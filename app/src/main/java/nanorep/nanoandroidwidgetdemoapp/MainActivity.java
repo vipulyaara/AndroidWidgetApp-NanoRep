@@ -87,9 +87,9 @@ public class MainActivity extends AppCompatActivity implements NRCustomViewAdapt
 
                 AccountParams accountParams = new AccountParams(_accountName, _kb);
 
-                HashMap<String, String> map = new HashMap<String, String>();
-                map.put("Brand","android");
-                accountParams.setContext(map);
+//                HashMap<String, String> map = new HashMap<String, String>();
+//                map.put("Brand","android");
+//                accountParams.setContext(map);
 
                 Nanorep.getInstance().init(getApplicationContext(), accountParams);
                 pb.setVisibility(View.VISIBLE);
