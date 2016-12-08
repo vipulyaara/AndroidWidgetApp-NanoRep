@@ -32,9 +32,10 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="13dp"
         android:layout_marginBottom="17dp"
+        android:enabled="false"
         android:textColor="@android:color/white"
         android:textSize="16sp"
-        android:background="#0aa0ff"
+        android:background="#D3D3D3"
         />
 
     <ImageView
