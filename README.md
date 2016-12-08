@@ -32,15 +32,8 @@ Create a new instance of NRMainFragment and open it:
 ```
 NRMainFragment mainFragment = NRMainFragment.newInstance();
 ```
-### Context
-
-Nanorep context is a key-value parameter, so when you create the AccountParams object you can set HasMap which contains the related context
-
-```
-HashMap map = new HashMap();
-map.put("key", "value");
-accountParams.setContext(map);
-```
+For advanced features:
+[Nanorep Wiki](https://github.com/nanorepsdk/AndroidWidgetApp/wiki)
 
 
 
