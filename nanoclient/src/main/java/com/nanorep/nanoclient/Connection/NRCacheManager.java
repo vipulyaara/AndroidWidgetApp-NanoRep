@@ -22,7 +22,7 @@ import java.util.StringTokenizer;
  * Created by nissopa on 10/7/15.
  */
 public class NRCacheManager extends SQLiteOpenHelper {
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
     private static final String DATABASE_NAME = "CacheNano.db";
     private static final String TABLE_ANSWERS = "ANSWERS";
 
