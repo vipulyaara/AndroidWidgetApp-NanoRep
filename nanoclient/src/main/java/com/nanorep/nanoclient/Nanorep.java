@@ -459,6 +459,9 @@ public class Nanorep {
         Uri.Builder uriBuilder = mAccountParams.getUri();
         uriBuilder.appendEncodedPath("api/analytics/v1/addFeedback");
         uriBuilder.appendQueryParameter("ignoreValidateCookie", "true");
+        if (mAccountParams.getKnowledgeBase() != null) {
+            uriBuilder.appendQueryParameter("kb", mAccountParams.getKnowledgeBase());
+        }
         for (String key: likeParams.getParams().keySet()) {
             uriBuilder.appendQueryParameter(key, likeParams.getParams().get(key));
         }
