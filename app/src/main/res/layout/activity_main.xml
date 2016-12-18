@@ -42,7 +42,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="23dp"
         android:id="@+id/serverId"
-        android:visibility="gone"
+        android:visibility="visible"
         android:layout_below="@+id/kbId"
         android:textAlignment="center"
         android:inputType="text"
@@ -55,6 +55,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:layout_centerHorizontal="true"
+        android:visibility="invisible"
         android:text="debug"
         android:layout_below="@+id/serverId"/>
 

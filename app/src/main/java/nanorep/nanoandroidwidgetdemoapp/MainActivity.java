@@ -90,7 +90,12 @@ public class MainActivity extends AppCompatActivity implements NRCustomViewAdapt
                 }
 
                 AccountParams accountParams = new AccountParams(_accountName, _kb);
-    
+
+                if(!isEmpty(_server)) {
+                    accountParams.setmHost(_server);
+                }
+
+
                 Nanorep.getInstance().init(getApplicationContext(), accountParams);
                 pb.setVisibility(View.VISIBLE);
 
