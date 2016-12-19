@@ -70,6 +70,9 @@ public class NRContentView extends NRCustomContentView implements View.OnKeyList
     public void onViewAdded(View child) {
         super.onViewAdded(child);
         mWebView = (WebView) child.findViewById(R.id.nrWebview);
+
+        mWebView.setVerticalScrollBarEnabled(false);
+        mWebView.setHorizontalScrollBarEnabled(false);
         
         configWebView();
 
