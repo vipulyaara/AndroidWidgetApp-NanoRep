@@ -4,13 +4,23 @@
              android:layout_width="match_parent"
              android:layout_height="match_parent">
 
-    <WebView
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginRight="21dp"
         android:layout_marginLeft="21dp"
-        android:background="@android:color/transparent"
-        android:id="@+id/nrWebview"/>
+        >
+        <WebView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/transparent"
+            android:id="@+id/nrWebview"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/gradient_background"/>
+    </RelativeLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
