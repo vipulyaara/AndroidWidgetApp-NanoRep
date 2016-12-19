@@ -10,7 +10,7 @@ import java.util.HashMap;
  * Created by noat on 24/11/2016.
  */
 
-public class AccountParams {
+public class AccountParams implements Comparable<AccountParams>{
 
     private String mHost;
     private String mAccount;
@@ -110,5 +110,27 @@ public class AccountParams {
     public void setDomain(String domain) {
         mDomain = domain;
     }
+
+    @Override
+    public int compareTo(AccountParams o) {
+        if(this.getAccount().equals(o.getAccount()) &&
+           this.getKnowledgeBase().equals(o.getKnowledgeBase()) && stringEqual(this.getmHost(), o.getmHost()) &&
+                stringEqual(this.getContext(), o.getContext())) {
+
+            return 0;
+
+        }
+        return -1;
+    }
+
+    private boolean stringEqual(String myString, String oString) {
+        if(myString == null && oString == null) {
+            return true;
+        } else if(myString != null && myString.equals(oString)) {
+            return true;
+        }
+        return false;
+    }
+
 }
 

@@ -81,6 +81,10 @@ public class Nanorep {
 
     public void init(Context context, AccountParams accountParams) {
         this.mContext = context;
+        if(getAccountParams() != null && accountParams.compareTo(getAccountParams()) != 0) {
+            mCnf = null;
+        }
+
         setmAccountParams(accountParams);
         this.nrLogger = new NRLogger();
 //        this.mCnf = null;
@@ -586,8 +590,14 @@ public class Nanorep {
     }
 
     private void overrideCnfData(NRConfiguration nrConfiguration) {
-        if(mCnf != null && mCnf.getCnfId().equals(nrConfiguration.getCnfId())) {
-            nrConfiguration.overrideCnfData(mCnf);
+        if(mCnf != null &&
+            mCnf.getmParams() != null &&
+            nrConfiguration.getmParams() != null &&
+            mCnf.getmParams().size() > 0 &&
+            nrConfiguration.getmParams().size() > 0 &&
+            mCnf.getCnfId().equals(nrConfiguration.getCnfId())) {
+
+                nrConfiguration.overrideCnfData(mCnf);
         }
         mCnf = nrConfiguration;
     }

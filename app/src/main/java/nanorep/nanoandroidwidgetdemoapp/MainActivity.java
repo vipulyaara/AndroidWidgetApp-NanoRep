@@ -59,10 +59,10 @@ public class MainActivity extends AppCompatActivity implements NRCustomViewAdapt
 
         final EditText accountName = (EditText) findViewById(R.id.accountNameId);
         final EditText kb = (EditText) findViewById(R.id.kbId);
-        EditText server = (EditText) findViewById(R.id.serverId);
+        final EditText server = (EditText) findViewById(R.id.serverId);
         final ProgressBar pb = (ProgressBar) findViewById(R.id.pb);
 
-        final String _server = server.getText().toString();
+
         final Button loadButton = (Button)findViewById(R.id.button);
 
 
@@ -76,6 +76,7 @@ public class MainActivity extends AppCompatActivity implements NRCustomViewAdapt
 
                 String _accountName = accountName.getText().toString();
                 String _kb = kb.getText().toString();
+                String _server = server.getText().toString();
 
                 if(isEmpty(_accountName)) {
                     Toast.makeText(MainActivity.this, "Please fill in your account", Toast.LENGTH_LONG).show();
