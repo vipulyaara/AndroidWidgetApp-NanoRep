@@ -6,6 +6,7 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
@@ -40,6 +41,8 @@ public class MyWebView extends FrameLayout implements View.OnKeyListener {
         mListener = listener;
 
         webView.setOnKeyListener(this);
+        webView.getSettings().setJavaScriptEnabled(true);
+
         webView.setWebViewClient(new WebViewClient() {
             @Override
             public void onPageFinished(WebView view, String url) {
@@ -47,6 +50,10 @@ public class MyWebView extends FrameLayout implements View.OnKeyListener {
                 webLoadingView.setVisibility(View.GONE);
             }
         });
+
+        webView.setWebChromeClient(new WebChromeClient() {
+        });
+
         webView.loadUrl(url);
     }
 
