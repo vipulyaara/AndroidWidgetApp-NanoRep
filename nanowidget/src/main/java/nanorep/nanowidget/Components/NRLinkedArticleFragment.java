@@ -244,7 +244,7 @@ public class NRLinkedArticleFragment extends Fragment implements NRContentView.L
             mLinkedArticles.get(mIndex).setLikeState(NRQueryResult.LikeState.positive);
             mListener.onLikeSelected(this, NRLikeType.POSITIVE, mLinkedArticles.get(mIndex));
         } else {
-            String reasons[] = new String[] {getString(R.string.Incorrect_answer), getString(R.string.missing_information), getString(R.string.didnt_find)};
+            String reasons[] = new String[] {getString(R.string.missing_information), getString(R.string.didnt_find)};
 
             View dislikeView = getActivity().getLayoutInflater().inflate(R.layout.dislike_dialog, null);
             DislikeDialog dislikeAlert = new DislikeDialog(getContext(), dislikeView);

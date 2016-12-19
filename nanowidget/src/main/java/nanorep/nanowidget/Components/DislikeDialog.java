@@ -129,13 +129,13 @@ public class DislikeDialog extends AlertDialog.Builder {
         @Override
         public void onClick(View v) {
             switch ((int)v.getTag()) {
+//                case 0:
+//                    mSelection = NRLikeType.INCORRECT_ANSWER;
+//                    break;
                 case 0:
-                    mSelection = NRLikeType.INCORRECT_ANSWER;
-                    break;
-                case 1:
                     mSelection = NRLikeType.MISSING_INFORMATION;
                     break;
-                case 2:
+                case 1:
                     mSelection = NRLikeType.IRRELEVANT;
                     break;
             }

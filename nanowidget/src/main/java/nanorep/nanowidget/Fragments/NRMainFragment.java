@@ -281,7 +281,7 @@ public class NRMainFragment extends Fragment implements NRSearchBarListener, NRS
     }
 
     private void openDislikeDialog(final NRResult result, final NRResultTopView view, final NRCustomLikeView likeView) {
-        String reasons[] = new String[] {getString(R.string.Incorrect_answer), getString(R.string.missing_information), getString(R.string.didnt_find)};
+        String reasons[] = new String[] {getString(R.string.missing_information), getString(R.string.didnt_find)};
         View dislikeView = getActivity().getLayoutInflater().inflate(R.layout.dislike_dialog, null);
 
         final DislikeDialog dislikeAlert = new DislikeDialog(getContext(), dislikeView);

@@ -586,7 +586,7 @@ public class Nanorep {
     }
 
     private void overrideCnfData(NRConfiguration nrConfiguration) {
-        if(mCnf != null) {
+        if(mCnf != null && mCnf.getCnfId().equals(nrConfiguration.getCnfId())) {
             nrConfiguration.overrideCnfData(mCnf);
         }
         mCnf = nrConfiguration;
