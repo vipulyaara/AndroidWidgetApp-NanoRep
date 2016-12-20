@@ -18,7 +18,7 @@
         android:layout_marginTop="56dp"
         android:id="@+id/accountNameId"
         android:layout_centerHorizontal="true"
-        android:text="yatra"
+        android:text="nanorep"
         android:textAlignment="center"
         android:hint="account name"/>
 
