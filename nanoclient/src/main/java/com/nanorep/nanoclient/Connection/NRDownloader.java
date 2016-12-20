@@ -46,6 +46,7 @@ public class NRDownloader extends  AsyncTask <Uri, Integer, Object> {
             url = new URL(uri.toString());
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setConnectTimeout(5000); // set timeout to 5 seconds
+            connection.setReadTimeout(10000);
             connection.setRequestProperty("Referer", uri.getQueryParameter("referer"));
             connection.connect();
             InputStream inputStream = new BufferedInputStream(connection.getInputStream());

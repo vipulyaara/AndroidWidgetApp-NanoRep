@@ -40,7 +40,7 @@ public abstract class NRCustomChannelView extends LinearLayout implements NRChan
 
         @Override
         public NRChannelItem onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.channel_item, null);
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.channel_item, parent, false);
             NRChannelItem item = new NRChannelItem(view);
             item.setListener(NRCustomChannelView.this);
             return item;

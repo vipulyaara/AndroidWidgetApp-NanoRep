@@ -3,6 +3,7 @@ package nanorep.nanowidget.Components;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.nanorep.nanoclient.Channeling.NRChanneling;
@@ -18,6 +19,7 @@ public class NRChannelItem extends RecyclerView.ViewHolder implements View.OnCli
 
     private ImageView mIcon;
     private TextView mTextView;
+    private LinearLayout channelItemLayout;
 
     public interface OnChannelSelectedListener {
         void onChannelSelected(NRChanneling channeling);
@@ -26,6 +28,7 @@ public class NRChannelItem extends RecyclerView.ViewHolder implements View.OnCli
         super(itemView);
         mIcon = (ImageView) itemView.findViewById(R.id.channelIcon);
         mTextView = (TextView) itemView.findViewById(R.id.channelName);
+        channelItemLayout = (LinearLayout) itemView.findViewById(R.id.channelItemLayout);
         itemView.setOnClickListener(this);
     }
 
