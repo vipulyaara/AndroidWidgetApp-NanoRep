@@ -97,4 +97,14 @@
         android:layout_centerHorizontal="true"
         android:text="debug"/>
 
+    <TextView
+        android:id="@+id/versionName"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:textSize="16dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="10dp"
+        android:layout_centerHorizontal="true"
+        />
+
 </RelativeLayout>

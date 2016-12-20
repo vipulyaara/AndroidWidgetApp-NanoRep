@@ -2,6 +2,8 @@ package nanorep.nanoandroidwidgetdemoapp;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Handler;
@@ -16,6 +18,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nanorep.nanoclient.AccountParams;
@@ -61,12 +64,19 @@ public class MainActivity extends AppCompatActivity implements NRCustomViewAdapt
         final EditText kb = (EditText) findViewById(R.id.kbId);
         final EditText server = (EditText) findViewById(R.id.serverId);
         final ProgressBar pb = (ProgressBar) findViewById(R.id.pb);
-
-
         final Button loadButton = (Button)findViewById(R.id.button);
-
-
         final Button prepareButton = (Button)findViewById(R.id.prepareButton);
+        TextView versionName = (TextView)findViewById(R.id.versionName);
+
+        PackageInfo pInfo = null;
+        try {
+            pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        String version = pInfo.versionName;
+        versionName.setText(version);
+
         prepareButton.setVisibility(View.VISIBLE);
 
         prepareButton.setOnClickListener(new View.OnClickListener() {
