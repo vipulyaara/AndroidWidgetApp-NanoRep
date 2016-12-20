@@ -89,7 +89,17 @@ public class AccountParams implements Comparable<AccountParams>{
         mReferrer = referrer;
     }
 
-    public Uri.Builder getUri() {
+    public Uri.Builder getUri(boolean setReferer) {
+        Uri.Builder uri = getUriNoReferer();
+
+        if(setReferer) {
+            uri.appendQueryParameter("referer", NRUtilities.buildReferer(getReferrer()));
+        }
+
+        return uri;
+    }
+
+    private Uri.Builder getUriNoReferer() {
         Uri.Builder uri = new Uri.Builder();
         uri.scheme("https");
 
@@ -99,6 +109,12 @@ public class AccountParams implements Comparable<AccountParams>{
         } else {
             uri.authority(getAccount() + ".nanorep.co");
         }
+
+        return uri;
+    }
+
+    public Uri.Builder getUri() {
+        Uri.Builder uri = getUriNoReferer();
         uri.appendQueryParameter("referer", NRUtilities.buildReferer(getReferrer()));
         return uri;
     }

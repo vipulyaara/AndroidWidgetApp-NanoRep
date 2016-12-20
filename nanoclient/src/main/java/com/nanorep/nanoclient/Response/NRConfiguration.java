@@ -44,13 +44,13 @@ public class NRConfiguration {
                 customization = new HashMap<String, String>();
             }
 
+            mIsContextDependent = false;
+
             Object faq = mParams.get("faqData");
             if (faq != null && faq instanceof String) {
                 if("context-dependent".toLowerCase().equals(((String) faq).toLowerCase())) {
                     mIsContextDependent = true;
                 }
-            } else if(faq == null) {
-                mIsContextDependent = true;
             }
         }
     }

@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity implements NRCustomViewAdapt
         final ProgressBar pb = (ProgressBar) findViewById(R.id.pb);
         final Button loadButton = (Button)findViewById(R.id.button);
         final Button prepareButton = (Button)findViewById(R.id.prepareButton);
-        TextView versionName = (TextView)findViewById(R.id.versionName);
+        final TextView versionName = (TextView)findViewById(R.id.versionName);
 
         PackageInfo pInfo = null;
         try {
@@ -123,6 +123,7 @@ public class MainActivity extends AppCompatActivity implements NRCustomViewAdapt
                         } else {
                             loadButton.setVisibility(View.VISIBLE);
                             pb.setVisibility(View.GONE);
+                            versionName.setVisibility(View.GONE);
                         }
                     }
                 }, 8000);

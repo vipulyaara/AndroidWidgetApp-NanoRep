@@ -503,12 +503,13 @@ public class Nanorep {
         }
 
         if (mAccountParams != null) {
-            final Uri.Builder uri = mAccountParams.getUri();
+            final Uri.Builder uri = mAccountParams.getUri(false);
             uri.appendEncodedPath("widget/scripts/cnf.json");
             if (mAccountParams.getKnowledgeBase() != null) {
                 uri.appendQueryParameter("kb", mAccountParams.getKnowledgeBase());
             }
             uri.appendQueryParameter("isFloat", "true");
+            uri.appendQueryParameter("Referer", NRUtilities.buildReferer(getAccountParams().getReferrer()));
 
             // check network connectivity speed
             final Long beforeCnfTs = System.currentTimeMillis()/1000;
