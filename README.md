@@ -19,7 +19,7 @@ allprojects {
 Add the library as a dependency in your build.gradle file.
 ```java
 dependencies {
-    compile 'com.nanorep:nanowidget:1.3.5'
+    compile 'com.nanorep:nanowidget:1.3.9'
 }
 ```
 ## Usage
