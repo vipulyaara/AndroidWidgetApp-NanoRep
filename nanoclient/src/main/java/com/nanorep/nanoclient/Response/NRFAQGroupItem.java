@@ -23,7 +23,7 @@ public class NRFAQGroupItem {
     }
 
     private HashMap getFirstGroup() {
-        if (mParams.get("data") != null && ((ArrayList)mParams.get("data")).get(0) != null) {
+        if (mParams.get("data") != null && !((ArrayList)mParams.get("data")).isEmpty() && ((ArrayList)mParams.get("data")).get(0) != null) {
             return (HashMap)((ArrayList)mParams.get("data")).get(0);
         }
         return null;
