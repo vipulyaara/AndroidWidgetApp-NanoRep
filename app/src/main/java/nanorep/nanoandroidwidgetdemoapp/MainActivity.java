@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
@@ -109,6 +110,8 @@ public class MainActivity extends AppCompatActivity implements NRCustomViewAdapt
                 Nanorep.getInstance().init(getApplicationContext(), accountParams);
                 pb.setVisibility(View.VISIBLE);
 
+
+
                 final Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
                     @Override
@@ -139,6 +142,15 @@ public class MainActivity extends AppCompatActivity implements NRCustomViewAdapt
                     v.setVisibility(View.INVISIBLE);
                     mainFragment = NRMainFragment.newInstance();
                     mainFragment.setApplicationContentListener(MainActivity.this);
+
+
+                    Nanorep.getInstance().getNRConfiguration().getTitle().setTitleColor("#212121");
+                    Nanorep.getInstance().getNRConfiguration().getTitle().setTitleBGColor("#ffffff");
+                    Nanorep.getInstance().getNRConfiguration().getTitle().setTitle("FAQs");
+                    Nanorep.getInstance().getNRConfiguration().getSearchBar().setInitialText("Search a question");
+                    Nanorep.getInstance().getNRConfiguration().getContent().setAnswerTitleColor("#212121");
+
+
                     FragmentUtils.openFragment(mainFragment, R.id.content_main,
                             NRMainFragment.TAG, MainActivity.this, false);
                 }

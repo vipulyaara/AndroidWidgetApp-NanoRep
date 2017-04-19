@@ -1,33 +1,32 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:tools="http://schemas.android.com/tools"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent"
-              android:orientation="vertical"
-            android:padding="10dp"
-             tools:context="nanorep.nanowidget.Fragments.NRWebContentFragment"
-              android:background="#ffffffff">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffffff"
+    android:orientation="vertical"
+    android:padding="10dp"
+    tools:context="nanorep.nanowidget.Fragments.NRWebContentFragment">
 
     <!-- TODO: Update blank fragment layout -->
 
     <WebView
+        android:id="@+id/webContentView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/webContentView">
-    </WebView>
+        android:layout_height="match_parent"></WebView>
 
     <RelativeLayout
+        android:id="@+id/webLoadingView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/webLoadingView"
         android:background="@android:color/transparent">
 
         <ProgressBar
+            android:id="@+id/webProgressBar"
             style="?android:attr/progressBarStyleSmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
             android:layout_centerHorizontal="true"
-            android:id="@+id/webProgressBar"/>
+            android:layout_centerVertical="true" />
     </RelativeLayout>
 
 

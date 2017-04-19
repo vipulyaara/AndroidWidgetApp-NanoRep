@@ -94,6 +94,7 @@ public class NRResultsView extends LinearLayout implements NRResultsAdapter.List
 //            frequentlyQuestions.setVisibility(View.VISIBLE);
 //            frequentlyQuestionsTv.setText(title);
 //        }
+        frequentlyQuestionsTv.setText("Popular Questions");
 
         this.title = title;
 

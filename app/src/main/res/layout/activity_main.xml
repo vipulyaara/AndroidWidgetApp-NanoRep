@@ -18,7 +18,7 @@
         android:layout_marginTop="56dp"
         android:id="@+id/accountNameId"
         android:layout_centerHorizontal="true"
-        android:text="nanorep"
+        android:text="yatra"
         android:textAlignment="center"
         android:hint="account name"/>
 
@@ -32,7 +32,7 @@
         android:layout_below="@+id/accountNameId"
         android:textAlignment="center"
         android:inputType="text"
-        android:text="English"
+        android:text="english"
         android:hint="knowledge base"/>
 
     <EditText

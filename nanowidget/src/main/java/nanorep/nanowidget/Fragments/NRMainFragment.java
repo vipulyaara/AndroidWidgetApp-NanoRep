@@ -21,6 +21,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -600,6 +601,7 @@ public class NRMainFragment extends Fragment implements NRSearchBarListener, NRS
         actionBar.setDisplayShowHomeEnabled(false);
         actionBar.setDisplayShowTitleEnabled(false);
         actionBar.setDisplayShowCustomEnabled(true);
+        actionBar.setElevation(20);
 
         Toolbar parent =(Toolbar) customActionBar.getParent();
         parent.setPadding(0,0,0,0);//for tab otherwise give space in tab
@@ -632,7 +634,7 @@ public class NRMainFragment extends Fragment implements NRSearchBarListener, NRS
         // titleConfig font
         if(!isEmpty(title.getTitleFont())) {
             String titleFont = title.getTitleFont();
-            tv.setTypeface(Typeface.create(titleFont, Typeface.NORMAL));
+            tv.setTypeface(Typeface.create(titleFont, Typeface.BOLD));
         }
 
     }

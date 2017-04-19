@@ -1,54 +1,54 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:tools="http://schemas.android.com/tools"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent"
-                android:id="@+id/content_id"
-             tools:context="nanorep.nanowidget.Components.NRResultFragment"
-    >
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/content_id"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="nanorep.nanowidget.Components.NRResultFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <nanorep.nanowidget.Components.NRResultTitleView
+        android:id="@+id/titleView"
         android:layout_width="match_parent"
-        android:layout_height="62dp"
-        android:id="@+id/titleView">
+        android:layout_height="wrap_content">
 
     </nanorep.nanowidget.Components.NRResultTitleView>
+
     <nanorep.nanowidget.Components.NRContentView
+        android:id="@+id/resultWebView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/resultWebView"
-        android:layout_below="@+id/titleView"
-        android:layout_above="@+id/feedbackView"/>
+        android:layout_above="@+id/feedbackView"
+        android:layout_below="@+id/titleView" />
+
     <RelativeLayout
+        android:id="@+id/feedbackView"
         android:layout_width="match_parent"
         android:layout_height="100dp"
-        android:layout_marginBottom="5dp"
-        android:id="@+id/feedbackView"
-        android:background="@color/white"
         android:layout_alignParentBottom="true"
-        >
+        android:layout_marginBottom="5dp"
+        android:background="@color/white">
+
         <nanorep.nanowidget.Components.NRLikeView
+            android:id="@+id/likeView"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:id="@+id/likeView"/>
+            android:layout_height="50dp" />
 
 
         <nanorep.nanowidget.Components.NRChannelingView
+            android:id="@+id/channelingView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/channelingView"
             android:layout_alignParentBottom="true"
-            android:layout_below="@+id/likeView">
-        </nanorep.nanowidget.Components.NRChannelingView>
+            android:layout_below="@+id/likeView"></nanorep.nanowidget.Components.NRChannelingView>
 
     </RelativeLayout>
+
     <LinearLayout
+        android:id="@+id/linkedArtHolder"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/linkedArtHolder"
+        android:background="#00ffffff"
         android:orientation="vertical"
-        android:visibility="invisible"
-        android:background="#00ffffff">
-    </LinearLayout>
+        android:visibility="invisible"></LinearLayout>
 
 </RelativeLayout>

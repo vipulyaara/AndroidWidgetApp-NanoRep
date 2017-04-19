@@ -1,29 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                                    android:orientation="vertical"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginRight="15dp"
-                                    android:layout_marginLeft="15dp"
-                                    android:layout_marginBottom="5dp"
-
-                                    android:id="@+id/cardView">
-<!--
-    <nanorep.nanowidget.Components.NRTitleView
-        android:id="@+id/title_view"
-        android:layout_height="match_parent"
-        android:layout_width="match_parent">
-    </nanorep.nanowidget.Components.NRTitleView>
--->
+    android:id="@+id/cardView"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="5dp"
+    android:layout_marginLeft="15dp"
+    android:layout_marginRight="15dp"
+    android:orientation="vertical">
+    <!--
+        <nanorep.nanowidget.Components.NRTitleView
+            android:id="@+id/title_view"
+            android:layout_height="match_parent"
+            android:layout_width="match_aparent">
+        </nanorep.nanowidget.Components.NRTitleView>
+    -->
 
     <LinearLayout
         android:id="@+id/title_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:background="@color/nr_background_color"
         android:layout_gravity="center_horizontal"
-        android:orientation="vertical">
-    </LinearLayout>
+        android:background="@color/nr_background_color"
+        android:gravity="center_vertical"
+        android:orientation="vertical"/>
 
 </LinearLayout>

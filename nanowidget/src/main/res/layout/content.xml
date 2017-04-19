@@ -1,39 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            android:background="@android:color/white"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginRight="21dp"
         android:layout_marginLeft="21dp"
-        >
+        android:layout_marginRight="21dp">
+
         <WebView
+            android:id="@+id/nrWebview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@android:color/transparent"
-            android:id="@+id/nrWebview"/>
+            android:background="@android:color/transparent" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:background="@drawable/gradient_background"/>
+            android:background="@drawable/gradient_background" />
     </RelativeLayout>
 
     <RelativeLayout
+        android:id="@+id/webLoadingView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/webLoadingView"
         android:background="@android:color/transparent">
 
         <ProgressBar
+            android:id="@+id/webProgressBar"
             style="?android:attr/progressBarStyleSmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
             android:layout_centerHorizontal="true"
-            android:id="@+id/webProgressBar"/>
+            android:layout_centerVertical="true" />
     </RelativeLayout>
 </FrameLayout>

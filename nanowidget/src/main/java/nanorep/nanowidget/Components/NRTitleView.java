@@ -8,6 +8,7 @@ import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.Typeface;
+import android.support.v7.widget.CardView;
 import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
@@ -43,9 +44,11 @@ public class NRTitleView extends NRCustomTitleView{
     private ImageButton mUnFoldButton;
     private ImageButton mShareButton;
     private LinearLayout titleLayout;
+    private CardView rootCardView;
+    private View viewSeparator;
     private Context context;
 
-    private String textColorAnswer = "#0aa0ff";
+    private String textColorAnswer = "#4a4a4a";
     private String textColorFaq = "#4a4a4a";
 
     private String textFontAnswer = "sans-serif-medium";
@@ -69,6 +72,9 @@ public class NRTitleView extends NRCustomTitleView{
         mTitleButton = (Button) child.findViewById(R.id.titleButton);
 
         mUnFoldButton = (ImageButton) child.findViewById(R.id.unFoldButton);
+        rootCardView = (CardView) child.findViewById(R.id.root_card_view);
+        viewSeparator = child.findViewById(R.id.view_separator);
+
         mUnFoldButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -137,6 +143,8 @@ public class NRTitleView extends NRCustomTitleView{
             font = textFontAnswer;
         }
 
+        viewSeparator.setVisibility(VISIBLE);
+        setCardElevation(0);
         mTitleButton.setTypeface(Typeface.create(font, Typeface.NORMAL));
     }
 
@@ -229,6 +237,12 @@ public class NRTitleView extends NRCustomTitleView{
         // title font
         if(content.getAnswerTextFont() != null && !"".equals(content.getAnswerTextFont())) {
             textFontAnswer = content.getAnswerTitleFont();
+        }
+    }
+
+    public void setCardElevation(float elevation) {
+        if (rootCardView != null) {
+            rootCardView.setCardElevation(elevation);
         }
     }
 

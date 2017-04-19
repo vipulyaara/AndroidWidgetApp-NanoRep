@@ -130,7 +130,7 @@ public class NRResultsAdapter extends RecyclerView.Adapter<NRResultsAdapter.View
 
         holder.titleView.setTitleText(result.getFetchedResult().getTitle());
 
-        holder.setHeight(result.getHeight());
+//        holder.setHeight(result.getHeight());
 
         holder.setResult(result);
 

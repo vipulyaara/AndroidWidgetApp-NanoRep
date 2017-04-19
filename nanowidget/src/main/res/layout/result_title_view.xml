@@ -1,29 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/white"
-                android:layout_alignParentTop="true">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_alignParentTop="true"
+    android:background="@color/white">
 
     <Button
+        android:id="@+id/resultTitle"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/resultTitle"
         android:layout_toStartOf="@+id/shareButton"
         android:background="#00ffffff"
-        android:textColor="#189ac6"
-        android:textAlignment="viewStart"
-        android:textStyle="bold"
-        android:maxLines="2"
         android:ellipsize="end"
-        android:paddingLeft="10dp"/>
+        android:maxLines="2"
+        android:paddingLeft="10dp"
+        android:textAlignment="viewStart"
+        android:textColor="@color/nr_text_color"
+        android:textStyle="bold" />
+
     <ImageButton
+        android:id="@+id/shareButton"
         android:layout_width="40dp"
         android:layout_height="match_parent"
-        android:id="@+id/shareButton"
+        android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
-        android:src="@drawable/share"
         android:background="#00ffffff"
-        android:layout_alignParentEnd="true"/>
+        android:src="@drawable/share" />
 
 </RelativeLayout>
