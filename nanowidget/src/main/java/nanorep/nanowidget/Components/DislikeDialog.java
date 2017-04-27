@@ -28,7 +28,7 @@ public class DislikeDialog extends AlertDialog.Builder {
 
     private ListView reasonsList;
     private Listener mListener;
-    private ImageView closeButton;
+    private TextView closeButton;
     private Button okButton;
     private NRLikeAdapter adapter;
     private AlertDialog alert;
@@ -47,7 +47,7 @@ public class DislikeDialog extends AlertDialog.Builder {
 
         setView(dislikeView);
         reasonsList = (ListView) dislikeView.findViewById(R.id.reasonsList);
-        closeButton = (ImageView) dislikeView.findViewById(R.id.closeButton);
+        closeButton = (TextView) dislikeView.findViewById(R.id.closeButton);
 
         closeButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -141,7 +141,7 @@ public class DislikeDialog extends AlertDialog.Builder {
             }
 
             okButton.setEnabled(true);
-            okButton.setBackgroundColor(Color.parseColor("#0aa0ff"));
+            okButton.setTextColor(Color.parseColor("#0aa0ff"));
 
             for (int i = 0; i < bullets.size(); i++) {
                 int id;

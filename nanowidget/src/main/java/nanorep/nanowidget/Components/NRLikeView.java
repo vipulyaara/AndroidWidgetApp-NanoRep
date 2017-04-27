@@ -1,27 +1,22 @@
 package nanorep.nanowidget.Components;
 
 import android.content.Context;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.support.v4.content.ContextCompat;
-import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import nanorep.nanowidget.Components.AbstractViews.NRCustomLikeView;
 import nanorep.nanowidget.R;
-import nanorep.nanowidget.interfaces.OnLikeListener;
 
 /**
  * Created by nissimpardo on 18/06/16.
  */
-public class NRLikeView extends NRCustomLikeView  {
+public class NRLikeView extends NRCustomLikeView {
 
     private TextView mLikeButton;
     private TextView mDislikeButton;
+    private TextView mThankYouMsg;
     private boolean mLikeSelection;
 
 
@@ -40,6 +35,7 @@ public class NRLikeView extends NRCustomLikeView  {
         if (isLike) {
             mLikeButton.setTextColor(ContextCompat.getColor(getContext(), R.color.nr_like_color));
             mDislikeButton.setTextColor(ContextCompat.getColor(getContext(), R.color.nr_text_color));
+            showThankYouMsg();
         } else {
             mLikeButton.setTextColor(ContextCompat.getColor(getContext(), R.color.nr_text_color));
             mDislikeButton.setTextColor(ContextCompat.getColor(getContext(), R.color.nr_dislike_color));
@@ -47,6 +43,11 @@ public class NRLikeView extends NRCustomLikeView  {
         mLikeButton.setEnabled(false);
         mDislikeButton.setEnabled(false);
         mLikeSelection = isLike;
+    }
+
+    @Override
+    public void showThankYouMsg() {
+        mThankYouMsg.setVisibility(VISIBLE);
     }
 
     @Override
@@ -59,6 +60,7 @@ public class NRLikeView extends NRCustomLikeView  {
 //        mDislikeButton.getBackground().setColorFilter(Color.LTGRAY, PorterDuff.Mode.MULTIPLY);
         mLikeButton.setTextColor(getResources().getColor(R.color.nr_text_color));
         mDislikeButton.setTextColor(getResources().getColor(R.color.nr_text_color));
+        mThankYouMsg.setVisibility(GONE);
     }
 
 //    private int resId(String resName) {
@@ -70,6 +72,7 @@ public class NRLikeView extends NRCustomLikeView  {
         super.onViewAdded(child);
         mLikeButton = (TextView) child.findViewById(R.id.likeButton);
         mDislikeButton = (TextView) child.findViewById(R.id.dislikeButton);
+        mThankYouMsg = (TextView) child.findViewById(R.id.tv_thank_you_msg);
         mLikeButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {

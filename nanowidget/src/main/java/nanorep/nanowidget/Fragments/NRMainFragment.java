@@ -276,6 +276,8 @@ public class NRMainFragment extends Fragment implements NRSearchBarListener, NRS
                 if(!success) {
                     view.getmResult().getFetchedResult().setLikeState(NRQueryResult.LikeState.notSelected);
                     likeView.resetLikeView();
+                } else {
+                    likeView.showThankYouMsg();
                 }
             }
         });
@@ -608,6 +610,13 @@ public class NRMainFragment extends Fragment implements NRSearchBarListener, NRS
         parent.setContentInsetsAbsolute(0,0);
 
         TextView tv = (TextView) actionBar.getCustomView().findViewById(R.id.titleBarTv);
+        ImageView ivBack = (ImageView) actionBar.getCustomView().findViewById(R.id.iv_back);
+        ivBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().onBackPressed();
+            }
+        });
 
         // titleConfig text
         String titleText = getString(R.string.default_title);

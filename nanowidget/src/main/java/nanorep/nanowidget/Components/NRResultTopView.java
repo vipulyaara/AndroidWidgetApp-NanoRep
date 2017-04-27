@@ -325,6 +325,7 @@ public class NRResultTopView extends RelativeLayout implements NRTitleListener, 
             likeView.resetLikeView();
         } else {
             likeView.updateLikeButton(mResult.getFetchedResult().getLikeState() == NRQueryResult.LikeState.positive);
+            likeView.showThankYouMsg();
         }
     }
 

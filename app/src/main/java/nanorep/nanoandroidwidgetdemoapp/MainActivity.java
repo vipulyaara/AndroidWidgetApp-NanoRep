@@ -146,7 +146,7 @@ public class MainActivity extends AppCompatActivity implements NRCustomViewAdapt
 
                     Nanorep.getInstance().getNRConfiguration().getTitle().setTitleColor("#212121");
                     Nanorep.getInstance().getNRConfiguration().getTitle().setTitleBGColor("#ffffff");
-                    Nanorep.getInstance().getNRConfiguration().getTitle().setTitle("FAQs");
+                    Nanorep.getInstance().getNRConfiguration().getTitle().setTitle("Search for an answer");
                     Nanorep.getInstance().getNRConfiguration().getSearchBar().setInitialText("Search a question");
                     Nanorep.getInstance().getNRConfiguration().getContent().setAnswerTitleColor("#212121");
 

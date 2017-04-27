@@ -22,6 +22,7 @@ import android.view.animation.Animation;
 import android.view.animation.Transformation;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -46,6 +47,7 @@ public class NRTitleView extends NRCustomTitleView{
     private LinearLayout titleLayout;
     private CardView rootCardView;
     private View viewSeparator;
+    private ImageView ivBack;
     private Context context;
 
     private String textColorAnswer = "#4a4a4a";
@@ -74,6 +76,13 @@ public class NRTitleView extends NRCustomTitleView{
         mUnFoldButton = (ImageButton) child.findViewById(R.id.unFoldButton);
         rootCardView = (CardView) child.findViewById(R.id.root_card_view);
         viewSeparator = child.findViewById(R.id.view_separator);
+        ivBack = (ImageView) child.findViewById(R.id.iv_back);
+        ivBack.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mListener.onTitleClicked();
+            }
+        });
 
         mUnFoldButton.setOnClickListener(new OnClickListener() {
             @Override
@@ -143,6 +152,7 @@ public class NRTitleView extends NRCustomTitleView{
             font = textFontAnswer;
         }
 
+        ivBack.setVisibility(VISIBLE);
         viewSeparator.setVisibility(VISIBLE);
         setCardElevation(0);
         mTitleButton.setTypeface(Typeface.create(font, Typeface.NORMAL));
